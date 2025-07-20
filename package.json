@@ -5,7 +5,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
-  "icon": "logo.svg",
+  "icon": "logo.png",
   "author": {
     "name": "Vijay Gangatharan",
     "email": "vijayanand431@gmail.com"
@@ -187,7 +187,7 @@
     "@stylistic/eslint-plugin": "^5.2.0",
     "@types/fs-extra": "^11.0.4",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^18.19.119",
+    "@types/node": "^18.19.120",
     "@types/vscode": "^1.102.0",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
@@ -205,8 +205,8 @@
   },
   "dependencies": {
     "fs-extra": "^11.3.0",
-    "@babel/parser": "^7.23.6",
-    "@babel/types": "^7.23.6",
-    "recast": "^0.23.4"
+    "@babel/parser": "^7.28.0",
+    "@babel/types": "^7.28.1",
+    "recast": "^0.23.11"
   }
 }
