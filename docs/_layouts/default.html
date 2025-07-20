@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}" />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      property="og:title"
+      content="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"
+    />
+    <meta property="og:description" content="{{ page.description | default: site.description }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ site.url }}{{ site.baseurl }}{{ page.url }}" />
+    <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}/assets/images/logo.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"
+    />
+    <meta name="twitter:description" content="{{ page.description | default: site.description }}" />
+    <meta name="twitter:image" content="{{ site.url }}{{ site.baseurl }}/assets/images/logo.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ site.baseurl }}/assets/images/logo.png" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/pages.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Jekyll SEO Plugin -->
+    {% seo %}
+  </head>
+  <body>
+    <!-- Navigation Header -->
+    <header class="site-header">
+      <nav class="navbar">
+        <div class="container">
+          <div class="nav-brand">
+            <a href="{{ site.baseurl }}/" class="brand-link">
+              <img
+                src="{{ site.baseurl }}/assets/images/logo.png"
+                alt="{{ site.extension.name }} Logo"
+                class="brand-logo"
+              />
+              <span class="brand-text">{{ site.extension.name }}</span>
+            </a>
+          </div>
+
+          <div class="nav-menu" id="nav-menu">
+            <ul class="nav-list">
+              {% for nav in site.navigation %}
+              <li class="nav-item">
+                <a
+                  href="{{ site.baseurl }}{{ nav.url }}"
+                  class="nav-link {% if page.url == nav.url %}active{% endif %}"
+                >
+                  {{ nav.title }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="nav-toggle" id="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">{{ content }}</main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3 class="footer-title">{{ site.extension.name }}</h3>
+            <p class="footer-description">{{ site.description }}</p>
+          </div>
+
+          <div class="footer-section">
+            <h4 class="footer-subtitle">Quick Links</h4>
+            <ul class="footer-links">
+              <li>
+                <a href="{{ site.extension.marketplace_url }}" target="_blank"
+                  >VS Code Marketplace</a
+                >
+              </li>
+              <li>
+                <a href="{{ site.extension.github_url }}" target="_blank">GitHub Repository</a>
+              </li>
+              <li>
+                <a href="{{ site.extension.github_url }}/issues" target="_blank">Report Issues</a>
+              </li>
+              <li>
+                <a href="{{ site.extension.github_url }}/releases" target="_blank">Releases</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4 class="footer-subtitle">Developer</h4>
+            <p class="footer-author">{{ site.author.name }}</p>
+            <div class="footer-social">
+              <a
+                href="https://github.com/{{ site.github_username }}"
+                target="_blank"
+                class="social-link"
+              >
+                <i class="fab fa-github"></i>
+              </a>
+              <a href="mailto:{{ site.author.email }}" class="social-link">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; {{ 'now' | date: '%Y' }} {{ site.author.name }}. Licensed under MIT License.</p>
+          <p>Version {{ site.extension.version }} | Built with Jekyll</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ site.baseurl }}/assets/js/main.js"></script>
+
+    <!-- Google Analytics -->
+    {% if site.google_analytics %}
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', '{{ site.google_analytics }}');
+    </script>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,11 @@
+*.vsix
+.vscode-test
+
+coverage
+dist
+node_modules
+out
+
+CLAUDE.md
+.claude
+TODO.md

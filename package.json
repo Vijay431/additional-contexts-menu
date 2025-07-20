@@ -1,0 +1,212 @@
+{
+  "name": "additional-context-menus",
+  "displayName": "Additional Context Menus",
+  "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, TypeScript & JavaScript with intelligent code operations.",
+  "version": "0.0.0",
+  "license": "MIT",
+  "publisher": "VijayGangatharan",
+  "icon": "logo.svg",
+  "author": {
+    "name": "Vijay Gangatharan",
+    "email": "vijayanand431@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vijay431/additional-contexts-menu.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Vijay431/additional-contexts-menu/issues"
+  },
+  "homepage": "https://github.com/Vijay431/additional-contexts-menu#readme",
+  "keywords": [
+    "context",
+    "menu",
+    "copy",
+    "function",
+    "react",
+    "angular",
+    "express",
+    "nextjs",
+    "typescript",
+    "javascript",
+    "nodejs",
+    "productivity"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "additionalContextMenus.copyFunction",
+        "title": "Copy Function",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-function)"
+      },
+      {
+        "command": "additionalContextMenus.copyCodeToFile",
+        "title": "Copy to Existing File",
+        "category": "Additional Context Menus",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "additionalContextMenus.moveCodeToFile",
+        "title": "Move to Existing File",
+        "category": "Additional Context Menus",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "additionalContextMenus.saveAll",
+        "title": "Save All",
+        "category": "Additional Context Menus",
+        "icon": "$(save-all)"
+      },
+      {
+        "command": "additionalContextMenus.enable",
+        "title": "Additional Context Menus: Enable",
+        "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.disable",
+        "title": "Additional Context Menus: Disable",
+        "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.showOutputChannel",
+        "title": "Additional Context Menus: Show Output Channel",
+        "category": "Additional Context Menus"
+      }
+    ],
+    "configuration": {
+      "title": "Additional Context Menus",
+      "properties": {
+        "additionalContextMenus.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Additional Context Menus extension"
+        },
+        "additionalContextMenus.autoDetectProjects": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect Node.js projects for context menu visibility"
+        },
+        "additionalContextMenus.supportedExtensions": {
+          "type": "array",
+          "default": [
+            ".ts",
+            ".tsx",
+            ".js",
+            ".jsx"
+          ],
+          "description": "File extensions where context menus will be shown"
+        },
+        "additionalContextMenus.copyCode.insertionPoint": {
+          "type": "string",
+          "enum": [
+            "smart",
+            "end",
+            "beginning"
+          ],
+          "default": "smart",
+          "description": "Where to insert copied code in target file"
+        },
+        "additionalContextMenus.copyCode.handleImports": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "duplicate",
+            "skip"
+          ],
+          "default": "merge",
+          "description": "How to handle import statements when copying code"
+        },
+        "additionalContextMenus.copyCode.preserveComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Preserve comments when copying code"
+        },
+        "additionalContextMenus.saveAll.showNotification": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notification after saving all files"
+        },
+        "additionalContextMenus.saveAll.skipReadOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "Skip read-only files when saving all"
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorTextFocus && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.copyFunction",
+          "group": "1_modification@1"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.copyCodeToFile",
+          "group": "1_modification@2"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.moveCodeToFile",
+          "group": "1_modification@3"
+        },
+        {
+          "when": "editorTextFocus",
+          "command": "additionalContextMenus.saveAll",
+          "group": "2_workspace@1"
+        }
+      ]
+    }
+  },
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "pretest": "npm run compile-tests",
+    "compile-tests": "tsc -p ./tsconfig.test.json",
+    "watch-tests": "tsc -p ./tsconfig.test.json -w",
+    "lint": "eslint src --ext ts",
+    "test": "node ./dist/test/runTest.js",
+    "test:watch": "npm run compile-tests && npm run test",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@stylistic/eslint-plugin": "^5.2.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^18.19.119",
+    "@types/vscode": "^1.102.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.31.0",
+    "fast-glob": "^3.3.3",
+    "mocha": "^11.7.1",
+    "picocolors": "^1.1.1",
+    "prettier": "^3.6.2",
+    "terser-webpack-plugin": "^5.3.14",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.37.0",
+    "webpack": "^5.100.2",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.0",
+    "@babel/parser": "^7.23.6",
+    "@babel/types": "^7.23.6",
+    "recast": "^0.23.4"
+  }
+}

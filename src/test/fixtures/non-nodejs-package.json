@@ -1,0 +1,8 @@
+{
+  "name": "test-python-project",
+  "version": "1.0.0",
+  "description": "A Python project",
+  "scripts": {
+    "test": "python -m pytest"
+  }
+}

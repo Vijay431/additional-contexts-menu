@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "jsx": "react"
+  },
+  "include": ["src/**/*.ts", "src/test/suite/**/*.ts", "src/test/runTest.ts"],
+  "exclude": ["src/test/fixtures/**/*", "node_modules"]
+}

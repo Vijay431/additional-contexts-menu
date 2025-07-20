@@ -1,0 +1,104 @@
+# Jekyll Configuration for Additional Context Menus GitHub Pages
+
+# Site settings
+title: 'Additional Context Menus - VS Code Extension'
+email: vijayanand431@gmail.com
+description: >-
+  Enhanced right-click context menus for Node.js development with intelligent 
+  code operations for React, Angular, Express, Next.js, TypeScript, and 
+  JavaScript projects. Features AST-based function detection and smart import handling.
+
+baseurl: '/additional-contexts-menu' # the subpath of your site, e.g. /blog
+url: 'https://vijay431.github.io' # the base hostname & protocol for your site
+
+# Author
+author:
+  name: 'Vijay Gangatharan'
+  email: 'vijayanand431@gmail.com'
+  github: 'Vijay431'
+
+# Repository
+repository: 'Vijay431/additional-contexts-menu'
+github_username: Vijay431
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - package.json
+  - package-lock.json
+  - webpack.config.js
+  - tsconfig.json
+  - .eslintrc.js
+  - .gitignore
+  - .vscode/
+  - src/
+  - dist/
+  - coverage/
+  - out/
+
+# Site navigation
+navigation:
+  - title: 'Home'
+    url: '/'
+  - title: 'Features'
+    url: '/features'
+  - title: 'Code Operations'
+    url: '/code-operations'
+  - title: 'Framework Support'
+    url: '/frameworks'
+  - title: 'Installation'
+    url: '/installation'
+  - title: 'Documentation'
+    url: '/documentation'
+  - title: 'Download'
+    url: '/download'
+
+# Extension details
+extension:
+  name: 'Additional Context Menus'
+  version: '0.0.0'
+  marketplace_url: 'https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus'
+  github_url: 'https://github.com/Vijay431/additional-contexts-menu'
+  publisher: 'VijayGangatharan'
+
+# SEO and social
+twitter:
+  username:
+  card: summary_large_image
+
+social:
+  name: 'Vijay Gangatharan'
+  links:
+    - 'https://github.com/Vijay431'
+
+# Analytics (uncomment and add your tracking ID)
+# google_analytics: UA-XXXXXXXXX-X
+
+# Default layouts
+defaults:
+  - scope:
+      path: ''
+      type: 'pages'
+    values:
+      layout: 'default'
+
+# Sass configuration
+sass:
+  sass_dir: assets/css
+  style: compressed
