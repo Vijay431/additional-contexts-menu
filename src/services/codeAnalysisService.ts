@@ -7,6 +7,7 @@ import { Logger } from '../utils/logger';
 export class CodeAnalysisService {
   private static instance: CodeAnalysisService;
   private logger: Logger;
+  private sourceText?: string;
 
   private constructor() {
     this.logger = Logger.getInstance();
@@ -25,6 +26,7 @@ export class CodeAnalysisService {
   ): Promise<FunctionInfo | null> {
     try {
       const text = document.getText();
+      this.sourceText = text; // Store for offset calculations
       const offset = document.offsetAt(position);
 
       // Parse the document
@@ -161,17 +163,31 @@ export class CodeAnalysisService {
 
     // Function declarations
     if (t.isFunctionDeclaration(node)) {
+      const isReactComponent = this.isReactComponent(node, parent);
       functionInfo = {
         name: node.id?.name || 'anonymous',
-        type: node.async ? 'async' : 'function',
+        type: isReactComponent ? 'component' : (node.async ? 'async' : 'function'),
         isExported: this.isExported(node, parent),
       };
     }
     // Arrow functions and function expressions
     else if (t.isArrowFunctionExpression(node) || t.isFunctionExpression(node)) {
+      const name = this.getVariableName(node, parent);
+      const isReactComponent = this.isReactComponent(node, parent);
+      const isReactHook = this.isReactHook(node, parent);
+      
+      let type: FunctionInfo['type'] = 'arrow';
+      if (isReactComponent) {
+        type = 'component';
+      } else if (isReactHook) {
+        type = 'hook';
+      } else if (node.async) {
+        type = 'async';
+      }
+      
       functionInfo = {
-        name: this.getVariableName(node, parent) || 'anonymous',
-        type: node.async ? 'async' : 'arrow',
+        name: name || 'anonymous',
+        type,
         isExported: this.isExported(parent, parent?.parent),
       };
     }
@@ -180,22 +196,6 @@ export class CodeAnalysisService {
       functionInfo = {
         name: this.getMethodName(node),
         type: 'method',
-        isExported: this.isExported(parent, parent?.parent),
-      };
-    }
-    // React functional components (special case)
-    else if (this.isReactComponent(node, parent)) {
-      functionInfo = {
-        name: this.getVariableName(node, parent) || 'Component',
-        type: 'component',
-        isExported: this.isExported(parent, parent?.parent),
-      };
-    }
-    // React hooks (special case)
-    else if (this.isReactHook(node, parent)) {
-      functionInfo = {
-        name: this.getVariableName(node, parent) || 'hook',
-        type: 'hook',
         isExported: this.isExported(parent, parent?.parent),
       };
     }
@@ -302,10 +302,27 @@ export class CodeAnalysisService {
     return node.decorators && node.decorators.length > 0;
   }
 
-  private isOffsetInRange(_offset: number, _functionInfo: FunctionInfo): boolean {
-    // Convert line/column positions to offsets would require the source text
-    // For now, we'll use a simple line-based check
-    return true; // This would need proper implementation with line-to-offset conversion
+  private isOffsetInRange(offset: number, functionInfo: FunctionInfo): boolean {
+    if (!functionInfo.startLine || !functionInfo.endLine) {
+      return false;
+    }
+    
+    // Get the source code to calculate offsets
+    const sourceLines = this.sourceText?.split('\n') || [];
+    
+    let startOffset = 0;
+    for (let i = 0; i < functionInfo.startLine - 1; i++) {
+      startOffset += (sourceLines[i]?.length || 0) + 1; // +1 for newline
+    }
+    startOffset += functionInfo.startColumn || 0;
+    
+    let endOffset = 0;
+    for (let i = 0; i < functionInfo.endLine - 1; i++) {
+      endOffset += (sourceLines[i]?.length || 0) + 1; // +1 for newline
+    }
+    endOffset += functionInfo.endColumn || 0;
+    
+    return offset >= startOffset && offset <= endOffset;
   }
 
   private extractFunctionText(node: any, sourceCode: string, _parent?: any): string {

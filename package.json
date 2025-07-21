@@ -174,12 +174,13 @@
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
-    "pretest": "npm run compile-tests",
     "compile-tests": "tsc -p ./tsconfig.test.json",
-    "watch-tests": "tsc -p ./tsconfig.test.json -w",
     "lint": "eslint src --ext ts",
-    "test": "node ./dist/test/runTest.js",
-    "test:watch": "npm run compile-tests && npm run test",
+    "test": "npm run test:e2e",
+    "test:e2e": "npm run compile-tests && node ./dist/test/e2e/runE2ETest.js",
+    "test:watch": "npm run compile-tests -- -w",
+    "test:quick": "npm run compile && npm run test:e2e",
+    "test:debug": "npm run compile-tests && code --wait && npm run test:e2e",
     "format": "prettier --write ."
   },
   "devDependencies": {
