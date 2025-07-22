@@ -46,11 +46,6 @@ async function build(production = false) {
       console.log(`✅ Build completed successfully!`);
       console.log(`📦 Bundle size: ${sizeKB} KB`);
       
-      // Performance comparison
-      const webpackSize = 601; // Previous webpack bundle size
-      const reduction = ((webpackSize - parseFloat(sizeKB)) / webpackSize * 100).toFixed(1);
-      console.log(`📈 Size reduction: ${reduction}% (from ${webpackSize}KB)`);
-      
       // Target verification
       if (parseFloat(sizeKB) > targetKB) {
         console.log(`⚠️  Bundle exceeds ${targetKB}KB target by ${(parseFloat(sizeKB) - targetKB).toFixed(2)}KB`);

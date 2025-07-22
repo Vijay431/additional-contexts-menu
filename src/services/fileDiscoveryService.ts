@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs-extra';
+import * as fs from 'fs/promises';
+import { constants } from 'fs';
 import * as path from 'path';
 import { CompatibleFile } from '../types/extension';
 import { Logger } from '../utils/logger';
@@ -123,14 +124,8 @@ export class FileDiscoveryService {
 
   public async validateTargetFile(filePath: string): Promise<boolean> {
     try {
-      // Check if file exists
-      const exists = await fs.pathExists(filePath);
-      if (!exists) {
-        return false;
-      }
-
-      // Check if file is writable
-      await fs.access(filePath, fs.constants.W_OK);
+      // Check if file exists and is writable
+      await fs.access(filePath, constants.F_OK | constants.W_OK);
       return true;
     } catch (error) {
       this.logger.warn(`File validation failed for ${filePath}`, error);

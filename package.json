@@ -203,8 +203,5 @@
     "typescript-eslint": "^8.38.0"
   },
   "dependencies": {
-    "@babel/parser": "^7.28.0",
-    "@babel/types": "^7.28.1",
-    "fs-extra": "^11.3.0"
   }
 }
