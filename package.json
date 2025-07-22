@@ -2,7 +2,7 @@
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
   "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, TypeScript & JavaScript with intelligent code operations.",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
   "icon": "logo.png",
@@ -202,6 +202,5 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
