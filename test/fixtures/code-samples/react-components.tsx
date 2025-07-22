@@ -77,7 +77,7 @@ export const useUserData = (userId: string) => {
   const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
-    if (!userId) return;
+    if (!userId) {return;}
 
     setLoading(true);
     setError(null);

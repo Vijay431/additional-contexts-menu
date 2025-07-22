@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": "./",
     "skipLibCheck": true,
     "jsx": "react",
     "resolveJsonModule": true,
@@ -10,12 +11,12 @@
   },
   "include": [
     "src/**/*.ts", 
-    "src/test/e2e/**/*.ts"
+    "test/e2e/**/*.ts"
   ],
   "exclude": [
-    "src/test/suite/**/*",
-    "src/test/fixtures/**/*.ts", 
-    "src/test/runTest.ts",
+    "test/suite/**/*",
+    "test/fixtures/**/*.ts", 
+    "test/runTest.ts",
     "node_modules"
   ]
 }

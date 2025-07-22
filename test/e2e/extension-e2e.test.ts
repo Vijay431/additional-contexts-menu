@@ -171,7 +171,7 @@ suite('Additional Context Menus - E2E Tests', () => {
   // ============================================================================
 
   suite('File Type Support', () => {
-    async function createAndTestFile(fileName: string, content: string, expectedToWork: boolean = true) {
+    async function createAndTestFile(fileName: string, content: string, expectedToWork = true) {
       const filePath = path.join(tempWorkspace, fileName);
       await fs.writeFile(filePath, content);
 

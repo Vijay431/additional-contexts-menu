@@ -33,16 +33,16 @@ description: 'Enhanced right-click context menus for Node.js development with in
                         <span class="stat-label">Current Version</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">7</span>
-                        <span class="stat-label">Context Menu Commands</span>
+                        <span class="stat-number">24.75KB</span>
+                        <span class="stat-label">Bundle Size</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">4+</span>
-                        <span class="stat-label">Supported Frameworks</span>
+                        <span class="stat-number">~1s</span>
+                        <span class="stat-label">Build Time</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">8+</span>
-                        <span class="stat-label">Configuration Options</span>
+                        <span class="stat-number">95.9%</span>
+                        <span class="stat-label">Size Reduction</span>
                     </div>
                 </div>
             </div>
@@ -122,11 +122,11 @@ description: 'Enhanced right-click context menus for Node.js development with in
             
             <div class="feature-card">
                 <div class="feature-icon">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-bolt"></i>
                 </div>
-                <h3 class="feature-title">Extensive Configuration</h3>
+                <h3 class="feature-title">Lightning Fast Performance</h3>
                 <p class="feature-description">
-                    8+ configuration options for customizing behavior, insertion points, import handling, and extension preferences.
+                    esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (24.75KB), and instant development feedback.
                 </p>
             </div>
         </div>

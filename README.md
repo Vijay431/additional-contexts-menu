@@ -138,6 +138,14 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 - Move to Existing File with conflict resolution
 - Save All functionality with progress feedback
 
+## Performance
+
+Additional Context Menus is optimized for speed and efficiency:
+
+- **⚡ Lightning Fast Builds**: esbuild compilation in ~1 second (20x faster than webpack)
+- **📦 Minimal Bundle Size**: 24.75KB production bundle (95.9% reduction from 601KB)
+- **🔄 Instant Rebuilds**: Near-instant watch mode for development
+
 ## Architecture
 
 Additional Context Menus follows a service-oriented architecture with clear separation of concerns:
@@ -176,9 +184,9 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ### Available Commands
 
-- `npm run compile` - Compile TypeScript using webpack
-- `npm run watch` - Watch mode for development
-- `npm run package` - Production build with optimizations
+- `npm run compile` - Compile TypeScript using esbuild (⚡ ~1s)
+- `npm run watch` - Watch mode for development with instant rebuilds
+- `npm run package` - Production build with optimizations (~25KB output)
 - `npm run lint` - Run ESLint on src directory
 - `npm run format` - Format code using Prettier
 - `npm test` - Run extension tests

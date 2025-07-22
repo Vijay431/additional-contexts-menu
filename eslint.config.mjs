@@ -49,5 +49,22 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // Required for Babel AST operations
     },
+  },
+  {
+    files: ['esbuild.config.js'],
+    languageOptions: {
+      globals: {
+        require: 'readonly',
+        module: 'readonly',
+        process: 'readonly',
+        console: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly'
+      }
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      'no-undef': 'off'
+    }
   }
 );

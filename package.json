@@ -171,13 +171,14 @@
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p ./tsconfig.test.json",
+    "compile": "node esbuild.config.js",
+    "watch": "node esbuild.config.js --watch",
+    "package": "node esbuild.config.js --production",
+    "compile-tests": "tsc -p ./tsconfig.test.json --outDir dist/test",
     "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
     "test": "npm run test:e2e",
-    "test:e2e": "npm run compile-tests && node ./dist/test/e2e/runE2ETest.js",
+    "test:e2e": "npm run compile-tests && node ./dist/test/test/e2e/runE2ETest.js",
     "test:watch": "npm run compile-tests -- -w",
     "test:quick": "npm run compile && npm run test:e2e",
     "test:debug": "npm run compile-tests && code --wait && npm run test:e2e",
@@ -185,29 +186,25 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
-    "@stylistic/eslint-plugin": "^5.2.0",
+    "@stylistic/eslint-plugin": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^18.19.120",
     "@types/vscode": "^1.102.0",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.8",
     "eslint": "^9.31.0",
     "fast-glob": "^3.3.3",
     "mocha": "^11.7.1",
     "picocolors": "^1.1.1",
     "prettier": "^3.6.2",
-    "terser-webpack-plugin": "^5.3.14",
-    "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.37.0",
-    "webpack": "^5.100.2",
-    "webpack-cli": "^6.0.1"
+    "typescript-eslint": "^8.38.0"
   },
   "dependencies": {
-    "fs-extra": "^11.3.0",
     "@babel/parser": "^7.28.0",
     "@babel/types": "^7.28.1",
-    "recast": "^0.23.11"
+    "fs-extra": "^11.3.0"
   }
 }
