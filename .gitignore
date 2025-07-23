@@ -1,10 +1,20 @@
 *.vsix
 .vscode-test
+.vscode-test-web
 
 coverage
 dist
 node_modules
 out
+
+# Debug files
+*.map
+debug.log
+meta.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
 
 CLAUDE.md
 .claude

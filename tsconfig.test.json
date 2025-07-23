@@ -2,9 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": "./",
     "skipLibCheck": true,
-    "jsx": "react"
+    "jsx": "react",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts", "src/test/suite/**/*.ts", "src/test/runTest.ts"],
-  "exclude": ["src/test/fixtures/**/*", "node_modules"]
+  "include": ["src/**/*.ts", "test/e2e/**/*.ts"],
+  "exclude": ["test/suite/**/*", "test/fixtures/**/*.ts", "test/runTest.ts", "node_modules"]
 }

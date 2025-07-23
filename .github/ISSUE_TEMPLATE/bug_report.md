@@ -30,9 +30,17 @@ What you expected the context menu or code operation to do.
 **Environment**
 
 - OS: [Windows/macOS/Linux]
-- VS Code Version: [e.g. 1.85.0]
-- Extension Version: [e.g. 0.1.0]
+- VS Code Version: [e.g. 1.102.0]
+- Extension Version: [e.g. 1.0.0]
 - Node.js Version: [e.g. 18.17.0]
+- TypeScript Version: [e.g. 4.9.0] (if applicable)
+
+**Test Environment** (for reproduction)
+
+- Workspace Type: [Single folder/Multi-root workspace/No workspace]
+- Project Size: [Small (<100 files)/Medium (100-1000 files)/Large (>1000 files)]
+- File Path Complexity: [Standard paths/Special characters/Very long paths]
+- Concurrent Operations: [Single operation/Multiple simultaneous operations]
 
 **Context Menu Behavior**
 
@@ -42,6 +50,19 @@ What you expected the context menu or code operation to do.
 - [ ] Copy/Move operations fail with imports
 - [ ] Save All doesn't work properly
 - [ ] Other:
+
+**Edge Case Context** (if applicable)
+
+- [ ] Issue occurs with extremely large files (1000+ functions)
+- [ ] Issue occurs with special characters in file paths
+- [ ] Issue occurs during rapid successive operations
+- [ ] Issue occurs with deeply nested function structures
+- [ ] Issue occurs with concurrent operations
+- [ ] Issue occurs with malformed/unusual code syntax
+- [ ] Issue occurs with complex TypeScript types/generics
+- [ ] Issue occurs with complex JSX components
+- [ ] Issue occurs in multi-workspace scenarios
+- [ ] Issue occurs with symbolic links or unusual file system structures
 
 **Screenshots**
 If applicable, add screenshots of context menus, error messages, or code examples.

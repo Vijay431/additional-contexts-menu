@@ -1,24 +1,25 @@
 # Jekyll Configuration for Additional Context Menus GitHub Pages
 
 # Site settings
-title: 'Additional Context Menus - VS Code Extension'
+title: "Additional Context Menus - VS Code Extension"
 email: vijayanand431@gmail.com
 description: >-
-  Enhanced right-click context menus for Node.js development with intelligent 
-  code operations for React, Angular, Express, Next.js, TypeScript, and 
-  JavaScript projects. Features AST-based function detection and smart import handling.
+  Enhanced right-click context menus for Node.js development with intelligent
+  code operations for React, Angular, Express, Next.js, TypeScript, and
+  JavaScript projects. Features AST-based function detection, smart import handling,
+  and enterprise-grade reliability with 37 comprehensive tests and 100% success rate.
 
-baseurl: '/additional-contexts-menu' # the subpath of your site, e.g. /blog
-url: 'https://vijay431.github.io' # the base hostname & protocol for your site
+baseurl: "/additional-contexts-menu" # the subpath of your site, e.g. /blog
+url: "https://vijay431.github.io" # the base hostname & protocol for your site
 
 # Author
 author:
-  name: 'Vijay Gangatharan'
-  email: 'vijayanand431@gmail.com'
-  github: 'Vijay431'
+  name: "Vijay Gangatharan"
+  email: "vijayanand431@gmail.com"
+  github: "Vijay431"
 
 # Repository
-repository: 'Vijay431/additional-contexts-menu'
+repository: "Vijay431/additional-contexts-menu"
 github_username: Vijay431
 
 # Build settings
@@ -54,28 +55,30 @@ exclude:
 
 # Site navigation
 navigation:
-  - title: 'Home'
-    url: '/'
-  - title: 'Features'
-    url: '/features'
-  - title: 'Code Operations'
-    url: '/code-operations'
-  - title: 'Framework Support'
-    url: '/frameworks'
-  - title: 'Installation'
-    url: '/installation'
-  - title: 'Documentation'
-    url: '/documentation'
-  - title: 'Download'
-    url: '/download'
+  - title: "Home"
+    url: "/"
+  - title: "Features"
+    url: "/features"
+  - title: "Code Operations"
+    url: "/code-operations"
+  - title: "Framework Support"
+    url: "/frameworks"
+  - title: "Installation"
+    url: "/installation"
+  - title: "Documentation"
+    url: "/documentation"
+  - title: "Download"
+    url: "/download"
 
 # Extension details
 extension:
-  name: 'Additional Context Menus'
-  version: '0.0.0'
-  marketplace_url: 'https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus'
-  github_url: 'https://github.com/Vijay431/additional-contexts-menu'
-  publisher: 'VijayGangatharan'
+  name: "Additional Context Menus"
+  version: "1.0.0"
+  marketplace_url: "https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus"
+  github_url: "https://github.com/Vijay431/additional-contexts-menu"
+  publisher: "VijayGangatharan"
+  test_coverage: "37 tests"
+  success_rate: "100%"
 
 # SEO and social
 twitter:
@@ -83,9 +86,9 @@ twitter:
   card: summary_large_image
 
 social:
-  name: 'Vijay Gangatharan'
+  name: "Vijay Gangatharan"
   links:
-    - 'https://github.com/Vijay431'
+    - "https://github.com/Vijay431"
 
 # Analytics (uncomment and add your tracking ID)
 # google_analytics: UA-XXXXXXXXX-X
@@ -93,10 +96,10 @@ social:
 # Default layouts
 defaults:
   - scope:
-      path: ''
-      type: 'pages'
+      path: ""
+      type: "pages"
     values:
-      layout: 'default'
+      layout: "default"
 
 # Sass configuration
 sass:

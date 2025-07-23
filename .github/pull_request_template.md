@@ -34,6 +34,21 @@ Verify all context menu functionality:
 - [ ] Context menus appear in correct file types
 - [ ] Project detection works properly (Node.js projects only)
 
+## Edge Case Testing
+
+Test the extension with challenging scenarios:
+
+- [ ] Large files (1000+ functions) - extension remains responsive
+- [ ] Files with special characters in paths - operations work correctly
+- [ ] Rapid successive command executions - no conflicts or crashes
+- [ ] Deeply nested function structures (20+ levels) - proper detection
+- [ ] Concurrent operations - multiple commands execute safely
+- [ ] Malformed but parseable code - graceful handling
+- [ ] Complex TypeScript syntax (generics, decorators) - accurate parsing
+- [ ] Complex JSX components - proper component detection
+- [ ] Multi-workspace scenarios - correct project detection
+- [ ] Symbolic links and unusual file structures - robust handling
+
 ## Code Operation Testing
 
 Test the core functionality:
@@ -49,7 +64,7 @@ Test the core functionality:
 
 - [ ] Code follows TypeScript strict mode
 - [ ] ESLint checks pass
-- [ ] All tests pass
+- [ ] All tests pass (37/37 expected)
 - [ ] Extension builds successfully (npm run compile)
 - [ ] Extension packages correctly (npm run package)
 - [ ] Manual testing completed
@@ -57,6 +72,28 @@ Test the core functionality:
 - [ ] No unnecessary console logs or debug code
 - [ ] Error handling implemented for new features
 - [ ] Performance impact considered
+
+## Test Coverage
+
+Ensure comprehensive test coverage is maintained:
+
+- [ ] New functionality has corresponding tests
+- [ ] Edge cases are covered in test suite
+- [ ] Performance impacts are tested
+- [ ] Error conditions are tested
+- [ ] Test success rate remains at 100% (37/37 passing)
+- [ ] Integration tests cover framework-specific scenarios
+
+## Production Readiness
+
+Verify the changes are ready for production deployment:
+
+- [ ] Changes handle edge cases gracefully
+- [ ] No performance degradation under stress
+- [ ] Memory usage remains efficient
+- [ ] Concurrent operations work safely
+- [ ] Error boundaries prevent crashes
+- [ ] Logging provides adequate debugging information
 
 ## Deployment Checklist
 

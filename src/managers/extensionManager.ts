@@ -19,13 +19,8 @@ export class ExtensionManager {
     this.logger.info('Activating Additional Context Menus extension');
 
     try {
-      // Check if extension is enabled
-      if (!this.configService.isEnabled()) {
-        this.logger.info('Extension is disabled, skipping activation');
-        return;
-      }
-
-      // Initialize components
+      // Always initialize components - commands should always be registered
+      // VS Code's when clauses will handle visibility based on configuration
       await this.initializeComponents();
 
       // Register disposables with VS Code context
@@ -36,10 +31,13 @@ export class ExtensionManager {
       // Add our own disposables
       context.subscriptions.push({ dispose: () => this.dispose() });
 
+      // Set initial context variable for enabled state
+      await this.updateEnabledContext();
+
       this.logger.info('Additional Context Menus extension activated successfully');
 
-      // Show activation message (only in debug mode)
-      if (process.env['NODE_ENV'] === 'development') {
+      // Show activation message (only in debug mode and when enabled)
+      if (process.env['NODE_ENV'] === 'development' && this.configService.isEnabled()) {
         vscode.window.showInformationMessage('Additional Context Menus extension is now active');
       }
     } catch (error) {
@@ -72,15 +70,22 @@ export class ExtensionManager {
     const isEnabled = this.configService.isEnabled();
     this.logger.debug(`Configuration changed - enabled: ${isEnabled}`);
 
+    // Update VS Code context variable for when clauses
+    await this.updateEnabledContext();
+
     if (!isEnabled) {
       this.logger.info('Extension disabled via configuration');
-      // Note: We don't dispose everything here as VS Code doesn't
-      // provide a clean way to re-initialize after disable/enable
-      // The extension will remain loaded but context menus won't show
+      // Context menus won't show due to when clauses, but commands remain registered
     } else {
       this.logger.info('Extension enabled via configuration');
       // Context menus will automatically show based on when clauses
     }
+  }
+
+  private async updateEnabledContext(): Promise<void> {
+    const isEnabled = this.configService.isEnabled();
+    await vscode.commands.executeCommand('setContext', 'additionalContextMenus.enabled', isEnabled);
+    this.logger.debug(`Context variable updated: additionalContextMenus.enabled = ${isEnabled}`);
   }
 
   public deactivate(): void {
