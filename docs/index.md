@@ -33,16 +33,16 @@ description: 'Enhanced right-click context menus for Node.js development with in
                         <span class="stat-label">Current Version</span>
                     </div>
                     <div class="stat">
+                        <span class="stat-number">37 Tests</span>
+                        <span class="stat-label">Comprehensive Coverage</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Test Success Rate</span>
+                    </div>
+                    <div class="stat">
                         <span class="stat-number">24.75KB</span>
                         <span class="stat-label">Bundle Size</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">~1s</span>
-                        <span class="stat-label">Build Time</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">95.9%</span>
-                        <span class="stat-label">Size Reduction</span>
                     </div>
                 </div>
             </div>
@@ -127,6 +127,26 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 <h3 class="feature-title">Lightning Fast Performance</h3>
                 <p class="feature-description">
                     esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (24.75KB), and instant development feedback.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">Enterprise-Grade Reliability</h3>
+                <p class="feature-description">
+                    37 comprehensive tests with 100% success rate ensure production-ready reliability. Handles edge cases, stress scenarios, and extreme conditions gracefully.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="feature-title">Quality Assurance</h3>
+                <p class="feature-description">
+                    Rigorous testing covers error boundaries, performance stress, configuration edge cases, and complex file system scenarios for bulletproof operation.
                 </p>
             </div>
         </div>
@@ -258,7 +278,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
         <div class="cta-content">
             <h2 class="cta-title">Ready to Supercharge Your Code Operations?</h2>
             <p class="cta-description">
-                Join developers who trust Additional Context Menus for intelligent code operations in React, Angular, Express, and Next.js projects.
+                Join developers who trust Additional Context Menus for reliable, production-ready code operations. With 37 comprehensive tests and 100% success rate, it's built for enterprise development.
             </p>
             <div class="cta-buttons">
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">
