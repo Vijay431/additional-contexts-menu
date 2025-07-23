@@ -65,8 +65,14 @@ export class ContextMenuManager {
         this.handleMoveCodeToFile()
       ),
       vscode.commands.registerCommand('additionalContextMenus.saveAll', () => this.handleSaveAll()),
-      vscode.commands.registerCommand('additionalContextMenus.enable', () => this.handleEnable()),
-      vscode.commands.registerCommand('additionalContextMenus.disable', () => this.handleDisable()),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.enable',
+        async () => await this.handleEnable()
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.disable',
+        async () => await this.handleDisable()
+      ),
       vscode.commands.registerCommand('additionalContextMenus.showOutputChannel', () =>
         this.handleShowOutputChannel()
       )

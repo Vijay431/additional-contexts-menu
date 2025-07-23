@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs-extra';
+import * as fs from 'fs/promises';
 import * as path from 'path';
 import { ProjectType } from '../types/extension';
 import { Logger } from '../utils/logger';
@@ -46,19 +46,20 @@ export class ProjectDetectionService {
       const tsConfigPath = path.join(projectPath, 'tsconfig.json');
 
       // Check if package.json exists
-      const hasPackageJson = await fs.pathExists(packageJsonPath);
+      const hasPackageJson = await this.pathExists(packageJsonPath);
       if (!hasPackageJson) {
         this.logger.debug('No package.json found, not a Node.js project');
         return this.createProjectType(false, [], false, 'none');
       }
 
       // Parse package.json
-      const packageJson = await fs.readJson(packageJsonPath);
+      const packageData = await fs.readFile(packageJsonPath, 'utf-8');
+      const packageJson = JSON.parse(packageData);
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
 
       // Check for TypeScript
       const hasTypeScript =
-        (await fs.pathExists(tsConfigPath)) ||
+        (await this.pathExists(tsConfigPath)) ||
         dependencies.typescript !== undefined ||
         dependencies['@types/node'] !== undefined;
 
@@ -224,6 +225,15 @@ export class ProjectDetectionService {
   public clearCache(): void {
     this.projectTypeCache.clear();
     this.logger.debug('Project type cache cleared');
+  }
+
+  private async pathExists(path: string): Promise<boolean> {
+    try {
+      await fs.access(path);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   public onWorkspaceChanged(callback: () => void): vscode.Disposable {

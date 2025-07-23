@@ -1,12 +1,43 @@
 import * as vscode from 'vscode';
-import { parse } from '@babel/parser';
-import * as t from '@babel/types';
 import { FunctionInfo } from '../types/extension';
 import { Logger } from '../utils/logger';
 
+/**
+ * Lightweight code analysis service that replaces Babel AST parsing
+ * with regex-based function detection for significant bundle size reduction.
+ *
+ * Trade-offs:
+ * - Much smaller bundle size (eliminates 500+ KB of Babel dependencies)
+ * - Faster parsing for simple use cases
+ * - Less accurate for complex nested functions and edge cases
+ * - No full AST analysis capabilities
+ */
 export class CodeAnalysisService {
   private static instance: CodeAnalysisService;
   private logger: Logger;
+
+  // Regex patterns for different function types
+  private readonly patterns = {
+    // Function declarations: function name() { ... }
+    functionDeclaration: /^(\s*)(?:export\s+)?(async\s+)?function\s+(\w+)\s*\([^)]*\)\s*[{:]/gm,
+
+    // Arrow functions: const name = () => ... | const name = async () => ...
+    arrowFunction:
+      /^(\s*)(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(async\s+)?\([^)]*\)\s*=>/gm,
+
+    // Method definitions in classes/objects: methodName() { ... }
+    methodDefinition: /^(\s*)(?:(async)\s+)?(\w+)\s*\([^)]*\)\s*[{:]/gm,
+
+    // Class methods: async methodName() { ... } or methodName() { ... }
+    classMethod:
+      /^(\s*)(?:(?:public|private|protected)\s+)?(?:(async)\s+)?(\w+)\s*\([^)]*\)\s*[{:]/gm,
+
+    // React components (functions that return JSX or have JSX in body)
+    reactComponent: /^(\s*)(?:export\s+)?(?:const|function)\s+([A-Z]\w+)/gm,
+
+    // React hooks (functions starting with 'use')
+    reactHook: /^(\s*)(?:export\s+)?(?:const|let|var)\s+(use[A-Z]\w*)\s*=/gm,
+  };
 
   private constructor() {
     this.logger = Logger.getInstance();
@@ -25,354 +56,265 @@ export class CodeAnalysisService {
   ): Promise<FunctionInfo | null> {
     try {
       const text = document.getText();
-      const offset = document.offsetAt(position);
 
-      // Parse the document
-      const ast = this.parseCode(text, document.languageId);
-      if (!ast) {
-        return null;
-      }
+      // Find all functions in the document
+      const functions = this.findAllFunctions(text, document.languageId);
 
-      // Find function containing the cursor position
-      const functionInfo = this.findFunctionContainingOffset(ast, text, offset);
+      // Find the function that contains the cursor position
+      const containingFunction = functions.find((func) =>
+        this.isPositionInFunction(position, func, document)
+      );
 
-      if (functionInfo) {
+      if (containingFunction) {
         this.logger.debug('Function found at position', {
-          name: functionInfo.name,
-          type: functionInfo.type,
-          line: functionInfo.startLine,
+          name: containingFunction.name,
+          type: containingFunction.type,
+          line: containingFunction.startLine,
         });
       }
 
-      return functionInfo;
+      return containingFunction || null;
     } catch (error) {
       this.logger.error('Error finding function at position', error);
       return null;
     }
   }
 
-  private parseCode(code: string, languageId: string): t.File | null {
-    try {
-      const plugins: any[] = ['jsx'];
+  private findAllFunctions(text: string, _languageId: string): FunctionInfo[] {
+    const functions: FunctionInfo[] = [];
+    const lines = text.split('\n');
 
-      // Add TypeScript plugin for .ts and .tsx files
-      if (languageId === 'typescript' || languageId === 'typescriptreact') {
-        plugins.push('typescript');
-      }
+    // Check each line for function patterns
+    lines.forEach((line, lineIndex) => {
+      const lineNumber = lineIndex + 1;
 
-      // Add additional plugins for modern JavaScript/TypeScript features
-      plugins.push(
-        'decorators-legacy',
-        'classProperties',
-        'objectRestSpread',
-        'functionBind',
-        'exportDefaultFrom',
-        'exportNamespaceFrom',
-        'dynamicImport',
-        'nullishCoalescingOperator',
-        'optionalChaining',
-        'asyncGenerators',
-        'bigInt',
-        'optionalCatchBinding'
+      // Try each pattern type
+      this.tryPatternMatch(
+        this.patterns.functionDeclaration,
+        line,
+        lineNumber,
+        'function',
+        functions,
+        lines
       );
+      this.tryPatternMatch(
+        this.patterns.arrowFunction,
+        line,
+        lineNumber,
+        'arrow',
+        functions,
+        lines
+      );
+      this.tryPatternMatch(
+        this.patterns.methodDefinition,
+        line,
+        lineNumber,
+        'method',
+        functions,
+        lines
+      );
+      this.tryPatternMatch(this.patterns.classMethod, line, lineNumber, 'method', functions, lines);
 
-      const ast = parse(code, {
-        sourceType: 'module',
-        plugins,
-        errorRecovery: true,
-        allowImportExportEverywhere: true,
-        allowAwaitOutsideFunction: true,
-        allowReturnOutsideFunction: true,
-        allowSuperOutsideMethod: true,
-        allowUndeclaredExports: true,
-      });
+      // Check for React components (start with capital letter)
+      if (this.isReactComponent(line, lines, lineIndex)) {
+        const match = this.patterns.reactComponent.exec(line);
+        if (match && match[2]) {
+          functions.push(
+            this.createFunctionInfo(
+              match[2],
+              'component',
+              lineNumber,
+              match[1] || '',
+              lines,
+              lineIndex
+            )
+          );
+        }
+      }
 
-      return ast;
-    } catch (error) {
-      this.logger.warn('Failed to parse code with full feature set, trying simpler parse', error);
+      // Check for React hooks (start with 'use')
+      const hookMatch = this.patterns.reactHook.exec(line);
+      if (hookMatch && hookMatch[2]) {
+        functions.push(
+          this.createFunctionInfo(
+            hookMatch[2],
+            'hook',
+            lineNumber,
+            hookMatch[1] || '',
+            lines,
+            lineIndex
+          )
+        );
+      }
 
-      try {
-        // Fallback with minimal plugins
-        const ast = parse(code, {
-          sourceType: 'module',
-          plugins: ['jsx', 'typescript'],
-          errorRecovery: true,
-        });
-        return ast;
-      } catch (fallbackError) {
-        this.logger.error('Failed to parse code', fallbackError);
-        return null;
+      // Reset regex state
+      Object.values(this.patterns).forEach((pattern) => (pattern.lastIndex = 0));
+    });
+
+    return functions;
+  }
+
+  private tryPatternMatch(
+    pattern: RegExp,
+    line: string,
+    lineNumber: number,
+    type: FunctionInfo['type'],
+    functions: FunctionInfo[],
+    allLines: string[]
+  ): void {
+    pattern.lastIndex = 0; // Reset regex state
+    const match = pattern.exec(line);
+
+    if (match) {
+      const indent = match[1] || '';
+      const isAsync = match[2] === 'async' || match[3] === 'async';
+      const functionName = match[3] || match[2];
+
+      if (functionName) {
+        const actualType = isAsync ? 'async' : type;
+        functions.push(
+          this.createFunctionInfo(
+            functionName,
+            actualType,
+            lineNumber,
+            indent,
+            allLines,
+            lineNumber - 1
+          )
+        );
       }
     }
   }
 
-  private findFunctionContainingOffset(
-    ast: t.File,
-    sourceCode: string,
-    offset: number
-  ): FunctionInfo | null {
-    let foundFunction: FunctionInfo | null = null;
+  private createFunctionInfo(
+    name: string,
+    type: FunctionInfo['type'],
+    startLine: number,
+    indent: string,
+    allLines: string[],
+    startIndex: number
+  ): FunctionInfo {
+    // Find the end of the function by tracking braces
+    const endInfo = this.findFunctionEnd(allLines, startIndex, indent.length);
 
-    const traverse = (node: any, parent?: any) => {
-      if (!node || typeof node !== 'object') {
-        return;
-      }
-
-      // Check if this node represents a function
-      const functionInfo = this.extractFunctionInfo(node, sourceCode, parent);
-
-      if (functionInfo && this.isOffsetInRange(offset, functionInfo)) {
-        // If we found a more specific function (nested), prefer it
-        if (
-          !foundFunction ||
-          functionInfo.startLine > foundFunction.startLine ||
-          (functionInfo.startLine === foundFunction.startLine &&
-            functionInfo.startColumn > foundFunction.startColumn)
-        ) {
-          foundFunction = functionInfo;
-        }
-      }
-
-      // Recursively traverse child nodes
-      for (const key in node) {
-        if (key === 'parent' || key === 'leadingComments' || key === 'trailingComments') {
-          continue;
-        }
-
-        const child = node[key];
-        if (Array.isArray(child)) {
-          child.forEach((item) => traverse(item, node));
-        } else if (child && typeof child === 'object') {
-          traverse(child, node);
-        }
-      }
+    return {
+      name,
+      type,
+      startLine,
+      startColumn: indent.length,
+      endLine: endInfo.endLine,
+      endColumn: endInfo.endColumn,
+      isExported: this.isExported(allLines[startIndex] || ''),
+      hasDecorators: this.hasDecorators(allLines[startIndex] || ''),
+      fullText: this.extractFunctionText(allLines, startIndex, endInfo.endLine),
     };
-
-    traverse(ast);
-    return foundFunction;
   }
 
-  private extractFunctionInfo(
-    node: any,
-    sourceCode: string,
-    parent?: any
-  ): FunctionInfo | null {
-    let functionInfo: Partial<FunctionInfo> = {};
+  private findFunctionEnd(
+    lines: string[],
+    startIndex: number,
+    _indentLevel: number
+  ): { endLine: number; endColumn: number } {
+    let braceCount = 0;
+    let foundFirstBrace = false;
+    let endLine = startIndex + 1;
+    let endColumn = 0;
 
-    // Function declarations
-    if (t.isFunctionDeclaration(node)) {
-      functionInfo = {
-        name: node.id?.name || 'anonymous',
-        type: node.async ? 'async' : 'function',
-        isExported: this.isExported(node, parent),
-      };
-    }
-    // Arrow functions and function expressions
-    else if (t.isArrowFunctionExpression(node) || t.isFunctionExpression(node)) {
-      functionInfo = {
-        name: this.getVariableName(node, parent) || 'anonymous',
-        type: node.async ? 'async' : 'arrow',
-        isExported: this.isExported(parent, parent?.parent),
-      };
-    }
-    // Class methods
-    else if (t.isClassMethod(node) || t.isObjectMethod(node)) {
-      functionInfo = {
-        name: this.getMethodName(node),
-        type: 'method',
-        isExported: this.isExported(parent, parent?.parent),
-      };
-    }
-    // React functional components (special case)
-    else if (this.isReactComponent(node, parent)) {
-      functionInfo = {
-        name: this.getVariableName(node, parent) || 'Component',
-        type: 'component',
-        isExported: this.isExported(parent, parent?.parent),
-      };
-    }
-    // React hooks (special case)
-    else if (this.isReactHook(node, parent)) {
-      functionInfo = {
-        name: this.getVariableName(node, parent) || 'hook',
-        type: 'hook',
-        isExported: this.isExported(parent, parent?.parent),
-      };
+    // For arrow functions, look for the opening brace or single expression
+    const startLine = lines[startIndex];
+    const isArrowFunction = startLine?.includes('=>');
+
+    if (isArrowFunction && !startLine?.includes('{')) {
+      // Single expression arrow function
+      return { endLine: startIndex + 1, endColumn: lines[startIndex]?.length || 0 };
     }
 
-    if (!functionInfo.name) {
-      return null;
-    }
+    // Track braces to find function end
+    for (let i = startIndex; i < lines.length; i++) {
+      const line = lines[i];
 
-    // Get position information
-    if (node.loc) {
-      const startPos = node.loc.start;
-      const endPos = node.loc.end;
-
-      functionInfo.startLine = startPos.line;
-      functionInfo.startColumn = startPos.column;
-      functionInfo.endLine = endPos.line;
-      functionInfo.endColumn = endPos.column;
-
-      // Extract the full function text
-      functionInfo.fullText = this.extractFunctionText(node, sourceCode, parent);
-    }
-
-    functionInfo.hasDecorators = this.hasDecorators(node);
-
-    return functionInfo as FunctionInfo;
-  }
-
-  private getVariableName(_node: any, parent: any): string | null {
-    if (t.isVariableDeclarator(parent) && t.isIdentifier(parent.id)) {
-      return parent.id.name;
-    }
-
-    if (t.isAssignmentExpression(parent) && t.isIdentifier(parent.left)) {
-      return parent.left.name;
-    }
-
-    if (t.isProperty(parent) && t.isIdentifier(parent.key)) {
-      return parent.key.name;
-    }
-
-    return null;
-  }
-
-  private getMethodName(node: any): string {
-    if (t.isIdentifier(node.key)) {
-      return node.key.name;
-    }
-    if (t.isStringLiteral(node.key)) {
-      return node.key.value;
-    }
-    return 'method';
-  }
-
-  private isExported(node: any, parent: any): boolean {
-    // Check for export declarations
-    return (
-      t.isExportNamedDeclaration(parent) ||
-      t.isExportDefaultDeclaration(parent) ||
-      (parent && parent.type === 'Program' && t.isExportNamedDeclaration(node))
-    );
-  }
-
-  private isReactComponent(node: any, _parent: any): boolean {
-    if (
-      !t.isArrowFunctionExpression(node) &&
-      !t.isFunctionExpression(node) &&
-      !t.isFunctionDeclaration(node)
-    ) {
-      return false;
-    }
-
-    // Check if function returns JSX
-    if (node.body && t.isBlockStatement(node.body)) {
-      // Look for return statements with JSX
-      return this.hasJSXReturn(node.body);
-    } else if (node.body && t.isJSXElement(node.body)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  private isReactHook(node: any, parent: any): boolean {
-    const name = this.getVariableName(node, parent);
-    return name ? name.startsWith('use') && name.length > 3 : false;
-  }
-
-  private hasJSXReturn(blockStatement: any): boolean {
-    if (!blockStatement.body) {
-      return false;
-    }
-
-    for (const statement of blockStatement.body) {
-      if (t.isReturnStatement(statement) && statement.argument) {
-        if (t.isJSXElement(statement.argument) || t.isJSXFragment(statement.argument)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private hasDecorators(node: any): boolean {
-    return node.decorators && node.decorators.length > 0;
-  }
-
-  private isOffsetInRange(_offset: number, _functionInfo: FunctionInfo): boolean {
-    // Convert line/column positions to offsets would require the source text
-    // For now, we'll use a simple line-based check
-    return true; // This would need proper implementation with line-to-offset conversion
-  }
-
-  private extractFunctionText(node: any, sourceCode: string, _parent?: any): string {
-    if (!node.loc) {
-      return '';
-    }
-
-    const lines = sourceCode.split('\n');
-    const startLine = node.loc.start.line - 1; // Convert to 0-based
-    const endLine = node.loc.end.line - 1;
-    const startCol = node.loc.start.column;
-    const endCol = node.loc.end.column;
-
-    if (startLine === endLine) {
-      return lines[startLine]?.substring(startCol, endCol) || '';
-    }
-
-    const result = [];
-    result.push(lines[startLine]?.substring(startCol) || '');
-
-    for (let i = startLine + 1; i < endLine; i++) {
-      result.push(lines[i] || '');
-    }
-
-    result.push(lines[endLine]?.substring(0, endCol) || '');
-
-    return result.join('\n');
-  }
-
-  public extractImports(code: string, languageId: string): string[] {
-    try {
-      const ast = this.parseCode(code, languageId);
-      if (!ast) {
-        return [];
-      }
-
-      const imports: string[] = [];
-
-      for (const statement of ast.program.body) {
-        if (t.isImportDeclaration(statement)) {
-          // Find the import statement in the source code
-          if (statement.loc) {
-            const lines = code.split('\n');
-            const startLine = statement.loc.start.line - 1;
-            const endLine = statement.loc.end.line - 1;
-            const startCol = statement.loc.start.column;
-            const endCol = statement.loc.end.column;
-
-            if (startLine === endLine) {
-              imports.push(lines[startLine]?.substring(startCol, endCol) || '');
-            } else {
-              const importLines = [];
-              importLines.push(lines[startLine]?.substring(startCol) || '');
-              for (let i = startLine + 1; i < endLine; i++) {
-                importLines.push(lines[i] || '');
-              }
-              importLines.push(lines[endLine]?.substring(0, endCol) || '');
-              imports.push(importLines.join('\n'));
+      if (line) {
+        for (let j = 0; j < line.length; j++) {
+          if (line[j] === '{') {
+            braceCount++;
+            foundFirstBrace = true;
+          } else if (line[j] === '}') {
+            braceCount--;
+            if (foundFirstBrace && braceCount === 0) {
+              return { endLine: i + 1, endColumn: j + 1 };
             }
           }
         }
       }
 
-      return imports;
-    } catch (error) {
-      this.logger.error('Error extracting imports', error);
-      return [];
+      endLine = i + 1;
+      endColumn = line?.length || 0;
     }
+
+    return { endLine, endColumn };
+  }
+
+  private isPositionInFunction(
+    position: vscode.Position,
+    func: FunctionInfo,
+    _document: vscode.TextDocument
+  ): boolean {
+    const startPos = new vscode.Position(func.startLine - 1, func.startColumn || 0);
+    const endPos = new vscode.Position((func.endLine || func.startLine) - 1, func.endColumn || 0);
+
+    return position.isAfterOrEqual(startPos) && position.isBeforeOrEqual(endPos);
+  }
+
+  private isReactComponent(line: string, allLines: string[], lineIndex: number): boolean {
+    // Check if function name starts with capital letter (React convention)
+    const hasCapitalName = /(?:function|const)\s+[A-Z]\w+/.test(line);
+    if (!hasCapitalName) {
+      return false;
+    }
+
+    // Look for JSX return in the next few lines (simple heuristic)
+    const searchLines = Math.min(allLines.length, lineIndex + 10);
+    for (let i = lineIndex; i < searchLines; i++) {
+      const currentLine = allLines[i];
+      const nextLine = allLines[i + 1];
+      if (
+        currentLine?.includes('return') &&
+        (currentLine.includes('<') || nextLine?.includes('<'))
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private isExported(line: string): boolean {
+    return line.trim().startsWith('export');
+  }
+
+  private hasDecorators(line: string): boolean {
+    // Look for decorators in the line or previous lines (simple check)
+    return line.includes('@');
+  }
+
+  private extractFunctionText(lines: string[], startIndex: number, endLine: number): string {
+    const functionLines = lines.slice(startIndex, endLine);
+    return functionLines.join('\n');
+  }
+
+  public extractImports(code: string, _languageId: string): string[] {
+    const imports: string[] = [];
+
+    // Simple regex-based import extraction
+    const importPattern = /^(\s*import\s+.+?;?\s*)$/gm;
+    let match;
+
+    while ((match = importPattern.exec(code)) !== null) {
+      if (match[1]) {
+        imports.push(match[1].trim());
+      }
+    }
+
+    return imports;
   }
 }
