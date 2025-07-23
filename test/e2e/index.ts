@@ -16,16 +16,16 @@ export function run(): Promise<void> {
     glob('**/**.test.js', { cwd: testsRoot })
       .then((files) => {
         console.log(`📋 Found ${files.length} E2E test file(s):`);
-        
+
         // Add files to the test suite
-        files.forEach(f => {
+        files.forEach((f) => {
           console.log(`  - ${f}`);
           mocha.addFile(path.resolve(testsRoot, f));
         });
 
         try {
           console.log('\n🏃 Running E2E tests...\n');
-          
+
           // Run the mocha test
           mocha.run((failures: number) => {
             if (failures > 0) {
@@ -39,7 +39,7 @@ export function run(): Promise<void> {
           e(err);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error finding E2E test files:', err);
         e(err);
       });

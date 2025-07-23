@@ -59,12 +59,12 @@ export default tseslint.config(
         process: 'readonly',
         console: 'readonly',
         __dirname: 'readonly',
-        __filename: 'readonly'
-      }
+        __filename: 'readonly',
+      },
     },
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
-      'no-undef': 'off'
-    }
+      'no-undef': 'off',
+    },
   }
 );

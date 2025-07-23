@@ -8,12 +8,12 @@ interface ButtonProps {
   size?: 'small' | 'medium' | 'large';
 }
 
-export default function Button({ 
-  children, 
-  onClick, 
-  variant = 'primary', 
+export default function Button({
+  children,
+  onClick,
+  variant = 'primary',
   disabled = false,
-  size = 'medium' 
+  size = 'medium',
 }: ButtonProps) {
   const handleClick = () => {
     if (!disabled && onClick) {
@@ -26,27 +26,18 @@ export default function Button({
     const variantClass = `btn--${variant}`;
     const sizeClass = `btn--${size}`;
     const disabledClass = disabled ? 'btn--disabled' : '';
-    
-    return [baseClass, variantClass, sizeClass, disabledClass]
-      .filter(Boolean)
-      .join(' ');
+
+    return [baseClass, variantClass, sizeClass, disabledClass].filter(Boolean).join(' ');
   };
 
   return (
-    <button 
-      className={getButtonClass()}
-      onClick={handleClick}
-      disabled={disabled}
-    >
+    <button className={getButtonClass()} onClick={handleClick} disabled={disabled}>
       {children}
     </button>
   );
 }
 
-export const IconButton: React.FC<{ icon: string; onClick: () => void }> = ({ 
-  icon, 
-  onClick 
-}) => {
+export const IconButton: React.FC<{ icon: string; onClick: () => void }> = ({ icon, onClick }) => {
   return (
     <button className="icon-btn" onClick={onClick}>
       <span className={`icon icon-${icon}`} />
@@ -56,9 +47,9 @@ export const IconButton: React.FC<{ icon: string; onClick: () => void }> = ({
 
 export const useButtonState = (initialDisabled = false) => {
   const [isDisabled, setIsDisabled] = React.useState(initialDisabled);
-  
+
   const toggleDisabled = React.useCallback(() => {
-    setIsDisabled(prev => !prev);
+    setIsDisabled((prev) => !prev);
   }, []);
 
   const enable = React.useCallback(() => {
@@ -73,6 +64,6 @@ export const useButtonState = (initialDisabled = false) => {
     isDisabled,
     toggleDisabled,
     enable,
-    disable
+    disable,
   };
 };

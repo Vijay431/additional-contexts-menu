@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 // Functional component with props
-export default function UserProfile({ userId, showDetails = true }: { 
-  userId: string; 
-  showDetails?: boolean; 
+export default function UserProfile({
+  userId,
+  showDetails = true,
+}: {
+  userId: string;
+  showDetails?: boolean;
 }) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -47,9 +50,9 @@ export default function UserProfile({ userId, showDetails = true }: {
 }
 
 // Arrow function component
-export const UserCard: React.FC<{ user: any; onSelect?: (user: any) => void }> = ({ 
-  user, 
-  onSelect 
+export const UserCard: React.FC<{ user: any; onSelect?: (user: any) => void }> = ({
+  user,
+  onSelect,
 }) => {
   const handleClick = () => {
     if (onSelect) {
@@ -77,11 +80,13 @@ export const useUserData = (userId: string) => {
   const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
-    if (!userId) {return;}
+    if (!userId) {
+      return;
+    }
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch(`/api/users/${userId}`);
       if (!response.ok) {
@@ -104,12 +109,15 @@ export const useUserData = (userId: string) => {
     user,
     loading,
     error,
-    refetch
+    refetch,
   };
 };
 
 // Component with complex state management
-export function UserList({ users, onUserSelect }: {
+export function UserList({
+  users,
+  onUserSelect,
+}: {
   users: any[];
   onUserSelect: (user: any) => void;
 }) {
@@ -139,9 +147,10 @@ export function UserList({ users, onUserSelect }: {
     let filtered = userList;
 
     if (search) {
-      filtered = userList.filter(user =>
-        user.name.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase())
+      filtered = userList.filter(
+        (user) =>
+          user.name.toLowerCase().includes(search.toLowerCase()) ||
+          user.email.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -200,12 +209,8 @@ export function UserList({ users, onUserSelect }: {
         </div>
       </div>
       <div className="user-list-items">
-        {filteredUsers.map(user => (
-          <UserCard
-            key={user.id}
-            user={user}
-            onSelect={onUserSelect}
-          />
+        {filteredUsers.map((user) => (
+          <UserCard key={user.id} user={user} onSelect={onUserSelect} />
         ))}
       </div>
     </div>

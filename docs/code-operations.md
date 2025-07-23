@@ -46,6 +46,7 @@ function calculateTotal(items: CartItem[]): number {
 // The entire function will be detected and copied
 // including type annotations and JSDoc comments
 </code></pre>
+
 </div>
 <div class="example-result">
 <p><strong>Result:</strong> Entire function copied with types preserved</p>
@@ -76,6 +77,7 @@ const [isEditing, setIsEditing] = useState(false);
 
 // Component with hooks and JSX will be accurately detected
 </code></pre>
+
 </div>
 <div class="example-result">
 <p><strong>Result:</strong> Complete React component with hooks and JSX</p>
@@ -105,6 +107,7 @@ throw error;
 
 // Async arrow functions are properly detected
 </code></pre>
+
 </div>
 <div class="example-result">
 <p><strong>Result:</strong> Async arrow function with error handling</p>
@@ -286,6 +289,7 @@ return emailRegex.test(email);
 
 // Other utility functions...
 </code></pre>
+
 </div>
 </div>
 
@@ -305,6 +309,7 @@ return emailRegex.test(email);
 // Other utility functions...
 // date-fns import removed automatically
 </code></pre>
+
 </div>
 
                     <div class="file-example">
@@ -319,6 +324,7 @@ return format(date, 'yyyy-MM-dd');
 
 // Function moved with its import
 </code></pre>
+
 </div>
 </div>
 </div>

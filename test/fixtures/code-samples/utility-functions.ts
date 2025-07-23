@@ -8,7 +8,9 @@ export function formatCurrency(amount: number, currency = 'USD'): string {
 }
 
 export const calculatePercentage = (value: number, total: number): number => {
-  if (total === 0) {return 0;}
+  if (total === 0) {
+    return 0;
+  }
   return Math.round((value / total) * 100 * 100) / 100; // Round to 2 decimal places
 };
 
@@ -28,7 +30,7 @@ export async function fetchUserData(userId: string): Promise<any> {
 const debounce = <T extends (...args: any[]) => any>(
   func: T,
   wait: number
-): (...args: Parameters<T>) => void => {
+): ((...args: Parameters<T>) => void) => {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
@@ -77,7 +79,7 @@ export function createApiResponse<T>(data: T, message = 'Success'): ApiResponse<
   return {
     data,
     message,
-    success: true
+    success: true,
   };
 }
 
@@ -114,6 +116,6 @@ export const createLocalStorageHelper = <T>(key: string, initialValue: T) => {
   return {
     get: getStoredValue,
     set: setStoredValue,
-    remove: removeStoredValue
+    remove: removeStoredValue,
   };
 };
