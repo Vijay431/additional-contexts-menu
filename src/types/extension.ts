@@ -80,4 +80,6 @@ export interface ExtensionConfig {
     showNotification: boolean;
     skipReadOnly: boolean;
   };
+  enableKeybindings: boolean;
+  showKeybindingsInMenu: boolean;
 }

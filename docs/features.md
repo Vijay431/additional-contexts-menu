@@ -349,6 +349,79 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
         </div>
         
+        <!-- Keyboard Shortcuts Section -->
+        <div class="feature-section">
+            <div class="feature-header">
+                <h2 class="feature-category">Keyboard Shortcuts & User Interface</h2>
+                <p class="feature-category-desc">Optional keyboard shortcuts and enhanced visual feedback for improved productivity.</p>
+            </div>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-name">Complete Keybinding System</h3>
+                        <p class="feature-desc">
+                            Optional keyboard shortcuts for all core operations with built-in conflict detection and safety features.
+                            Keybindings are disabled by default to prevent conflicts with existing shortcuts.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li><strong>Copy Function:</strong> <code>Ctrl+Alt+Shift+F</code> (Windows/Linux) / <code>Cmd+Alt+Shift+F</code> (macOS)</li>
+                            <li><strong>Copy Code to File:</strong> <code>Ctrl+Alt+Shift+C</code> (Windows/Linux) / <code>Cmd+Alt+Shift+C</code> (macOS)</li>
+                            <li><strong>Move Code to File:</strong> <code>Ctrl+Alt+Shift+M</code> (Windows/Linux) / <code>Cmd+Alt+Shift+M</code> (macOS)</li>
+                            <li><strong>Save All Files:</strong> <code>Ctrl+Alt+Shift+A</code> (Windows/Linux) / <code>Cmd+Alt+Shift+A</code> (macOS)</li>
+                            <li>Built-in conflict detection and management commands</li>
+                            <li>Context-aware activation (only when appropriate)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-name">Status Bar Integration</h3>
+                        <p class="feature-desc">
+                            Real-time visual feedback in VS Code status bar showing extension state, project detection, 
+                            and framework-specific indicators with interactive debug functionality.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li><strong>Framework Icons:</strong> ⚛️ React, 🅰️ Angular, 🚂 Express, ▲ Next.js</li>
+                            <li><strong>Extension State:</strong> Enabled/disabled status with color coding</li>
+                            <li><strong>Project Detection:</strong> Node.js project recognition feedback</li>
+                            <li><strong>Interactive Debug:</strong> Click to inspect extension context variables</li>
+                            <li><strong>Multi-Framework Support:</strong> Shows all detected frameworks</li>
+                            <li><strong>Real-time Updates:</strong> Automatically updates on configuration changes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-name">Safety & Management Features</h3>
+                        <p class="feature-desc">
+                            Comprehensive safety features and management commands to ensure smooth integration 
+                            with existing VS Code configurations and workflows.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li><strong>Conflict Detection:</strong> Check for keybinding conflicts before enabling</li>
+                            <li><strong>Debug Commands:</strong> Inspect extension state and context variables</li>
+                            <li><strong>Refresh Commands:</strong> Reload project detection without restart</li>
+                            <li><strong>Management Commands:</strong> Enable/disable features through command palette</li>
+                            <li><strong>Safe Defaults:</strong> Conservative settings to prevent configuration conflicts</li>
+                            <li><strong>Gradual Adoption:</strong> Enable features incrementally as needed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Performance Section -->
         <div class="feature-section">
             <div class="feature-header">
@@ -456,6 +529,24 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <i class="fas fa-project-diagram"></i>
                     <h3>Framework Detection</h3>
                     <p>Automatic project detection for React, Angular, Express, Next.js</p>
+                    <small>Screenshots coming soon</small>
+                </div>
+            </div>
+            
+            <div class="screenshot-item">
+                <div class="screenshot-placeholder">
+                    <i class="fas fa-keyboard"></i>
+                    <h3>Keyboard Shortcuts</h3>
+                    <p>Optional keybindings with conflict detection and management</p>
+                    <small>Screenshots coming soon</small>
+                </div>
+            </div>
+            
+            <div class="screenshot-item">
+                <div class="screenshot-placeholder">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Status Bar Integration</h3>
+                    <p>Visual project status with framework-specific indicators</p>
                     <small>Screenshots coming soon</small>
                 </div>
             </div>

@@ -27,6 +27,24 @@ Enhanced right-click context menus for Node.js development with intelligent code
 - 📍 **Smart Insertion** - Intelligent code placement (smart, end, beginning)
 - 💬 **Comment Preservation** - Maintains code comments during operations
 
+### Status Bar Integration
+
+- 📊 **Visual Project Status** - Real-time display of extension and project state in VS Code status bar
+- 🎯 **Framework Detection** - Shows detected frameworks with specific icons:
+  - ⚛️ **React** projects
+  - 🅰️ **Angular** projects  
+  - 🚂 **Express** projects
+  - ▲ **Next.js** projects
+- 🔍 **Project State Indicators** - Clear visual feedback for:
+  - Extension enabled/disabled status
+  - Node.js project detection
+  - Multi-framework project support
+- 🖱️ **Interactive Debug** - Click status bar item to debug context variables
+- 🎨 **Color-Coded Status** - Different background colors for various states:
+  - Prominent background for active projects
+  - Warning background when extension is disabled
+  - Normal background for non-Node.js projects
+
 ## Installation
 
 ### From VS Code Marketplace
@@ -72,6 +90,49 @@ Additional Context Menus provides command palette integration (accessible via `C
 - `Additional Context Menus: Enable` - Enable the extension
 - `Additional Context Menus: Disable` - Disable the extension
 - `Additional Context Menus: Show Output Channel` - Open debug logs for troubleshooting
+- `Additional Context Menus: Debug Context Variables` - Inspect extension state and context variables
+- `Additional Context Menus: Refresh Context Variables` - Reload project detection and refresh context
+- `Additional Context Menus: Check Keybinding Conflicts` - Detect potential keyboard shortcut conflicts
+- `Additional Context Menus: Enable Keybindings` - Enable keyboard shortcuts for all commands
+- `Additional Context Menus: Disable Keybindings` - Disable keyboard shortcuts for all commands
+
+## Keyboard Shortcuts
+
+Additional Context Menus provides optional keyboard shortcuts for all core operations. **Keybindings are disabled by default** to prevent conflicts with existing shortcuts.
+
+### Default Keybindings
+
+| Command | Windows/Linux | macOS | Description |
+|---------|---------------|-------|-------------|
+| Copy Function | `Ctrl+Alt+Shift+F` | `Cmd+Alt+Shift+F` | Copy function at cursor position |
+| Copy Code to File | `Ctrl+Alt+Shift+C` | `Cmd+Alt+Shift+C` | Copy selected code to another file |
+| Move Code to File | `Ctrl+Alt+Shift+M` | `Cmd+Alt+Shift+M` | Move selected code to another file |
+| Save All Files | `Ctrl+Alt+Shift+A` | `Cmd+Alt+Shift+A` | Save all open files with progress |
+
+### Enabling Keyboard Shortcuts
+
+⚠️ **Important**: Check for conflicts before enabling keybindings!
+
+1. **Check for conflicts** (recommended):
+   - Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
+   - Run `Additional Context Menus: Check Keybinding Conflicts`
+   - Review any reported conflicts
+
+2. **Enable keybindings**:
+   - Use Command Palette: `Additional Context Menus: Enable Keybindings`
+   - Or set `additionalContextMenus.enableKeybindings` to `true` in settings
+
+3. **Customize shortcuts** (optional):
+   - Open Keyboard Shortcuts (`Ctrl+K Ctrl+S` / `Cmd+K Cmd+S`)
+   - Search for "Additional Context Menus"
+   - Modify shortcuts as needed
+
+### Safety Features
+
+- **Disabled by default** - Prevents conflicts with existing shortcuts
+- **Conflict detection** - Built-in command to check for potential conflicts
+- **Conditional activation** - Shortcuts only work when appropriate (e.g., with selected text)
+- **Context-aware** - Keybindings respect file types and project detection
 
 ## Requirements
 
@@ -106,6 +167,12 @@ Additional Context Menus provides extensive configuration options:
 - `additionalContextMenus.saveAll.showNotification` (boolean, default: `true`) - Show notification after saving all files
 - `additionalContextMenus.saveAll.skipReadOnly` (boolean, default: `true`) - Skip read-only files when saving all
 
+### Keyboard Shortcut Settings
+
+- `additionalContextMenus.enableKeybindings` (boolean, default: `false`) - Enable keyboard shortcuts for context menu commands
+  - ⚠️ **Warning**: Check for conflicts with existing keybindings before enabling
+- `additionalContextMenus.showKeybindingsInMenu` (boolean, default: `true`) - Show keyboard shortcuts in context menu items when keybindings are enabled
+
 ## Supported Frameworks
 
 The extension automatically detects and provides enhanced functionality for:
@@ -128,12 +195,13 @@ Please report any issues on our [GitHub repository](https://github.com/Vijay431/
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
-### [1.0.0] - Latest
+### [1.1.0] - Latest
 
-- **🧪 Comprehensive Test Suite**: 37 enterprise-grade tests with 100% success rate
-- **🔧 Enhanced Reliability**: Robust error handling for extreme conditions and edge cases
-- **⚡ Performance Testing**: Stress-tested with large files, concurrent operations, and memory pressure
-- **🛡️ Production Ready**: Proven stability in real-world development environments
+- **⌨️ Keyboard Shortcuts System**: Complete keybinding support with conflict detection and safety features
+- **📊 Status Bar Integration**: Visual project status indicators with framework-specific icons
+- **🔧 Enhanced Command System**: New debug and management commands for better control
+- **⚙️ Expanded Configuration**: Enhanced settings for keybinding and status bar management
+- **🛡️ Safety First**: Keybindings disabled by default to prevent conflicts with existing shortcuts
 
 ### [1.0.0] - Initial Release
 

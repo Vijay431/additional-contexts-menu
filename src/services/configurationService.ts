@@ -45,6 +45,8 @@ export class ConfigurationService {
         showNotification: config.get<boolean>('saveAll.showNotification', true),
         skipReadOnly: config.get<boolean>('saveAll.skipReadOnly', true),
       },
+      enableKeybindings: config.get<boolean>('enableKeybindings', false),
+      showKeybindingsInMenu: config.get<boolean>('showKeybindingsInMenu', true),
     };
   }
 

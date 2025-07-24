@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-07-24
+
+### Added
+
+- **⌨️ Keyboard Shortcuts System**: Complete keybinding support with conflict detection
+  - New `enableKeybindings` setting (default: false) to enable/disable keyboard shortcuts
+  - New `showKeybindingsInMenu` setting (default: true) to control shortcut visibility in context menus
+  - Default keybindings for all core commands:
+    - `Ctrl+Alt+Shift+F` (`Cmd+Alt+Shift+F` on Mac) - Copy Function
+    - `Ctrl+Alt+Shift+C` (`Cmd+Alt+Shift+C` on Mac) - Copy Code to File
+    - `Ctrl+Alt+Shift+M` (`Cmd+Alt+Shift+M` on Mac) - Move Code to File
+    - `Ctrl+Alt+Shift+A` (`Cmd+Alt+Shift+A` on Mac) - Save All Files
+  - Keybinding conflict detection and management commands
+  - Built-in safety with disabled-by-default setting to prevent conflicts
+
+- **📊 Status Bar Integration**: Visual project status indicators
+  - Framework-specific icons for React (⚛️), Angular (🅰️), Express (🚂), and Next.js (▲)
+  - Real-time project detection status display
+  - Extension state indicators (enabled/disabled, Node.js project detection)
+  - Clickable status bar with debug functionality
+  - Color-coded status (prominent for active projects, warning for disabled)
+
+- **🔧 Enhanced Command System**: New debug and management commands
+  - `Additional Context Menus: Debug Context Variables` - Inspect extension state
+  - `Additional Context Menus: Refresh Context Variables` - Reload project detection
+  - `Additional Context Menus: Check Keybinding Conflicts` - Detect potential conflicts
+  - `Additional Context Menus: Enable Keybindings` - Enable keyboard shortcuts
+  - `Additional Context Menus: Disable Keybindings` - Disable keyboard shortcuts
+
+### Enhanced
+
+- **⚙️ Configuration Management**: Expanded settings for better user control
+  - Enhanced keybinding management with safety warnings
+  - Improved project detection feedback through status bar
+  - Better visual feedback for extension state changes
+
+### Technical Improvements
+
+- **🏗️ Architecture**: Added StatusBarService for centralized status management
+- **🔄 Real-time Updates**: Status bar updates automatically on configuration and workspace changes
+- **🛡️ Safety Features**: Keybindings disabled by default to prevent conflicts with existing shortcuts
+
 ## [1.0.0] - 2025-07-23
 
 ### Fixed
