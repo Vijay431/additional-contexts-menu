@@ -75,6 +75,21 @@ export class ContextMenuManager {
       ),
       vscode.commands.registerCommand('additionalContextMenus.showOutputChannel', () =>
         this.handleShowOutputChannel()
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.debugContextVariables', () =>
+        this.handleDebugContextVariables()
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.refreshContextVariables', () =>
+        this.handleRefreshContextVariables()
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.checkKeybindingConflicts', () =>
+        this.handleCheckKeybindingConflicts()
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.enableKeybindings', () =>
+        this.handleEnableKeybindings()
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.disableKeybindings', () =>
+        this.handleDisableKeybindings()
       )
     );
 
@@ -351,6 +366,137 @@ export class ContextMenuManager {
 
   private handleShowOutputChannel(): void {
     this.logger.show();
+  }
+
+  private async handleDebugContextVariables(): Promise<void> {
+    this.logger.info('Debug Context Variables command triggered');
+    
+    try {
+      const projectType = await this.projectDetectionService.detectProjectType();
+      const isEnabled = this.configService.isEnabled();
+      
+      const debugInfo = {
+        extensionEnabled: isEnabled,
+        projectDetection: {
+          isNodeProject: projectType.isNodeProject,
+          frameworks: projectType.frameworks,
+          hasTypeScript: projectType.hasTypeScript,
+          supportLevel: projectType.supportLevel
+        },
+        workspace: {
+          workspaceFolders: vscode.workspace.workspaceFolders?.length || 0,
+          activeEditor: !!vscode.window.activeTextEditor,
+          activeFile: vscode.window.activeTextEditor?.document.fileName || 'none'
+        }
+      };
+
+      this.logger.info('Current extension state', debugInfo);
+      
+      // Show in output channel
+      this.logger.show();
+      
+      // Also show user-friendly message
+      const message = `Extension: ${isEnabled ? 'Enabled' : 'Disabled'} | Node Project: ${projectType.isNodeProject ? 'Yes' : 'No'} | Frameworks: ${projectType.frameworks.join(', ') || 'None'}`;
+      vscode.window.showInformationMessage(message);
+      
+    } catch (error) {
+      this.logger.error('Error in Debug Context Variables command', error);
+      vscode.window.showErrorMessage('Failed to debug context variables');
+    }
+  }
+
+  private async handleRefreshContextVariables(): Promise<void> {
+    this.logger.info('Refresh Context Variables command triggered');
+    
+    try {
+      // Clear caches
+      this.projectDetectionService.clearCache();
+      
+      // Update context variables
+      await this.projectDetectionService.updateContextVariables();
+      
+      vscode.window.showInformationMessage('Context variables refreshed successfully');
+      this.logger.info('Context variables refreshed');
+      
+    } catch (error) {
+      this.logger.error('Error in Refresh Context Variables command', error);
+      vscode.window.showErrorMessage('Failed to refresh context variables');
+    }
+  }
+
+  private async handleCheckKeybindingConflicts(): Promise<void> {
+    this.logger.info('Check Keybinding Conflicts command triggered');
+    
+    try {
+      const keybindings = [
+        { command: 'Copy Function', key: 'Ctrl+Alt+Shift+F' },
+        { command: 'Copy to File', key: 'Ctrl+Alt+Shift+C' },
+        { command: 'Move to File', key: 'Ctrl+Alt+Shift+M' },
+        { command: 'Save All', key: 'Ctrl+Alt+Shift+A' }
+      ];
+
+      // Show in output channel for detailed view
+      this.logger.info('Keybinding conflict check', { keybindings });
+      this.logger.show();
+      
+      // Show informational dialog
+      const action = await vscode.window.showInformationMessage(
+        'Check VS Code Keyboard Shortcuts editor for potential conflicts. See output channel for details.',
+        'Open Keyboard Shortcuts',
+        'Enable Keybindings',
+        'Cancel'
+      );
+
+      if (action === 'Open Keyboard Shortcuts') {
+        await vscode.commands.executeCommand('workbench.action.openGlobalKeybindings');
+      } else if (action === 'Enable Keybindings') {
+        await this.handleEnableKeybindings();
+      }
+      
+    } catch (error) {
+      this.logger.error('Error in Check Keybinding Conflicts command', error);
+      vscode.window.showErrorMessage('Failed to check keybinding conflicts');
+    }
+  }
+
+  private async handleEnableKeybindings(): Promise<void> {
+    this.logger.info('Enable Keybindings command triggered');
+    
+    try {
+      const confirmation = await vscode.window.showWarningMessage(
+        'This will enable keyboard shortcuts for Additional Context Menus. Make sure to check for conflicts first.',
+        'Check Conflicts First',
+        'Enable Anyway',
+        'Cancel'
+      );
+
+      if (confirmation === 'Check Conflicts First') {
+        await this.handleCheckKeybindingConflicts();
+        return;
+      } else if (confirmation === 'Enable Anyway') {
+        await this.configService.updateConfiguration('enableKeybindings', true);
+        vscode.window.showInformationMessage('Keybindings enabled! Use Ctrl+Alt+Shift+[F/C/M/A] for commands.');
+        this.logger.info('Keybindings enabled');
+      }
+      
+    } catch (error) {
+      this.logger.error('Error in Enable Keybindings command', error);
+      vscode.window.showErrorMessage('Failed to enable keybindings');
+    }
+  }
+
+  private async handleDisableKeybindings(): Promise<void> {
+    this.logger.info('Disable Keybindings command triggered');
+    
+    try {
+      await this.configService.updateConfiguration('enableKeybindings', false);
+      vscode.window.showInformationMessage('Keybindings disabled. Use context menu for commands.');
+      this.logger.info('Keybindings disabled');
+      
+    } catch (error) {
+      this.logger.error('Error in Disable Keybindings command', error);
+      vscode.window.showErrorMessage('Failed to disable keybindings');
+    }
   }
 
   private async handleConfigurationChanged(): Promise<void> {

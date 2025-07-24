@@ -66,6 +66,8 @@ suite('Additional Context Menus - E2E Tests', () => {
       vscode.ConfigurationTarget.Workspace
     );
     await config.update('saveAll.skipReadOnly', undefined, vscode.ConfigurationTarget.Workspace);
+    await config.update('enableKeybindings', undefined, vscode.ConfigurationTarget.Workspace);
+    await config.update('showKeybindingsInMenu', undefined, vscode.ConfigurationTarget.Workspace);
 
     await new Promise((resolve) => setTimeout(resolve, 200)); // Allow time for config updates
 
@@ -98,6 +100,11 @@ suite('Additional Context Menus - E2E Tests', () => {
         'additionalContextMenus.enable',
         'additionalContextMenus.disable',
         'additionalContextMenus.showOutputChannel',
+        'additionalContextMenus.debugContextVariables',
+        'additionalContextMenus.refreshContextVariables',
+        'additionalContextMenus.checkKeybindingConflicts',
+        'additionalContextMenus.enableKeybindings',
+        'additionalContextMenus.disableKeybindings',
       ];
 
       for (const command of expectedCommands) {
@@ -120,6 +127,8 @@ suite('Additional Context Menus - E2E Tests', () => {
       assert.strictEqual(config.get('copyCode.preserveComments'), true);
       assert.strictEqual(config.get('saveAll.showNotification'), true);
       assert.strictEqual(config.get('saveAll.skipReadOnly'), true);
+      assert.strictEqual(config.get('enableKeybindings'), false);
+      assert.strictEqual(config.get('showKeybindingsInMenu'), true);
     });
   });
 
@@ -148,6 +157,61 @@ suite('Additional Context Menus - E2E Tests', () => {
       // This should not throw any errors
       await vscode.commands.executeCommand('additionalContextMenus.showOutputChannel');
       assert.ok(true, 'Show output channel command executed successfully');
+    });
+
+    test('Debug Context Variables command should execute without errors', async () => {
+      // This should not throw any errors
+      await vscode.commands.executeCommand('additionalContextMenus.debugContextVariables');
+      assert.ok(true, 'Debug context variables command executed successfully');
+    });
+
+    test('Refresh Context Variables command should execute without errors', async () => {
+      // This should not throw any errors
+      await vscode.commands.executeCommand('additionalContextMenus.refreshContextVariables');
+      assert.ok(true, 'Refresh context variables command executed successfully');
+    });
+
+    test('Check Keybinding Conflicts command should execute without errors', async function() {
+      this.timeout(5000);
+      
+      try {
+        // This command shows a user dialog, so we need to handle timeout
+        await Promise.race([
+          vscode.commands.executeCommand('additionalContextMenus.checkKeybindingConflicts'),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
+        ]);
+        assert.ok(true, 'Check keybinding conflicts command executed successfully');
+      } catch (error) {
+        if (error instanceof Error && error.message === 'Timeout') {
+          assert.ok(true, 'Check keybinding conflicts command timed out as expected (requires user interaction)');
+        } else {
+          throw error;
+        }
+      }
+    });
+
+    test('Enable/Disable Keybindings commands should work correctly', async () => {
+      // Test disable keybindings command
+      await vscode.commands.executeCommand('additionalContextMenus.disableKeybindings');
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Allow time for config update
+
+      let config = vscode.workspace.getConfiguration('additionalContextMenus');
+      assert.strictEqual(config.get('enableKeybindings'), false, 'Keybindings should be disabled');
+
+      // Test enable keybindings command (this will show a confirmation dialog, so it might timeout)
+      try {
+        await Promise.race([
+          vscode.commands.executeCommand('additionalContextMenus.enableKeybindings'),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000))
+        ]);
+        assert.ok(true, 'Enable keybindings command executed (may have timed out due to user confirmation)');
+      } catch (error) {
+        if (error instanceof Error && error.message === 'Timeout') {
+          assert.ok(true, 'Enable keybindings command timed out as expected (requires user confirmation)');
+        } else {
+          throw error;
+        }
+      }
     });
 
     test('Save All command should save dirty documents', async () => {

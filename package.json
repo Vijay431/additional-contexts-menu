@@ -2,7 +2,7 @@
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
   "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, TypeScript & JavaScript with intelligent code operations.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
   "icon": "logo.png",
@@ -81,6 +81,31 @@
         "command": "additionalContextMenus.showOutputChannel",
         "title": "Additional Context Menus: Show Output Channel",
         "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.debugContextVariables",
+        "title": "Additional Context Menus: Debug Context Variables",
+        "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.refreshContextVariables",
+        "title": "Additional Context Menus: Refresh Context Variables",
+        "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.checkKeybindingConflicts",
+        "title": "Additional Context Menus: Check Keybinding Conflicts",
+        "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.enableKeybindings",
+        "title": "Additional Context Menus: Enable Keybindings",
+        "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.disableKeybindings",
+        "title": "Additional Context Menus: Disable Keybindings",
+        "category": "Additional Context Menus"
       }
     ],
     "configuration": {
@@ -140,33 +165,69 @@
           "type": "boolean",
           "default": true,
           "description": "Skip read-only files when saving all"
+        },
+        "additionalContextMenus.enableKeybindings": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable keyboard shortcuts for context menu commands. WARNING: Check for conflicts with existing keybindings before enabling."
+        },
+        "additionalContextMenus.showKeybindingsInMenu": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show keyboard shortcuts in context menu items when keybindings are enabled"
         }
       }
     },
     "menus": {
       "editor/context": [
         {
-          "when": "editorTextFocus && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyFunction",
           "group": "1_modification@1"
         },
         {
-          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.isNodeProject",
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
           "command": "additionalContextMenus.copyCodeToFile",
           "group": "1_modification@2"
         },
         {
-          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.isNodeProject",
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
           "command": "additionalContextMenus.moveCodeToFile",
           "group": "1_modification@3"
         },
         {
-          "when": "editorTextFocus",
+          "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.saveAll",
           "group": "2_workspace@1"
         }
       ]
-    }
+    },
+    "keybindings": [
+      {
+        "command": "additionalContextMenus.copyFunction",
+        "key": "ctrl+alt+shift+f",
+        "mac": "cmd+alt+shift+f",
+        "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
+      },
+      {
+        "command": "additionalContextMenus.copyCodeToFile",
+        "key": "ctrl+alt+shift+c",
+        "mac": "cmd+alt+shift+c",
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
+      },
+      {
+        "command": "additionalContextMenus.moveCodeToFile",
+        "key": "ctrl+alt+shift+m",
+        "mac": "cmd+alt+shift+m",
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
+      },
+      {
+        "command": "additionalContextMenus.saveAll",
+        "key": "ctrl+alt+shift+a",
+        "mac": "cmd+alt+shift+a",
+        "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
+      }
+    ]
   },
   "main": "./dist/extension.js",
   "scripts": {
