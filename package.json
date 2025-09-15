@@ -251,7 +251,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^18.19.120",
-    "@types/vscode": "^1.102.0",
+    "@types/vscode": "^1.104.0",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.25.8",
