@@ -247,7 +247,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
-    "@stylistic/eslint-plugin": "^5.2.2",
+    "@stylistic/eslint-plugin": "^5.4.0",
     "@types/fs-extra": "^11.0.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^18.19.120",
