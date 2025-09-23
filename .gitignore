@@ -19,3 +19,7 @@ Thumbs.db
 CLAUDE.md
 .claude
 TODO.md
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

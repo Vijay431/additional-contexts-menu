@@ -5,6 +5,7 @@ import { ProjectDetectionService } from '../services/projectDetectionService';
 import { FileDiscoveryService } from '../services/fileDiscoveryService';
 import { FileSaveService } from '../services/fileSaveService';
 import { CodeAnalysisService } from '../services/codeAnalysisService';
+import { TerminalService } from '../services/terminalService';
 
 export class ContextMenuManager {
   private logger: Logger;
@@ -13,6 +14,7 @@ export class ContextMenuManager {
   private fileDiscoveryService: FileDiscoveryService;
   private fileSaveService: FileSaveService;
   private codeAnalysisService: CodeAnalysisService;
+  private terminalService: TerminalService;
   private disposables: vscode.Disposable[] = [];
 
   constructor() {
@@ -22,6 +24,7 @@ export class ContextMenuManager {
     this.fileDiscoveryService = FileDiscoveryService.getInstance();
     this.fileSaveService = FileSaveService.getInstance();
     this.codeAnalysisService = CodeAnalysisService.getInstance();
+    this.terminalService = TerminalService.getInstance();
   }
 
   public async initialize(): Promise<void> {
@@ -90,6 +93,9 @@ export class ContextMenuManager {
       ),
       vscode.commands.registerCommand('additionalContextMenus.disableKeybindings', () =>
         this.handleDisableKeybindings()
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.openInTerminal', () =>
+        this.handleOpenInTerminal()
       )
     );
 
@@ -496,6 +502,25 @@ export class ContextMenuManager {
     } catch (error) {
       this.logger.error('Error in Disable Keybindings command', error);
       vscode.window.showErrorMessage('Failed to disable keybindings');
+    }
+  }
+
+  private async handleOpenInTerminal(): Promise<void> {
+    this.logger.info('Open in Terminal command triggered');
+
+    try {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        vscode.window.showErrorMessage('No active editor found');
+        return;
+      }
+
+      const filePath = editor.document.fileName;
+      await this.terminalService.openInTerminal(filePath);
+
+    } catch (error) {
+      this.logger.error('Error in Open in Terminal command', error);
+      vscode.window.showErrorMessage('Failed to open terminal');
     }
   }
 

@@ -47,6 +47,11 @@ export class ConfigurationService {
       },
       enableKeybindings: config.get<boolean>('enableKeybindings', false),
       showKeybindingsInMenu: config.get<boolean>('showKeybindingsInMenu', true),
+      terminal: {
+        type: config.get<'integrated' | 'external' | 'system-default'>('terminal.type', 'integrated'),
+        externalTerminalCommand: config.get<string>('terminal.externalTerminalCommand', ''),
+        openBehavior: config.get<'parent-directory' | 'workspace-root' | 'current-directory'>('terminal.openBehavior', 'parent-directory'),
+      },
     };
   }
 

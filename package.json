@@ -106,6 +106,12 @@
         "command": "additionalContextMenus.disableKeybindings",
         "title": "Additional Context Menus: Disable Keybindings",
         "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.openInTerminal",
+        "title": "Open in Terminal",
+        "category": "Additional Context Menus",
+        "icon": "$(terminal)"
       }
     ],
     "configuration": {
@@ -175,6 +181,31 @@
           "type": "boolean",
           "default": true,
           "description": "Show keyboard shortcuts in context menu items when keybindings are enabled"
+        },
+        "additionalContextMenus.terminal.type": {
+          "type": "string",
+          "enum": [
+            "integrated",
+            "external",
+            "system-default"
+          ],
+          "default": "integrated",
+          "description": "Type of terminal to open when using 'Open in Terminal' command"
+        },
+        "additionalContextMenus.terminal.externalTerminalCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Custom command for external terminal. Use {{directory}} as placeholder for directory path"
+        },
+        "additionalContextMenus.terminal.openBehavior": {
+          "type": "string",
+          "enum": [
+            "parent-directory",
+            "workspace-root",
+            "current-directory"
+          ],
+          "default": "parent-directory",
+          "description": "Which directory to open in terminal"
         }
       }
     },
@@ -199,6 +230,11 @@
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.saveAll",
           "group": "2_workspace@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.openInTerminal",
+          "group": "2_workspace@2"
         }
       ]
     },
