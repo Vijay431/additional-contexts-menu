@@ -164,37 +164,43 @@ export class TestSetup {
    */
   private static restoreOriginalMethods(): void {
     for (const [key, originalMethod] of originalMethods.entries()) {
-      const [object, method] = key.split('.');
+      const parts = key.split('.');
+      if (parts.length < 2) continue;
+
+      const [object, method] = parts;
+      if (!object || !method) continue;
 
       switch (object) {
         case 'window':
           if (method === 'terminals') {
             delete (vscode.window as any).terminals;
-          } else {
+          } else if (originalMethod) {
             (vscode.window as any)[method] = originalMethod;
           }
           break;
         case 'workspace':
           if (method === 'workspaceFolders') {
             delete (vscode.workspace as any).workspaceFolders;
-          } else if (method.startsWith('fs.')) {
+          } else if (method && method.startsWith('fs.')) {
             const fsMethod = method.replace('fs.', '');
-            if (vscode.workspace.fs) {
+            if (vscode.workspace.fs && originalMethod) {
               (vscode.workspace.fs as any)[fsMethod] = originalMethod;
             }
-          } else {
+          } else if (originalMethod) {
             (vscode.workspace as any)[method] = originalMethod;
           }
           break;
         case 'ConfigurationService':
-          if (method === 'getInstance') {
+          if (method === 'getInstance' && originalMethod) {
             (ConfigurationService as any).getInstance = originalMethod;
-          } else {
+          } else if (originalMethod) {
             (ConfigurationService.prototype as any)[method] = originalMethod;
           }
           break;
         case 'Logger':
-          (Logger.prototype as any)[method] = originalMethod;
+          if (originalMethod) {
+            (Logger.prototype as any)[method] = originalMethod;
+          }
           break;
       }
     }

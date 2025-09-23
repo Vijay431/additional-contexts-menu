@@ -49,7 +49,18 @@ What you expected the context menu or code operation to do.
 - [ ] Copy Function doesn't detect functions correctly
 - [ ] Copy/Move operations fail with imports
 - [ ] Save All doesn't work properly
+- [ ] **Open in Terminal doesn't work** (NEW in v1.2.0)
 - [ ] Other:
+
+**Terminal Functionality Issues** (v1.2.0+)
+
+- [ ] **Terminal doesn't open**: No response when clicking "Open in Terminal"
+- [ ] **Wrong directory**: Terminal opens in incorrect location
+- [ ] **Platform issues**: Cross-platform terminal problems (Windows/macOS/Linux)
+- [ ] **Configuration issues**: Custom terminal commands not working
+- [ ] **Permission errors**: Terminal access denied or permission problems
+- [ ] **External terminal**: Custom external terminal command fails
+- [ ] **System default**: System default terminal doesn't open correctly
 
 **Edge Case Context** (if applicable)
 

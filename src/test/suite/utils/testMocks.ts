@@ -12,6 +12,7 @@ export class MockTerminal implements vscode.Terminal {
   public readonly creationOptions: vscode.TerminalOptions;
   public exitStatus: vscode.TerminalExitStatus | undefined;
   public state: vscode.TerminalState;
+  public shellIntegration: vscode.TerminalShellIntegration | undefined;
 
   private _disposed = false;
 
@@ -19,7 +20,11 @@ export class MockTerminal implements vscode.Terminal {
     this.name = options.name || 'Mock Terminal';
     this.creationOptions = options;
     this.processId = Promise.resolve(12345);
-    this.state = { isInteractedWith: false };
+    this.state = {
+      isInteractedWith: false,
+      shell: undefined
+    };
+    this.shellIntegration = undefined;
   }
 
   sendText(text: string, shouldExecute?: boolean): void {

@@ -12,6 +12,7 @@ Enhanced right-click context menus for Node.js development with intelligent code
 - 📋 **Copy to Existing File** - Smart code copying with import conflict resolution
 - ✂️ **Move to Existing File** - Intelligent code moving with automatic cleanup
 - 💾 **Save All** - Enhanced save functionality with progress feedback and read-only handling
+- 🖥️ **Open in Terminal** - Cross-platform terminal integration (NEW in v1.2.0)
 
 ### Project Intelligence
 
@@ -82,6 +83,18 @@ The extension automatically detects Node.js projects and enhances right-click co
 
 - Right-click anywhere in the editor
 - Select "Save All" to save all modified files with progress feedback
+
+### Open in Terminal (v1.2.0+)
+
+1. Right-click on any file in the editor
+2. Select "Open in Terminal" from the context menu
+3. Terminal opens in the appropriate directory based on your configuration
+4. Works across Windows, macOS, and Linux with intelligent platform detection
+
+**Terminal Types:**
+- **Integrated** - VS Code's built-in terminal (default)
+- **External** - Custom external terminal application
+- **System Default** - Platform's default terminal (cmd/PowerShell, Terminal.app, gnome-terminal, etc.)
 
 ### Commands
 
@@ -173,6 +186,46 @@ Additional Context Menus provides extensive configuration options:
   - ⚠️ **Warning**: Check for conflicts with existing keybindings before enabling
 - `additionalContextMenus.showKeybindingsInMenu` (boolean, default: `true`) - Show keyboard shortcuts in context menu items when keybindings are enabled
 
+### Terminal Settings (v1.2.0+)
+
+- `additionalContextMenus.terminal.type` (string, default: `"integrated"`) - Type of terminal to open
+  - `"integrated"` - VS Code's built-in terminal
+  - `"external"` - Custom external terminal application
+  - `"system-default"` - Platform's default terminal
+- `additionalContextMenus.terminal.externalTerminalCommand` (string, default: `""`) - Custom command for external terminal
+  - Use `{{directory}}` as placeholder for directory path
+  - Examples: `"wt -d {{directory}}"` (Windows Terminal), `"open -a iTerm {{directory}}"` (iTerm2)
+- `additionalContextMenus.terminal.openBehavior` (string, default: `"parent-directory"`) - Which directory to open in terminal
+  - `"parent-directory"` - Directory containing the file
+  - `"workspace-root"` - Root of the workspace
+  - `"current-directory"` - The file's directory
+
+#### Terminal Configuration Examples
+
+**Windows Terminal:**
+```json
+{
+  "additionalContextMenus.terminal.type": "external",
+  "additionalContextMenus.terminal.externalTerminalCommand": "wt -d {{directory}}"
+}
+```
+
+**iTerm2 (macOS):**
+```json
+{
+  "additionalContextMenus.terminal.type": "external",
+  "additionalContextMenus.terminal.externalTerminalCommand": "open -a iTerm {{directory}}"
+}
+```
+
+**System Default with Workspace Root:**
+```json
+{
+  "additionalContextMenus.terminal.type": "system-default",
+  "additionalContextMenus.terminal.openBehavior": "workspace-root"
+}
+```
+
 ## Supported Frameworks
 
 The extension automatically detects and provides enhanced functionality for:
@@ -195,7 +248,16 @@ Please report any issues on our [GitHub repository](https://github.com/Vijay431/
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
-### [1.1.0] - Latest
+### [1.2.0] - Latest
+
+- **🖥️ Cross-Platform Terminal Integration**: Right-click "Open in Terminal" with intelligent platform detection
+- **🔧 Three Terminal Types**: Integrated, External, and System Default with automatic fallbacks
+- **⚙️ Configurable Directory Behaviors**: Parent directory, workspace root, or current directory options
+- **🌐 Robust Cross-Platform Support**: Windows (cmd/PowerShell), macOS (Terminal.app), Linux (auto-detection)
+- **🛠️ Enhanced GitHub Infrastructure**: Updated templates, issue tracking, and comprehensive wiki
+- **📚 Custom External Terminal Support**: User-configurable commands with directory placeholders
+
+### [1.1.0] - Previous Release
 
 - **⌨️ Keyboard Shortcuts System**: Complete keybinding support with conflict detection and safety features
 - **📊 Status Bar Integration**: Visual project status indicators with framework-specific icons

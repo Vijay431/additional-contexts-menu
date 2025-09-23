@@ -244,7 +244,10 @@ export class TerminalService {
   private getWorkspaceRoot(): string {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (workspaceFolders && workspaceFolders.length > 0) {
-      return workspaceFolders[0].uri.fsPath;
+      const firstWorkspace = workspaceFolders[0];
+      if (firstWorkspace) {
+        return firstWorkspace.uri.fsPath;
+      }
     }
 
     return process.cwd();

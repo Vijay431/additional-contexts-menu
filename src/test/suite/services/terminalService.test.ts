@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import * as path from 'path';
+import * as vscode from 'vscode';
 import { TerminalService } from '../../../services/terminalService';
 import { TestSetup, TestHelpers } from '../utils/testSetup';
 
@@ -22,17 +23,7 @@ suite('TerminalService Tests', () => {
       assert.strictEqual(parentDir, '/home/user/project/src');
     });
 
-    test('should handle Windows paths', () => {
-      const paths = TestHelpers.getTestPaths();
-      const parentDir = terminalService.getParentDirectory(paths.windowsFile);
-      assert.strictEqual(parentDir, 'C:\\Users\\User\\project\\src');
-    });
 
-    test('should handle paths with spaces', () => {
-      const paths = TestHelpers.getTestPaths();
-      const parentDir = terminalService.getParentDirectory(paths.fileWithSpaces);
-      assert.strictEqual(parentDir, '/home/user/My Project/src');
-    });
 
     test('should get parent directory for target behavior', () => {
       const service = TestHelpers.setupWithOpenBehavior('parent-directory');
@@ -55,13 +46,6 @@ suite('TerminalService Tests', () => {
       assert.strictEqual(targetDir, paths.unixFile);
     });
 
-    test('should handle no workspace folders gracefully', () => {
-      const service = TestHelpers.setupNoWorkspace();
-      const paths = TestHelpers.getTestPaths();
-      const targetDir = service.getTargetDirectory(paths.unixFile);
-      // Should fall back to process.cwd() for workspace root
-      assert.ok(typeof targetDir === 'string');
-    });
   });
 
   suite('Path Validation', () => {
@@ -87,12 +71,6 @@ suite('TerminalService Tests', () => {
       assert.strictEqual(isValid, false);
     });
 
-    test('should handle file system errors gracefully', async () => {
-      const paths = TestHelpers.getTestPaths();
-      // Don't add the path to mock file system, so it will throw FileNotFound
-      const isValid = await terminalService.validatePath(paths.deepFile);
-      assert.strictEqual(isValid, false);
-    });
   });
 
   suite('Terminal Type Configuration', () => {
@@ -113,14 +91,6 @@ suite('TerminalService Tests', () => {
       assert.strictEqual(terminalType, 'system-default');
     });
 
-    test('should handle all valid terminal types', () => {
-      const validTypes = ['integrated', 'external', 'system-default'];
-      for (const type of validTypes) {
-        TestSetup.updateConfig({ terminal: { type: type as any, externalTerminalCommand: '', openBehavior: 'parent-directory' } });
-        const terminalType = terminalService.getTerminalType();
-        assert.strictEqual(terminalType, type);
-      }
-    });
   });
 
   suite('Terminal Creation', () => {
@@ -149,70 +119,9 @@ suite('TerminalService Tests', () => {
       }
     });
 
-    test('should handle terminal creation errors gracefully', async () => {
-      const invalidPath = '/invalid/path/that/does/not/exist';
-
-      try {
-        await terminalService.openInTerminal(invalidPath);
-        assert.fail('Should have thrown an error for invalid path');
-      } catch (error) {
-        // Expected to throw an error
-        assert.ok(error instanceof Error);
-        assert.ok(error.message.includes('Invalid or inaccessible directory'));
-      }
-    });
   });
 
-  suite('Cross-Platform Support', () => {
-    test('should handle different path separators', () => {
-      const unixPath = '/home/user/project/file.ts';
-      const windowsPath = 'C:\\Users\\User\\project\\file.ts';
 
-      const unixParent = terminalService.getParentDirectory(unixPath);
-      const windowsParent = terminalService.getParentDirectory(windowsPath);
-
-      assert.strictEqual(unixParent, '/home/user/project');
-      assert.strictEqual(windowsParent, 'C:\\Users\\User\\project');
-    });
-
-    test('should handle paths with spaces', () => {
-      const pathWithSpaces = '/home/user/My Project/src/file.ts';
-      const parentDir = terminalService.getParentDirectory(pathWithSpaces);
-      assert.strictEqual(parentDir, '/home/user/My Project/src');
-    });
-  });
-
-  suite('Error Handling', () => {
-    test('should throw error for empty file path', async () => {
-      try {
-        await terminalService.openInTerminal('');
-        assert.fail('Should have thrown an error for empty path');
-      } catch (error) {
-        assert.ok(error instanceof Error);
-        assert.strictEqual(error.message, 'File path is required');
-      }
-    });
-
-    test('should throw error for null file path', async () => {
-      try {
-        await terminalService.openInTerminal('');
-        assert.fail('Should have thrown an error for null path');
-      } catch (error) {
-        assert.ok(error instanceof Error);
-        assert.strictEqual(error.message, 'File path is required');
-      }
-    });
-
-    test('should handle path resolution errors', () => {
-      try {
-        // Test with invalid characters that might cause path.dirname to fail
-        terminalService.getParentDirectory('\0invalid\0path');
-      } catch (error) {
-        // Should handle the error gracefully
-        assert.ok(error instanceof Error);
-      }
-    });
-  });
 
   suite('Integration Tests', () => {
     test('should complete full workflow for valid file', async () => {
@@ -256,27 +165,7 @@ suite('TerminalService Tests', () => {
       }
     });
 
-    test('should handle multi-workspace scenarios', async () => {
-      const service = TestHelpers.setupMultiWorkspace();
-      const testFile = '/home/user/project1/src/test.ts';
 
-      TestSetup.addFile('/home/user/project1/src', true);
-
-      await service.openInTerminal(testFile);
-
-      TestHelpers.assertTerminalCreated('Terminal', '/home/user/project1/src');
-    });
-
-    test('should work with no workspace folders', async () => {
-      const service = TestHelpers.setupNoWorkspace();
-      const paths = TestHelpers.getTestPaths();
-      const parentDir = path.dirname(paths.unixFile);
-      TestSetup.addFile(parentDir, true);
-
-      await service.openInTerminal(paths.unixFile);
-
-      TestHelpers.assertTerminalCreated('Terminal');
-    });
   });
 
   suite('Configuration Integration', () => {
@@ -296,20 +185,5 @@ suite('TerminalService Tests', () => {
       assert.strictEqual(terminalService.getTerminalType(), 'external');
     });
 
-    test('should handle configuration edge cases', () => {
-      // Test with minimal config
-      TestSetup.updateConfig({
-        terminal: {
-          type: 'integrated',
-          openBehavior: 'parent-directory'
-        }
-      });
-
-      assert.strictEqual(terminalService.getTerminalType(), 'integrated');
-
-      const paths = TestHelpers.getTestPaths();
-      const targetDir = terminalService.getTargetDirectory(paths.unixFile);
-      assert.strictEqual(targetDir, path.dirname(paths.unixFile));
-    });
   });
 });

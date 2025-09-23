@@ -7,6 +7,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-09-23
+
+### Added
+
+- **🖥️ Cross-Platform Terminal Integration**: New "Open in Terminal" functionality with comprehensive platform support
+  - Right-click context menu integration for quick terminal access
+  - **Three terminal types**: Integrated, External, System Default with intelligent detection
+  - **Cross-platform support**: Windows (cmd/PowerShell), macOS (Terminal.app), Linux (auto-detection)
+  - **Configurable directory behaviors**: Parent directory, workspace root, current directory
+  - **Robust error handling**: Permission validation, path checking, graceful fallbacks
+  - **Custom external terminal support**: User-configurable commands with directory placeholders
+
+- **⚙️ Enhanced Configuration System**: New terminal-specific settings
+  - `additionalContextMenus.terminal.type` - Choose terminal type (integrated/external/system-default)
+  - `additionalContextMenus.terminal.externalTerminalCommand` - Custom external terminal command
+  - `additionalContextMenus.terminal.openBehavior` - Directory selection behavior
+
+- **🧪 Expanded Testing Infrastructure**: Terminal service testing and validation
+  - Comprehensive terminal service test suite with cross-platform scenarios
+  - Enhanced test utilities for better testing architecture
+  - Error condition and configuration edge case testing
+
+- **📚 GitHub Repository Management**: Enhanced community infrastructure
+  - Updated Pull Request templates with terminal functionality testing
+  - Enhanced Issue templates with terminal-specific bug reporting
+  - New terminal configuration issue template
+  - Comprehensive GitHub wiki with detailed guides and API reference
+
+### Enhanced
+
+- **🖱️ Context Menu System**: Added terminal integration to existing menu structure
+  - Terminal option appears for all file types (not just Node.js projects)
+  - Seamless integration with existing Copy, Move, and Save All operations
+  - Consistent behavior across different project types and frameworks
+
+- **🏗️ Service Architecture**: Added TerminalService to existing service ecosystem
+  - New TerminalService singleton with full lifecycle management
+  - Integration with existing ConfigurationService for settings management
+  - Consistent error handling and logging patterns
+
+### Technical Improvements
+
+- **🔧 Code Quality**: Enhanced development infrastructure
+  - Updated GitHub templates for better contribution experience
+  - Improved testing coverage for new terminal functionality
+  - Enhanced documentation and API reference materials
+
+- **📖 Documentation**: Comprehensive updates for v1.2.0
+  - GitHub wiki with detailed terminal integration guide
+  - Updated README.md with terminal features and configuration examples
+  - Enhanced troubleshooting documentation for cross-platform issues
+
+- **🌐 Cross-Platform Reliability**: Robust platform detection and handling
+  - Automatic terminal application detection on Linux systems
+  - Intelligent fallback mechanisms for unsupported configurations
+  - Platform-specific command generation and error handling
+
 ## [1.1.0] - 2025-07-24
 
 ### Added

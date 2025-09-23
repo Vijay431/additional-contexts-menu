@@ -1,6 +1,12 @@
-## Description
+# Pull Request - Additional Context Menus v1.2.0+
 
-Brief description of the context menu or code operation changes.
+## 📋 Description
+
+### What changed?
+<!-- Provide a detailed description of the changes made in this PR -->
+
+### Why was this change needed?
+<!-- Explain the motivation behind this change -->
 
 ## Type of Change
 
@@ -23,7 +29,7 @@ Test your changes across different project types:
 - [ ] Tested with TypeScript files (.ts, .tsx)
 - [ ] Tested with JavaScript files (.js, .jsx)
 
-## Context Menu Testing
+## 🖱️ Context Menu Testing
 
 Verify all context menu functionality:
 
@@ -31,8 +37,35 @@ Verify all context menu functionality:
 - [ ] Copy to Existing File handles imports properly
 - [ ] Move to Existing File cleans up source file
 - [ ] Save All shows progress feedback
+- [ ] **Open in Terminal** works across platforms (NEW in v1.2.0)
 - [ ] Context menus appear in correct file types
 - [ ] Project detection works properly (Node.js projects only)
+
+## 🖥️ Terminal Functionality Testing (v1.2.0+)
+
+Test the new terminal integration features:
+
+### Cross-Platform Terminal Testing
+- [ ] **Windows**: Integrated terminal opens correctly
+- [ ] **Windows**: System default (cmd/PowerShell) opens correctly
+- [ ] **macOS**: Integrated terminal opens correctly
+- [ ] **macOS**: System default (Terminal.app) opens correctly
+- [ ] **Linux**: Integrated terminal opens correctly
+- [ ] **Linux**: System default terminal detection works
+
+### Terminal Configuration Testing
+- [ ] **Integrated Terminal**: Opens in correct directory
+- [ ] **External Terminal**: Custom command configuration works
+- [ ] **System Default**: Platform-specific commands execute properly
+- [ ] **Directory Behavior**: Parent directory selection works
+- [ ] **Directory Behavior**: Workspace root selection works
+- [ ] **Directory Behavior**: Current directory selection works
+
+### Terminal Error Handling
+- [ ] **Permission Issues**: Graceful error handling with helpful messages
+- [ ] **Invalid Paths**: Proper validation and fallback behavior
+- [ ] **Missing Terminals**: Fallback to integrated terminal works
+- [ ] **External Command Failures**: Appropriate error reporting
 
 ## Edge Case Testing
 
