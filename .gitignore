@@ -7,8 +7,9 @@ dist
 node_modules
 out
 
-.codacy
 blogs
+.specify
+.mcp.json
 
 # Debug files
 *.map
@@ -23,6 +24,3 @@ CLAUDE.md
 .claude
 TODO.md
 
-
-#Ignore vscode AI rules
-.github/instructions/codacy.instructions.md
