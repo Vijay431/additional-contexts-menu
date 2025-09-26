@@ -1,0 +1,225 @@
+name: Daily Security Audit
+
+on:
+  schedule:
+    # Run daily at 2:00 AM UTC to minimize impact on development
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+  push:
+    branches: ['master']
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  security-audit:
+    name: NPM Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Security Audit
+        id: audit
+        run: |
+          echo "Running npm audit..."
+          npm audit --json > audit-results.json || true
+
+          # Count vulnerabilities by severity
+          HIGH=$(jq '.vulnerabilities | to_entries | map(select(.value.severity == "high")) | length' audit-results.json)
+          MODERATE=$(jq '.vulnerabilities | to_entries | map(select(.value.severity == "moderate")) | length' audit-results.json)
+          LOW=$(jq '.vulnerabilities | to_entries | map(select(.value.severity == "low")) | length' audit-results.json)
+          CRITICAL=$(jq '.vulnerabilities | to_entries | map(select(.value.severity == "critical")) | length' audit-results.json)
+
+          echo "critical=$CRITICAL" >> $GITHUB_OUTPUT
+          echo "high=$HIGH" >> $GITHUB_OUTPUT
+          echo "moderate=$MODERATE" >> $GITHUB_OUTPUT
+          echo "low=$LOW" >> $GITHUB_OUTPUT
+
+          # Create summary
+          TOTAL=$((CRITICAL + HIGH + MODERATE + LOW))
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+
+          echo "## Security Audit Results" >> audit-summary.md
+          echo "| Severity | Count |" >> audit-summary.md
+          echo "|----------|-------|" >> audit-summary.md
+          echo "| Critical | $CRITICAL |" >> audit-summary.md
+          echo "| High | $HIGH |" >> audit-summary.md
+          echo "| Moderate | $MODERATE |" >> audit-summary.md
+          echo "| Low | $LOW |" >> audit-summary.md
+          echo "| **Total** | **$TOTAL** |" >> audit-summary.md
+
+      - name: Check for Outdated Packages
+        id: outdated
+        run: |
+          echo "Checking for outdated packages..."
+          npm outdated --json > outdated-packages.json || true
+
+          # Count outdated packages
+          OUTDATED_COUNT=$(jq '. | length' outdated-packages.json)
+          echo "outdated_count=$OUTDATED_COUNT" >> $GITHUB_OUTPUT
+
+          if [ "$OUTDATED_COUNT" -gt 0 ]; then
+            echo "" >> audit-summary.md
+            echo "## Outdated Packages ($OUTDATED_COUNT)" >> audit-summary.md
+            echo "| Package | Current | Wanted | Latest |" >> audit-summary.md
+            echo "|---------|---------|--------|--------|" >> audit-summary.md
+            jq -r 'to_entries[] | "| \(.key) | \(.value.current) | \(.value.wanted) | \(.value.latest) |"' outdated-packages.json >> audit-summary.md
+          fi
+
+      - name: Attempt Automatic Fixes
+        id: autofix
+        if: steps.audit.outputs.total > 0
+        run: |
+          echo "Attempting to fix vulnerabilities automatically..."
+
+          # Try to fix vulnerabilities
+          npm audit fix --dry-run > fix-preview.txt 2>&1 || true
+
+          # Check if fixes are available
+          if grep -q "fixed" fix-preview.txt; then
+            echo "auto_fixes_available=true" >> $GITHUB_OUTPUT
+            npm audit fix > fix-results.txt 2>&1 || true
+
+            # Check if package-lock.json was modified
+            if git diff --quiet package-lock.json; then
+              echo "fixes_applied=false" >> $GITHUB_OUTPUT
+            else
+              echo "fixes_applied=true" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "auto_fixes_available=false" >> $GITHUB_OUTPUT
+            echo "fixes_applied=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request for Security Fixes
+        if: steps.autofix.outputs.fixes_applied == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'security: automated npm audit fix'
+          title: '🔒 Automated Security Updates'
+          body: |
+            ## Automated Security Updates
+
+            This PR contains automated fixes for npm security vulnerabilities detected during the daily security audit.
+
+            ### Security Audit Results
+            $(cat audit-summary.md)
+
+            ### Applied Fixes
+            ```
+            $(cat fix-results.txt)
+            ```
+
+            **⚠️ Please review these changes carefully before merging.**
+
+            - Verify that all tests still pass
+            - Check that the extension builds successfully
+            - Test critical functionality to ensure no breaking changes
+
+            This PR was automatically created by the Daily Security Audit workflow.
+          branch: security/automated-fixes-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            security
+            automated
+            dependencies
+
+      - name: Create Security Issue for Manual Review
+        if: steps.audit.outputs.critical > 0 || steps.audit.outputs.high > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const auditSummary = fs.readFileSync('audit-summary.md', 'utf8');
+
+            const title = `🚨 Security Alert: ${{ steps.audit.outputs.critical }} Critical, ${{ steps.audit.outputs.high }} High Vulnerabilities`;
+
+            const body = `## Security Vulnerability Alert
+
+            The daily security audit has detected **critical** or **high** severity vulnerabilities that require immediate attention.
+
+            ${auditSummary}
+
+            ## Next Steps
+
+            1. **Immediate Action Required**: Review and address critical and high-severity vulnerabilities
+            2. **Update Dependencies**: Run \`npm update\` and \`npm audit fix\` manually
+            3. **Test Thoroughly**: Ensure all functionality works after updates
+            4. **Security Review**: Consider additional security measures if needed
+
+            ## Automated Actions Taken
+
+            - ${{ steps.autofix.outputs.auto_fixes_available == 'true' && 'Automatic fixes were attempted' || 'No automatic fixes available' }}
+            - ${{ steps.autofix.outputs.fixes_applied == 'true' && 'A pull request with fixes has been created' || 'Manual intervention required' }}
+
+            ---
+
+            *This issue was automatically created by the Daily Security Audit workflow.*
+            *Audit Date: ${{ github.run_id }} | Run: ${{ github.run_number }}*`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'critical', 'automated']
+            });
+
+      - name: Notify on Workflow Failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔧 Daily Security Audit Failed',
+              body: `## Security Audit Workflow Failure
+
+              The daily security audit workflow has failed and requires attention.
+
+              **Workflow Run**: ${{ github.run_id }}
+              **Run Number**: ${{ github.run_number }}
+              **Failed Step**: Check the workflow logs for details
+
+              ## Action Required
+
+              Please review the workflow logs and fix any issues preventing the security audit from running properly.
+
+              ---
+
+              *This issue was automatically created due to workflow failure.*`,
+              labels: ['bug', 'workflow', 'automated']
+            });
+
+      - name: Upload Audit Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-audit-results-${{ github.run_number }}
+          path: |
+            audit-results.json
+            outdated-packages.json
+            audit-summary.md
+            fix-preview.txt
+            fix-results.txt
+          retention-days: 30
