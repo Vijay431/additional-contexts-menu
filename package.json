@@ -203,12 +203,16 @@
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "build": "node esbuild.config.js",
-    "watch": "node esbuild.config.js --watch",
-    "package": "node esbuild.config.js --production",
+    "build": "tsx esbuild.config.ts",
+    "watch": "tsx esbuild.config.ts --watch",
+    "package": "tsx esbuild.config.ts --production",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
+    "test": "rm -rf dist && npm run build && npm run create-minimal && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
+    "test:full": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && SKIP_OPTIMIZATION=true node ./dist/test/e2e/runE2ETest.js",
+    "test:minimal": "npm test",
+    "test:clean": "rm -rf .vscode-test/minimal-extension .vscode-test/user-data-isolated .vscode-test/user-data-dev",
+    "create-minimal": "tsx scripts/create-minimal-extension.ts",
     "format": "prettier --write ."
   },
   "devDependencies": {
@@ -234,6 +238,7 @@
     "mocha": "^11.7.1",
     "picocolors": "^1.1.1",
     "prettier": "^3.6.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
   }

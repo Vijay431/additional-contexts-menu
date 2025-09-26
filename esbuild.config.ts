@@ -1,8 +1,9 @@
-const esbuild = require('esbuild');
-const { readFileSync, writeFileSync } = require('fs');
+#!/usr/bin/env tsx
 
-/** @type {import('esbuild').BuildOptions} */
-const createConfig = (isProduction = false) => ({
+import * as esbuild from 'esbuild';
+import { readFileSync, writeFileSync } from 'fs';
+
+const createConfig = (isProduction = false): esbuild.BuildOptions => ({
   entryPoints: ['./src/extension.ts'],
   bundle: true,
   outfile: './dist/extension.js',
@@ -27,7 +28,7 @@ const createConfig = (isProduction = false) => ({
 });
 
 // Build function with comprehensive reporting
-async function build(production = false) {
+async function build(production = false): Promise<void> {
   try {
     console.log(`🚀 Building in ${production ? 'production' : 'development'} mode...`);
 
@@ -43,12 +44,13 @@ async function build(production = false) {
       const sizeKB = (stats.length / 1024).toFixed(2);
       const targetKB = 50;
 
-      console.log(`✅ Build completed successfully!`);
+      console.log('✅ Build completed successfully!');
       console.log(`📦 Bundle size: ${sizeKB} KB`);
 
       // Target verification
       if (parseFloat(sizeKB) > targetKB) {
         console.log(
+          // eslint-disable-next-line @stylistic/max-len
           `⚠️  Bundle exceeds ${targetKB}KB target by ${(parseFloat(sizeKB) - targetKB).toFixed(2)}KB`,
         );
       } else {
@@ -69,14 +71,14 @@ async function build(production = false) {
 }
 
 // Watch function for development
-async function watch() {
+async function watch(): Promise<void> {
   console.log('👀 Starting watch mode...');
 
   const config = createConfig(false);
   const context = await esbuild.context({
     ...config,
     plugins: [
-      ...config.plugins,
+      ...(config.plugins ?? []),
       {
         name: 'watch-plugin',
         setup(build) {
@@ -94,12 +96,12 @@ async function watch() {
 }
 
 // Export for external use
-module.exports = { createConfig, build, watch };
+export { build, createConfig, watch };
 
 // CLI interface
 if (require.main === module) {
   const args = process.argv.slice(2);
-  const isProduction = args.includes('--production') || process.env.NODE_ENV === 'production';
+  const isProduction = args.includes('--production') || process.env['NODE_ENV'] === 'production';
   const isWatch = args.includes('--watch');
 
   if (isWatch) {

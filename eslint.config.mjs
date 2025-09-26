@@ -40,7 +40,9 @@ export default tseslint.config(
       'src/**/*.js',
       'src/**/*.js.map',
       'test/**/*.js',
-      'test/**/*.js.map'
+      'test/**/*.js.map',
+      'srcipts/**/*.js',
+      'srcipts/**/*.js.map',
     ],
   },
 
@@ -55,10 +57,10 @@ export default tseslint.config(
     files: ['**/*.ts', '**/*.tsx'],
     plugins: {
       '@stylistic': stylistic,
-      'security': security,
-      'import': importPlugin,
-      'node': nodePlugin,
-      'promise': promisePlugin,
+      security: security,
+      import: importPlugin,
+      node: nodePlugin,
+      promise: promisePlugin,
     },
     languageOptions: {
       parser: tseslint.parser,
@@ -81,7 +83,7 @@ export default tseslint.config(
     },
     rules: {
       // Stylistic rules
-      'curly': ['error', 'all'],
+      curly: ['error', 'all'],
       '@stylistic/semi': ['error', 'always'],
       '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
       '@stylistic/comma-dangle': ['error', 'always-multiline'],
@@ -164,14 +166,7 @@ export default tseslint.config(
       'import/order': [
         'warn',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
           'newlines-between': 'always',
           alphabetize: { order: 'asc' },
         },
@@ -230,7 +225,7 @@ export default tseslint.config(
   {
     files: ['test/**/*.ts', '**/*.test.ts', '**/*.spec.ts'],
     plugins: {
-      'mocha': mochaPlugin,
+      mocha: mochaPlugin,
     },
     languageOptions: {
       globals: {
@@ -300,5 +295,5 @@ export default tseslint.config(
       'security/detect-non-literal-require': 'off',
       'import/no-dynamic-require': 'off',
     },
-  }
+  },
 );
