@@ -2,7 +2,7 @@
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
   "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, TypeScript & JavaScript with intelligent code operations.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
   "icon": "logo.png",
@@ -36,6 +36,7 @@
     "Other"
   ],
   "engines": {
+    "node": ">=16.0.0 <25.0.0",
     "vscode": "^1.102.0"
   },
   "activationEvents": [
@@ -50,14 +51,14 @@
         "icon": "$(symbol-function)"
       },
       {
-        "command": "additionalContextMenus.copyCodeToFile",
-        "title": "Copy to Existing File",
+        "command": "additionalContextMenus.copyLinesToFile",
+        "title": "Copy Lines to File",
         "category": "Additional Context Menus",
         "icon": "$(copy)"
       },
       {
-        "command": "additionalContextMenus.moveCodeToFile",
-        "title": "Move to Existing File",
+        "command": "additionalContextMenus.moveLinesToFile",
+        "title": "Move Lines to File",
         "category": "Additional Context Menus",
         "icon": "$(arrow-right)"
       },
@@ -78,34 +79,10 @@
         "category": "Additional Context Menus"
       },
       {
-        "command": "additionalContextMenus.showOutputChannel",
-        "title": "Additional Context Menus: Show Output Channel",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.debugContextVariables",
-        "title": "Additional Context Menus: Debug Context Variables",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.refreshContextVariables",
-        "title": "Additional Context Menus: Refresh Context Variables",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.checkKeybindingConflicts",
-        "title": "Additional Context Menus: Check Keybinding Conflicts",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.enableKeybindings",
-        "title": "Additional Context Menus: Enable Keybindings",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.disableKeybindings",
-        "title": "Additional Context Menus: Disable Keybindings",
-        "category": "Additional Context Menus"
+        "command": "additionalContextMenus.openInTerminal",
+        "title": "Open in Terminal",
+        "category": "Additional Context Menus",
+        "icon": "$(terminal)"
       }
     ],
     "configuration": {
@@ -166,15 +143,30 @@
           "default": true,
           "description": "Skip read-only files when saving all"
         },
-        "additionalContextMenus.enableKeybindings": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enable keyboard shortcuts for context menu commands. WARNING: Check for conflicts with existing keybindings before enabling."
+        "additionalContextMenus.terminal.type": {
+          "type": "string",
+          "enum": [
+            "integrated",
+            "external",
+            "system-default"
+          ],
+          "default": "integrated",
+          "description": "Type of terminal to open when using 'Open in Terminal' command"
         },
-        "additionalContextMenus.showKeybindingsInMenu": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show keyboard shortcuts in context menu items when keybindings are enabled"
+        "additionalContextMenus.terminal.externalTerminalCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Custom command for external terminal. Use {{directory}} as placeholder for directory path"
+        },
+        "additionalContextMenus.terminal.openBehavior": {
+          "type": "string",
+          "enum": [
+            "parent-directory",
+            "workspace-root",
+            "current-directory"
+          ],
+          "default": "parent-directory",
+          "description": "Which directory to open in terminal"
         }
       }
     },
@@ -187,62 +179,40 @@
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
-          "command": "additionalContextMenus.copyCodeToFile",
+          "command": "additionalContextMenus.copyLinesToFile",
           "group": "1_modification@2"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
-          "command": "additionalContextMenus.moveCodeToFile",
+          "command": "additionalContextMenus.moveLinesToFile",
           "group": "1_modification@3"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.saveAll",
           "group": "2_workspace@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.openInTerminal",
+          "group": "2_workspace@2"
         }
       ]
-    },
-    "keybindings": [
-      {
-        "command": "additionalContextMenus.copyFunction",
-        "key": "ctrl+alt+shift+f",
-        "mac": "cmd+alt+shift+f",
-        "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
-      },
-      {
-        "command": "additionalContextMenus.copyCodeToFile",
-        "key": "ctrl+alt+shift+c",
-        "mac": "cmd+alt+shift+c",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
-      },
-      {
-        "command": "additionalContextMenus.moveCodeToFile",
-        "key": "ctrl+alt+shift+m",
-        "mac": "cmd+alt+shift+m",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
-      },
-      {
-        "command": "additionalContextMenus.saveAll",
-        "key": "ctrl+alt+shift+a",
-        "mac": "cmd+alt+shift+a",
-        "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
-      }
-    ]
+    }
   },
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "compile": "node esbuild.config.js",
-    "watch": "node esbuild.config.js --watch",
-    "package": "node esbuild.config.js --production",
-    "compile-tests": "tsc -p ./tsconfig.test.json --outDir dist/test",
-    "lint": "eslint src --ext ts",
-    "lint:fix": "eslint src --ext ts --fix",
-    "test": "npm run test:e2e",
-    "test:e2e": "npm run compile-tests && node ./dist/test/test/e2e/runE2ETest.js",
-    "test:watch": "npm run compile-tests -- -w",
-    "test:quick": "npm run compile && npm run test:e2e",
-    "test:debug": "npm run compile-tests && code --wait && npm run test:e2e",
+    "build": "tsx esbuild.config.ts",
+    "watch": "tsx esbuild.config.ts --watch",
+    "package": "tsx esbuild.config.ts --production",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "test": "rm -rf dist && npm run build && npm run create-minimal && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
+    "test:full": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && SKIP_OPTIMIZATION=true node ./dist/test/e2e/runE2ETest.js",
+    "test:minimal": "npm test",
+    "test:clean": "rm -rf .vscode-test/minimal-extension .vscode-test/user-data-isolated .vscode-test/user-data-dev",
+    "create-minimal": "tsx scripts/create-minimal-extension.ts",
     "format": "prettier --write ."
   },
   "devDependencies": {
@@ -250,17 +220,25 @@
     "@stylistic/eslint-plugin": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^18.19.120",
+    "@types/node": "^16.18.126",
     "@types/vscode": "^1.102.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
+    "@typescript-eslint/parser": "^8.44.1",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.25.8",
     "eslint": "^9.31.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-mocha": "^11.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-security": "^3.0.1",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.0",
     "mocha": "^11.7.1",
     "picocolors": "^1.1.1",
     "prettier": "^3.6.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
   }

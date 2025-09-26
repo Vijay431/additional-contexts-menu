@@ -29,10 +29,10 @@ description: 'Explore the comprehensive features and intelligent code operations
                         <i class="fas fa-code"></i>
                     </div>
                     <div class="feature-content">
-                        <h3 class="feature-name">AST-Based Function Detection</h3>
+                        <h3 class="feature-name">Smart Function Detection</h3>
                         <p class="feature-desc">
-                            Uses Abstract Syntax Tree parsing to accurately detect and copy functions, arrow functions, methods, 
-                            and React components with proper syntax analysis for TypeScript and JavaScript files.
+                            Uses intelligent pattern matching to accurately detect and copy functions, arrow functions, methods,
+                            and React components with optimized performance for TypeScript and JavaScript files.
                         </p>
                         <ul class="feature-benefits">
                             <li>Detects function declarations, expressions, and arrow functions</li>
@@ -89,7 +89,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="feature-content">
                         <h3 class="feature-name">Enhanced Save All</h3>
                         <p class="feature-desc">
-                            Improved Save All functionality with progress feedback, read-only file handling, 
+                            Improved Save All functionality with progress feedback, read-only file handling,
                             and notification options for better development workflow.
                         </p>
                         <ul class="feature-benefits">
@@ -97,6 +97,27 @@ description: 'Explore the comprehensive features and intelligent code operations
                             <li>Automatically skips read-only files</li>
                             <li>Configurable success/failure notifications</li>
                             <li>Handles workspace multi-root scenarios</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-name">Cross-Platform Terminal Integration <span class="version-badge">v1.2.0+</span></h3>
+                        <p class="feature-desc">
+                            Right-click "Open in Terminal" functionality with intelligent cross-platform detection
+                            and configurable terminal types for seamless command-line access from any file.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li><strong>Three Terminal Types:</strong> Integrated, External, System Default</li>
+                            <li><strong>Cross-Platform Support:</strong> Windows (cmd/PowerShell), macOS (Terminal.app), Linux (auto-detection)</li>
+                            <li><strong>Directory Behaviors:</strong> Parent directory, workspace root, current directory</li>
+                            <li><strong>Custom External Terminals:</strong> Windows Terminal, iTerm2, Tilix, and more</li>
+                            <li><strong>Intelligent Fallbacks:</strong> Automatic fallback to integrated terminal on errors</li>
+                            <li><strong>Path Validation:</strong> Robust error handling for permissions and invalid paths</li>
                         </ul>
                     </div>
                 </div>
@@ -340,9 +361,20 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="arch-icon">
                         <i class="fas fa-terminal"></i>
                     </div>
+                    <h3 class="arch-title">TerminalService <span class="version-badge">v1.2.0+</span></h3>
+                    <p class="arch-desc">
+                        Cross-platform terminal integration service handling terminal type detection,
+                        directory resolution, and platform-specific command execution with error handling.
+                    </p>
+                </div>
+
+                <div class="architecture-card">
+                    <div class="arch-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
                     <h3 class="arch-title">Logger</h3>
                     <p class="arch-desc">
-                        Centralized logging utility with output channel integration 
+                        Centralized logging utility with output channel integration
                         for debugging and troubleshooting support.
                     </p>
                 </div>

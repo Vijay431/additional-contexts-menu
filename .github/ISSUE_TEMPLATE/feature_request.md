@@ -6,38 +6,35 @@ labels: enhancement
 assignees: ''
 ---
 
-**Is your feature request related to a problem?**
-Describe the current limitation with context menus or code operations. Ex. I'm always frustrated when I can't easily copy React components between files...
+## Feature Description
+Clear description of the feature you'd like to see.
 
-**Describe the solution you'd like**
-What context menu feature or code operation would you like to see?
+## Problem/Use Case
+What problem would this solve or what workflow would it improve?
 
-**Framework Context**
-Which framework(s) would this feature benefit?
+## Proposed Solution
+How do you envision this working?
 
-- [ ] React
-- [ ] Angular
-- [ ] Express
-- [ ] Next.js
+## Framework Context (check applicable)
+- [ ] React projects
+- [ ] Angular projects
+- [ ] Express projects
+- [ ] Next.js projects
 - [ ] General TypeScript/JavaScript
-- [ ] All frameworks
+- [ ] Cross-framework functionality
 
-**Code Operation Type**
-What type of operation is this?
+## Integration Location (check preferred)
+- [ ] New right-click context menu option
+- [ ] Enhancement to existing feature (Copy Function, Copy/Move, Save All, Terminal)
+- [ ] Command Palette only
+- [ ] Keyboard shortcut
+- [ ] Configuration setting
+- [ ] Other: ___________
 
-- [ ] Function/Component copying
-- [ ] Code movement between files
-- [ ] Import/Export handling
-- [ ] Project structure operations
-- [ ] Context menu enhancement
-- [ ] AST parsing improvement
-- [ ] Other
+## Examples
+**Example 1:** [Specific use case scenario]
+**Example 2:** [Another use case scenario]
+**Workflow:** [How this fits into development workflow]
 
-**Example Use Case**
-Provide a specific example of how this feature would be used in development workflow.
-
-**Describe alternatives you've considered**
-Any alternative solutions or workarounds you've considered.
-
-**Additional context**
-Screenshots, code examples, mockups, or other context about the feature request.
+## Additional Context
+Any other context, mockups, screenshots, or technical requirements.

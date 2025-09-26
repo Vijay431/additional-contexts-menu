@@ -138,12 +138,24 @@ description: 'Complete step-by-step installation guide for Additional Context Me
             
             <div class="requirement-card">
                 <div class="req-icon">
+                    <i class="fab fa-node-js"></i>
+                </div>
+                <h3 class="req-title">Node.js Runtime</h3>
+                <div class="req-details">
+                    <p class="req-version">Node.js 16-24 supported</p>
+                    <p class="req-note">For development and build tools</p>
+                    <p class="req-note">Extension runs in VS Code host</p>
+                </div>
+            </div>
+
+            <div class="requirement-card">
+                <div class="req-icon">
                     <i class="fas fa-memory"></i>
                 </div>
                 <h3 class="req-title">System Resources</h3>
                 <div class="req-details">
                     <p class="req-spec">RAM: 4GB minimum</p>
-                    <p class="req-spec">Storage: 1MB extension size</p>
+                    <p class="req-spec">Storage: ~48KB extension size</p>
                     <p class="req-note">Minimal system impact</p>
                 </div>
             </div>
@@ -157,7 +169,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
         <div class="section-header">
             <h2 class="section-title">Post-Installation Setup</h2>
             <p class="section-description">
-                Configure File Insights to match your development workflow preferences.
+                Configure Additional Context Menus to match your development workflow preferences.
             </p>
         </div>
         
@@ -168,11 +180,9 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                     <h3 class="step-title">Verify Installation</h3>
                 </div>
                 <div class="step-content">
-                    <p>After installation, open any file in VS Code. You should see the file size displayed in the status bar (bottom-right by default).</p>
-                    <div class="verification-image">
-                        <img src="https://88tynjcpeunoim0x.public.blob.vercel-storage.com/image/vscode-file_insights-extension/status-bar.png" 
-                             alt="Status Bar Verification" 
-                             class="setup-screenshot">
+                    <p>After installation, open a Node.js project in VS Code. Right-click in any TypeScript or JavaScript file to see the new context menu options.</p>
+                    <div class="verification-note">
+                        <p><strong>Note:</strong> Context menus appear in Node.js projects with package.json files and in supported file types (.ts, .tsx, .js, .jsx).</p>
                     </div>
                 </div>
             </div>
@@ -183,11 +193,16 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                     <h3 class="step-title">Access Commands</h3>
                 </div>
                 <div class="step-content">
-                    <p>Open the Command Palette (<kbd>Ctrl+Shift+P</kbd>) and type "File Insights" to see all available commands:</p>
-                    <div class="command-showcase">
-                        <img src="https://88tynjcpeunoim0x.public.blob.vercel-storage.com/image/vscode-file_insights-extension/vscode-command.png" 
-                             alt="Command Palette" 
-                             class="setup-screenshot">
+                    <p>Open the Command Palette (<kbd>Ctrl+Shift+P</kbd>) and type "Additional Context Menus" to see all available commands:</p>
+                    <div class="command-list">
+                        <ul>
+                            <li><strong>Copy Function</strong> - Copy function at cursor position</li>
+                            <li><strong>Copy Lines to File</strong> - Copy selected code to another file</li>
+                            <li><strong>Move Lines to File</strong> - Move selected code to another file</li>
+                            <li><strong>Save All</strong> - Save all open files</li>
+                            <li><strong>Open in Terminal</strong> - Open terminal in file directory</li>
+                            <li><strong>Additional Context Menus: Enable/Disable</strong> - Toggle extension</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -198,7 +213,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                     <h3 class="step-title">Configure Settings</h3>
                 </div>
                 <div class="step-content">
-                    <p>Customize File Insights through VS Code settings (<kbd>Ctrl+,</kbd>) by searching for "fileInsights":</p>
+                    <p>Customize Additional Context Menus through VS Code settings (<kbd>Ctrl+,</kbd>) by searching for "additionalContextMenus":</p>
                     <div class="settings-table">
                         <table>
                             <thead>
@@ -210,34 +225,34 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><code>fileInsights.enabled</code></td>
+                                    <td><code>additionalContextMenus.enabled</code></td>
                                     <td>Enable/disable the extension</td>
                                     <td><code>true</code></td>
                                 </tr>
                                 <tr>
-                                    <td><code>fileInsights.displayFormat</code></td>
-                                    <td>Size display format (auto, bytes, kb, mb)</td>
-                                    <td><code>auto</code></td>
-                                </tr>
-                                <tr>
-                                    <td><code>fileInsights.statusBarPosition</code></td>
-                                    <td>Status bar position (left, right)</td>
-                                    <td><code>right</code></td>
-                                </tr>
-                                <tr>
-                                    <td><code>fileInsights.showTooltip</code></td>
-                                    <td>Show detailed tooltips</td>
+                                    <td><code>additionalContextMenus.autoDetectProjects</code></td>
+                                    <td>Auto-detect Node.js projects</td>
                                     <td><code>true</code></td>
                                 </tr>
                                 <tr>
-                                    <td><code>fileInsights.refreshInterval</code></td>
-                                    <td>Refresh interval in milliseconds</td>
-                                    <td><code>500</code></td>
+                                    <td><code>additionalContextMenus.supportedExtensions</code></td>
+                                    <td>Supported file extensions</td>
+                                    <td><code>[".ts", ".tsx", ".js", ".jsx"]</code></td>
                                 </tr>
                                 <tr>
-                                    <td><code>fileInsights.maxFileSize</code></td>
-                                    <td>Maximum file size to analyze (bytes)</td>
-                                    <td><code>1073741824</code></td>
+                                    <td><code>additionalContextMenus.copyCode.insertionPoint</code></td>
+                                    <td>Code insertion strategy</td>
+                                    <td><code>smart</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>additionalContextMenus.terminal.type</code></td>
+                                    <td>Terminal type (integrated/external/system-default)</td>
+                                    <td><code>integrated</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>additionalContextMenus.saveAll.showNotification</code></td>
+                                    <td>Show save notifications</td>
+                                    <td><code>true</code></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -261,54 +276,56 @@ description: 'Complete step-by-step installation guide for Additional Context Me
         <div class="config-grid">
             <div class="config-card">
                 <h3 class="config-title">
-                    <i class="fas fa-bolt"></i>
-                    Performance Focused
+                    <i class="fas fa-code"></i>
+                    Developer Focused
                 </h3>
                 <p class="config-description">
-                    Optimized for large files and minimal resource usage.
+                    Optimized for React/TypeScript development workflows.
                 </p>
                 <div class="config-code">
                     <pre><code>{
-  "fileInsights.refreshInterval": 1000,
-  "fileInsights.maxFileSize": 536870912,
-  "fileInsights.showTooltip": false,
-  "fileInsights.displayFormat": "auto"
+  "additionalContextMenus.enabled": true,
+  "additionalContextMenus.autoDetectProjects": true,
+  "additionalContextMenus.copyCode.insertionPoint": "smart",
+  "additionalContextMenus.copyCode.handleImports": "merge",
+  "additionalContextMenus.terminal.type": "integrated"
 }</code></pre>
                 </div>
             </div>
-            
+
             <div class="config-card">
                 <h3 class="config-title">
-                    <i class="fas fa-info-circle"></i>
-                    Detailed Information
+                    <i class="fas fa-terminal"></i>
+                    Terminal Power User
                 </h3>
                 <p class="config-description">
-                    Maximum information display with detailed tooltips.
+                    Custom terminal integration with external applications.
                 </p>
                 <div class="config-code">
                     <pre><code>{
-  "fileInsights.showTooltip": true,
-  "fileInsights.displayFormat": "bytes",
-  "fileInsights.refreshInterval": 250,
-  "fileInsights.statusBarPosition": "left"
+  "additionalContextMenus.terminal.type": "external",
+  "additionalContextMenus.terminal.externalTerminalCommand": "wt -d {{directory}}",
+  "additionalContextMenus.terminal.openBehavior": "parent-directory",
+  "additionalContextMenus.copyCode.preserveComments": true
 }</code></pre>
                 </div>
             </div>
-            
+
             <div class="config-card">
                 <h3 class="config-title">
-                    <i class="fas fa-eye"></i>
-                    Minimal Display
+                    <i class="fas fa-cog"></i>
+                    Team Settings
                 </h3>
                 <p class="config-description">
-                    Clean interface with essential information only.
+                    Recommended settings for team development environments.
                 </p>
                 <div class="config-code">
                     <pre><code>{
-  "fileInsights.displayFormat": "auto",
-  "fileInsights.showTooltip": false,
-  "fileInsights.statusBarPosition": "right",
-  "fileInsights.refreshInterval": 750
+  "additionalContextMenus.enabled": true,
+  "additionalContextMenus.saveAll.showNotification": false,
+  "additionalContextMenus.copyCode.insertionPoint": "smart",
+  "additionalContextMenus.copyCode.handleImports": "merge",
+  "additionalContextMenus.supportedExtensions": [".ts", ".tsx", ".js", ".jsx"]
 }</code></pre>
                 </div>
             </div>
@@ -322,7 +339,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
         <div class="section-header">
             <h2 class="section-title">Troubleshooting</h2>
             <p class="section-description">
-                Common issues and solutions for File Insights installation and usage.
+                Common issues and solutions for Additional Context Menus installation and usage.
             </p>
         </div>
         
@@ -330,17 +347,17 @@ description: 'Complete step-by-step installation guide for Additional Context Me
             <div class="trouble-card">
                 <div class="trouble-header">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Extension Not Showing</h3>
+                    <h3>Context Menus Not Appearing</h3>
                 </div>
                 <div class="trouble-content">
-                    <p class="trouble-problem">File size is not displayed in the status bar after installation.</p>
+                    <p class="trouble-problem">Right-click context menus don't show Additional Context Menus options.</p>
                     <div class="trouble-solutions">
                         <h4>Solutions:</h4>
                         <ol>
-                            <li>Ensure you have opened a file (not just a folder)</li>
-                            <li>Check if the extension is enabled: <code>File Insights: Enable</code></li>
-                            <li>Verify the file is not exceeding the size limit (1GB default)</li>
-                            <li>Try refreshing with <code>File Insights: Refresh</code></li>
+                            <li>Ensure you're in a Node.js project with package.json</li>
+                            <li>Verify file type is supported (.ts, .tsx, .js, .jsx)</li>
+                            <li>Check if the extension is enabled: <code>Additional Context Menus: Enable</code></li>
+                            <li>Try refreshing context variables from Command Palette</li>
                         </ol>
                     </div>
                 </div>
@@ -375,10 +392,10 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                     <div class="trouble-solutions">
                         <h4>Solutions:</h4>
                         <ol>
-                            <li>Increase refresh interval: <code>fileInsights.refreshInterval</code></li>
-                            <li>Reduce max file size: <code>fileInsights.maxFileSize</code></li>
-                            <li>Disable tooltips: <code>fileInsights.showTooltip: false</code></li>
-                            <li>Check output logs: <code>File Insights: Show Output Channel</code></li>
+                            <li>Disable extension temporarily: <code>Additional Context Menus: Disable</code></li>
+                            <li>Check for large files that may slow AST parsing</li>
+                            <li>Verify Node.js version compatibility (16-24 supported)</li>
+                            <li>Check output logs: <code>Additional Context Menus: Show Output Channel</code></li>
                         </ol>
                     </div>
                 </div>
@@ -408,7 +425,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
         <div class="section-header">
             <h2 class="section-title">Next Steps</h2>
             <p class="section-description">
-                Now that you have File Insights installed, explore its full potential.
+                Now that you have Additional Context Menus installed, explore its full potential.
             </p>
         </div>
         
@@ -445,7 +462,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </div>
                 <h3 class="next-title">Support the Project</h3>
                 <p class="next-description">
-                    Help improve File Insights by contributing or sharing feedback.
+                    Help improve Additional Context Menus by contributing or sharing feedback.
                 </p>
                 <a href="{{ site.extension.github_url }}" class="btn btn-outline" target="_blank">
                     Contribute

@@ -9,6 +9,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts", "test/e2e/**/*.ts"],
-  "exclude": ["test/suite/**/*", "test/fixtures/**/*.ts", "test/runTest.ts", "node_modules"]
+  "include": ["test/**/*.ts"],
+  "exclude": ["test/fixtures/**/*.ts", "node_modules"]
 }

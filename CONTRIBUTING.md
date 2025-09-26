@@ -22,7 +22,7 @@ By participating in this project, you are expected to uphold our [Code of Conduc
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (version 18 or higher)
+- [Node.js](https://nodejs.org/) (versions 16-24 supported, 18+ recommended for development)
 - [npm](https://www.npmjs.com/) (comes with Node.js)
 - [Visual Studio Code](https://code.visualstudio.com/) (for development and testing)
 - [Git](https://git-scm.com/)
@@ -340,8 +340,8 @@ Helpful extensions for development:
 
 If you have questions about contributing:
 
-1. Check existing [issues](https://github.com/Vijay431/file-insights/issues)
-2. Search [discussions](https://github.com/Vijay431/file-insights/discussions)
+1. Check existing [issues](https://github.com/Vijay431/additional-contexts-menu/issues)
+2. Search [discussions](https://github.com/Vijay431/additional-contexts-menu/discussions)
 3. Create a new issue with the "question" label
 4. Email the maintainer: <vijayanand431@gmail.com>
 

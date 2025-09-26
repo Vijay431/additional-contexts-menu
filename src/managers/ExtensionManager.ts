@@ -1,20 +1,19 @@
 import * as vscode from 'vscode';
-import { Logger } from '../utils/logger';
+
 import { ConfigurationService } from '../services/configurationService';
-import { StatusBarService } from '../services/statusBarService';
+import { Logger } from '../utils/logger';
+
 import { ContextMenuManager } from './ContextMenuManager';
 
 export class ExtensionManager {
   private logger: Logger;
   private configService: ConfigurationService;
-  private statusBarService: StatusBarService;
   private contextMenuManager: ContextMenuManager;
   private disposables: vscode.Disposable[] = [];
 
   constructor() {
     this.logger = Logger.getInstance();
     this.configService = ConfigurationService.getInstance();
-    this.statusBarService = StatusBarService.getInstance();
     this.contextMenuManager = new ContextMenuManager();
   }
 
@@ -55,14 +54,12 @@ export class ExtensionManager {
       // Initialize context menu manager
       await this.contextMenuManager.initialize();
 
-      // Initialize status bar service
-      await this.statusBarService.initialize();
 
       // Listen for configuration changes to enable/disable extension
       this.disposables.push(
-        this.configService.onConfigurationChanged(async () => {
-          await this.handleConfigurationChanged();
-        })
+        this.configService.onConfigurationChanged(() => {
+          void this.handleConfigurationChanged();
+        }),
       );
 
       this.logger.debug('All components initialized successfully');
@@ -90,18 +87,10 @@ export class ExtensionManager {
 
   private async updateEnabledContext(): Promise<void> {
     const isEnabled = this.configService.isEnabled();
-    const keybindingsEnabled = this.configService.getConfiguration().enableKeybindings;
 
     await vscode.commands.executeCommand('setContext', 'additionalContextMenus.enabled', isEnabled);
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.enableKeybindings',
-      keybindingsEnabled
-    );
 
-    this.logger.debug(
-      `Context variables updated: enabled = ${isEnabled}, keybindings = ${keybindingsEnabled}`
-    );
+    this.logger.debug(`Context variables updated: enabled = ${isEnabled}`);
   }
 
   public deactivate(): void {
@@ -117,10 +106,6 @@ export class ExtensionManager {
       this.contextMenuManager.dispose();
     }
 
-    // Dispose status bar service
-    if (this.statusBarService) {
-      this.statusBarService.dispose();
-    }
 
     // Dispose all registered disposables
     this.disposables.forEach((disposable) => {

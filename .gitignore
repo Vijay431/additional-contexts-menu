@@ -7,6 +7,17 @@ dist
 node_modules
 out
 
+blogs
+.specify
+specs
+.mcp.json
+
+# Compiled files - prevent TypeScript output in source directories
+src/**/*.js
+src/**/*.js.map
+test/**/*.js
+test/**/*.js.map
+
 # Debug files
 *.map
 debug.log
@@ -19,3 +30,4 @@ Thumbs.db
 CLAUDE.md
 .claude
 TODO.md
+

@@ -1,6 +1,8 @@
-import * as vscode from 'vscode';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+
+import * as vscode from 'vscode';
+
 import { ProjectType } from '../types/extension';
 import { Logger } from '../utils/logger';
 
@@ -154,7 +156,7 @@ export class ProjectDetectionService {
   private determineSupportLevel(
     isNodeProject: boolean,
     frameworks: string[],
-    hasTypeScript: boolean
+    hasTypeScript: boolean,
   ): 'full' | 'partial' | 'none' {
     if (!isNodeProject) {
       return 'none';
@@ -175,7 +177,7 @@ export class ProjectDetectionService {
     isNodeProject: boolean,
     frameworks: string[],
     hasTypeScript: boolean,
-    supportLevel: 'full' | 'partial' | 'none'
+    supportLevel: 'full' | 'partial' | 'none',
   ): ProjectType {
     return {
       isNodeProject,
@@ -191,32 +193,32 @@ export class ProjectDetectionService {
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.isNodeProject',
-      projectType.isNodeProject
+      projectType.isNodeProject,
     );
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.hasReact',
-      projectType.frameworks.includes('react')
+      projectType.frameworks.includes('react'),
     );
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.hasAngular',
-      projectType.frameworks.includes('angular')
+      projectType.frameworks.includes('angular'),
     );
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.hasExpress',
-      projectType.frameworks.includes('express')
+      projectType.frameworks.includes('express'),
     );
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.hasNextjs',
-      projectType.frameworks.includes('nextjs')
+      projectType.frameworks.includes('nextjs'),
     );
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.hasTypeScript',
-      projectType.hasTypeScript
+      projectType.hasTypeScript,
     );
 
     this.logger.debug('Context variables updated', projectType);
@@ -239,7 +241,7 @@ export class ProjectDetectionService {
   public onWorkspaceChanged(callback: () => void): vscode.Disposable {
     return vscode.workspace.onDidChangeWorkspaceFolders(() => {
       this.clearCache();
-      this.updateContextVariables();
+      void this.updateContextVariables();
       callback();
     });
   }
