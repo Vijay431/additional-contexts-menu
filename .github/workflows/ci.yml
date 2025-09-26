@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Build Extension
-        run: npm run compile
+        run: npm run build
 
       - name: Run Extension Tests
         run: xvfb-run --auto-servernum npm test
