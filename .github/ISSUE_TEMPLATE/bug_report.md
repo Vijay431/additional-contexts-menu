@@ -31,7 +31,7 @@ What you expected the context menu or code operation to do.
 
 - OS: [Windows/macOS/Linux]
 - VS Code Version: [e.g. 1.102.0]
-- Extension Version: [e.g. 1.0.0]
+- Extension Version: [e.g. 1.2.0]
 - Node.js Version: [e.g. 18.17.0]
 - TypeScript Version: [e.g. 4.9.0] (if applicable)
 
@@ -61,6 +61,14 @@ What you expected the context menu or code operation to do.
 - [ ] **Permission errors**: Terminal access denied or permission problems
 - [ ] **External terminal**: Custom external terminal command fails
 - [ ] **System default**: System default terminal doesn't open correctly
+- [ ] **Fallback issues**: Integrated terminal fallback not working
+- [ ] **Path validation**: File/directory path issues causing failures
+
+**Terminal Configuration Details** (if terminal issue)
+- Terminal Type Setting: [integrated/external/system-default]
+- External Command (if used): [your custom command]
+- Directory Behavior Setting: [parent-directory/workspace-root/current-directory]
+- Error Messages: [any error messages shown]
 
 **Edge Case Context** (if applicable)
 

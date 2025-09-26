@@ -250,6 +250,7 @@ Access all features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 ## 📋 Requirements
 
 - **VS Code**: Version 1.102.0 or higher
+- **Node.js**: Versions 16-24 supported (for development and build tools)
 - **Project Type**: Node.js project with `package.json` (for smart detection)
 - **File Types**: TypeScript/JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`)
 - **Optional**: Framework dependencies (React, Angular, Express, Next.js) for enhanced features
@@ -475,7 +476,7 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 2. **Check Extension State**: `Additional Context Menus: Debug Context Variables`
 3. **Refresh Detection**: `Additional Context Menus: Refresh Context Variables`
 4. **Review Configuration**: Check all settings in VS Code preferences
-5. **Report Issues**: Use [GitHub Issues](https://github.com/Vijay431/file-insights/issues) with debug output
+5. **Report Issues**: Use [GitHub Issues](https://github.com/Vijay431/additional-contexts-menu/issues) with debug output
 
 ---
 
@@ -486,7 +487,7 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 - **Import Merging**: Complex import scenarios may require manual adjustment
 - **Large Files**: Very large files (>10MB) may experience slower function detection
 
-**Reporting Issues**: Please report problems on our [GitHub repository](https://github.com/Vijay431/file-insights/issues) with:
+**Reporting Issues**: Please report problems on our [GitHub repository](https://github.com/Vijay431/additional-contexts-menu/issues) with:
 - VS Code version
 - Extension version
 - Debug output from `Show Output Channel`
@@ -531,14 +532,14 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
 **Build Performance:**
 - ⚡ **Lightning Fast Builds**: esbuild compilation in ~1 second (20x faster than webpack)
-- 📦 **Minimal Bundle Size**: 24.75KB production bundle (95.9% reduction from 601KB)
+- 📦 **Minimal Bundle Size**: 47.86KB production bundle (95.9% reduction from 601KB)
 - 🔄 **Instant Rebuilds**: Near-instant watch mode for development
 - 🎯 **Smart Bundling**: Tree-shaking eliminates unused dependencies
 
 **Runtime Performance:**
 - 🧠 **Intelligent Caching**: Project detection and file discovery results cached
 - 📊 **Memory Efficient**: Optimized for large codebases and complex project structures
-- ⚡ **Fast Function Detection**: Regex-based parsing for millisecond response times
+- ⚡ **Fast Function Detection**: AST-based parsing for accurate millisecond response times
 - 🔄 **Background Processing**: Non-blocking operations don't interrupt coding
 
 ### 🛡️ Enterprise-Grade Quality Assurance
@@ -603,6 +604,8 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ### 🛠️ Development Setup
 
+**Prerequisites**: Node.js 16-24 required for development
+
 ```bash
 # 1. Clone and setup
 git clone https://github.com/Vijay431/additional-contexts-menu.git
@@ -641,7 +644,7 @@ This extension is licensed under the [MIT License](LICENSE).
 
 **Vijay Gangatharan**
 - 📧 Email: <vijayanand431@gmail.com>
-- 🐙 [GitHub Repository](https://github.com/Vijay431/file-insights)
+- 🐙 [GitHub Repository](https://github.com/Vijay431/additional-contexts-menu)
 - 🌐 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus)
 
 ---

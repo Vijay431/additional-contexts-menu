@@ -36,6 +36,7 @@
     "Other"
   ],
   "engines": {
+    "node": ">=16.0.0 <25.0.0",
     "vscode": "^1.102.0"
   },
   "activationEvents": [
@@ -221,7 +222,7 @@
     "@stylistic/eslint-plugin": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^18.19.120",
+    "@types/node": "^16.18.126",
     "@types/vscode": "^1.102.0",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",

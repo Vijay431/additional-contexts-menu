@@ -81,8 +81,7 @@ export class CodeAnalysisService {
 
   private findAllFunctions(
     text: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    languageId: string,
+    _languageId: string,
   ): FunctionInfo[] {
     const functions: FunctionInfo[] = [];
     const lines = text.split('\n');
@@ -216,8 +215,7 @@ export class CodeAnalysisService {
   private findFunctionEnd(
     lines: string[],
     startIndex: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    indentLevel: number,
+    _indentLevel: number,
   ): { endLine: number; endColumn: number } {
     let braceCount = 0;
     let foundFirstBrace = false;
@@ -261,8 +259,7 @@ export class CodeAnalysisService {
   private isPositionInFunction(
     position: vscode.Position,
     func: FunctionInfo,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    document: vscode.TextDocument,
+    _document: vscode.TextDocument,
   ): boolean {
     const startPos = new vscode.Position(func.startLine - 1, func.startColumn ?? 0);
     const endPos = new vscode.Position((func.endLine ?? func.startLine) - 1, func.endColumn ?? 0);
@@ -309,8 +306,7 @@ export class CodeAnalysisService {
 
   public extractImports(
     code: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    languageId: string,
+    _languageId: string,
   ): string[] {
     const imports: string[] = [];
 

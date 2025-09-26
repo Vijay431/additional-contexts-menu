@@ -41,7 +41,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                         <span class="stat-label">Test Success Rate</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">24.75KB</span>
+                        <span class="stat-number">47.86KB</span>
                         <span class="stat-label">Bundle Size</span>
                     </div>
                 </div>
@@ -136,7 +136,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Lightning Fast Performance</h3>
                 <p class="feature-description">
-                    esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (24.75KB), and instant development feedback.
+                    esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (47.86KB), and instant development feedback.
                 </p>
             </div>
 

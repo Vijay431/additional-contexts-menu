@@ -267,11 +267,7 @@ export class ContextMenuManager {
     }
   }
 
-  private getInsertionPoint(
-    document: vscode.TextDocument,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    code: string,
-  ): vscode.Position {
+  private getInsertionPoint(document: vscode.TextDocument, _code: string): vscode.Position {
     const config = this.configService.getCopyCodeConfig();
 
     switch (config.insertionPoint) {

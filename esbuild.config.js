@@ -9,7 +9,7 @@ const createConfig = (isProduction = false) => ({
   external: ['vscode'],
   format: 'cjs',
   platform: 'node',
-  target: 'node20',
+  target: 'node16',
   sourcemap: isProduction ? false : 'inline',
   minify: isProduction,
   treeShaking: true,

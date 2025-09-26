@@ -71,10 +71,11 @@ Additional Context Menus enhances VS Code's right-click context menus for Node.j
 
 ## 📊 Quick Stats
 
-- **⚡ Performance**: 24.75KB bundle size (95.9% reduction from webpack)
+- **⚡ Performance**: 47.86KB bundle size (95.9% reduction from webpack)
 - **🧪 Quality**: 37+ comprehensive tests with 100% pass rate
 - **🔧 Architecture**: Service-oriented design with TypeScript strict mode
 - **🌍 Compatibility**: VS Code 1.102.0+ on Windows, macOS, Linux
+- **⚙️ Node.js Support**: Compatible with Node.js versions 16-24
 
 ---
 

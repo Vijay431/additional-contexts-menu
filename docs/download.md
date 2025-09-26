@@ -1,15 +1,15 @@
 ---
 layout: default
-title: 'Download File Insights'
-description: 'Download File Insights VS Code extension from multiple sources including VS Code Marketplace, GitHub releases, and direct installation options.'
+title: 'Download Additional Context Menus'
+description: 'Download Additional Context Menus VS Code extension from multiple sources including VS Code Marketplace, GitHub releases, and direct installation options.'
 ---
 
 <!-- Page Header -->
 <section class="page-header">
     <div class="container">
-        <h1 class="page-title">Download File Insights</h1>
+        <h1 class="page-title">Download Additional Context Menus</h1>
         <p class="page-description">
-            Get File Insights for VS Code from your preferred download source.
+            Get Additional Context Menus for VS Code from your preferred download source.
         </p>
     </div>
 </section>
@@ -118,11 +118,11 @@ description: 'Download File Insights VS Code extension from multiple sources inc
                         </ul>
                     </div>
                     <div class="code-example">
-                        <pre><code>code --install-extension VijayGangatharan.file-insights</code></pre>
+                        <pre><code>code --install-extension VijayGangatharan.additional-context-menus</code></pre>
                     </div>
                 </div>
                 <div class="download-actions">
-                    <button class="btn btn-outline btn-large" onclick="copyToClipboard('code --install-extension VijayGangatharan.file-insights')">
+                    <button class="btn btn-outline btn-large" onclick="copyToClipboard('code --install-extension VijayGangatharan.additional-context-menus')">
                         <i class="fas fa-copy"></i>
                         Copy Command
                     </button>
@@ -173,7 +173,7 @@ description: 'Download File Insights VS Code extension from multiple sources inc
                             <span class="step-number">3</span>
                             <div class="step-content">
                                 <h3>Search & Install</h3>
-                                <p>Search for "File Insights" and click Install</p>
+                                <p>Search for "Additional Context Menus" and click Install</p>
                             </div>
                         </div>
                     </div>
@@ -220,7 +220,7 @@ description: 'Download File Insights VS Code extension from multiple sources inc
                                 <h3>Run Command</h3>
                                 <p>Execute the installation command</p>
                                 <div class="code-block">
-                                    <pre><code>code --install-extension VijayGangatharan.file-insights</code></pre>
+                                    <pre><code>code --install-extension VijayGangatharan.additional-context-menus</code></pre>
                                 </div>
                             </div>
                         </div>
@@ -316,7 +316,7 @@ description: 'Download File Insights VS Code extension from multiple sources inc
         <div class="section-header">
             <h2 class="section-title">Support & Resources</h2>
             <p class="section-description">
-                Get help and find additional resources for File Insights.
+                Get help and find additional resources for Additional Context Menus.
             </p>
         </div>
         

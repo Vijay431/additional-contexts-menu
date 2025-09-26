@@ -196,15 +196,17 @@ export class FileSaveService {
       } failed.`;
       vscode.window
         .showWarningMessage(message, 'Show Details')
-        .then((selection) => {
-          if (selection === 'Show Details') {
-            this.showFailureDetails(result);
-          }
-          return selection;
-        })
-        .catch((error: unknown) => {
-          this.logger.error('Error showing warning message', error);
-        });
+        .then(
+          (selection) => {
+            if (selection === 'Show Details') {
+              this.showFailureDetails(result);
+            }
+            return selection;
+          },
+          (error: unknown) => {
+            this.logger.error('Error showing warning message', error);
+          },
+        );
     }
   }
 
