@@ -200,12 +200,18 @@
       ]
     }
   },
+  "vsce": {
+    "baseImageUrl": "./logo.png",
+    "dependencies": true,
+    "yarn": false
+  },
   "main": "./dist/extension.js",
   "scripts": {
-    "vscode:prepublish": "npm run package",
+    "vscode:prepublish": "tsx esbuild.config.ts --production",
     "build": "tsx esbuild.config.ts",
     "watch": "tsx esbuild.config.ts --watch",
-    "package": "tsx esbuild.config.ts --production",
+    "package": "vsce package",
+    "publish": "vsce publish",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "rm -rf dist && npm run build && npm run create-minimal && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
@@ -226,6 +232,7 @@
     "@typescript-eslint/parser": "^8.44.1",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.6.1",
     "esbuild": "^0.25.8",
     "eslint": "^9.31.0",
     "eslint-plugin-import": "^2.32.0",

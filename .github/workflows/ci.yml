@@ -88,6 +88,29 @@ jobs:
       - name: Check for Known Vulnerabilities
         run: npm audit --audit-level=moderate --json | jq '.vulnerabilities | length'
 
+  # Dry-run publish job - validates publishing on non-master branches
+  dry-run-publish:
+    name: Validate Publishing (Dry Run)
+    needs: [build, lint, security]
+    if: github.ref != 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Validate Extension Package
+        run: npm run package
+
   # Deploy job - ONLY runs on master branch after all checks pass
   deploy:
     name: Deploy to VS Code Marketplace
@@ -112,19 +135,17 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Production Package
+      - name: Package Extension
         run: npm run package
 
-      - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@v2
-        with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
-          packagePath: '*.vsix'
+      - name: Publish to VS Code Marketplace
+        run: npm run publish
+        env:
+          VSCE_PAT: ${{ secrets.VS_MARKETPLACE_TOKEN }}
 
       - name: Create Release Artifact
         uses: actions/upload-artifact@v4
         with:
           name: extension-package
-          path: '*.vsix'
+          path: 'additional-context-menus-*.vsix'
           retention-days: 90
