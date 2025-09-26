@@ -613,7 +613,7 @@ cd additional-contexts-menu
 npm install
 
 # 2. Build and test
-npm run compile
+npm run build
 npm test
 
 # 3. Launch development environment
@@ -624,7 +624,7 @@ npm test
 
 | Command | Description | Performance |
 |---------|-------------|-------------|
-| `npm run compile` | Compile TypeScript using esbuild | ⚡ ~1 second |
+| `npm run build` | Build extension using esbuild | ⚡ ~1 second |
 | `npm run watch` | Watch mode for development | 🔄 Instant rebuilds |
 | `npm run package` | Production build with optimizations | 📦 ~25KB output |
 | `npm run lint` | Run ESLint on src directory | 🎨 Code quality |

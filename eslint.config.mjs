@@ -122,6 +122,11 @@ export default tseslint.config(
       '@typescript-eslint/naming-convention': [
         'error',
         {
+          selector: 'parameter',
+          filter: '^_',
+          format: null, // Allow any format for parameters starting with underscore
+        },
+        {
           selector: 'variableLike',
           format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
         },

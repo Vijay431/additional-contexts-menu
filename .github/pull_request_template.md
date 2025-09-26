@@ -1,27 +1,24 @@
-# Pull Request - Additional Context Menus v1.2.0+
+# Pull Request - Additional Context Menus
 
-## 📋 Description
-
+## Description
 ### What changed?
-<!-- Provide a detailed description of the changes made in this PR -->
+<!-- Brief description of the changes -->
 
 ### Why was this change needed?
-<!-- Explain the motivation behind this change -->
+<!-- Motivation behind the change -->
 
 ## Type of Change
-
-- [ ] Bug fix (context menu not appearing/working)
-- [ ] New context menu feature
+- [ ] Bug fix
+- [ ] New feature
 - [ ] Code operation enhancement
 - [ ] Framework support improvement
 - [ ] Documentation update
-- [ ] Code refactoring
-- [ ] Other (please describe):
+- [ ] Refactoring
+- [ ] Other: ___________
 
-## Framework Testing
+## Testing Checklist
 
-Test your changes across different project types:
-
+### Framework Testing
 - [ ] Tested with React projects
 - [ ] Tested with Angular projects
 - [ ] Tested with Express projects
@@ -29,128 +26,34 @@ Test your changes across different project types:
 - [ ] Tested with TypeScript files (.ts, .tsx)
 - [ ] Tested with JavaScript files (.js, .jsx)
 
-## 🖱️ Context Menu Testing
-
-Verify all context menu functionality:
-
-- [ ] Copy Function works correctly and detects functions
+### Core Functionality Testing
+- [ ] Copy Function works and detects functions correctly
 - [ ] Copy to Existing File handles imports properly
 - [ ] Move to Existing File cleans up source file
 - [ ] Save All shows progress feedback
-- [ ] **Open in Terminal** works across platforms (NEW in v1.2.0)
+- [ ] Open in Terminal works (v1.2.0+)
 - [ ] Context menus appear in correct file types
-- [ ] Project detection works properly (Node.js projects only)
+- [ ] Project detection works (Node.js projects)
 
-## 🖥️ Terminal Functionality Testing (v1.2.0+)
+### Terminal Testing (v1.2.0+)
+- [ ] Integrated terminal opens correctly
+- [ ] System default terminal works
+- [ ] External terminal configuration works (if applicable)
+- [ ] Directory behaviors work (parent/workspace/current)
+- [ ] Error handling and fallbacks work
 
-Test the new terminal integration features:
-
-### Cross-Platform Terminal Testing
-- [ ] **Windows**: Integrated terminal opens correctly
-- [ ] **Windows**: System default (cmd/PowerShell) opens correctly
-- [ ] **macOS**: Integrated terminal opens correctly
-- [ ] **macOS**: System default (Terminal.app) opens correctly
-- [ ] **Linux**: Integrated terminal opens correctly
-- [ ] **Linux**: System default terminal detection works
-
-### Terminal Configuration Testing
-- [ ] **Integrated Terminal**: Opens in correct directory
-- [ ] **External Terminal**: Custom command configuration works
-- [ ] **System Default**: Platform-specific commands execute properly
-- [ ] **Directory Behavior**: Parent directory selection works
-- [ ] **Directory Behavior**: Workspace root selection works
-- [ ] **Directory Behavior**: Current directory selection works
-
-### Terminal Error Handling
-- [ ] **Permission Issues**: Graceful error handling with helpful messages
-- [ ] **Invalid Paths**: Proper validation and fallback behavior
-- [ ] **Missing Terminals**: Fallback to integrated terminal works
-- [ ] **External Command Failures**: Appropriate error reporting
-
-## Edge Case Testing
-
-Test the extension with challenging scenarios:
-
-- [ ] Large files (1000+ functions) - extension remains responsive
-- [ ] Files with special characters in paths - operations work correctly
-- [ ] Rapid successive command executions - no conflicts or crashes
-- [ ] Deeply nested function structures (20+ levels) - proper detection
-- [ ] Concurrent operations - multiple commands execute safely
-- [ ] Malformed but parseable code - graceful handling
-- [ ] Complex TypeScript syntax (generics, decorators) - accurate parsing
-- [ ] Complex JSX components - proper component detection
-- [ ] Multi-workspace scenarios - correct project detection
-- [ ] Symbolic links and unusual file structures - robust handling
-
-## Code Operation Testing
-
-Test the core functionality:
-
-- [ ] AST parsing handles edge cases (arrow functions, async functions, etc.)
-- [ ] Import merging works correctly (no duplicates)
-- [ ] Function detection is accurate for different syntax patterns
-- [ ] Code insertion points are smart and appropriate
-- [ ] Comment preservation works during copy/move
-- [ ] Conflict resolution handles duplicates appropriately
-
-## Development Checklist
-
+### Development Quality
 - [ ] Code follows TypeScript strict mode
 - [ ] ESLint checks pass
 - [ ] All tests pass (37/37 expected)
-- [ ] Extension builds successfully (npm run compile)
-- [ ] Extension packages correctly (npm run package)
+- [ ] Extension builds successfully (`npm run build`)
 - [ ] Manual testing completed
-- [ ] Documentation updated (if applicable)
-- [ ] No unnecessary console logs or debug code
-- [ ] Error handling implemented for new features
-- [ ] Performance impact considered
+- [ ] No unnecessary console logs
 
-## Test Coverage
-
-Ensure comprehensive test coverage is maintained:
-
-- [ ] New functionality has corresponding tests
-- [ ] Edge cases are covered in test suite
-- [ ] Performance impacts are tested
-- [ ] Error conditions are tested
-- [ ] Test success rate remains at 100% (37/37 passing)
-- [ ] Integration tests cover framework-specific scenarios
-
-## Production Readiness
-
-Verify the changes are ready for production deployment:
-
-- [ ] Changes handle edge cases gracefully
-- [ ] No performance degradation under stress
-- [ ] Memory usage remains efficient
-- [ ] Concurrent operations work safely
-- [ ] Error boundaries prevent crashes
-- [ ] Logging provides adequate debugging information
-
-## Deployment Checklist
-
-(Only for maintainers preparing releases)
-
-- [ ] Version number updated in package.json
-- [ ] CHANGELOG.md updated with new version and changes
-- [ ] README.md updated (if applicable)
-- [ ] GitHub release draft prepared
-- [ ] VS Code Marketplace description updated (if applicable)
-
-## Screenshots/Demos
-
-If applicable, add screenshots or GIFs showing:
-
-- Context menus in action
-- Before/after code examples
-- New functionality demonstrations
+## Breaking Changes
+- [ ] This PR introduces breaking changes
+- [ ] Configuration changes required
+- [ ] Migration guide needed
 
 ## Additional Notes
-
-Add any additional notes for reviewers, including:
-
-- Breaking changes
-- Configuration changes
-- Known limitations
-- Future improvements needed
+<!-- Any additional context for reviewers -->

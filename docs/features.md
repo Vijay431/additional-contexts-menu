@@ -29,10 +29,10 @@ description: 'Explore the comprehensive features and intelligent code operations
                         <i class="fas fa-code"></i>
                     </div>
                     <div class="feature-content">
-                        <h3 class="feature-name">AST-Based Function Detection</h3>
+                        <h3 class="feature-name">Smart Function Detection</h3>
                         <p class="feature-desc">
-                            Uses Abstract Syntax Tree parsing to accurately detect and copy functions, arrow functions, methods, 
-                            and React components with proper syntax analysis for TypeScript and JavaScript files.
+                            Uses intelligent pattern matching to accurately detect and copy functions, arrow functions, methods,
+                            and React components with optimized performance for TypeScript and JavaScript files.
                         </p>
                         <ul class="feature-benefits">
                             <li>Detects function declarations, expressions, and arrow functions</li>

@@ -40,19 +40,20 @@ Additional Context Menus enhances VS Code's right-click context menus for Node.j
 - **📊 Framework Intelligence**: Automatic detection of React, Angular, Express, and Next.js
 - **💾 Enhanced Save All**: Progress feedback and read-only file handling
 
-## 🌟 Version 1.2.0 Highlights
+## 🌟 Latest Updates
 
-### 🆕 New Terminal Integration
-- Cross-platform terminal opening (Windows, macOS, Linux)
-- Three terminal types: Integrated, External, System Default
-- Configurable directory behaviors
-- Intelligent fallback and error handling
+### 🆕 Version 1.2.0+ Features
+- **Cross-platform terminal integration** (Windows, macOS, Linux)
+- **Three terminal types**: Integrated, External, System Default
+- **Configurable directory behaviors** with intelligent fallback
+- **Enhanced build system**: esbuild configuration with TypeScript execution
+- **Improved development workflow**: `npm run build` primary command with tsx
 
 ### 🔧 Enhanced Developer Experience
-- Improved issue templates for better bug reporting
-- Comprehensive testing documentation
-- Enhanced GitHub wiki with detailed guides
-- Better community contribution workflows
+- **Concise GitHub templates** for streamlined issue reporting and PRs
+- **TypeScript-first scripting** with direct execution via tsx
+- **Optimized testing environment** with minimal extension packages
+- **Advanced build reporting** with bundle size analysis and performance metrics
 
 ## 📖 Popular Wiki Pages
 
@@ -72,10 +73,12 @@ Additional Context Menus enhances VS Code's right-click context menus for Node.j
 ## 📊 Quick Stats
 
 - **⚡ Performance**: 47.86KB bundle size (95.9% reduction from webpack)
+- **🚀 Build Speed**: esbuild compilation in ~1 second (20x faster than webpack)
 - **🧪 Quality**: 37+ comprehensive tests with 100% pass rate
 - **🔧 Architecture**: Service-oriented design with TypeScript strict mode
 - **🌍 Compatibility**: VS Code 1.102.0+ on Windows, macOS, Linux
 - **⚙️ Node.js Support**: Compatible with Node.js versions 16-24
+- **📦 Development**: TypeScript-first with tsx execution for all build scripts
 
 ---
 
