@@ -80,8 +80,6 @@ export interface ExtensionConfig {
     showNotification: boolean;
     skipReadOnly: boolean;
   };
-  enableKeybindings: boolean;
-  showKeybindingsInMenu: boolean;
   terminal: {
     type: 'integrated' | 'external' | 'system-default';
     externalTerminalCommand?: string;

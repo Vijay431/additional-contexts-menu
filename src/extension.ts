@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+
 import { ExtensionManager } from './managers/ExtensionManager';
 
 let extensionManager: ExtensionManager | undefined;

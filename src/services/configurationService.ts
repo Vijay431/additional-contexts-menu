@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+
 import { ExtensionConfig } from '../types/extension';
 import { Logger } from '../utils/logger';
 
@@ -33,11 +34,11 @@ export class ConfigurationService {
       copyCode: {
         insertionPoint: config.get<'smart' | 'end' | 'beginning'>(
           'copyCode.insertionPoint',
-          'smart'
+          'smart',
         ),
         handleImports: config.get<'merge' | 'duplicate' | 'skip'>(
           'copyCode.handleImports',
-          'merge'
+          'merge',
         ),
         preserveComments: config.get<boolean>('copyCode.preserveComments', true),
       },
@@ -45,12 +46,16 @@ export class ConfigurationService {
         showNotification: config.get<boolean>('saveAll.showNotification', true),
         skipReadOnly: config.get<boolean>('saveAll.skipReadOnly', true),
       },
-      enableKeybindings: config.get<boolean>('enableKeybindings', false),
-      showKeybindingsInMenu: config.get<boolean>('showKeybindingsInMenu', true),
       terminal: {
-        type: config.get<'integrated' | 'external' | 'system-default'>('terminal.type', 'integrated'),
+        type: config.get<'integrated' | 'external' | 'system-default'>(
+          'terminal.type',
+          'integrated',
+        ),
         externalTerminalCommand: config.get<string>('terminal.externalTerminalCommand', ''),
-        openBehavior: config.get<'parent-directory' | 'workspace-root' | 'current-directory'>('terminal.openBehavior', 'parent-directory'),
+        openBehavior: config.get<'parent-directory' | 'workspace-root' | 'current-directory'>(
+          'terminal.openBehavior',
+          'parent-directory',
+        ),
       },
     };
   }
@@ -87,7 +92,7 @@ export class ConfigurationService {
   public async updateConfiguration<T>(
     key: string,
     value: T,
-    target?: vscode.ConfigurationTarget
+    target?: vscode.ConfigurationTarget,
   ): Promise<void> {
     const config = vscode.workspace.getConfiguration(this.configSection);
     await config.update(key, value, target);

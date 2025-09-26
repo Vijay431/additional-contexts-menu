@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
-import { Logger } from '../utils/logger';
+
+import { CodeAnalysisService } from '../services/codeAnalysisService';
 import { ConfigurationService } from '../services/configurationService';
-import { ProjectDetectionService } from '../services/projectDetectionService';
 import { FileDiscoveryService } from '../services/fileDiscoveryService';
 import { FileSaveService } from '../services/fileSaveService';
-import { CodeAnalysisService } from '../services/codeAnalysisService';
+import { ProjectDetectionService } from '../services/projectDetectionService';
 import { TerminalService } from '../services/terminalService';
+import { Logger } from '../utils/logger';
 
 export class ContextMenuManager {
   private logger: Logger;
@@ -39,15 +40,15 @@ export class ContextMenuManager {
     // Listen for configuration changes
     this.disposables.push(
       this.configService.onConfigurationChanged(() => {
-        this.handleConfigurationChanged();
-      })
+        void this.handleConfigurationChanged();
+      }),
     );
 
     // Listen for workspace changes
     this.disposables.push(
       this.projectDetectionService.onWorkspaceChanged(() => {
-        this.handleWorkspaceChanged();
-      })
+        void this.handleWorkspaceChanged();
+      }),
     );
 
     // Listen for file system changes
@@ -59,44 +60,26 @@ export class ContextMenuManager {
   private registerCommands(): void {
     this.disposables.push(
       vscode.commands.registerCommand('additionalContextMenus.copyFunction', () =>
-        this.handleCopyFunction()
+        this.handleCopyFunction(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.copyCodeToFile', () =>
-        this.handleCopyCodeToFile()
+      vscode.commands.registerCommand('additionalContextMenus.copyLinesToFile', () =>
+        this.handleCopyLinesToFile(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.moveCodeToFile', () =>
-        this.handleMoveCodeToFile()
+      vscode.commands.registerCommand('additionalContextMenus.moveLinesToFile', () =>
+        this.handleMoveLinesToFile(),
       ),
       vscode.commands.registerCommand('additionalContextMenus.saveAll', () => this.handleSaveAll()),
       vscode.commands.registerCommand(
         'additionalContextMenus.enable',
-        async () => await this.handleEnable()
+        async () => await this.handleEnable(),
       ),
       vscode.commands.registerCommand(
         'additionalContextMenus.disable',
-        async () => await this.handleDisable()
-      ),
-      vscode.commands.registerCommand('additionalContextMenus.showOutputChannel', () =>
-        this.handleShowOutputChannel()
-      ),
-      vscode.commands.registerCommand('additionalContextMenus.debugContextVariables', () =>
-        this.handleDebugContextVariables()
-      ),
-      vscode.commands.registerCommand('additionalContextMenus.refreshContextVariables', () =>
-        this.handleRefreshContextVariables()
-      ),
-      vscode.commands.registerCommand('additionalContextMenus.checkKeybindingConflicts', () =>
-        this.handleCheckKeybindingConflicts()
-      ),
-      vscode.commands.registerCommand('additionalContextMenus.enableKeybindings', () =>
-        this.handleEnableKeybindings()
-      ),
-      vscode.commands.registerCommand('additionalContextMenus.disableKeybindings', () =>
-        this.handleDisableKeybindings()
+        async () => await this.handleDisable(),
       ),
       vscode.commands.registerCommand('additionalContextMenus.openInTerminal', () =>
-        this.handleOpenInTerminal()
-      )
+        this.handleOpenInTerminal(),
+      ),
     );
 
     this.logger.debug('Commands registered');
@@ -118,7 +101,7 @@ export class ContextMenuManager {
       // Find function at cursor position
       const functionInfo = await this.codeAnalysisService.findFunctionAtPosition(
         document,
-        position
+        position,
       );
 
       if (!functionInfo) {
@@ -130,7 +113,7 @@ export class ContextMenuManager {
       await vscode.env.clipboard.writeText(functionInfo.fullText);
 
       vscode.window.showInformationMessage(
-        `Copied ${functionInfo.type} '${functionInfo.name}' to clipboard`
+        `Copied ${functionInfo.type} '${functionInfo.name}' to clipboard`,
       );
       this.logger.info(`Function copied: ${functionInfo.name}`);
     } catch (error) {
@@ -139,8 +122,8 @@ export class ContextMenuManager {
     }
   }
 
-  private async handleCopyCodeToFile(): Promise<void> {
-    this.logger.info('Copy Code to File command triggered');
+  private async handleCopyLinesToFile(): Promise<void> {
+    this.logger.info('Copy Lines to File command triggered');
 
     try {
       const editor = vscode.window.activeTextEditor;
@@ -178,16 +161,16 @@ export class ContextMenuManager {
       await this.copyCodeToTargetFile(selectedText, targetFilePath, editor.document);
 
       const fileName = this.getFileName(targetFilePath);
-      vscode.window.showInformationMessage(`Code copied to ${fileName}`);
-      this.logger.info(`Code copied to: ${targetFilePath}`);
+      vscode.window.showInformationMessage(`Lines copied to ${fileName}`);
+      this.logger.info(`Lines copied to: ${targetFilePath}`);
     } catch (error) {
-      this.logger.error('Error in Copy Code to File command', error);
-      vscode.window.showErrorMessage('Failed to copy code to file');
+      this.logger.error('Error in Copy Lines to File command', error);
+      vscode.window.showErrorMessage('Failed to copy lines to file');
     }
   }
 
-  private async handleMoveCodeToFile(): Promise<void> {
-    this.logger.info('Move Code to File command triggered');
+  private async handleMoveLinesToFile(): Promise<void> {
+    this.logger.info('Move Lines to File command triggered');
 
     try {
       const editor = vscode.window.activeTextEditor;
@@ -230,11 +213,11 @@ export class ContextMenuManager {
       });
 
       const fileName = this.getFileName(targetFilePath);
-      vscode.window.showInformationMessage(`Code moved to ${fileName}`);
-      this.logger.info(`Code moved to: ${targetFilePath}`);
+      vscode.window.showInformationMessage(`Lines moved to ${fileName}`);
+      this.logger.info(`Lines moved to: ${targetFilePath}`);
     } catch (error) {
-      this.logger.error('Error in Move Code to File command', error);
-      vscode.window.showErrorMessage('Failed to move code to file');
+      this.logger.error('Error in Move Lines to File command', error);
+      vscode.window.showErrorMessage('Failed to move lines to file');
     }
   }
 
@@ -246,14 +229,14 @@ export class ContextMenuManager {
       this.logger.info('Save All completed', result);
     } catch (error) {
       this.logger.error('Error in Save All command', error);
-      vscode.window.showErrorMessage('Failed to save files: ' + (error as Error).message);
+      vscode.window.showErrorMessage(`Failed to save files: ${(error as Error).message}`);
     }
   }
 
   private async copyCodeToTargetFile(
     code: string,
     targetFilePath: string,
-    sourceDocument: vscode.TextDocument
+    sourceDocument: vscode.TextDocument,
   ): Promise<void> {
     try {
       // Open target file
@@ -266,12 +249,12 @@ export class ContextMenuManager {
       // Open target file in editor to make edits
       const targetEditor = await vscode.window.showTextDocument(
         targetDocument,
-        vscode.ViewColumn.Beside
+        vscode.ViewColumn.Beside,
       );
 
       // Insert code at the determined position
       await targetEditor.edit((editBuilder) => {
-        editBuilder.insert(insertionPoint, '\n' + code + '\n');
+        editBuilder.insert(insertionPoint, `\n${code}\n`);
       });
 
       // Handle imports if configured
@@ -284,7 +267,11 @@ export class ContextMenuManager {
     }
   }
 
-  private getInsertionPoint(document: vscode.TextDocument, _code: string): vscode.Position {
+  private getInsertionPoint(
+    document: vscode.TextDocument,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    code: string,
+  ): vscode.Position {
     const config = this.configService.getCopyCodeConfig();
 
     switch (config.insertionPoint) {
@@ -307,7 +294,7 @@ export class ContextMenuManager {
     let firstExportLine = -1;
 
     for (let i = 0; i < lines.length; i++) {
-      const line = lines[i]?.trim() || '';
+      const line = lines[i]?.trim() ?? '';
 
       if (line.startsWith('import ')) {
         lastImportLine = i;
@@ -329,13 +316,13 @@ export class ContextMenuManager {
   private async handleImportMerging(
     sourceDocument: vscode.TextDocument,
     targetDocument: vscode.TextDocument,
-    copiedCode: string
+    copiedCode: string,
   ): Promise<void> {
     try {
       // Extract imports from copied code
       const sourceImports = this.codeAnalysisService.extractImports(
         copiedCode,
-        sourceDocument.languageId
+        sourceDocument.languageId,
       );
 
       if (sourceImports.length === 0) {
@@ -346,7 +333,7 @@ export class ContextMenuManager {
       const targetText = targetDocument.getText();
       const targetImports = this.codeAnalysisService.extractImports(
         targetText,
-        targetDocument.languageId
+        targetDocument.languageId,
       );
 
       // TODO: Implement smart import merging logic
@@ -370,141 +357,6 @@ export class ContextMenuManager {
     vscode.window.showInformationMessage('Additional Context Menus disabled');
   }
 
-  private handleShowOutputChannel(): void {
-    this.logger.show();
-  }
-
-  private async handleDebugContextVariables(): Promise<void> {
-    this.logger.info('Debug Context Variables command triggered');
-    
-    try {
-      const projectType = await this.projectDetectionService.detectProjectType();
-      const isEnabled = this.configService.isEnabled();
-      
-      const debugInfo = {
-        extensionEnabled: isEnabled,
-        projectDetection: {
-          isNodeProject: projectType.isNodeProject,
-          frameworks: projectType.frameworks,
-          hasTypeScript: projectType.hasTypeScript,
-          supportLevel: projectType.supportLevel
-        },
-        workspace: {
-          workspaceFolders: vscode.workspace.workspaceFolders?.length || 0,
-          activeEditor: !!vscode.window.activeTextEditor,
-          activeFile: vscode.window.activeTextEditor?.document.fileName || 'none'
-        }
-      };
-
-      this.logger.info('Current extension state', debugInfo);
-      
-      // Show in output channel
-      this.logger.show();
-      
-      // Also show user-friendly message
-      const message = `Extension: ${isEnabled ? 'Enabled' : 'Disabled'} | Node Project: ${projectType.isNodeProject ? 'Yes' : 'No'} | Frameworks: ${projectType.frameworks.join(', ') || 'None'}`;
-      vscode.window.showInformationMessage(message);
-      
-    } catch (error) {
-      this.logger.error('Error in Debug Context Variables command', error);
-      vscode.window.showErrorMessage('Failed to debug context variables');
-    }
-  }
-
-  private async handleRefreshContextVariables(): Promise<void> {
-    this.logger.info('Refresh Context Variables command triggered');
-    
-    try {
-      // Clear caches
-      this.projectDetectionService.clearCache();
-      
-      // Update context variables
-      await this.projectDetectionService.updateContextVariables();
-      
-      vscode.window.showInformationMessage('Context variables refreshed successfully');
-      this.logger.info('Context variables refreshed');
-      
-    } catch (error) {
-      this.logger.error('Error in Refresh Context Variables command', error);
-      vscode.window.showErrorMessage('Failed to refresh context variables');
-    }
-  }
-
-  private async handleCheckKeybindingConflicts(): Promise<void> {
-    this.logger.info('Check Keybinding Conflicts command triggered');
-    
-    try {
-      const keybindings = [
-        { command: 'Copy Function', key: 'Ctrl+Alt+Shift+F' },
-        { command: 'Copy to File', key: 'Ctrl+Alt+Shift+C' },
-        { command: 'Move to File', key: 'Ctrl+Alt+Shift+M' },
-        { command: 'Save All', key: 'Ctrl+Alt+Shift+A' }
-      ];
-
-      // Show in output channel for detailed view
-      this.logger.info('Keybinding conflict check', { keybindings });
-      this.logger.show();
-      
-      // Show informational dialog
-      const action = await vscode.window.showInformationMessage(
-        'Check VS Code Keyboard Shortcuts editor for potential conflicts. See output channel for details.',
-        'Open Keyboard Shortcuts',
-        'Enable Keybindings',
-        'Cancel'
-      );
-
-      if (action === 'Open Keyboard Shortcuts') {
-        await vscode.commands.executeCommand('workbench.action.openGlobalKeybindings');
-      } else if (action === 'Enable Keybindings') {
-        await this.handleEnableKeybindings();
-      }
-      
-    } catch (error) {
-      this.logger.error('Error in Check Keybinding Conflicts command', error);
-      vscode.window.showErrorMessage('Failed to check keybinding conflicts');
-    }
-  }
-
-  private async handleEnableKeybindings(): Promise<void> {
-    this.logger.info('Enable Keybindings command triggered');
-    
-    try {
-      const confirmation = await vscode.window.showWarningMessage(
-        'This will enable keyboard shortcuts for Additional Context Menus. Make sure to check for conflicts first.',
-        'Check Conflicts First',
-        'Enable Anyway',
-        'Cancel'
-      );
-
-      if (confirmation === 'Check Conflicts First') {
-        await this.handleCheckKeybindingConflicts();
-        return;
-      } else if (confirmation === 'Enable Anyway') {
-        await this.configService.updateConfiguration('enableKeybindings', true);
-        vscode.window.showInformationMessage('Keybindings enabled! Use Ctrl+Alt+Shift+[F/C/M/A] for commands.');
-        this.logger.info('Keybindings enabled');
-      }
-      
-    } catch (error) {
-      this.logger.error('Error in Enable Keybindings command', error);
-      vscode.window.showErrorMessage('Failed to enable keybindings');
-    }
-  }
-
-  private async handleDisableKeybindings(): Promise<void> {
-    this.logger.info('Disable Keybindings command triggered');
-    
-    try {
-      await this.configService.updateConfiguration('enableKeybindings', false);
-      vscode.window.showInformationMessage('Keybindings disabled. Use context menu for commands.');
-      this.logger.info('Keybindings disabled');
-      
-    } catch (error) {
-      this.logger.error('Error in Disable Keybindings command', error);
-      vscode.window.showErrorMessage('Failed to disable keybindings');
-    }
-  }
-
   private async handleOpenInTerminal(): Promise<void> {
     this.logger.info('Open in Terminal command triggered');
 
@@ -517,7 +369,6 @@ export class ContextMenuManager {
 
       const filePath = editor.document.fileName;
       await this.terminalService.openInTerminal(filePath);
-
     } catch (error) {
       this.logger.error('Error in Open in Terminal command', error);
       vscode.window.showErrorMessage('Failed to open terminal');

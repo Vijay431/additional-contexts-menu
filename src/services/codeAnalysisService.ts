@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+
 import { FunctionInfo } from '../types/extension';
 import { Logger } from '../utils/logger';
 
@@ -16,27 +17,25 @@ export class CodeAnalysisService {
   private static instance: CodeAnalysisService;
   private logger: Logger;
 
-  // Regex patterns for different function types
+  // Very simple, safe regex patterns for different function types
   private readonly patterns = {
     // Function declarations: function name() { ... }
-    functionDeclaration: /^(\s*)(?:export\s+)?(async\s+)?function\s+(\w+)\s*\([^)]*\)\s*[{:]/gm,
+    functionDeclaration: /function\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
 
     // Arrow functions: const name = () => ... | const name = async () => ...
-    arrowFunction:
-      /^(\s*)(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(async\s+)?\([^)]*\)\s*=>/gm,
+    arrowFunction: /const\s+([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g,
 
     // Method definitions in classes/objects: methodName() { ... }
-    methodDefinition: /^(\s*)(?:(async)\s+)?(\w+)\s*\([^)]*\)\s*[{:]/gm,
+    methodDefinition: /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g,
 
     // Class methods: async methodName() { ... } or methodName() { ... }
-    classMethod:
-      /^(\s*)(?:(?:public|private|protected)\s+)?(?:(async)\s+)?(\w+)\s*\([^)]*\)\s*[{:]/gm,
+    classMethod: /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g,
 
     // React components (functions that return JSX or have JSX in body)
-    reactComponent: /^(\s*)(?:export\s+)?(?:const|function)\s+([A-Z]\w+)/gm,
+    reactComponent: /(?:const|function)\s+([A-Z][a-zA-Z0-9_$]*)/g,
 
     // React hooks (functions starting with 'use')
-    reactHook: /^(\s*)(?:export\s+)?(?:const|let|var)\s+(use[A-Z]\w*)\s*=/gm,
+    reactHook: /const\s+(use[A-Z][a-zA-Z0-9_$]*)\s*=/g,
   };
 
   private constructor() {
@@ -52,7 +51,7 @@ export class CodeAnalysisService {
 
   public async findFunctionAtPosition(
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
   ): Promise<FunctionInfo | null> {
     try {
       const text = document.getText();
@@ -62,7 +61,7 @@ export class CodeAnalysisService {
 
       // Find the function that contains the cursor position
       const containingFunction = functions.find((func) =>
-        this.isPositionInFunction(position, func, document)
+        this.isPositionInFunction(position, func, document),
       );
 
       if (containingFunction) {
@@ -73,14 +72,18 @@ export class CodeAnalysisService {
         });
       }
 
-      return containingFunction || null;
+      return containingFunction ?? null;
     } catch (error) {
       this.logger.error('Error finding function at position', error);
       return null;
     }
   }
 
-  private findAllFunctions(text: string, _languageId: string): FunctionInfo[] {
+  private findAllFunctions(
+    text: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    languageId: string,
+  ): FunctionInfo[] {
     const functions: FunctionInfo[] = [];
     const lines = text.split('\n');
 
@@ -95,7 +98,7 @@ export class CodeAnalysisService {
         lineNumber,
         'function',
         functions,
-        lines
+        lines,
       );
       this.tryPatternMatch(
         this.patterns.arrowFunction,
@@ -103,7 +106,7 @@ export class CodeAnalysisService {
         lineNumber,
         'arrow',
         functions,
-        lines
+        lines,
       );
       this.tryPatternMatch(
         this.patterns.methodDefinition,
@@ -111,39 +114,39 @@ export class CodeAnalysisService {
         lineNumber,
         'method',
         functions,
-        lines
+        lines,
       );
       this.tryPatternMatch(this.patterns.classMethod, line, lineNumber, 'method', functions, lines);
 
       // Check for React components (start with capital letter)
       if (this.isReactComponent(line, lines, lineIndex)) {
         const match = this.patterns.reactComponent.exec(line);
-        if (match && match[2]) {
+        if (match?.[2]) {
           functions.push(
             this.createFunctionInfo(
               match[2],
               'component',
               lineNumber,
-              match[1] || '',
+              match[1] ?? '',
               lines,
-              lineIndex
-            )
+              lineIndex,
+            ),
           );
         }
       }
 
       // Check for React hooks (start with 'use')
       const hookMatch = this.patterns.reactHook.exec(line);
-      if (hookMatch && hookMatch[2]) {
+      if (hookMatch?.[2]) {
         functions.push(
           this.createFunctionInfo(
             hookMatch[2],
             'hook',
             lineNumber,
-            hookMatch[1] || '',
+            hookMatch[1] ?? '',
             lines,
-            lineIndex
-          )
+            lineIndex,
+          ),
         );
       }
 
@@ -160,15 +163,15 @@ export class CodeAnalysisService {
     lineNumber: number,
     type: FunctionInfo['type'],
     functions: FunctionInfo[],
-    allLines: string[]
+    allLines: string[],
   ): void {
     pattern.lastIndex = 0; // Reset regex state
     const match = pattern.exec(line);
 
     if (match) {
-      const indent = match[1] || '';
+      const indent = match[1] ?? '';
       const isAsync = match[2] === 'async' || match[3] === 'async';
-      const functionName = match[3] || match[2];
+      const functionName = match[3] ?? match[2];
 
       if (functionName) {
         const actualType = isAsync ? 'async' : type;
@@ -179,8 +182,8 @@ export class CodeAnalysisService {
             lineNumber,
             indent,
             allLines,
-            lineNumber - 1
-          )
+            lineNumber - 1,
+          ),
         );
       }
     }
@@ -192,7 +195,7 @@ export class CodeAnalysisService {
     startLine: number,
     indent: string,
     allLines: string[],
-    startIndex: number
+    startIndex: number,
   ): FunctionInfo {
     // Find the end of the function by tracking braces
     const endInfo = this.findFunctionEnd(allLines, startIndex, indent.length);
@@ -204,8 +207,8 @@ export class CodeAnalysisService {
       startColumn: indent.length,
       endLine: endInfo.endLine,
       endColumn: endInfo.endColumn,
-      isExported: this.isExported(allLines[startIndex] || ''),
-      hasDecorators: this.hasDecorators(allLines[startIndex] || ''),
+      isExported: this.isExported(allLines[startIndex] ?? ''),
+      hasDecorators: this.hasDecorators(allLines[startIndex] ?? ''),
       fullText: this.extractFunctionText(allLines, startIndex, endInfo.endLine),
     };
   }
@@ -213,7 +216,8 @@ export class CodeAnalysisService {
   private findFunctionEnd(
     lines: string[],
     startIndex: number,
-    _indentLevel: number
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    indentLevel: number,
   ): { endLine: number; endColumn: number } {
     let braceCount = 0;
     let foundFirstBrace = false;
@@ -226,7 +230,7 @@ export class CodeAnalysisService {
 
     if (isArrowFunction && !startLine?.includes('{')) {
       // Single expression arrow function
-      return { endLine: startIndex + 1, endColumn: lines[startIndex]?.length || 0 };
+      return { endLine: startIndex + 1, endColumn: lines[startIndex]?.length ?? 0 };
     }
 
     // Track braces to find function end
@@ -248,7 +252,7 @@ export class CodeAnalysisService {
       }
 
       endLine = i + 1;
-      endColumn = line?.length || 0;
+      endColumn = line?.length ?? 0;
     }
 
     return { endLine, endColumn };
@@ -257,10 +261,11 @@ export class CodeAnalysisService {
   private isPositionInFunction(
     position: vscode.Position,
     func: FunctionInfo,
-    _document: vscode.TextDocument
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    document: vscode.TextDocument,
   ): boolean {
-    const startPos = new vscode.Position(func.startLine - 1, func.startColumn || 0);
-    const endPos = new vscode.Position((func.endLine || func.startLine) - 1, func.endColumn || 0);
+    const startPos = new vscode.Position(func.startLine - 1, func.startColumn ?? 0);
+    const endPos = new vscode.Position((func.endLine ?? func.startLine) - 1, func.endColumn ?? 0);
 
     return position.isAfterOrEqual(startPos) && position.isBeforeOrEqual(endPos);
   }
@@ -302,7 +307,11 @@ export class CodeAnalysisService {
     return functionLines.join('\n');
   }
 
-  public extractImports(code: string, _languageId: string): string[] {
+  public extractImports(
+    code: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    languageId: string,
+  ): string[] {
     const imports: string[] = [];
 
     // Simple regex-based import extraction

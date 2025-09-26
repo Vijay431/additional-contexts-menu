@@ -13,7 +13,7 @@
 1. **Install** the extension from VS Code Marketplace
 2. **Open** any Node.js project with `package.json`
 3. **Right-click** in a TypeScript/JavaScript file to see new context menu options
-4. **Try it out:** Select some code → Right-click → "Copy to Existing File"
+4. **Try it out:** Select some code → Right-click → "Copy Lines to File"
 
 ### 💡 Common Workflows
 
@@ -28,13 +28,17 @@
 
 ## ✨ Features Overview
 
-### 🎯 Smart Context Menus
+### 🎯 Core Functionality
 
+#### Main Features (Command Palette + Right-Click Menu)
 - 🎯 **Copy Function** - AST-based function detection and copying with intelligent import handling
-- 📋 **Copy to Existing File** - Smart code copying with import conflict resolution
-- ✂️ **Move to Existing File** - Intelligent code moving with automatic cleanup
+- 📋 **Copy Lines to File** - Smart code copying with import conflict resolution
+- ✂️ **Move Lines to File** - Intelligent code moving with automatic cleanup
 - 💾 **Save All** - Enhanced save functionality with progress feedback and read-only handling
-- 🖥️ **Open in Terminal** - Cross-platform terminal integration (NEW in v1.2.0)
+- 🖥️ **Open in Terminal** - Cross-platform terminal integration
+
+#### Extension Management (Command Palette Only)
+- ⚙️ **Enable/Disable Extension** - Global extension control via command palette
 
 ### Project Intelligence
 
@@ -50,23 +54,12 @@
 - 📍 **Smart Insertion** - Intelligent code placement (smart, end, beginning)
 - 💬 **Comment Preservation** - Maintains code comments during operations
 
-### Status Bar Integration
+### Accessibility
 
-- 📊 **Visual Project Status** - Real-time display of extension and project state in VS Code status bar
-- 🎯 **Framework Detection** - Shows detected frameworks with specific icons:
-  - ⚛️ **React** projects
-  - 🅰️ **Angular** projects  
-  - 🚂 **Express** projects
-  - ▲ **Next.js** projects
-- 🔍 **Project State Indicators** - Clear visual feedback for:
-  - Extension enabled/disabled status
-  - Node.js project detection
-  - Multi-framework project support
-- 🖱️ **Interactive Debug** - Click status bar item to debug context variables
-- 🎨 **Color-Coded Status** - Different background colors for various states:
-  - Prominent background for active projects
-  - Warning background when extension is disabled
-  - Normal background for non-Node.js projects
+- 🔍 **Dual Access Patterns** - Main features accessible via both command palette and right-click menu
+- ⚙️ **Management Commands** - Enable/disable functionality available via command palette only
+- 🎯 **Context-Aware Display** - Menus shown based on file type, project detection, and extension state
+- 🌐 **Cross-Platform Terminal** - Intelligent terminal integration across Windows, macOS, and Linux
 
 ---
 

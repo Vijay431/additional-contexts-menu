@@ -9,7 +9,7 @@ const createConfig = (isProduction = false) => ({
   external: ['vscode'],
   format: 'cjs',
   platform: 'node',
-  target: 'node18',
+  target: 'node20',
   sourcemap: isProduction ? false : 'inline',
   minify: isProduction,
   treeShaking: true,
@@ -41,7 +41,7 @@ async function build(production = false) {
       // Calculate bundle metrics
       const stats = readFileSync('./dist/extension.js');
       const sizeKB = (stats.length / 1024).toFixed(2);
-      const targetKB = 300;
+      const targetKB = 50;
 
       console.log(`✅ Build completed successfully!`);
       console.log(`📦 Bundle size: ${sizeKB} KB`);
@@ -49,11 +49,11 @@ async function build(production = false) {
       // Target verification
       if (parseFloat(sizeKB) > targetKB) {
         console.log(
-          `⚠️  Bundle exceeds ${targetKB}KB target by ${(parseFloat(sizeKB) - targetKB).toFixed(2)}KB`
+          `⚠️  Bundle exceeds ${targetKB}KB target by ${(parseFloat(sizeKB) - targetKB).toFixed(2)}KB`,
         );
       } else {
         console.log(
-          `✨ Bundle is ${(targetKB - parseFloat(sizeKB)).toFixed(2)}KB under ${targetKB}KB target!`
+          `✨ Bundle is ${(targetKB - parseFloat(sizeKB)).toFixed(2)}KB under ${targetKB}KB target!`,
         );
       }
 

@@ -1,6 +1,9 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
+
+import * as vscode from 'vscode';
+
 import { Logger } from '../utils/logger';
+
 import { ConfigurationService } from './configurationService';
 
 export class TerminalService {
@@ -87,7 +90,7 @@ export class TerminalService {
 
       const terminal = vscode.window.createTerminal({
         name: terminalName,
-        cwd: directoryPath
+        cwd: directoryPath,
       });
 
       terminal.show();
@@ -110,7 +113,7 @@ export class TerminalService {
       const command = this.buildExternalTerminalCommand(externalTerminalCommand, directoryPath);
 
       const terminal = vscode.window.createTerminal({
-        name: 'External Terminal Launcher'
+        name: 'External Terminal Launcher',
       });
 
       terminal.sendText(command);
@@ -152,7 +155,7 @@ export class TerminalService {
       }
 
       const terminal = vscode.window.createTerminal({
-        name: 'System Terminal Launcher'
+        name: 'System Terminal Launcher',
       });
 
       terminal.sendText(command);
@@ -170,7 +173,7 @@ export class TerminalService {
     for (const terminal of terminals) {
       try {
         const testTerminal = vscode.window.createTerminal({
-          name: 'Terminal Test'
+          name: 'Terminal Test',
         });
 
         testTerminal.sendText(`which ${terminal}`);
@@ -281,8 +284,8 @@ export class TerminalService {
     const message = error.message.includes('permission')
       ? 'Permission denied. Check if you have access to this directory.'
       : error.message.includes('not found') || error.message.includes('No such file')
-      ? 'Directory not found or inaccessible.'
-      : 'Failed to open terminal. See output channel for details.';
+        ? 'Directory not found or inaccessible.'
+        : 'Failed to open terminal. See output channel for details.';
 
     vscode.window.showErrorMessage(`Terminal Error: ${message}`);
   }

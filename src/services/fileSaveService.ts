@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
+
 import { SaveAllResult } from '../types/extension';
 import { Logger } from '../utils/logger';
+
 import { ConfigurationService } from './configurationService';
 
 export class FileSaveService {
@@ -167,7 +169,7 @@ export class FileSaveService {
         }
 
         progress.report({ increment: 100 });
-      }
+      },
     );
 
     result.success = result.failedFiles.length === 0;
@@ -189,18 +191,26 @@ export class FileSaveService {
         vscode.window.showInformationMessage(message);
       }
     } else {
-      const message = `Saved ${result.savedFiles}/${result.totalFiles} files. ${result.failedFiles.length} failed.`;
-      vscode.window.showWarningMessage(message, 'Show Details').then((selection) => {
-        if (selection === 'Show Details') {
-          this.showFailureDetails(result);
-        }
-      });
+      const message = `Saved ${result.savedFiles}/${result.totalFiles} files. ${
+        result.failedFiles.length
+      } failed.`;
+      vscode.window
+        .showWarningMessage(message, 'Show Details')
+        .then((selection) => {
+          if (selection === 'Show Details') {
+            this.showFailureDetails(result);
+          }
+          return selection;
+        })
+        .catch((error: unknown) => {
+          this.logger.error('Error showing warning message', error);
+        });
     }
   }
 
   private showFailureDetails(result: SaveAllResult): void {
     const details = [
-      `Save All Results:`,
+      'Save All Results:',
       `- Total files: ${result.totalFiles}`,
       `- Saved successfully: ${result.savedFiles}`,
       `- Failed: ${result.failedFiles.length}`,

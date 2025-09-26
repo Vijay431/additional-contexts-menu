@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { TerminalService } from '../../../services/terminalService';
-import { ConfigurationService } from '../../../services/configurationService';
-import { Logger } from '../../../utils/logger';
+import { TerminalService } from '../../../src/services/terminalService';
+import { ConfigurationService } from '../../../src/services/configurationService';
+import { Logger } from '../../../src/utils/logger';
 import { VSCodeMocks, MockConfigurationService, TestConfigFactory, TestDataFactory } from './testMocks';
-import { ExtensionConfig } from '../../../types/extension';
+import { ExtensionConfig } from '../../../src/types/extension';
 
 /**
  * Test setup utilities for injecting mocks and managing test state

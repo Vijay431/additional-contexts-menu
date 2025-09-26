@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { TerminalService } from '../../../services/terminalService';
+import { TerminalService } from '../../../src/services/terminalService';
 import { TestSetup, TestHelpers } from '../utils/testSetup';
 
 suite('TerminalService Tests', () => {

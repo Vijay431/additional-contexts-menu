@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ExtensionConfig } from '../../../types/extension';
+import { ExtensionConfig } from '../../../src/types/extension';
 
 /**
  * Test utilities and mocks for VS Code extension testing
@@ -112,8 +112,6 @@ export class MockConfigurationService {
         showNotification: true,
         skipReadOnly: true,
       },
-      enableKeybindings: false,
-      showKeybindingsInMenu: true,
       terminal: {
         type: 'integrated',
         externalTerminalCommand: '',
@@ -266,8 +264,6 @@ export class TestConfigFactory {
         showNotification: true,
         skipReadOnly: true,
       },
-      enableKeybindings: false,
-      showKeybindingsInMenu: true,
       terminal: {
         type: 'integrated',
         externalTerminalCommand: '',

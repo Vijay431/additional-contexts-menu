@@ -50,14 +50,14 @@
         "icon": "$(symbol-function)"
       },
       {
-        "command": "additionalContextMenus.copyCodeToFile",
-        "title": "Copy to Existing File",
+        "command": "additionalContextMenus.copyLinesToFile",
+        "title": "Copy Lines to File",
         "category": "Additional Context Menus",
         "icon": "$(copy)"
       },
       {
-        "command": "additionalContextMenus.moveCodeToFile",
-        "title": "Move to Existing File",
+        "command": "additionalContextMenus.moveLinesToFile",
+        "title": "Move Lines to File",
         "category": "Additional Context Menus",
         "icon": "$(arrow-right)"
       },
@@ -75,36 +75,6 @@
       {
         "command": "additionalContextMenus.disable",
         "title": "Additional Context Menus: Disable",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.showOutputChannel",
-        "title": "Additional Context Menus: Show Output Channel",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.debugContextVariables",
-        "title": "Additional Context Menus: Debug Context Variables",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.refreshContextVariables",
-        "title": "Additional Context Menus: Refresh Context Variables",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.checkKeybindingConflicts",
-        "title": "Additional Context Menus: Check Keybinding Conflicts",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.enableKeybindings",
-        "title": "Additional Context Menus: Enable Keybindings",
-        "category": "Additional Context Menus"
-      },
-      {
-        "command": "additionalContextMenus.disableKeybindings",
-        "title": "Additional Context Menus: Disable Keybindings",
         "category": "Additional Context Menus"
       },
       {
@@ -172,16 +142,6 @@
           "default": true,
           "description": "Skip read-only files when saving all"
         },
-        "additionalContextMenus.enableKeybindings": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enable keyboard shortcuts for context menu commands. WARNING: Check for conflicts with existing keybindings before enabling."
-        },
-        "additionalContextMenus.showKeybindingsInMenu": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show keyboard shortcuts in context menu items when keybindings are enabled"
-        },
         "additionalContextMenus.terminal.type": {
           "type": "string",
           "enum": [
@@ -218,12 +178,12 @@
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
-          "command": "additionalContextMenus.copyCodeToFile",
+          "command": "additionalContextMenus.copyLinesToFile",
           "group": "1_modification@2"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
-          "command": "additionalContextMenus.moveCodeToFile",
+          "command": "additionalContextMenus.moveLinesToFile",
           "group": "1_modification@3"
         },
         {
@@ -237,45 +197,20 @@
           "group": "2_workspace@2"
         }
       ]
-    },
-    "keybindings": [
-      {
-        "command": "additionalContextMenus.copyFunction",
-        "key": "ctrl+alt+shift+f",
-        "mac": "cmd+alt+shift+f",
-        "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
-      },
-      {
-        "command": "additionalContextMenus.copyCodeToFile",
-        "key": "ctrl+alt+shift+c",
-        "mac": "cmd+alt+shift+c",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
-      },
-      {
-        "command": "additionalContextMenus.moveCodeToFile",
-        "key": "ctrl+alt+shift+m",
-        "mac": "cmd+alt+shift+m",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
-      },
-      {
-        "command": "additionalContextMenus.saveAll",
-        "key": "ctrl+alt+shift+a",
-        "mac": "cmd+alt+shift+a",
-        "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.enableKeybindings"
-      }
-    ]
+    }
   },
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run package",
+    "build": "npm run compile",
     "compile": "node esbuild.config.js",
     "watch": "node esbuild.config.js --watch",
     "package": "node esbuild.config.js --production",
-    "compile-tests": "tsc -p ./tsconfig.test.json --outDir dist/test",
-    "lint": "eslint src --ext ts",
-    "lint:fix": "eslint src --ext ts --fix",
+    "compile-tests": "tsc -p ./tsconfig.test.json",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "test": "npm run test:e2e",
-    "test:e2e": "npm run compile-tests && node ./dist/test/test/e2e/runE2ETest.js",
+    "test:e2e": "npm run compile-tests && node ./dist/test/e2e/runE2ETest.js",
     "test:watch": "npm run compile-tests -- -w",
     "test:quick": "npm run compile && npm run test:e2e",
     "test:debug": "npm run compile-tests && code --wait && npm run test:e2e",
@@ -288,10 +223,17 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^18.19.120",
     "@types/vscode": "^1.102.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
+    "@typescript-eslint/parser": "^8.44.1",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.25.8",
     "eslint": "^9.31.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-mocha": "^11.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-security": "^3.0.1",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.0",
     "mocha": "^11.7.1",
