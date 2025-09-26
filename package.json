@@ -203,18 +203,12 @@
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "build": "npm run compile",
-    "compile": "node esbuild.config.js",
+    "build": "node esbuild.config.js",
     "watch": "node esbuild.config.js --watch",
     "package": "node esbuild.config.js --production",
-    "compile-tests": "tsc -p ./tsconfig.test.json",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "npm run test:e2e",
-    "test:e2e": "npm run compile-tests && node ./dist/test/e2e/runE2ETest.js",
-    "test:watch": "npm run compile-tests -- -w",
-    "test:quick": "npm run compile && npm run test:e2e",
-    "test:debug": "npm run compile-tests && code --wait && npm run test:e2e",
+    "test": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
     "format": "prettier --write ."
   },
   "devDependencies": {
