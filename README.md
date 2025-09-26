@@ -49,7 +49,7 @@
 
 ### Code Operations
 
-- 🧠 **AST-Based Analysis** - Uses Babel parser for accurate code parsing
+- 🧠 **Lightweight Code Analysis** - Uses optimized regex-based parsing for fast function detection
 - 🔀 **Import Management** - Merge, duplicate, or skip import statements
 - 📍 **Smart Insertion** - Intelligent code placement (smart, end, beginning)
 - 💬 **Comment Preservation** - Maintains code comments during operations
@@ -201,56 +201,12 @@ Access all features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 - `Additional Context Menus: Show Output Channel` - Open debug logs for troubleshooting
 - `Additional Context Menus: Debug Context Variables` - Inspect extension state and context variables
 - `Additional Context Menus: Refresh Context Variables` - Reload project detection and refresh context
-- `Additional Context Menus: Check Keybinding Conflicts` - Detect potential keyboard shortcut conflicts
-- `Additional Context Menus: Enable Keybindings` - Enable keyboard shortcuts for all commands
-- `Additional Context Menus: Disable Keybindings` - Disable keyboard shortcuts for all commands
-
----
-
-## ⌨️ Keyboard Shortcuts
-
-**⚠️ Smart Conflict Prevention**: Keybindings are **disabled by default** to avoid conflicts with your existing shortcuts.
-
-### Default Keybindings
-
-| Command | Windows/Linux | macOS | Description |
-|---------|---------------|-------|-------------|
-| Copy Function | `Ctrl+Alt+Shift+F` | `Cmd+Alt+Shift+F` | Copy function at cursor position |
-| Copy Code to File | `Ctrl+Alt+Shift+C` | `Cmd+Alt+Shift+C` | Copy selected code to another file |
-| Move Code to File | `Ctrl+Alt+Shift+M` | `Cmd+Alt+Shift+M` | Move selected code to another file |
-| Save All Files | `Ctrl+Alt+Shift+A` | `Cmd+Alt+Shift+A` | Save all open files with progress |
-
-### Enabling Keyboard Shortcuts
-
-⚠️ **Important**: Check for conflicts before enabling keybindings!
-
-1. **Check for conflicts** (recommended):
-   - Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
-   - Run `Additional Context Menus: Check Keybinding Conflicts`
-   - Review any reported conflicts
-
-2. **Enable keybindings**:
-   - Use Command Palette: `Additional Context Menus: Enable Keybindings`
-   - Or set `additionalContextMenus.enableKeybindings` to `true` in settings
-
-3. **Customize shortcuts** (optional):
-   - Open Keyboard Shortcuts (`Ctrl+K Ctrl+S` / `Cmd+K Cmd+S`)
-   - Search for "Additional Context Menus"
-   - Modify shortcuts as needed
-
-### Safety Features
-
-- **Disabled by default** - Prevents conflicts with existing shortcuts
-- **Conflict detection** - Built-in command to check for potential conflicts
-- **Conditional activation** - Shortcuts only work when appropriate (e.g., with selected text)
-- **Context-aware** - Keybindings respect file types and project detection
-
 ---
 
 ## 📋 Requirements
 
 - **VS Code**: Version 1.102.0 or higher
-- **Node.js**: Versions 16-24 supported (for development and build tools)
+- **Node.js**: Versions 16-24 supported (16+ required, 18+ recommended for development)
 - **Project Type**: Node.js project with `package.json` (for smart detection)
 - **File Types**: TypeScript/JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`)
 - **Optional**: Framework dependencies (React, Angular, Express, Next.js) for enhanced features
@@ -286,11 +242,6 @@ Additional Context Menus provides extensive configuration options:
 - `additionalContextMenus.saveAll.showNotification` (boolean, default: `true`) - Show notification after saving all files
 - `additionalContextMenus.saveAll.skipReadOnly` (boolean, default: `true`) - Skip read-only files when saving all
 
-### Keyboard Shortcut Settings
-
-- `additionalContextMenus.enableKeybindings` (boolean, default: `false`) - Enable keyboard shortcuts for context menu commands
-  - ⚠️ **Warning**: Check for conflicts with existing keybindings before enabling
-- `additionalContextMenus.showKeybindingsInMenu` (boolean, default: `true`) - Show keyboard shortcuts in context menu items when keybindings are enabled
 
 ### Terminal Settings (v1.2.0+)
 
@@ -346,7 +297,6 @@ Additional Context Menus provides extensive configuration options:
   "additionalContextMenus.copyCode.handleImports": "merge",
   "additionalContextMenus.copyCode.preserveComments": true,
   "additionalContextMenus.saveAll.showNotification": true,
-  "additionalContextMenus.enableKeybindings": false,
   "additionalContextMenus.terminal.type": "integrated"
 }
 ```
@@ -508,11 +458,9 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
 ### [1.1.0] - Previous Release
 
-- **⌨️ Keyboard Shortcuts System**: Complete keybinding support with conflict detection and safety features
 - **📊 Status Bar Integration**: Visual project status indicators with framework-specific icons
 - **🔧 Enhanced Command System**: New debug and management commands for better control
-- **⚙️ Expanded Configuration**: Enhanced settings for keybinding and status bar management
-- **🛡️ Safety First**: Keybindings disabled by default to prevent conflicts with existing shortcuts
+- **⚙️ Expanded Configuration**: Enhanced settings for project detection and status management
 
 ### [1.0.0] - Initial Release
 
@@ -532,23 +480,23 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
 **Build Performance:**
 - ⚡ **Lightning Fast Builds**: esbuild compilation in ~1 second (20x faster than webpack)
-- 📦 **Minimal Bundle Size**: 47.86KB production bundle (95.9% reduction from 601KB)
+- 📦 **Minimal Bundle Size**: 47.86KB production bundle (500KB+ reduction from Babel removal)
 - 🔄 **Instant Rebuilds**: Near-instant watch mode for development
 - 🎯 **Smart Bundling**: Tree-shaking eliminates unused dependencies
 
 **Runtime Performance:**
 - 🧠 **Intelligent Caching**: Project detection and file discovery results cached
 - 📊 **Memory Efficient**: Optimized for large codebases and complex project structures
-- ⚡ **Fast Function Detection**: AST-based parsing for accurate millisecond response times
+- ⚡ **Fast Function Detection**: Regex-based parsing for millisecond response times
 - 🔄 **Background Processing**: Non-blocking operations don't interrupt coding
 
 ### 🛡️ Enterprise-Grade Quality Assurance
 
 **Comprehensive Testing:**
-- 🧪 **37 Comprehensive Tests**: Covers real-world production scenarios
-- ✅ **100% Success Rate**: All tests pass consistently (37/37 passing)
+- 🧪 **Streamlined Test Suite**: E2E testing with core functionality validation
+- ✅ **High Success Rate**: Comprehensive coverage with automated test infrastructure
 - 🎯 **Edge Case Coverage**: Large files, special characters, rapid operations
-- 📈 **Performance Testing**: Stress-tested with nested functions, concurrent operations
+- 📈 **Performance Testing**: Optimized testing with minimal extension packages (85.5% size reduction)
 - ⚙️ **Configuration Validation**: Tested with invalid values and extreme configurations
 
 **Reliability Engineering:**
@@ -580,9 +528,8 @@ Built with clear separation of concerns and enterprise-grade patterns:
 - **ConfigurationService**: Manages settings and real-time configuration changes
 - **FileDiscoveryService**: Discovers compatible files with smart filtering
 - **FileSaveService**: Handles bulk save operations with progress feedback
-- **CodeAnalysisService**: Parses JavaScript/TypeScript using optimized regex patterns
-- **TerminalService**: Cross-platform terminal integration (v1.2.0+)
-- **StatusBarService**: Real-time project status display (v1.1.0+)
+- **CodeAnalysisService**: Lightweight regex-based function detection (replaces Babel AST for 500KB+ bundle reduction)
+- **TerminalService**: Cross-platform terminal integration with three modes (integrated/external/system-default)
 
 #### ⚡ **Performance Optimizations**
 - **Intelligent Caching**: Project detection and file discovery results
@@ -624,13 +571,14 @@ npm test
 
 | Command | Description | Performance |
 |---------|-------------|-------------|
-| `npm run build` | Build extension using esbuild | ⚡ ~1 second |
+| `npm run build` | Build extension using TypeScript esbuild config | ⚡ ~1 second |
 | `npm run watch` | Watch mode for development | 🔄 Instant rebuilds |
-| `npm run package` | Production build with optimizations | 📦 ~25KB output |
+| `npm run package` | Production build with optimizations | 📦 47.86KB output |
 | `npm run lint` | Run ESLint on src directory | 🎨 Code quality |
 | `npm run format` | Format code using Prettier | ✨ Consistent style |
-| `npm test` | Run extension tests | 🧪 37 tests |
-| `npm run test:watch` | Continuous testing during development | 🔄 Live feedback |
+| `npm test` | **Default optimized testing** with minimal extension package | 🧪 85.5% smaller, faster |
+| `npm run test:full` | Full project testing with complete environment | 🔄 Backwards compatibility |
+| `npm run create-minimal` | Create minimal extension package for testing | 📦 1MB vs 250MB |
 
 ---
 
