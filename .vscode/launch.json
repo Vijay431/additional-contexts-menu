@@ -9,8 +9,24 @@
       "runtimeExecutable": "${execPath}",
       "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
       "sourceMaps": true,
-      "outFiles": ["${workspaceRoot}/out/**/*.js"],
+      "outFiles": ["${workspaceRoot}/dist/**/*.js"],
       "preLaunchTask": "npm: watch"
+    },
+    {
+      "name": "Launch Extension (Minimal)",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceRoot}/.vscode-test/minimal-extension",
+        "--user-data-dir=${workspaceRoot}/.vscode-test/user-data-dev",
+        "--disable-extensions",
+        "--no-sandbox",
+        "--disable-dev-shm-usage"
+      ],
+      "sourceMaps": true,
+      "outFiles": ["${workspaceRoot}/.vscode-test/minimal-extension/dist/**/*.js"],
+      "preLaunchTask": "npm: create-minimal"
     }
   ]
 }

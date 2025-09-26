@@ -1,7 +1,9 @@
-import * as vscode from 'vscode';
-import * as fs from 'fs/promises';
 import { constants } from 'fs';
+import * as fs from 'fs/promises';
 import * as path from 'path';
+
+import * as vscode from 'vscode';
+
 import { CompatibleFile } from '../types/extension';
 import { Logger } from '../utils/logger';
 
@@ -35,12 +37,12 @@ export class FileDiscoveryService {
     try {
       const compatibleFiles = await this.scanWorkspaceForCompatibleFiles(
         workspaceFolder,
-        sourceExtension
+        sourceExtension,
       );
       this.fileCache.set(cacheKey, compatibleFiles);
 
       this.logger.debug(
-        `Found ${compatibleFiles.length} compatible files for extension ${sourceExtension}`
+        `Found ${compatibleFiles.length} compatible files for extension ${sourceExtension}`,
       );
       return compatibleFiles;
     } catch (error) {
@@ -51,7 +53,7 @@ export class FileDiscoveryService {
 
   private async scanWorkspaceForCompatibleFiles(
     workspaceFolder: vscode.WorkspaceFolder,
-    sourceExtension: string
+    sourceExtension: string,
   ): Promise<CompatibleFile[]> {
     const compatibleFiles: CompatibleFile[] = [];
     const workspacePath = workspaceFolder.uri.fsPath;
@@ -118,7 +120,7 @@ export class FileDiscoveryService {
       '.jsx': ['.js', '.jsx'],
     };
 
-    const compatibleExtensions = compatibilityRules[sourceExt] || [sourceExt];
+    const compatibleExtensions = compatibilityRules[sourceExt] ?? [sourceExt];
     return compatibleExtensions.includes(targetExt);
   }
 
@@ -153,7 +155,7 @@ export class FileDiscoveryService {
   private formatFileList(files: CompatibleFile[]): (vscode.QuickPickItem & { filePath: string })[] {
     return files.map((file) => {
       const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
-      const workspaceName = workspaceFolder?.name || 'workspace';
+      const workspaceName = workspaceFolder?.name ?? 'workspace';
 
       return {
         label: file.name,

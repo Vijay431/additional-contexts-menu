@@ -14,8 +14,8 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     <br>Smart Code Operations for VS Code
                 </h1>
                 <p class="hero-description">
-                    Enhanced right-click context menus with intelligent code operations for React, Angular, Express, and Next.js. 
-                    Features AST-based function detection, smart import handling, and seamless project integration.
+                    Enhanced right-click context menus with intelligent code operations for React, Angular, Express, and Next.js.
+                    Features smart function detection, intelligent import handling, cross-platform terminal integration (v1.2.0+), and ultra-fast esbuild compilation.
                 </p>
                 <div class="hero-buttons">
                     <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary" target="_blank">
@@ -41,7 +41,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                         <span class="stat-label">Test Success Rate</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">24.75KB</span>
+                        <span class="stat-number">47.86KB</span>
                         <span class="stat-label">Bundle Size</span>
                     </div>
                 </div>
@@ -119,14 +119,24 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     Improved Save All functionality with progress feedback, read-only file handling, and notification options.
                 </p>
             </div>
-            
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <h3 class="feature-title">Cross-Platform Terminal Integration <span class="version-badge">v1.2.0</span></h3>
+                <p class="feature-description">
+                    Right-click "Open in Terminal" with intelligent platform detection. Supports Windows, macOS, and Linux with configurable terminal types and directory behaviors.
+                </p>
+            </div>
+
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-bolt"></i>
                 </div>
                 <h3 class="feature-title">Lightning Fast Performance</h3>
                 <p class="feature-description">
-                    esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (24.75KB), and instant development feedback.
+                    esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (47.86KB), and instant development feedback.
                 </p>
             </div>
 

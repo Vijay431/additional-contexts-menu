@@ -3,14 +3,14 @@ name: CI/CD
 on:
   push:
     branches: ['**']
-  pull_request:
-    branches: ['**']
 
 permissions:
   contents: read
 
 jobs:
+  # Build job - runs on all branches for continuous validation
   build:
+    name: Build & Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -18,63 +18,119 @@ jobs:
         node-version: [16.x, 18.x, 20.x, 22.x, 24.x]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
       # Install xvfb for headless VS Code testing
-      - name: Install xvfb
+      - name: Install System Dependencies
         run: sudo apt-get install -y xvfb
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build Extension
+        run: npm run build
+
+      - name: Run Extension Tests
+        run: xvfb-run --auto-servernum npm test
+
+  # Lint job - runs on all branches for code quality checks
+  lint:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Extension
-        run: npm run compile
+      - name: Run ESLint
+        run: npm run lint
 
-      - name: Run Tests
-        run: xvfb-run --auto-servernum npm test
+      - name: Check Code Formatting
+        run: npm run format -- --check
 
-  lint:
+  # Security audit job - runs on all branches for security validation
+  security:
+    name: Security Audit
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           cache: 'npm'
 
-      - run: npm ci
-      - run: npm run lint
+      - name: Install Dependencies
+        run: npm ci
 
+      - name: Run Security Audit
+        run: npm audit --audit-level=high
+
+      - name: Check for Known Vulnerabilities
+        run: npm audit --audit-level=moderate --json | jq '.vulnerabilities | length'
+
+  # Deploy job - ONLY runs on master branch after all checks pass
   deploy:
-    needs: [build, lint]
+    name: Deploy to VS Code Marketplace
+    needs: [build, lint, security]
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+    environment:
+      name: production
+      url: https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus
 
-      - name: Use Node.js
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           cache: 'npm'
 
-      - run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-      - name: Package Extension
+      - name: Build Production Package
         run: npm run package
+
+      - name: Validate Package
+        run: |
+          ls -la *.vsix
+          echo "Package size:"
+          du -h *.vsix
 
       - name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v2
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
+          packagePath: '*.vsix'
+
+      - name: Create Release Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-package
+          path: '*.vsix'
+          retention-days: 90
