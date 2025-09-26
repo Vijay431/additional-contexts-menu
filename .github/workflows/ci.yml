@@ -115,12 +115,6 @@ jobs:
       - name: Build Production Package
         run: npm run package
 
-      - name: Validate Package
-        run: |
-          ls -la *.vsix
-          echo "Package size:"
-          du -h *.vsix
-
       - name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v2
         with:
