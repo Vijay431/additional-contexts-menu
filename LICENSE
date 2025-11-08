@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Vijay Gangatharan
+Copyright (c) 2025 Vijay Gangatharan and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## Contribution License Agreement
+
+By submitting contributions to this repository, you agree that your work is
+licensed under the terms of the MIT License above. You retain authorship of
+your contributions while granting Vijay Gangatharan and the project maintainers
+the rights necessary to distribute and relicense the project under MIT. Please
+only submit contributions for which you have the necessary rights and ensure
+that all third-party content is appropriately licensed.

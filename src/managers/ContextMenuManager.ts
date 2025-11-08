@@ -1,3 +1,6 @@
+import { constants } from 'fs';
+import * as fs from 'fs/promises';
+
 import * as vscode from 'vscode';
 
 import { CodeAnalysisService } from '../services/codeAnalysisService';
@@ -7,6 +10,7 @@ import { FileSaveService } from '../services/fileSaveService';
 import { ProjectDetectionService } from '../services/projectDetectionService';
 import { TerminalService } from '../services/terminalService';
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
 
 export class ContextMenuManager {
   private logger: Logger;
@@ -33,6 +37,9 @@ export class ContextMenuManager {
 
     // Register commands
     this.registerCommands();
+
+    // Initialize services that require watchers
+    this.projectDetectionService.initialize();
 
     // Update context variables for menu visibility
     await this.projectDetectionService.updateContextVariables();
@@ -96,6 +103,15 @@ export class ContextMenuManager {
       }
 
       const document = editor.document;
+
+      // Reject untitled files
+      if (document.isUntitled) {
+        vscode.window.showErrorMessage(
+          'Copy Function is not available for untitled files. Please save the file first.',
+        );
+        return;
+      }
+
       const position = editor.selection.active;
 
       // Find function at cursor position
@@ -118,7 +134,8 @@ export class ContextMenuManager {
       this.logger.info(`Function copied: ${functionInfo.name}`);
     } catch (error) {
       this.logger.error('Error in Copy Function command', error);
-      vscode.window.showErrorMessage('Failed to copy function');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      vscode.window.showErrorMessage(`Failed to copy function: ${errorMessage}`);
     }
   }
 
@@ -132,9 +149,26 @@ export class ContextMenuManager {
         return;
       }
 
+      const document = editor.document;
+
+      // Reject untitled files
+      if (document.isUntitled) {
+        vscode.window.showErrorMessage(
+          'Copy Lines to File is not available for untitled files. Please save the file first.',
+        );
+        return;
+      }
+
       const selection = editor.selection;
       if (selection.isEmpty) {
         vscode.window.showWarningMessage('No code selected');
+        return;
+      }
+
+      if (editor.selections.length > 1) {
+        vscode.window.showWarningMessage(
+          'Copy Lines to File does not support multiple selections.',
+        );
         return;
       }
 
@@ -165,7 +199,8 @@ export class ContextMenuManager {
       this.logger.info(`Lines copied to: ${targetFilePath}`);
     } catch (error) {
       this.logger.error('Error in Copy Lines to File command', error);
-      vscode.window.showErrorMessage('Failed to copy lines to file');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      vscode.window.showErrorMessage(`Failed to copy lines to file: ${errorMessage}`);
     }
   }
 
@@ -179,14 +214,49 @@ export class ContextMenuManager {
         return;
       }
 
+      const document = editor.document;
+
+      // Reject untitled files
+      if (document.isUntitled) {
+        vscode.window.showErrorMessage(
+          'Move Lines to File is not available for untitled files. Please save the file first.',
+        );
+        return;
+      }
+
       const selection = editor.selection;
       if (selection.isEmpty) {
         vscode.window.showWarningMessage('No code selected');
         return;
       }
 
+      if (editor.selections.length > 1) {
+        vscode.window.showWarningMessage(
+          'Move Lines to File does not support multiple selections.',
+        );
+        return;
+      }
+
       const selectedText = editor.document.getText(selection);
       const sourceExtension = this.getFileExtension(editor.document.fileName);
+
+      // Validate source file is writable before proceeding
+      const sourceFilePath = document.fileName;
+      if (!isSafeFilePath(sourceFilePath)) {
+        this.logger.warn('Rejected unsafe source file path', { filePath: sourceFilePath });
+        vscode.window.showErrorMessage('Source file path is not allowed.');
+        return;
+      }
+
+      try {
+        await fs.access(sourceFilePath, constants.W_OK);
+      } catch (error) {
+        this.logger.warn('Source file is not writable', { filePath: sourceFilePath, error });
+        vscode.window.showErrorMessage(
+          'Source file is read-only or not writable. Cannot move code from this file.',
+        );
+        return;
+      }
 
       // Get compatible files
       const compatibleFiles = await this.fileDiscoveryService.getCompatibleFiles(sourceExtension);
@@ -204,20 +274,40 @@ export class ContextMenuManager {
         return;
       }
 
-      // Copy code to target file first
-      await this.copyCodeToTargetFile(selectedText, targetFilePath, editor.document);
+      // Copy code to target file first - only proceed with deletion if copy succeeds
+      try {
+        await this.copyCodeToTargetFile(selectedText, targetFilePath, editor.document);
+      } catch (copyError) {
+        // If copy fails, preserve source file and show error
+        this.logger.error('Failed to copy code to target file', copyError);
+        const errorMsg = (copyError as Error).message;
+        vscode.window.showErrorMessage(
+          `Failed to copy code to target file. Source file preserved: ${errorMsg}`,
+        );
+        return; // Exit early - source file remains unchanged
+      }
 
-      // Remove code from source file
-      await editor.edit((editBuilder) => {
-        editBuilder.delete(selection);
-      });
+      // Only delete from source file after successful copy
+      try {
+        await editor.edit((editBuilder) => {
+          editBuilder.delete(selection);
+        });
+      } catch (deleteError) {
+        // If deletion fails, log error but don't throw - code is already copied
+        this.logger.error('Failed to delete code from source file', deleteError);
+        const deleteErrorMsg = (deleteError as Error).message;
+        vscode.window.showWarningMessage(
+          `Code copied to target file, but failed to remove from source: ${deleteErrorMsg}`,
+        );
+      }
 
       const fileName = this.getFileName(targetFilePath);
       vscode.window.showInformationMessage(`Lines moved to ${fileName}`);
       this.logger.info(`Lines moved to: ${targetFilePath}`);
     } catch (error) {
       this.logger.error('Error in Move Lines to File command', error);
-      vscode.window.showErrorMessage('Failed to move lines to file');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      vscode.window.showErrorMessage(`Failed to move lines to file: ${errorMessage}`);
     }
   }
 
@@ -239,6 +329,11 @@ export class ContextMenuManager {
     sourceDocument: vscode.TextDocument,
   ): Promise<void> {
     try {
+      if (!isSafeFilePath(targetFilePath)) {
+        this.logger.warn('Rejected unsafe target file path', { targetFilePath });
+        throw new Error('Target file path is not allowed.');
+      }
+
       // Open target file
       const targetUri = vscode.Uri.file(targetFilePath);
       const targetDocument = await vscode.workspace.openTextDocument(targetUri);
@@ -247,15 +342,24 @@ export class ContextMenuManager {
       const insertionPoint = this.getInsertionPoint(targetDocument, code);
 
       // Open target file in editor to make edits
-      const targetEditor = await vscode.window.showTextDocument(
-        targetDocument,
-        vscode.ViewColumn.Beside,
-      );
-
-      // Insert code at the determined position
-      await targetEditor.edit((editBuilder) => {
-        editBuilder.insert(insertionPoint, `\n${code}\n`);
+      const targetEditor = await vscode.window.showTextDocument(targetDocument, {
+        viewColumn: vscode.ViewColumn.Beside,
+        preserveFocus: true,
+        preview: false,
       });
+
+      const normalizedCode = code.replace(/\r\n/g, '\n');
+
+      const succeeded = await targetEditor.edit((editBuilder) => {
+        const needsTrailingNewline = normalizedCode.endsWith('\n') ? '' : '\n';
+        const textToInsert = `${normalizedCode}${needsTrailingNewline}`;
+        const prefix = insertionPoint.line === 0 && insertionPoint.character === 0 ? '' : '\n';
+        editBuilder.insert(insertionPoint, `${prefix}${textToInsert}`);
+      });
+
+      if (!succeeded) {
+        throw new Error('Failed to apply edits to target file');
+      }
 
       // Handle imports if configured
       if (this.configService.getCopyCodeConfig().handleImports === 'merge') {
@@ -289,13 +393,13 @@ export class ContextMenuManager {
     let lastImportLine = -1;
     let firstExportLine = -1;
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i]?.trim() ?? '';
+    for (const [index, rawLine] of lines.entries()) {
+      const trimmed = rawLine.trim();
 
-      if (line.startsWith('import ')) {
-        lastImportLine = i;
-      } else if (line.startsWith('export ') && firstExportLine === -1) {
-        firstExportLine = i;
+      if (trimmed.startsWith('import ')) {
+        lastImportLine = index;
+      } else if (trimmed.startsWith('export ') && firstExportLine === -1) {
+        firstExportLine = index;
       }
     }
 
@@ -332,11 +436,19 @@ export class ContextMenuManager {
         targetDocument.languageId,
       );
 
-      // TODO: Implement smart import merging logic
-      // This would involve parsing import statements and merging them intelligently
+      // NOTE: Import merging logic is not yet fully implemented
+      // Current behavior: Imports are extracted but not automatically merged
+      // Future enhancement: Implement smart import merging that:
+      // - Deduplicates imports from the same module
+      // - Merges named imports from the same source
+      // - Handles default vs named imports appropriately
+      // - Respects the handleImports configuration ('merge', 'duplicate', 'skip')
+      //
+      // For now, imports in copied code are included as-is in the target file
       this.logger.debug('Import merging not yet fully implemented', {
         sourceImports: sourceImports.length,
         targetImports: targetImports.length,
+        handleImports: this.configService.getCopyCodeConfig().handleImports,
       });
     } catch (error) {
       this.logger.warn('Error handling import merging', error);
@@ -396,5 +508,6 @@ export class ContextMenuManager {
     this.logger.debug('Disposing ContextMenuManager');
     this.disposables.forEach((disposable) => disposable.dispose());
     this.disposables = [];
+    this.projectDetectionService.dispose();
   }
 }

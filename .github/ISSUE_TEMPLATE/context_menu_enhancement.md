@@ -14,6 +14,11 @@ assignees: ''
 - [ ] Save All
 - [ ] Other:
 
+**Pre-flight Checklist**
+- [ ] I verified this idea is not already tracked in issues or discussions.
+- [ ] I reviewed the [current feature set](https://github.com/Vijay431/additional-contexts-menu/wiki/Home).
+- [ ] I am willing to help test or validate the enhancement.
+
 **Current Behavior**
 Describe how the context menu currently works and what could be improved.
 

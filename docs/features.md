@@ -123,14 +123,14 @@ description: 'Explore the comprehensive features and intelligent code operations
                 </div>
             </div>
         </div>
-        
+
         <!-- Professional Features Section -->
         <div class="feature-section">
             <div class="feature-header">
                 <h2 class="feature-category">Project Intelligence & Framework Support</h2>
                 <p class="feature-category-desc">Smart project detection and framework-specific enhancements for modern web development.</p>
             </div>
-            
+
             <div class="feature-list">
                 <div class="feature-item">
                     <div class="feature-icon">
@@ -139,7 +139,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="feature-content">
                         <h3 class="feature-name">Automatic Project Detection</h3>
                         <p class="feature-desc">
-                            Automatically detects Node.js projects and identifies frameworks by analyzing package.json dependencies 
+                            Automatically detects Node.js projects and identifies frameworks by analyzing package.json dependencies
                             to provide framework-specific context menu enhancements.
                         </p>
                         <ul class="feature-benefits">
@@ -151,7 +151,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="feature-item">
                     <div class="feature-icon">
                         <i class="fas fa-cogs"></i>
@@ -159,7 +159,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="feature-content">
                         <h3 class="feature-name">Comprehensive Configuration System</h3>
                         <p class="feature-desc">
-                            Extensive configuration options with real-time updates, allowing complete customization 
+                            Extensive configuration options with real-time updates, allowing complete customization
                             of behavior and appearance without requiring VS Code restart.
                         </p>
                         <div class="config-table">
@@ -226,7 +226,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="feature-item">
                     <div class="feature-icon">
                         <i class="fas fa-terminal"></i>
@@ -234,7 +234,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="feature-content">
                         <h3 class="feature-name">Command Palette Integration</h3>
                         <p class="feature-desc">
-                            Professional command palette integration with categorized commands for complete 
+                            Professional command palette integration with categorized commands for complete
                             extension control and troubleshooting capabilities.
                         </p>
                         <div class="command-grid">
@@ -271,14 +271,14 @@ description: 'Explore the comprehensive features and intelligent code operations
                 </div>
             </div>
         </div>
-        
+
         <!-- Architecture Section -->
         <div class="feature-section">
             <div class="feature-header">
                 <h2 class="feature-category">Service-Oriented Architecture</h2>
                 <p class="feature-category-desc">Modern architectural patterns with separation of concerns for maintainable and scalable code.</p>
             </div>
-            
+
             <div class="architecture-grid">
                 <div class="architecture-card">
                     <div class="arch-icon">
@@ -286,77 +286,77 @@ description: 'Explore the comprehensive features and intelligent code operations
                     </div>
                     <h3 class="arch-title">ExtensionManager</h3>
                     <p class="arch-desc">
-                        Central coordinator managing extension lifecycle, event listeners, 
+                        Central coordinator managing extension lifecycle, event listeners,
                         and component initialization with proper cleanup and error handling.
                     </p>
                 </div>
-                
+
                 <div class="architecture-card">
                     <div class="arch-icon">
                         <i class="fas fa-mouse-pointer"></i>
                     </div>
                     <h3 class="arch-title">ContextMenuManager</h3>
                     <p class="arch-desc">
-                        Dedicated manager for context menu command registration, 
+                        Dedicated manager for context menu command registration,
                         menu interactions, and conditional menu visibility.
                     </p>
                 </div>
-                
+
                 <div class="architecture-card">
                     <div class="arch-icon">
                         <i class="fas fa-project-diagram"></i>
                     </div>
                     <h3 class="arch-title">ProjectDetectionService</h3>
                     <p class="arch-desc">
-                        Singleton service for detecting Node.js projects and identifying 
+                        Singleton service for detecting Node.js projects and identifying
                         frameworks through package.json analysis.
                     </p>
                 </div>
-                
+
                 <div class="architecture-card">
                     <div class="arch-icon">
                         <i class="fas fa-sliders-h"></i>
                     </div>
                     <h3 class="arch-title">ConfigurationService</h3>
                     <p class="arch-desc">
-                        VS Code settings integration with real-time updates, 
+                        VS Code settings integration with real-time updates,
                         type-safe configuration access, and change notifications.
                     </p>
                 </div>
-                
+
                 <div class="architecture-card">
                     <div class="arch-icon">
                         <i class="fas fa-search"></i>
                     </div>
                     <h3 class="arch-title">FileDiscoveryService</h3>
                     <p class="arch-desc">
-                        Service for discovering compatible files in the workspace 
+                        Service for discovering compatible files in the workspace
                         for code operations and target file selection.
                     </p>
                 </div>
-                
+
                 <div class="architecture-card">
                     <div class="arch-icon">
                         <i class="fas fa-save"></i>
                     </div>
                     <h3 class="arch-title">FileSaveService</h3>
                     <p class="arch-desc">
-                        Enhanced save operations with progress feedback, 
+                        Enhanced save operations with progress feedback,
                         read-only file handling, and workspace management.
                     </p>
                 </div>
-                
+
                 <div class="architecture-card">
                     <div class="arch-icon">
                         <i class="fas fa-code-branch"></i>
                     </div>
                     <h3 class="arch-title">CodeAnalysisService</h3>
                     <p class="arch-desc">
-                        AST-based code parsing and analysis using Babel parser 
+                        AST-based code parsing and analysis using Babel parser
                         for function detection and code manipulation.
                     </p>
                 </div>
-                
+
                 <div class="architecture-card">
                     <div class="arch-icon">
                         <i class="fas fa-terminal"></i>
@@ -380,14 +380,14 @@ description: 'Explore the comprehensive features and intelligent code operations
                 </div>
             </div>
         </div>
-        
+
         <!-- Keyboard Shortcuts Section -->
         <div class="feature-section">
             <div class="feature-header">
                 <h2 class="feature-category">Keyboard Shortcuts & User Interface</h2>
                 <p class="feature-category-desc">Optional keyboard shortcuts and enhanced visual feedback for improved productivity.</p>
             </div>
-            
+
             <div class="feature-list">
                 <div class="feature-item">
                     <div class="feature-icon">
@@ -409,7 +409,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="feature-item">
                     <div class="feature-icon">
                         <i class="fas fa-chart-bar"></i>
@@ -417,7 +417,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="feature-content">
                         <h3 class="feature-name">Status Bar Integration</h3>
                         <p class="feature-desc">
-                            Real-time visual feedback in VS Code status bar showing extension state, project detection, 
+                            Real-time visual feedback in VS Code status bar showing extension state, project detection,
                             and framework-specific indicators with interactive debug functionality.
                         </p>
                         <ul class="feature-benefits">
@@ -430,7 +430,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="feature-item">
                     <div class="feature-icon">
                         <i class="fas fa-shield-alt"></i>
@@ -438,7 +438,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="feature-content">
                         <h3 class="feature-name">Safety & Management Features</h3>
                         <p class="feature-desc">
-                            Comprehensive safety features and management commands to ensure smooth integration 
+                            Comprehensive safety features and management commands to ensure smooth integration
                             with existing VS Code configurations and workflows.
                         </p>
                         <ul class="feature-benefits">
@@ -453,14 +453,14 @@ description: 'Explore the comprehensive features and intelligent code operations
                 </div>
             </div>
         </div>
-        
+
         <!-- Performance Section -->
         <div class="feature-section">
             <div class="feature-header">
                 <h2 class="feature-category">Performance & Quality</h2>
                 <p class="feature-category-desc">Optimized performance with professional development practices for VS Code extensions.</p>
             </div>
-            
+
             <div class="performance-metrics">
                 <div class="metric-card">
                     <div class="metric-icon">
@@ -468,13 +468,13 @@ description: 'Explore the comprehensive features and intelligent code operations
                     </div>
                     <h3 class="metric-title">Optimized Build</h3>
                     <ul class="metric-list">
-                        <li>Webpack bundling for production</li>
-                        <li>Tree-shaking for minimal bundle size</li>
-                        <li>Terser optimization for compressed output</li>
-                        <li>Source maps for debugging support</li>
+                        <li>esbuild bundling for production and watch mode</li>
+                        <li>Tree shaking and dead-code elimination</li>
+                        <li>Inline source maps for development debugging</li>
+                        <li>Automatic bundle metrics and target tracking</li>
                     </ul>
                 </div>
-                
+
                 <div class="metric-card">
                     <div class="metric-icon">
                         <i class="fas fa-shield-alt"></i>
@@ -482,12 +482,12 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <h3 class="metric-title">Code Quality</h3>
                     <ul class="metric-list">
                         <li>TypeScript strict mode compliance</li>
-                        <li>ESLint with TypeScript and stylistic rules</li>
-                        <li>Prettier code formatting</li>
+                        <li>Biome linting and formatting with project presets</li>
+                        <li>Automated formatting with Biome formatter</li>
                         <li>Comprehensive type definitions</li>
                     </ul>
                 </div>
-                
+
                 <div class="metric-card">
                     <div class="metric-icon">
                         <i class="fas fa-vial"></i>
@@ -500,7 +500,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         <li>CI/CD automated testing pipeline</li>
                     </ul>
                 </div>
-                
+
                 <div class="metric-card">
                     <div class="metric-icon">
                         <i class="fas fa-heartbeat"></i>
@@ -516,6 +516,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Screenshots Section -->
@@ -592,7 +593,7 @@ description: 'Explore the comprehensive features and intelligent code operations
         <div class="cta-content">
             <h2 class="cta-title">Experience Intelligent Code Operations</h2>
             <p class="cta-description">
-                Install Additional Context Menus today and enhance your development workflow with smart code operations for modern frameworks.
+                Install Additional Context Menus today and enhance your development workflow with smart code operations for modern frameworks. Ready to shape the roadmap? Join the community-driven governance and contribute your expertise.
             </p>
             <div class="cta-buttons">
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">
@@ -606,6 +607,10 @@ description: 'Explore the comprehensive features and intelligent code operations
                 <a href="{{ site.baseurl }}/code-operations" class="btn btn-tertiary btn-large">
                     <i class="fas fa-copy"></i>
                     See Code Operations
+                </a>
+                <a href="https://github.com/Vijay431/additional-contexts-menu/blob/master/CONTRIBUTING.md" class="btn btn-outline btn-large" target="_blank">
+                    <i class="fas fa-users"></i>
+                    Contribute & Collaborate
                 </a>
             </div>
         </div>

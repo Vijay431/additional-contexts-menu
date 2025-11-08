@@ -7,9 +7,17 @@ assignees: ''
 ---
 
 ## Terminal Issue Description
+
 Describe the terminal functionality problem you're experiencing.
 
+## Pre-flight Checklist
+
+- [ ] I reviewed the [terminal configuration guide](https://github.com/Vijay431/additional-contexts-menu/wiki/Terminal-Integration).
+- [ ] I captured logs from `Additional Context Menus: Debug Context Variables` or the Output channel.
+- [ ] I verified the issue persists after restarting VS Code.
+
 ## Current Configuration
+
 ```json
 {
   "additionalContextMenus.terminal.type": "",
@@ -19,28 +27,34 @@ Describe the terminal functionality problem you're experiencing.
 ```
 
 ## Expected vs Actual Behavior
+
 **Expected:** What should happen when using "Open in Terminal"
 **Actual:** What actually happens
 
 ## Platform Information
+
 - **OS:** Windows 10/11, macOS version, or Linux distribution
 - **Default Terminal:** Command Prompt/PowerShell/Terminal.app/gnome-terminal/etc.
 - **VS Code Terminal:** What appears in integrated terminal
 
 ## Terminal Type Testing (test and mark)
+
 - [ ] **Integrated Terminal**: ✅ Works / ❌ Fails - [Description]
 - [ ] **External Terminal**: ✅ Works / ❌ Fails - [Description]
 - [ ] **System Default**: ✅ Works / ❌ Fails - [Description]
 
 ## Directory Behavior Testing (test and mark)
+
 - [ ] **Parent Directory**: ✅ Works / ❌ Fails - [Description]
 - [ ] **Workspace Root**: ✅ Works / ❌ Fails - [Description]
 - [ ] **Current Directory**: ✅ Works / ❌ Fails - [Description]
 
 ## Error Messages (if any)
+
 ```
 [Paste error messages from VS Code Console, Output Channel, or system dialogs]
 ```
 
 ## Additional Context
+
 File path details, custom terminal commands, workarounds, or other relevant information.

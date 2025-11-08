@@ -14,8 +14,8 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     <br>Smart Code Operations for VS Code
                 </h1>
                 <p class="hero-description">
-                    Enhanced right-click context menus with intelligent code operations for React, Angular, Express, and Next.js.
-                    Features smart function detection, intelligent import handling, cross-platform terminal integration (v1.2.0+), and ultra-fast esbuild compilation.
+                    Community-driven right-click context menus with intelligent code operations for React, Angular, Express, and Next.js.
+                    Features smart function detection, intelligent import handling, cross-platform terminal integration, and a Biome-powered developer workflow.
                 </p>
                 <div class="hero-buttons">
                     <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary" target="_blank">
@@ -25,6 +25,10 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     <a href="{{ site.extension.github_url }}" class="btn btn-secondary" target="_blank">
                         <i class="fab fa-github"></i>
                         View on GitHub
+                    </a>
+                    <a href="https://github.com/Vijay431/additional-contexts-menu/blob/master/CONTRIBUTING.md" class="btn btn-outline" target="_blank">
+                        <i class="fas fa-users"></i>
+                        Join the Community
                     </a>
                 </div>
                 <div class="hero-stats">
@@ -159,8 +163,19 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     Rigorous testing covers error boundaries, performance stress, configuration edge cases, and complex file system scenarios for bulletproof operation.
                 </p>
             </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h3 class="feature-title">Community Governance</h3>
+                <p class="feature-description">
+                    Maintainer-led yet community-driven roadmap with transparent contribution guidelines, CODEOWNERS review, and open decision making documented in the changelog.
+                </p>
+            </div>
         </div>
     </div>
+
 </section>
 
 <!-- Framework Support Section -->
@@ -288,7 +303,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
         <div class="cta-content">
             <h2 class="cta-title">Ready to Supercharge Your Code Operations?</h2>
             <p class="cta-description">
-                Join developers who trust Additional Context Menus for reliable, production-ready code operations. With 37 comprehensive tests and 100% success rate, it's built for enterprise development.
+                Join developers who trust Additional Context Menus for reliable, production-ready code operations. With 37 comprehensive tests, Biome-driven tooling, and an active contributor community, it's built for enterprise development.
             </p>
             <div class="cta-buttons">
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">
@@ -302,6 +317,10 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 <a href="{{ site.baseurl }}/code-operations" class="btn btn-tertiary btn-large">
                     <i class="fas fa-copy"></i>
                     See Code Operations
+                </a>
+                <a href="https://github.com/Vijay431/additional-contexts-menu/blob/master/CONTRIBUTING.md" class="btn btn-outline btn-large" target="_blank">
+                    <i class="fas fa-people-carry"></i>
+                    Contribute Today
                 </a>
             </div>
         </div>

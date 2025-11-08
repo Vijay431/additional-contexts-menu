@@ -42,7 +42,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         totalUsers: users.length,
       },
     });
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
@@ -57,7 +57,7 @@ export const getUserById = async (req: Request, res: Response) => {
     }
 
     res.json(user);
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ error: 'Failed to fetch user' });
   }
 };
@@ -80,7 +80,7 @@ const createUser = async (req: Request, res: Response) => {
     users.push(newUser);
 
     res.status(201).json(newUser);
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ error: 'Failed to create user' });
   }
 };

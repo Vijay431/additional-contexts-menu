@@ -8,7 +8,7 @@ export enum LogLevel {
 }
 
 export class Logger {
-  private static instance: Logger;
+  private static instance: Logger | undefined;
   private outputChannel: vscode.OutputChannel;
   private logLevel: LogLevel = LogLevel.INFO;
 
@@ -17,9 +17,7 @@ export class Logger {
   }
 
   public static getInstance(): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
-    }
+    Logger.instance ??= new Logger();
     return Logger.instance;
   }
 
@@ -57,7 +55,7 @@ export class Logger {
     }
 
     const timestamp = new Date().toISOString();
-    const levelName = LogLevel[level];
+    const levelName = this.getLevelName(level);
     const logMessage = `[${timestamp}] [${levelName}] ${message}`;
 
     this.outputChannel.appendLine(logMessage);
@@ -82,6 +80,21 @@ export class Logger {
           console.error(logMessage, data);
           break;
       }
+    }
+  }
+
+  private getLevelName(level: LogLevel): string {
+    switch (level) {
+      case LogLevel.DEBUG:
+        return 'DEBUG';
+      case LogLevel.INFO:
+        return 'INFO';
+      case LogLevel.WARN:
+        return 'WARN';
+      case LogLevel.ERROR:
+        return 'ERROR';
+      default:
+        return 'INFO';
     }
   }
 }

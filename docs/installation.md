@@ -161,6 +161,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Post-Installation Setup -->
@@ -303,13 +304,14 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </p>
                 <div class="config-code">
                     <pre><code>{
-  "additionalContextMenus.terminal.type": "external",
-  "additionalContextMenus.terminal.externalTerminalCommand": "wt -d {{directory}}",
-  "additionalContextMenus.terminal.openBehavior": "parent-directory",
-  "additionalContextMenus.copyCode.preserveComments": true
+
+"additionalContextMenus.terminal.type": "external",
+"additionalContextMenus.terminal.externalTerminalCommand": "wt -d {{directory}}",
+"additionalContextMenus.terminal.openBehavior": "parent-directory",
+"additionalContextMenus.copyCode.preserveComments": true
 }</code></pre>
-                </div>
-            </div>
+</div>
+</div>
 
             <div class="config-card">
                 <h3 class="config-title">
@@ -321,16 +323,18 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </p>
                 <div class="config-code">
                     <pre><code>{
-  "additionalContextMenus.enabled": true,
-  "additionalContextMenus.saveAll.showNotification": false,
-  "additionalContextMenus.copyCode.insertionPoint": "smart",
-  "additionalContextMenus.copyCode.handleImports": "merge",
-  "additionalContextMenus.supportedExtensions": [".ts", ".tsx", ".js", ".jsx"]
+
+"additionalContextMenus.enabled": true,
+"additionalContextMenus.saveAll.showNotification": false,
+"additionalContextMenus.copyCode.insertionPoint": "smart",
+"additionalContextMenus.copyCode.handleImports": "merge",
+"additionalContextMenus.supportedExtensions": [".ts", ".tsx", ".js", ".jsx"]
 }</code></pre>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
+</div>
+</div>
+</div>
+
 </section>
 
 <!-- Troubleshooting -->
@@ -414,6 +418,47 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                     <i class="fas fa-comments"></i>
                     Join Discussion
                 </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Developer Environment -->
+<section class="developer-environment">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Contribute with Confidence</h2>
+            <p class="section-description">
+                Additional Context Menus is a community-driven project. Follow these steps to keep your environment aligned with project standards.
+            </p>
+        </div>
+
+        <div class="dev-grid">
+            <div class="dev-card">
+                <h3 class="dev-title"><i class="fas fa-tools"></i> Required Tooling</h3>
+                <ul class="dev-list">
+                    <li>Install Node.js 18+ (16–24 supported)</li>
+                    <li>Install npm dependencies: <code>npm install</code></li>
+                    <li>Recommended VS Code extensions: <code>biomejs.biome</code>, <code>editorconfig.editorconfig</code></li>
+                </ul>
+            </div>
+
+            <div class="dev-card">
+                <h3 class="dev-title"><i class="fas fa-code"></i> Quality Checks</h3>
+                <div class="code-block">
+                    <pre><code>npm run lint
+npm run format:check
+npm run typecheck
+npm test</code></pre>
+                </div>
+                <p class="dev-note">Use <code>npm run lint:fix</code> or <code>npm run format</code> to apply Biome fixes automatically.</p>
+            </div>
+
+            <div class="dev-card">
+                <h3 class="dev-title"><i class="fas fa-sitemap"></i> Governance</h3>
+                <p class="dev-description">
+                    Review the <a href="{{ site.extension.github_url }}/blob/master/CONTRIBUTING.md" target="_blank">contribution guide</a>, follow the <a href="{{ site.extension.github_url }}/blob/master/CODE_OF_CONDUCT.md" target="_blank">Code of Conduct</a>, and request reviews from CODEOWNERS when submitting pull requests.
+                </p>
             </div>
         </div>
     </div>

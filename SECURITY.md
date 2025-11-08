@@ -2,71 +2,47 @@
 
 ## Supported Versions
 
-We provide security updates for the following versions of Additional Context Menus:
-
-| Version | Supported          | Node.js Compatibility |
-| ------- | ------------------ | --------------------- |
-| 1.2.x   | :white_check_mark: | Node.js 16-24         |
-| 1.1.x   | :white_check_mark: | Node.js 16-24         |
-| 1.0.x   | :white_check_mark: | Node.js 16-24         |
+| Version | Supported | Node.js Compatibility |
+| ------- | --------- | --------------------- |
+| 1.3.x   | ✅        | Node.js 16-24         |
+| 1.2.x   | ✅        | Node.js 16-24         |
+| 1.1.x   | ⚠️        | Critical fixes only   |
+| ≤1.0.x  | ❌        | Unsupported           |
 
 ## Reporting a Vulnerability
 
-We take the security of Additional Context Menus VS Code Extension seriously. If you believe you have found a security vulnerability, please follow these steps:
+If you discover a security issue, please report it privately so we can address it responsibly.
 
-1. **DO NOT** disclose the vulnerability publicly.
-2. Send a detailed description of the vulnerability to vijayanand431@gmail.com.
-3. You should receive a response within 48 hours.
-4. Please provide sufficient information to reproduce the vulnerability.
+1. Email [vijayanand431+security@gmail.com](mailto:vijayanand431+security@gmail.com) with "Security" in the subject line.
+2. Provide a clear description, reproduction steps, and potential impact.
+3. Expect acknowledgement within **48 hours** and a status update within **5 business days**.
+4. We prefer encrypted reports; request our PGP key in your initial email if needed.
 
-## What to Include in Your Report
+Do not create public issues for exploitable vulnerabilities.
 
-When reporting a vulnerability, please include:
+## Response Process
 
-- A clear description of the vulnerability
-- Steps to reproduce the issue
-- VS Code version and Additional Context Menus version
-- Node.js version (if relevant to the vulnerability)
-- Operating system and platform information
-- Potential impact of the vulnerability
-- Any potential solutions you've identified
-
-## Our Commitment
-
-- We will acknowledge receipt of your vulnerability report within 48 hours.
-- We will provide regular updates about our progress.
-- We will maintain confidentiality of the issue until a fix is released.
-- We will credit you (if desired) when we disclose the issue.
+- Triage: confirm severity and scope.
+- Mitigation: develop fix, tests, and documentation updates.
+- Coordination: credit reporters (if desired) and prepare advisories.
+- Release: publish patched versions and announce via changelog and GitHub advisory.
 
 ## Safe Harbor
 
-We support safe harbor for security researchers who:
+We encourage good-faith research:
 
-1. Make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our services.
-2. Only interact with accounts you own or with explicit permission of the account holder.
-3. Report any vulnerability promptly.
-4. Do not access, modify, or delete data beyond what is necessary to demonstrate the vulnerability.
+- Avoid privacy violations and data destruction.
+- Limit testing to your own environments unless you have consent.
+- Report promptly and cooperate in remediation.
 
-## Security Considerations
+## Dependencies
 
-Additional Context Menus extension:
+Security updates include dependency audits. Dependabot runs weekly for npm and monthly for GitHub Actions. Automated fixes are surfaced via PRs tagged `security`.
 
-- Only operates on files within your VS Code workspace
-- Does not transmit any data externally
-- Only accesses VS Code APIs and Node.js built-in modules
-- Follows VS Code extension security best practices
+## Staying Informed
 
-## Updates and Notifications
+- Subscribe to GitHub releases for security announcements.
+- Monitor `CHANGELOG.md` for entries marked "Security".
+- Review Dependabot PRs for dependency changes.
 
-Security updates will be released through:
-
-- GitHub Security Advisories
-- Extension changelog (CHANGELOG.md)
-- VS Code Marketplace updates
-- GitHub releases with security tags
-
-## Node.js Compatibility & Security
-
-This extension is compatible with Node.js versions 16-24. Security updates will maintain compatibility across this range. If you're using an unsupported Node.js version, please upgrade to receive security updates.
-
-Thank you for helping keep Additional Context Menus and its users safe!
+Thank you for helping keep Additional Context Menus secure for everyone!

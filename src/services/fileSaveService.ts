@@ -1,12 +1,17 @@
+import { constants } from 'fs';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+
 import * as vscode from 'vscode';
 
 import { SaveAllResult } from '../types/extension';
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
 
 import { ConfigurationService } from './configurationService';
 
 export class FileSaveService {
-  private static instance: FileSaveService;
+  private static instance: FileSaveService | undefined;
   private logger: Logger;
   private configService: ConfigurationService;
 
@@ -16,9 +21,7 @@ export class FileSaveService {
   }
 
   public static getInstance(): FileSaveService {
-    if (!FileSaveService.instance) {
-      FileSaveService.instance = new FileSaveService();
-    }
+    FileSaveService.instance ??= new FileSaveService();
     return FileSaveService.instance;
   }
 
@@ -52,6 +55,8 @@ export class FileSaveService {
         skippedFiles: [],
         success: false,
       };
+      let skippedFiles: string[] = [];
+      let failedFiles: string[] = [];
 
       // Show progress for large operations
       if (unsavedFiles.length > 5) {
@@ -61,21 +66,24 @@ export class FileSaveService {
       // Save files sequentially for better error handling
       for (const document of unsavedFiles) {
         try {
+          const fileName = this.getSafeFileName(document);
           const saved = await this.saveFile(document);
           if (saved) {
             result.savedFiles++;
-            this.logger.debug(`Saved file: ${document.fileName}`);
+            this.logger.debug(`Saved file: ${fileName}`);
           } else {
-            result.skippedFiles.push(document.fileName);
-            this.logger.warn(`Skipped file: ${document.fileName}`);
+            skippedFiles = [...skippedFiles, fileName];
+            this.logger.warn(`Skipped file: ${fileName}`);
           }
         } catch (error) {
-          result.failedFiles.push(document.fileName);
-          this.logger.error(`Failed to save file: ${document.fileName}`, error);
+          const fileName = this.getSafeFileName(document);
+          failedFiles = [...failedFiles, fileName];
+          this.logger.error(`Failed to save file: ${fileName}`, error);
         }
       }
-
-      result.success = result.failedFiles.length === 0;
+      result.failedFiles = failedFiles;
+      result.skippedFiles = skippedFiles;
+      result.success = failedFiles.length === 0;
 
       this.showCompletionNotification(result);
       this.logger.info('Save All operation completed', result);
@@ -96,14 +104,19 @@ export class FileSaveService {
         // Skip read-only files if configured to do so
         if (this.configService.getSaveAllConfig().skipReadOnly) {
           try {
-            // Check if file is writable by attempting to get its stats
             const uri = document.uri;
             if (uri.scheme === 'file') {
-              unsavedFiles.push(document);
+              const filePath = uri.fsPath;
+              if (!isSafeFilePath(filePath)) {
+                this.logger.warn('Skipping save for unsafe file path', { filePath });
+              } else {
+                await fs.access(filePath, constants.W_OK);
+                unsavedFiles.push(document);
+              }
             }
-          } catch {
-            this.logger.warn(`Skipping read-only file: ${document.fileName}`);
-            continue;
+          } catch (error) {
+            // File is read-only or not accessible
+            this.logger.warn(`Skipping read-only file: ${document.fileName}`, error);
           }
         } else {
           unsavedFiles.push(document);
@@ -133,6 +146,8 @@ export class FileSaveService {
       skippedFiles: [],
       success: false,
     };
+    let skippedFiles: string[] = [];
+    let failedFiles: string[] = [];
 
     await vscode.window.withProgress(
       {
@@ -143,16 +158,13 @@ export class FileSaveService {
       async (progress) => {
         const increment = 100 / files.length;
 
-        for (let i = 0; i < files.length; i++) {
-          const document = files[i];
-
-          if (!document) {
-            continue;
-          }
+        let index = 0;
+        for (const document of files) {
+          const fileName = this.getSafeFileName(document);
 
           progress.report({
-            message: `Saving ${document.fileName}`,
-            increment: i === 0 ? 0 : increment,
+            message: 'Saving file...',
+            increment: index === 0 ? 0 : increment,
           });
 
           try {
@@ -160,19 +172,23 @@ export class FileSaveService {
             if (saved) {
               result.savedFiles++;
             } else {
-              result.skippedFiles.push(document.fileName);
+              skippedFiles = [...skippedFiles, fileName];
             }
           } catch (error) {
-            result.failedFiles.push(document.fileName);
-            this.logger.error(`Failed to save file: ${document.fileName}`, error);
+            failedFiles = [...failedFiles, fileName];
+            this.logger.error(`Failed to save file: ${fileName}`, error);
           }
+
+          index++;
         }
 
         progress.report({ increment: 100 });
       },
     );
 
-    result.success = result.failedFiles.length === 0;
+    result.failedFiles = failedFiles;
+    result.skippedFiles = skippedFiles;
+    result.success = failedFiles.length === 0;
     this.showCompletionNotification(result);
 
     return result;
@@ -194,22 +210,18 @@ export class FileSaveService {
       const message = `Saved ${result.savedFiles}/${result.totalFiles} files. ${
         result.failedFiles.length
       } failed.`;
-      vscode.window
-        .showWarningMessage(message, 'Show Details')
-        .then(
-          (selection) => {
-            if (selection === 'Show Details') {
-              this.showFailureDetails(result);
-            }
-            return selection;
-          },
-          (error: unknown) => {
-            this.logger.error('Error showing warning message', error);
-          },
-        )
-        .catch((error: unknown) => {
-          this.logger.error('Unexpected error in warning message handling', error);
-        });
+      void vscode.window.showWarningMessage(message, 'Show Details').then(
+        (selection) => {
+          if (selection === 'Show Details') {
+            this.showFailureDetails(result);
+          }
+          return undefined;
+        },
+        (error: unknown) => {
+          this.logger.error('Error showing warning message', error);
+          return undefined;
+        },
+      );
     }
   }
 
@@ -244,5 +256,9 @@ export class FileSaveService {
 
   public getUnsavedFileCount(): number {
     return vscode.workspace.textDocuments.filter((doc) => doc.isDirty && !doc.isUntitled).length;
+  }
+
+  private getSafeFileName(document: vscode.TextDocument): string {
+    return path.basename(document.fileName);
   }
 }

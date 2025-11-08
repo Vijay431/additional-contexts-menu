@@ -1,13 +1,15 @@
+import { spawn } from 'child_process';
 import * as path from 'path';
 
 import * as vscode from 'vscode';
 
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
 
 import { ConfigurationService } from './configurationService';
 
 export class TerminalService {
-  private static instance: TerminalService;
+  private static instance: TerminalService | undefined;
   private logger: Logger;
   private configService: ConfigurationService;
 
@@ -17,9 +19,7 @@ export class TerminalService {
   }
 
   public static getInstance(): TerminalService {
-    if (!TerminalService.instance) {
-      TerminalService.instance = new TerminalService();
-    }
+    TerminalService.instance ??= new TerminalService();
     return TerminalService.instance;
   }
 
@@ -35,9 +35,35 @@ export class TerminalService {
         throw new Error('File path is required');
       }
 
+      if (!isSafeFilePath(filePath)) {
+        throw new Error('File path is outside the workspace or not allowed.');
+      }
+
+      // Validate that the path is actually a file, not a directory (if it exists)
+      try {
+        const fileUri = vscode.Uri.file(filePath);
+        const stats = await vscode.workspace.fs.stat(fileUri);
+        if ((stats.type & vscode.FileType.File) === 0) {
+          throw new Error('Path is a directory, not a file. Please provide a file path.');
+        }
+        // If it's a file, continue normally
+      } catch (statError) {
+        // If stat fails because path doesn't exist, that's okay - might be a new file
+        // But if it fails because it's a directory, we should throw
+        if (statError instanceof Error && statError.message.includes('directory')) {
+          throw statError;
+        }
+        // For other errors (like file not found), continue - directory validation will handle it
+        this.logger.debug('File path validation', { filePath, error: statError });
+      }
+
       const directoryPath = this.getTargetDirectory(filePath);
 
-      if (!await this.validatePath(directoryPath)) {
+      if (!isSafeFilePath(directoryPath)) {
+        throw new Error('Target directory is outside the workspace or not allowed.');
+      }
+
+      if (!(await this.validatePath(directoryPath))) {
         throw new Error(`Invalid or inaccessible directory: ${directoryPath}`);
       }
 
@@ -45,7 +71,6 @@ export class TerminalService {
 
       vscode.window.showInformationMessage(`Terminal opened in ${path.basename(directoryPath)}`);
       this.logger.info('Terminal opened successfully', { directory: directoryPath });
-
     } catch (error) {
       this.handleTerminalError(error as Error);
       throw error;
@@ -56,6 +81,10 @@ export class TerminalService {
     this.logger.info('Opening directory in terminal', { directoryPath });
 
     try {
+      if (!isSafeFilePath(directoryPath)) {
+        throw new Error('Directory path is outside the workspace or not allowed.');
+      }
+
       const terminalType = this.getTerminalType();
 
       switch (terminalType) {
@@ -71,7 +100,6 @@ export class TerminalService {
         default:
           throw new Error(`Unsupported terminal type: ${terminalType}`);
       }
-
     } catch (error) {
       this.logger.error('Failed to open directory in terminal', error);
 
@@ -95,7 +123,6 @@ export class TerminalService {
 
       terminal.show();
       this.logger.debug('Integrated terminal created', { name: terminalName, cwd: directoryPath });
-
     } catch (error) {
       this.logger.error('Failed to create integrated terminal', error);
       throw new Error('Failed to open integrated terminal');
@@ -112,15 +139,12 @@ export class TerminalService {
 
       const command = this.buildExternalTerminalCommand(externalTerminalCommand, directoryPath);
 
-      const terminal = vscode.window.createTerminal({
-        name: 'External Terminal Launcher',
-      });
+      if (!this.isCommandSafe(command)) {
+        throw new Error('External terminal command contains unsupported characters.');
+      }
 
-      terminal.sendText(command);
-      terminal.dispose();
-
+      await this.launchDetachedProcess(command, directoryPath);
       this.logger.debug('External terminal command executed', { command });
-
     } catch (error) {
       this.logger.error('Failed to open external terminal', error);
       throw new Error('Failed to open external terminal');
@@ -154,15 +178,12 @@ export class TerminalService {
           throw new Error(`Unsupported platform: ${platform}`);
       }
 
-      const terminal = vscode.window.createTerminal({
-        name: 'System Terminal Launcher',
-      });
+      if (!this.isCommandSafe(command)) {
+        throw new Error('System terminal command contains unsupported characters.');
+      }
 
-      terminal.sendText(command);
-      terminal.dispose();
-
+      await this.launchDetachedProcess(command, directoryPath);
       this.logger.debug('System default terminal command executed', { platform, command });
-
     } catch (error) {
       this.logger.error('Failed to open system default terminal', error);
       throw new Error('Failed to open system default terminal');
@@ -170,19 +191,16 @@ export class TerminalService {
   }
 
   private async findAvailableTerminal(terminals: string[]): Promise<string | null> {
+    // Try each terminal in order of preference
+    // Note: We can't easily test terminal availability without executing commands
+    // This method returns the first terminal in the list, assuming it's available
+    // If the terminal doesn't exist, the openSystemDefaultTerminal will handle the error
+    // and fall back to integrated terminal
+
     for (const terminal of terminals) {
-      try {
-        const testTerminal = vscode.window.createTerminal({
-          name: 'Terminal Test',
-        });
-
-        testTerminal.sendText(`which ${terminal}`);
-        testTerminal.dispose();
-
-        return terminal;
-      } catch {
-        continue;
-      }
+      // Return first terminal - actual availability will be tested when opening
+      // If it fails, the error handling in openSystemDefaultTerminal will catch it
+      return terminal;
     }
     return null;
   }
@@ -218,6 +236,33 @@ export class TerminalService {
     return filePath.replace(/['"]/g, '\\$&');
   }
 
+  private isCommandSafe(command: string): boolean {
+    const unsafePatterns = [/[`$<>|]/, /&&/, /\|\|/, /;|\r|\n/];
+    return !unsafePatterns.some((pattern) => pattern.test(command));
+  }
+
+  private async launchDetachedProcess(command: string, cwd: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const child = spawn(command, {
+          cwd,
+          shell: true,
+          detached: true,
+          stdio: 'ignore',
+        });
+
+        child.on('error', (error) => {
+          reject(error);
+        });
+
+        child.unref();
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   public getParentDirectory(filePath: string): string {
     try {
       return path.dirname(filePath);
@@ -237,7 +282,8 @@ export class TerminalService {
       case 'workspace-root':
         return this.getWorkspaceRoot();
       case 'current-directory':
-        return filePath;
+        // Return the directory containing the file, not the file path itself
+        return this.getParentDirectory(filePath);
       default:
         this.logger.warn('Unknown open behavior, defaulting to parent directory', { openBehavior });
         return this.getParentDirectory(filePath);
@@ -268,6 +314,11 @@ export class TerminalService {
 
   public async validatePath(directoryPath: string): Promise<boolean> {
     try {
+      if (!isSafeFilePath(directoryPath)) {
+        this.logger.warn('Rejected unsafe directory path during validation', { directoryPath });
+        return false;
+      }
+
       const uri = vscode.Uri.file(directoryPath);
       const stat = await vscode.workspace.fs.stat(uri);
 

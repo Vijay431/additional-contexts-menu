@@ -80,6 +80,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Build System -->
@@ -116,6 +117,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Commands API -->
@@ -201,6 +203,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Development Guide -->
@@ -218,12 +221,13 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                 <h3>Setup & Build</h3>
                 <div class="code-block">
                     <pre><code>git clone https://github.com/Vijay431/additional-contexts-menu.git
+
 cd additional-contexts-menu
 npm install
 npm run build
 npm test</code></pre>
-                </div>
-            </div>
+</div>
+</div>
 
             <div class="dev-section">
                 <h3>Development Commands</h3>
@@ -231,7 +235,10 @@ npm test</code></pre>
                     <li><code>npm run build</code> - Primary build using esbuild</li>
                     <li><code>npm run watch</code> - Development watch mode</li>
                     <li><code>npm run package</code> - Production build</li>
-                    <li><code>npm run lint</code> - ESLint code quality check</li>
+                    <li><code>npm run lint</code> - Biome lint checks</li>
+                    <li><code>npm run format</code> - Apply Biome formatting</li>
+                    <li><code>npm run format:check</code> - Verify formatting without writing</li>
+                    <li><code>npm run typecheck</code> - TypeScript <code>--noEmit</code> verification</li>
                     <li><code>npm test</code> - Run comprehensive test suite</li>
                 </ul>
             </div>
@@ -247,6 +254,7 @@ npm test</code></pre>
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Performance -->
@@ -283,9 +291,10 @@ npm test</code></pre>
                 <ul>
                     <li><strong>Test Coverage:</strong> 37+ comprehensive tests</li>
                     <li><strong>Success Rate:</strong> 100% (37/37 passing)</li>
-                    <li><strong>Code Quality:</strong> ESLint compliant with TypeScript strict mode</li>
+                    <li><strong>Code Quality:</strong> Biome lint/format with TypeScript strict mode</li>
                 </ul>
             </div>
         </div>
     </div>
+
 </section>

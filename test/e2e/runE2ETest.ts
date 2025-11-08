@@ -19,7 +19,7 @@ function findProjectRoot(startDir: string): string {
         if (packageJson.name === 'additional-context-menus') {
           return currentDir;
         }
-      } catch (error) {
+      } catch (_error) {
         // Continue searching if package.json is malformed
       }
     }
@@ -60,14 +60,14 @@ function cleanupOldVSCodeVersions(projectRoot: string): void {
 
   try {
     const items = fs.readdirSync(vscodeTestPath);
-    const vscodeVersions = items.filter(item => item.startsWith('vscode-'));
+    const vscodeVersions = items.filter((item) => item.startsWith('vscode-'));
 
     if (vscodeVersions.length > 1) {
       // Sort by creation time, keep only the latest
-      const versionPaths = vscodeVersions.map(version => ({
+      const versionPaths = vscodeVersions.map((version) => ({
         name: version,
         path: path.join(vscodeTestPath, version),
-        mtime: fs.statSync(path.join(vscodeTestPath, version)).mtime
+        mtime: fs.statSync(path.join(vscodeTestPath, version)).mtime,
       }));
 
       versionPaths.sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
@@ -167,16 +167,16 @@ async function main() {
 
     // Build launch args based on optimization mode
     const launchArgs: string[] = [
-      '--disable-extensions',          // Disable other extensions during testing
-      '--disable-workspace-trust',     // Skip workspace trust dialog
-      extensionDevelopmentPath,        // Open the extension workspace
+      '--disable-extensions', // Disable other extensions during testing
+      '--disable-workspace-trust', // Skip workspace trust dialog
+      extensionDevelopmentPath, // Open the extension workspace
     ];
 
     if (!skipOptimization) {
       // Add optimization flags only for optimized mode
       launchArgs.push(
-        '--no-sandbox',                  // Faster startup in test environment
-        '--disable-dev-shm-usage',       // Lower memory usage
+        '--no-sandbox', // Faster startup in test environment
+        '--disable-dev-shm-usage', // Lower memory usage
         '--disable-background-timer-throttling', // Consistent test timing
         '--disable-backgrounding-occluded-windows', // Performance optimization
         '--disable-renderer-backgrounding', // Prevent background throttling
@@ -199,11 +199,12 @@ async function main() {
     console.log('✅ All E2E tests completed successfully!');
 
     if (!skipOptimization) {
-      console.log('📊 Resource optimization active: minimal extension package + isolated user data');
+      console.log(
+        '📊 Resource optimization active: minimal extension package + isolated user data',
+      );
     } else {
       console.log('📊 Full setup mode: using complete project directory');
     }
-
   } catch (err) {
     console.error('❌ E2E tests failed:', err);
     process.exit(1);

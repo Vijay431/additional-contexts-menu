@@ -31,7 +31,7 @@ export default function Button({
   };
 
   return (
-    <button className={getButtonClass()} onClick={handleClick} disabled={disabled}>
+    <button type="button" className={getButtonClass()} onClick={handleClick} disabled={disabled}>
       {children}
     </button>
   );
@@ -39,7 +39,7 @@ export default function Button({
 
 export const IconButton: React.FC<{ icon: string; onClick: () => void }> = ({ icon, onClick }) => {
   return (
-    <button className="icon-btn" onClick={onClick}>
+    <button type="button" className="icon-btn" onClick={onClick}>
       <span className={`icon icon-${icon}`} />
     </button>
   );

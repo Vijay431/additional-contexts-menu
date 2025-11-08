@@ -54,7 +54,6 @@ export class ExtensionManager {
       // Initialize context menu manager
       await this.contextMenuManager.initialize();
 
-
       // Listen for configuration changes to enable/disable extension
       this.disposables.push(
         this.configService.onConfigurationChanged(() => {
@@ -102,10 +101,7 @@ export class ExtensionManager {
     this.logger.debug('Disposing ExtensionManager');
 
     // Dispose context menu manager
-    if (this.contextMenuManager) {
-      this.contextMenuManager.dispose();
-    }
-
+    this.contextMenuManager.dispose();
 
     // Dispose all registered disposables
     this.disposables.forEach((disposable) => {

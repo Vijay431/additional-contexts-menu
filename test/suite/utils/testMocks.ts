@@ -22,7 +22,7 @@ export class MockTerminal implements vscode.Terminal {
     this.processId = Promise.resolve(12345);
     this.state = {
       isInteractedWith: false,
-      shell: undefined
+      shell: undefined,
     };
     this.shellIntegration = undefined;
   }
@@ -94,6 +94,41 @@ export class MockFileStat implements vscode.FileStat {
   }
 }
 
+// Mock FileSystemWatcher
+export class MockFileSystemWatcher implements vscode.FileSystemWatcher {
+  public ignoreCreateEvents = false;
+  public ignoreChangeEvents = false;
+  public ignoreDeleteEvents = false;
+  private readonly disposables: vscode.Disposable[] = [];
+
+  constructor(public readonly pattern: string) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onDidChange(_listener: (e: vscode.Uri) => any): vscode.Disposable {
+    const disposable = new vscode.Disposable(() => undefined);
+    this.disposables.push(disposable);
+    return disposable;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onDidCreate(_listener: (e: vscode.Uri) => any): vscode.Disposable {
+    const disposable = new vscode.Disposable(() => undefined);
+    this.disposables.push(disposable);
+    return disposable;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onDidDelete(_listener: (e: vscode.Uri) => any): vscode.Disposable {
+    const disposable = new vscode.Disposable(() => undefined);
+    this.disposables.push(disposable);
+    return disposable;
+  }
+
+  dispose(): void {
+    this.disposables.forEach((disposable) => disposable.dispose());
+  }
+}
+
 // Mock Configuration Service
 export class MockConfigurationService {
   private config: ExtensionConfig;
@@ -153,7 +188,11 @@ export class MockConfigurationService {
     return new vscode.Disposable(() => {});
   }
 
-  async updateConfiguration<T>(_key: string, _value: T, _target?: vscode.ConfigurationTarget): Promise<void> {
+  async updateConfiguration<T>(
+    _key: string,
+    _value: T,
+    _target?: vscode.ConfigurationTarget,
+  ): Promise<void> {
     // Mock implementation
   }
 }
@@ -164,6 +203,7 @@ export class VSCodeMocks {
   public terminals: MockTerminal[] = [];
   public workspaceFolders: MockWorkspaceFolder[] = [];
   public fileSystem: Map<string, MockFileStat> = new Map();
+  public watchers: MockFileSystemWatcher[] = [];
 
   private constructor() {}
 
@@ -179,6 +219,7 @@ export class VSCodeMocks {
     instance.terminals = [];
     instance.workspaceFolders = [];
     instance.fileSystem.clear();
+    instance.watchers = [];
   }
 
   // Mock window methods
@@ -230,6 +271,12 @@ export class VSCodeMocks {
     this.fileSystem.delete(path);
   }
 
+  public createFileSystemWatcher(pattern: string): MockFileSystemWatcher {
+    const watcher = new MockFileSystemWatcher(pattern);
+    this.watchers.push(watcher);
+    return watcher;
+  }
+
   // Test helper methods
   public getLastInfoMessage(): string {
     return (this as any)._lastInfoMessage;
@@ -272,13 +319,17 @@ export class TestConfigFactory {
     };
   }
 
-  public static createForTerminalType(type: 'integrated' | 'external' | 'system-default'): ExtensionConfig {
+  public static createForTerminalType(
+    type: 'integrated' | 'external' | 'system-default',
+  ): ExtensionConfig {
     const config = TestConfigFactory.createDefault();
     config.terminal.type = type;
     return config;
   }
 
-  public static createForOpenBehavior(behavior: 'parent-directory' | 'workspace-root' | 'current-directory'): ExtensionConfig {
+  public static createForOpenBehavior(
+    behavior: 'parent-directory' | 'workspace-root' | 'current-directory',
+  ): ExtensionConfig {
     const config = TestConfigFactory.createDefault();
     config.terminal.openBehavior = behavior;
     return config;
@@ -299,9 +350,7 @@ export class TestDataFactory {
   }
 
   public static createTypicalWorkspace(): MockWorkspaceFolder[] {
-    return [
-      new MockWorkspaceFolder('/home/user/project', 'project', 0),
-    ];
+    return [new MockWorkspaceFolder('/home/user/project', 'project', 0)];
   }
 
   public static createMultiWorkspace(): MockWorkspaceFolder[] {

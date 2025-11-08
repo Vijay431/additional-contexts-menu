@@ -1,24 +1,29 @@
 # Pull Request - Additional Context Menus
 
 ## Description
+
 ### What changed?
+
 <!-- Brief description of the changes -->
 
 ### Why was this change needed?
+
 <!-- Motivation behind the change -->
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Code operation enhancement
 - [ ] Framework support improvement
 - [ ] Documentation update
 - [ ] Refactoring
-- [ ] Other: ___________
+- [ ] Other: ****\_\_\_****
 
 ## Testing Checklist
 
 ### Framework Testing
+
 - [ ] Tested with React projects
 - [ ] Tested with Angular projects
 - [ ] Tested with Express projects
@@ -27,6 +32,7 @@
 - [ ] Tested with JavaScript files (.js, .jsx)
 
 ### Core Functionality Testing
+
 - [ ] Copy Function works and detects functions correctly
 - [ ] Copy to Existing File handles imports properly
 - [ ] Move to Existing File cleans up source file
@@ -36,6 +42,7 @@
 - [ ] Project detection works (Node.js projects)
 
 ### Terminal Testing (v1.2.0+)
+
 - [ ] Integrated terminal opens correctly
 - [ ] System default terminal works
 - [ ] External terminal configuration works (if applicable)
@@ -43,17 +50,23 @@
 - [ ] Error handling and fallbacks work
 
 ### Development Quality
+
 - [ ] Code follows TypeScript strict mode
-- [ ] ESLint checks pass
-- [ ] All tests pass (37/37 expected)
+- [ ] `npm run lint` passes (Biome)
+- [ ] `npm run format:check` passes
+- [ ] `npm run typecheck` passes
+- [ ] `npm test` passes
 - [ ] Extension builds successfully (`npm run build`)
 - [ ] Manual testing completed
 - [ ] No unnecessary console logs
+- [ ] Changelog (`CHANGELOG.md`) updated if user-facing changes occur
 
 ## Breaking Changes
+
 - [ ] This PR introduces breaking changes
 - [ ] Configuration changes required
 - [ ] Migration guide needed
 
 ## Additional Notes
+
 <!-- Any additional context for reviewers -->

@@ -5,27 +5,50 @@ import * as vscode from 'vscode';
 
 import { ProjectType } from '../types/extension';
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
 
 export class ProjectDetectionService {
-  private static instance: ProjectDetectionService;
+  private static instance: ProjectDetectionService | undefined;
   private logger: Logger;
   private projectTypeCache = new Map<string, ProjectType>();
+  private watchers: vscode.FileSystemWatcher[] = [];
 
   private constructor() {
     this.logger = Logger.getInstance();
   }
 
   public static getInstance(): ProjectDetectionService {
-    if (!ProjectDetectionService.instance) {
-      ProjectDetectionService.instance = new ProjectDetectionService();
-    }
+    ProjectDetectionService.instance ??= new ProjectDetectionService();
     return ProjectDetectionService.instance;
   }
 
-  public async detectProjectType(workspaceFolder?: vscode.WorkspaceFolder): Promise<ProjectType> {
-    if (!workspaceFolder && vscode.workspace.workspaceFolders) {
-      workspaceFolder = vscode.workspace.workspaceFolders[0];
+  public initialize(): void {
+    if (this.watchers.length > 0) {
+      return;
     }
+
+    const packageWatcher = vscode.workspace.createFileSystemWatcher('**/package.json');
+    const tsconfigWatcher = vscode.workspace.createFileSystemWatcher('**/tsconfig.json');
+
+    const handleChange = (): void => {
+      this.logger.debug('Project file change detected, refreshing context');
+      this.clearCache();
+      void this.updateContextVariables();
+    };
+
+    packageWatcher.onDidChange(handleChange);
+    packageWatcher.onDidCreate(handleChange);
+    packageWatcher.onDidDelete(handleChange);
+
+    tsconfigWatcher.onDidChange(handleChange);
+    tsconfigWatcher.onDidCreate(handleChange);
+    tsconfigWatcher.onDidDelete(handleChange);
+
+    this.watchers.push(packageWatcher, tsconfigWatcher);
+  }
+
+  public async detectProjectType(workspaceFolder?: vscode.WorkspaceFolder): Promise<ProjectType> {
+    workspaceFolder ??= vscode.workspace.workspaceFolders?.[0];
 
     if (!workspaceFolder) {
       return this.createProjectType(false, [], false, 'none');
@@ -55,8 +78,14 @@ export class ProjectDetectionService {
       }
 
       // Parse package.json
-      const packageData = await fs.readFile(packageJsonPath, 'utf-8');
-      const packageJson = JSON.parse(packageData);
+      if (!isSafeFilePath(packageJsonPath)) {
+        this.logger.warn('Unsafe package.json path detected', { packageJsonPath });
+        return this.createProjectType(false, [], false, 'none');
+      }
+
+      const packageUri = vscode.Uri.file(packageJsonPath);
+      const packageBuffer = await vscode.workspace.fs.readFile(packageUri);
+      const packageJson = JSON.parse(Buffer.from(packageBuffer).toString('utf-8'));
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
 
       // Check for TypeScript
@@ -150,7 +179,8 @@ export class ProjectDetectionService {
       'rollup',
     ];
 
-    return nodeIndicators.some((indicator) => dependencies[indicator] !== undefined);
+    const dependencySet = new Set(Object.keys(dependencies));
+    return nodeIndicators.some((indicator) => dependencySet.has(indicator));
   }
 
   private determineSupportLevel(
@@ -229,9 +259,25 @@ export class ProjectDetectionService {
     this.logger.debug('Project type cache cleared');
   }
 
-  private async pathExists(path: string): Promise<boolean> {
+  public dispose(): void {
+    this.watchers.forEach((watcher) => {
+      try {
+        watcher.dispose();
+      } catch (error) {
+        this.logger.warn('Failed to dispose project detection watcher', error);
+      }
+    });
+    this.watchers = [];
+  }
+
+  private async pathExists(filePath: string): Promise<boolean> {
     try {
-      await fs.access(path);
+      if (!isSafeFilePath(filePath)) {
+        this.logger.warn('Unsafe path detected during existence check', { filePath });
+        return false;
+      }
+
+      await fs.access(filePath);
       return true;
     } catch {
       return false;

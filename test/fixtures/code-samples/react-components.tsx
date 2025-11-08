@@ -61,7 +61,7 @@ export const UserCard: React.FC<{ user: any; onSelect?: (user: any) => void }> =
   };
 
   return (
-    <div className="user-card" onClick={handleClick}>
+    <button type="button" className="user-card" onClick={handleClick}>
       <div className="user-avatar">
         <img src={user.avatar || '/default-avatar.png'} alt={user.name} />
       </div>
@@ -69,7 +69,7 @@ export const UserCard: React.FC<{ user: any; onSelect?: (user: any) => void }> =
         <h3>{user.name}</h3>
         <p>{user.email}</p>
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -138,54 +138,55 @@ export function UserList({
     filterAndSortUsers(users, searchTerm, field, newOrder);
   };
 
-  const filterAndSortUsers = (
-    userList: any[],
-    search: string,
-    sortField: string,
-    order: string
-  ) => {
-    let filtered = userList;
+  const filterAndSortUsers = useCallback(
+    (userList: any[], search: string, sortField: string, order: string) => {
+      let filtered = userList;
 
-    if (search) {
-      filtered = userList.filter(
-        (user) =>
-          user.name.toLowerCase().includes(search.toLowerCase()) ||
-          user.email.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    filtered.sort((a, b) => {
-      let aValue, bValue;
-      switch (sortField) {
-        case 'name':
-          aValue = a.name;
-          bValue = b.name;
-          break;
-        case 'email':
-          aValue = a.email;
-          bValue = b.email;
-          break;
-        case 'date':
-          aValue = new Date(a.createdAt);
-          bValue = new Date(b.createdAt);
-          break;
-        default:
-          return 0;
+      if (search) {
+        filtered = userList.filter(
+          (user) =>
+            user.name.toLowerCase().includes(search.toLowerCase()) ||
+            user.email.toLowerCase().includes(search.toLowerCase()),
+        );
       }
 
-      if (order === 'asc') {
-        return aValue > bValue ? 1 : -1;
-      } else {
+      filtered.sort((a, b) => {
+        let aValue: string | number = '';
+        let bValue: string | number = '';
+
+        switch (sortField) {
+          case 'name':
+            aValue = a.name.toLowerCase();
+            bValue = b.name.toLowerCase();
+            break;
+          case 'email':
+            aValue = a.email.toLowerCase();
+            bValue = b.email.toLowerCase();
+            break;
+          case 'date':
+            aValue = new Date(a.createdAt).getTime();
+            bValue = new Date(b.createdAt).getTime();
+            break;
+          default:
+            aValue = a.name.toLowerCase();
+            bValue = b.name.toLowerCase();
+        }
+
+        if (order === 'asc') {
+          return aValue > bValue ? 1 : -1;
+        }
+
         return aValue < bValue ? 1 : -1;
-      }
-    });
+      });
 
-    setFilteredUsers(filtered);
-  };
+      setFilteredUsers(filtered);
+    },
+    [],
+  );
 
   useEffect(() => {
     filterAndSortUsers(users, searchTerm, sortBy, sortOrder);
-  }, [users, searchTerm, sortBy, sortOrder]);
+  }, [filterAndSortUsers, users, searchTerm, sortBy, sortOrder]);
 
   return (
     <div className="user-list">
@@ -197,13 +198,13 @@ export function UserList({
           onChange={(e) => handleSearch(e.target.value)}
         />
         <div className="sort-controls">
-          <button onClick={() => handleSort('name')}>
+          <button type="button" onClick={() => handleSort('name')}>
             Sort by Name {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
           </button>
-          <button onClick={() => handleSort('email')}>
+          <button type="button" onClick={() => handleSort('email')}>
             Sort by Email {sortBy === 'email' && (sortOrder === 'asc' ? '↑' : '↓')}
           </button>
-          <button onClick={() => handleSort('date')}>
+          <button type="button" onClick={() => handleSort('date')}>
             Sort by Date {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
           </button>
         </div>

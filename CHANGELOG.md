@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-11-08
+
+### Added
+- Community governance guidelines covering maintainer roles, decision process, and communication channels.
+- CODEOWNERS file and updated issue/PR templates to encourage collaborative reviews.
+- Contribution license note clarifying that all submissions remain under MIT while acknowledging authorship.
+
+### Changed
+- Migrated linting and formatting from ESLint + Prettier to Biome with new developer scripts (`lint`, `lint:fix`, `format`, `format:check`, `typecheck`).
+- Refreshed README, documentation pages, and wiki content to highlight the open-source community model and Biome workflow.
+- Updated security policy, dependabot configuration, and GitHub workflows to align with the new tooling stack.
+
+### Fixed
+- Corrected outdated repository references in conduct and security documents.
+- Ensured marketplace badges, CI status, and community links are consistent across root and `.github/` documentation.
+
 ## [1.2.0] - 2025-09-26
 
 ### Added

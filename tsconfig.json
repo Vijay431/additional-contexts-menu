@@ -28,5 +28,12 @@
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules", ".vscode-test", "test/**/*", "dist/test/**/*"]
+  "exclude": [
+    "node_modules",
+    ".vscode-test",
+    "test/**/*",
+    "dist/test/**/*",
+    "esbuild.config.ts",
+    "scripts/**/*"
+  ]
 }

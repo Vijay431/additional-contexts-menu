@@ -6,20 +6,25 @@ import * as vscode from 'vscode';
 
 import { CompatibleFile } from '../types/extension';
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
 
 export class FileDiscoveryService {
-  private static instance: FileDiscoveryService;
+  private static instance: FileDiscoveryService | undefined;
   private logger: Logger;
   private fileCache = new Map<string, CompatibleFile[]>();
+  private readonly compatibilityRules = new Map<string, string[]>([
+    ['.ts', ['.ts', '.tsx']],
+    ['.tsx', ['.ts', '.tsx']],
+    ['.js', ['.js', '.jsx']],
+    ['.jsx', ['.js', '.jsx']],
+  ]);
 
   private constructor() {
     this.logger = Logger.getInstance();
   }
 
   public static getInstance(): FileDiscoveryService {
-    if (!FileDiscoveryService.instance) {
-      FileDiscoveryService.instance = new FileDiscoveryService();
-    }
+    FileDiscoveryService.instance ??= new FileDiscoveryService();
     return FileDiscoveryService.instance;
   }
 
@@ -30,8 +35,9 @@ export class FileDiscoveryService {
     }
 
     const cacheKey = `${workspaceFolder.uri.fsPath}:${sourceExtension}`;
-    if (this.fileCache.has(cacheKey)) {
-      return this.fileCache.get(cacheKey)!;
+    const cached = this.fileCache.get(cacheKey);
+    if (cached) {
+      return cached;
     }
 
     try {
@@ -62,10 +68,19 @@ export class FileDiscoveryService {
     const filePattern = this.getSearchPattern(sourceExtension);
     const files = await vscode.workspace.findFiles(filePattern, '**/node_modules/**');
 
-    for (const fileUri of files) {
+    for (const uri of files) {
       try {
-        const filePath = fileUri.fsPath;
-        const stats = await fs.stat(filePath);
+        const filePath = uri.fsPath;
+        if (!isSafeFilePath(filePath)) {
+          this.logger.warn('Skipping unsafe file path during discovery', { filePath });
+          continue;
+        }
+
+        const fileStatUri = vscode.Uri.file(filePath);
+        const stats = await vscode.workspace.fs.stat(fileStatUri);
+        if ((stats.type & vscode.FileType.File) === 0) {
+          continue;
+        }
         const extension = path.extname(filePath);
 
         if (this.isCompatibleExtension(sourceExtension, extension)) {
@@ -77,12 +92,12 @@ export class FileDiscoveryService {
             name: fileName,
             extension,
             isCompatible: true,
-            lastModified: stats.mtime,
+            lastModified: new Date(stats.mtime),
             relativePath,
           });
         }
       } catch (error) {
-        this.logger.warn(`Error processing file ${fileUri.fsPath}`, error);
+        this.logger.warn(`Error processing file ${uri.fsPath}`, error);
       }
     }
 
@@ -113,21 +128,28 @@ export class FileDiscoveryService {
     const targetExt = target.startsWith('.') ? target : `.${target}`;
 
     // Define compatibility rules
-    const compatibilityRules: Record<string, string[]> = {
-      '.ts': ['.ts', '.tsx'],
-      '.tsx': ['.ts', '.tsx'],
-      '.js': ['.js', '.jsx'],
-      '.jsx': ['.js', '.jsx'],
-    };
-
-    const compatibleExtensions = compatibilityRules[sourceExt] ?? [sourceExt];
+    const compatibleExtensions = this.compatibilityRules.get(sourceExt) ?? [sourceExt];
     return compatibleExtensions.includes(targetExt);
   }
 
   public async validateTargetFile(filePath: string): Promise<boolean> {
     try {
+      if (!isSafeFilePath(filePath)) {
+        this.logger.warn('Target file validation failed due to unsafe path', { filePath });
+        return false;
+      }
+
       // Check if file exists and is writable
       await fs.access(filePath, constants.F_OK | constants.W_OK);
+
+      // Verify it's actually a file, not a directory
+      const fileUri = vscode.Uri.file(filePath);
+      const stats = await vscode.workspace.fs.stat(fileUri);
+      if ((stats.type & vscode.FileType.File) === 0) {
+        this.logger.warn(`Path is a directory, not a file: ${filePath}`);
+        return false;
+      }
+
       return true;
     } catch (error) {
       this.logger.warn(`File validation failed for ${filePath}`, error);

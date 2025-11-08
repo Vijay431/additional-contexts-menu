@@ -4,7 +4,7 @@ import { ExtensionConfig } from '../types/extension';
 import { Logger } from '../utils/logger';
 
 export class ConfigurationService {
-  private static instance: ConfigurationService;
+  private static instance: ConfigurationService | undefined;
   private logger: Logger;
   private readonly configSection = 'additionalContextMenus';
 
@@ -13,9 +13,7 @@ export class ConfigurationService {
   }
 
   public static getInstance(): ConfigurationService {
-    if (!ConfigurationService.instance) {
-      ConfigurationService.instance = new ConfigurationService();
-    }
+    ConfigurationService.instance ??= new ConfigurationService();
     return ConfigurationService.instance;
   }
 

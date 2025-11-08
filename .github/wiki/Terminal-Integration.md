@@ -29,6 +29,7 @@ Configure which type of terminal to open:
 ```
 
 **Options:**
+
 - `"integrated"` - VS Code integrated terminal (default)
 - `"external"` - Custom external terminal
 - `"system-default"` - Platform's default terminal
@@ -44,6 +45,7 @@ Choose which directory the terminal should open in:
 ```
 
 **Options:**
+
 - `"parent-directory"` - Directory containing the file (default)
 - `"workspace-root"` - Root of the workspace
 - `"current-directory"` - The file's directory (if file is a directory)
@@ -65,13 +67,16 @@ Use `{{directory}}` as a placeholder for the target directory path.
 ### Windows
 
 **Integrated Terminal:**
+
 - Opens VS Code's integrated terminal with the specified directory
 
 **System Default:**
+
 - Automatically detects and opens Command Prompt or PowerShell
 - Command: `start cmd /k "cd /d {path}"`
 
 **External Terminal Examples:**
+
 ```json
 {
   "additionalContextMenus.terminal.externalTerminalCommand": "wt -d {{directory}}"
@@ -81,13 +86,16 @@ Use `{{directory}}` as a placeholder for the target directory path.
 ### macOS
 
 **Integrated Terminal:**
+
 - Opens VS Code's integrated terminal with the specified directory
 
 **System Default:**
+
 - Opens Terminal.app with the specified directory
 - Command: `open -a Terminal "{path}"`
 
 **External Terminal Examples:**
+
 ```json
 {
   "additionalContextMenus.terminal.externalTerminalCommand": "open -a iTerm {{directory}}"
@@ -97,9 +105,11 @@ Use `{{directory}}` as a placeholder for the target directory path.
 ### Linux
 
 **Integrated Terminal:**
+
 - Opens VS Code's integrated terminal with the specified directory
 
 **System Default:**
+
 - Automatically detects available terminal applications:
   - gnome-terminal
   - konsole
@@ -108,6 +118,7 @@ Use `{{directory}}` as a placeholder for the target directory path.
 - Falls back to integrated terminal if none found
 
 **External Terminal Examples:**
+
 ```json
 {
   "additionalContextMenus.terminal.externalTerminalCommand": "gnome-terminal --working-directory={{directory}}"
@@ -117,6 +128,7 @@ Use `{{directory}}` as a placeholder for the target directory path.
 ## 🔧 Advanced Configuration Examples
 
 ### Windows Terminal (Windows)
+
 ```json
 {
   "additionalContextMenus.terminal.type": "external",
@@ -125,6 +137,7 @@ Use `{{directory}}` as a placeholder for the target directory path.
 ```
 
 ### iTerm2 (macOS)
+
 ```json
 {
   "additionalContextMenus.terminal.type": "external",
@@ -133,6 +146,7 @@ Use `{{directory}}` as a placeholder for the target directory path.
 ```
 
 ### Tilix (Linux)
+
 ```json
 {
   "additionalContextMenus.terminal.type": "external",
@@ -141,6 +155,7 @@ Use `{{directory}}` as a placeholder for the target directory path.
 ```
 
 ### Workspace Root Terminal
+
 ```json
 {
   "additionalContextMenus.terminal.openBehavior": "workspace-root",
@@ -153,34 +168,41 @@ Use `{{directory}}` as a placeholder for the target directory path.
 The terminal integration includes robust error handling:
 
 ### Permission Issues
+
 - Displays helpful error messages for permission problems
 - Suggests solutions for common access issues
 
 ### Invalid Paths
+
 - Validates directory paths before attempting to open terminal
 - Falls back to workspace root if target directory is invalid
 
 ### Missing External Terminals
+
 - Automatically falls back to integrated terminal if external command fails
 - Provides clear error messages about missing applications
 
 ### Platform Detection Failures
+
 - Gracefully handles unsupported platforms
 - Falls back to integrated terminal as safe default
 
 ## 🧪 Testing Terminal Functionality
 
 ### Basic Testing
+
 1. Test with different file types (.ts, .tsx, .js, .jsx)
 2. Test in different project structures (React, Angular, Express, Next.js)
 3. Test with files at different directory levels
 
 ### Cross-Platform Testing
+
 1. **Windows**: Test Command Prompt, PowerShell, Windows Terminal
 2. **macOS**: Test Terminal.app, iTerm2
 3. **Linux**: Test gnome-terminal, konsole, xfce4-terminal
 
 ### Configuration Testing
+
 1. Test all three terminal types
 2. Test all three directory behaviors
 3. Test custom external terminal commands
@@ -191,6 +213,7 @@ The terminal integration includes robust error handling:
 ### Terminal Doesn't Open
 
 **Check Configuration:**
+
 ```json
 {
   "additionalContextMenus.enabled": true,
@@ -199,12 +222,14 @@ The terminal integration includes robust error handling:
 ```
 
 **Verify Permissions:**
+
 - Ensure VS Code has permission to execute terminal commands
 - Check if external terminal application is installed and accessible
 
 ### Wrong Directory Opens
 
 **Check Directory Behavior Setting:**
+
 ```json
 {
   "additionalContextMenus.terminal.openBehavior": "parent-directory"
@@ -212,12 +237,14 @@ The terminal integration includes robust error handling:
 ```
 
 **Verify Workspace Structure:**
+
 - Ensure workspace root is correctly detected
 - Check if package.json exists in expected location
 
 ### External Terminal Fails
 
 **Verify Command Syntax:**
+
 ```json
 {
   "additionalContextMenus.terminal.externalTerminalCommand": "correct-command {{directory}}"
@@ -225,6 +252,7 @@ The terminal integration includes robust error handling:
 ```
 
 **Check Application Installation:**
+
 - Ensure external terminal application is installed
 - Verify application is in system PATH
 - Test command manually in system terminal
@@ -232,14 +260,17 @@ The terminal integration includes robust error handling:
 ### Platform-Specific Issues
 
 **Windows:**
+
 - Ensure Command Prompt or PowerShell is available
 - Check Windows Terminal installation if using custom commands
 
 **macOS:**
+
 - Verify Terminal.app permissions
 - Check iTerm2 or other terminal app permissions
 
 **Linux:**
+
 - Ensure at least one terminal application is installed
 - Check desktop environment terminal integration
 
@@ -258,6 +289,12 @@ The terminal integration is designed for optimal performance:
 - [Configuration](Configuration) - Complete settings reference
 - [Troubleshooting](Troubleshooting) - General troubleshooting guide
 - [Development Guide](Development-Guide) - Contributing terminal improvements
+
+## 🤝 Need Help?
+
+- Use the [terminal configuration issue template](https://github.com/Vijay431/additional-contexts-menu/issues/new?template=terminal_configuration.md) and complete the pre-flight checklist when reporting bugs.
+- Attach output from `Additional Context Menus: Debug Context Variables` and the "Additional Context Menus" output channel with your report.
+- Join the [project discussions](https://github.com/Vijay431/additional-contexts-menu/discussions) to collaborate on improvements or propose enhancements to terminal workflows.
 
 ---
 
