@@ -16,6 +16,7 @@ import { Logger } from '../utils/logger';
 export class CodeAnalysisService {
   private static instance: CodeAnalysisService;
   private logger: Logger;
+  private documentCache = new Map<string, FunctionInfo[]>();
 
   // Very simple, safe regex patterns for different function types
   private readonly patterns = {
@@ -47,6 +48,10 @@ export class CodeAnalysisService {
       CodeAnalysisService.instance = new CodeAnalysisService();
     }
     return CodeAnalysisService.instance;
+  }
+
+  private generateCacheKey(document: vscode.TextDocument): string {
+    return `${document.uri.toString()}:${document.version}`;
   }
 
   public async findFunctionAtPosition(
