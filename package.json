@@ -167,6 +167,23 @@
           ],
           "default": "parent-directory",
           "description": "Which directory to open in terminal"
+        },
+        "additionalContextMenus.cache.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the file discovery cache"
+        },
+        "additionalContextMenus.cache.maxSize": {
+          "type": "number",
+          "default": 100,
+          "minimum": 1,
+          "description": "Maximum number of cache entries to store (LRU eviction when limit is reached)"
+        },
+        "additionalContextMenus.cache.ttl": {
+          "type": "number",
+          "default": 300000,
+          "minimum": 1000,
+          "description": "Time-to-live for cache entries in milliseconds (default: 5 minutes)"
         }
       }
     },
