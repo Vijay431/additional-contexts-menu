@@ -4,8 +4,139 @@ import * as path from 'path';
 
 import * as vscode from 'vscode';
 
-import { CompatibleFile } from '../types/extension';
+import { CacheConfig, CompatibleFile, LRUCacheEntry } from '../types/extension';
 import { Logger } from '../utils/logger';
+
+/**
+ * LRU (Least Recently Used) Cache with size tracking and eviction logic.
+ * Tracks entry access time and count to determine which entries to evict when size limit is reached.
+ */
+class LRUCache<K, V> {
+  private cache: Map<K, LRUCacheEntry<V>>;
+  private maxSize: number;
+  private logger: Logger;
+
+  constructor(maxSize: number, logger: Logger) {
+    this.maxSize = maxSize;
+    this.logger = logger;
+    this.cache = new Map<K, LRUCacheEntry<V>>();
+  }
+
+  /**
+   * Get a value from the cache. Updates access tracking for LRU eviction.
+   * Returns undefined if the key doesn't exist.
+   */
+  public get(key: K): V | undefined {
+    const entry = this.cache.get(key);
+    if (!entry) {
+      return undefined;
+    }
+
+    // Update access tracking for LRU
+    entry.lastAccessedAt = Date.now();
+    entry.accessCount++;
+
+    return entry.value;
+  }
+
+  /**
+   * Set a value in the cache. Enforces size limit by evicting least recently used entries.
+   */
+  public set(key: K, value: V, ttl?: number): void {
+    const now = Date.now();
+
+    // If key already exists, update it and move to most recently used
+    if (this.cache.has(key)) {
+      const entry = this.cache.get(key)!;
+      entry.value = value;
+      entry.lastAccessedAt = now;
+      entry.accessCount++;
+      if (ttl !== undefined) {
+        entry.ttl = ttl;
+      }
+      return;
+    }
+
+    // Check if we need to evict entries before adding new one
+    if (this.cache.size >= this.maxSize) {
+      this.evictLeastRecentlyUsed();
+    }
+
+    // Add new entry
+    const entry: LRUCacheEntry<V> = {
+      value,
+      createdAt: now,
+      lastAccessedAt: now,
+      accessCount: 1,
+      ttl,
+    };
+    this.cache.set(key, entry);
+  }
+
+  /**
+   * Check if a key exists in the cache.
+   */
+  public has(key: K): boolean {
+    return this.cache.has(key);
+  }
+
+  /**
+   * Delete a specific key from the cache.
+   * Returns true if the key existed and was deleted, false otherwise.
+   */
+  public delete(key: K): boolean {
+    return this.cache.delete(key);
+  }
+
+  /**
+   * Clear all entries from the cache.
+   */
+  public clear(): void {
+    this.cache.clear();
+  }
+
+  /**
+   * Get the current size of the cache.
+   */
+  public get size(): number {
+    return this.cache.size;
+  }
+
+  /**
+   * Get all keys in the cache.
+   */
+  public keys(): K[] {
+    return Array.from(this.cache.keys());
+  }
+
+  /**
+   * Evict the least recently used entry from the cache.
+   * This is called automatically when the cache reaches its size limit.
+   */
+  private evictLeastRecentlyUsed(): void {
+    let lruKey: K | undefined;
+    let lruTime = Infinity;
+
+    // Find the entry with the oldest lastAccessedAt time
+    const entries = Array.from(this.cache.entries());
+    for (const [key, entry] of entries) {
+      if (entry.lastAccessedAt < lruTime) {
+        lruTime = entry.lastAccessedAt;
+        lruKey = key;
+      }
+    }
+
+    if (lruKey !== undefined) {
+      const deleted = this.cache.delete(lruKey);
+      if (deleted) {
+        this.logger.debug('LRU cache evicted least recently used entry', {
+          key: String(lruKey),
+          lastAccessedAt: new Date(lruTime).toISOString(),
+        });
+      }
+    }
+  }
+}
 
 export class FileDiscoveryService {
   private static instance: FileDiscoveryService;
