@@ -5,7 +5,27 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+> 📦 **Distribution**: This extension is published to both the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) and [Open VSX Registry](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus). All releases are available on both platforms simultaneously.
+
 ## [Unreleased]
+
+### Added
+- **🌐 Open VSX Registry Support**: Extension now available on Open VSX Registry for VS Code alternative users
+  - VSCodium users can install directly from Open VSX
+  - Gitpod workspaces can access the extension through Open VSX
+  - Eclipse Theia users can install from Open VSX Registry
+  - Automated dual publishing to both VS Code Marketplace and Open VSX Registry
+  - Identical functionality across all distribution channels
+
+### Distribution
+- Available on [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus)
+- Available on [Open VSX Registry](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus)
+
+---
+
+> **Note**: Starting with this release, all versions are published simultaneously to both the VS Code Marketplace and Open VSX Registry, ensuring users of VS Code alternatives (VSCodium, Gitpod, Eclipse Theia) have access to the same features and updates.
+
+---
 
 ## [1.3.0] - 2025-11-08
 

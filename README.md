@@ -2,7 +2,10 @@
 
 Enhanced right-click context menus for Node.js projects with first-class support for React, Angular, Express, Next.js, TypeScript, and JavaScript workflows.
 
+**Available on both VS Code Marketplace and Open VSX Registry** - ensuring compatibility with VS Code, VSCodium, Gitpod, Eclipse Theia, and other VS Code-compatible editors.
+
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/VijayGangatharan.additional-context-menus?label=VS%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus)
+[![Open VSX Registry](https://img.shields.io/open-vsx/v/VijayGangatharan/additional-context-menus?label=Open%20VSX)](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus)
 [![CI](https://github.com/Vijay431/additional-contexts-menu/actions/workflows/ci.yml/badge.svg)](https://github.com/Vijay431/additional-contexts-menu/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
@@ -26,17 +29,82 @@ See [`docs/features.md`](docs/features.md) for detailed scenarios and upcoming e
 
 ---
 
-## Quick Start
+## Installation
 
+### VS Code (Microsoft)
+
+**From VS Code Marketplace:**
+1. Open VS Code
+2. Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)
+3. Search for "Additional Context Menus"
+4. Click Install
+
+**Command Line:**
 ```bash
 code --install-extension VijayGangatharan.additional-context-menus
 ```
+
+### VSCodium Users
+
+**From Open VSX Registry:**
+1. Open VSCodium
+2. Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)
+3. Search for "Additional Context Menus"
+4. Click Install (extension will be installed from Open VSX Registry)
+
+**Command Line:**
+```bash
+codium --install-extension VijayGangatharan.additional-context-menus
+```
+
+### Gitpod Users
+
+**Workspace Configuration:**
+Add to your `.gitpod.yml`:
+```yaml
+vscode:
+  extensions:
+    - VijayGangatharan.additional-context-menus
+```
+
+**Manual Installation:**
+1. Open your Gitpod workspace
+2. Go to Extensions panel
+3. Search for "Additional Context Menus"
+4. Click Install (automatically uses Open VSX Registry)
+
+### Eclipse Theia Users
+
+**From Extensions Panel:**
+1. Open Eclipse Theia
+2. Navigate to Extensions view
+3. Search for "Additional Context Menus"
+4. Click Install (extension will be installed from Open VSX Registry)
+
+**Note:** Eclipse Theia automatically uses the Open VSX Registry for extension installation.
+
+## Quick Start
 
 1. Open a Node.js project containing `package.json`.
 2. Right-click inside a `.ts`, `.tsx`, `.js`, or `.jsx` file.
 3. Explore the Additional Context Menus group (Copy Function, Copy Lines to File, Move Lines to File, Save All, Open in Terminal).
 
 Configuration options live under **Settings → Additional Context Menus**. Refer to [`docs/installation.md`](docs/installation.md) for screens and recommendations.
+
+---
+
+## Commands Reference
+
+The extension provides seven commands to enhance your development workflow:
+
+- **Copy Function** – Extract functions, components, or methods to the clipboard
+- **Copy Lines to File** – Duplicate selected code to another file with smart insertion
+- **Move Lines to File** – Transfer code between files (copy + delete from source)
+- **Save All** – Bulk save all modified files with progress reporting
+- **Open in Terminal** – Launch a terminal in your file's directory
+- **Enable/Disable Extension** – Toggle the extension's context menu visibility
+
+For complete documentation including command availability, configuration options, and usage examples, see **[COMMANDS.md](COMMANDS.md)**.
 
 ---
 

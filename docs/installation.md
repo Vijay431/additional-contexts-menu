@@ -65,6 +65,58 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </div>
             </div>
             
+            <!-- Open VSX Registry -->
+            <div class="method-card">
+                <div class="method-header">
+                    <i class="fas fa-globe"></i>
+                    <h2>Open VSX Registry</h2>
+                    <span class="method-badge">VSCodium, Gitpod, Theia</span>
+                </div>
+                <div class="method-content">
+                    <p class="method-description">
+                        Install from the Open VSX Registry for VS Code-compatible editors like VSCodium, Gitpod, and Eclipse Theia.
+                    </p>
+                    
+                    <div class="installation-steps">
+                        <h3>VSCodium Installation</h3>
+                        <ol class="step-list">
+                            <li>Open VSCodium</li>
+                            <li>Click on the Extensions icon in the Activity Bar (or press <kbd>Ctrl+Shift+X</kbd>)</li>
+                            <li>Search for <strong>"Additional Context Menus"</strong></li>
+                            <li>Look for the extension by <strong>VijayGangatharan</strong></li>
+                            <li>Click the <strong>Install</strong> button</li>
+                        </ol>
+                        
+                        <h3>VSCodium Command Line</h3>
+                        <ol class="step-list">
+                            <li>Open your terminal</li>
+                            <li>Run: <code>codium --install-extension VijayGangatharan.additional-context-menus</code></li>
+                        </ol>
+                        
+                        <h3>Gitpod Workspace</h3>
+                        <p>Add to your <code>.gitpod.yml</code>:</p>
+                        <pre><code>vscode:
+  extensions:
+    - VijayGangatharan.additional-context-menus</code></pre>
+                        
+                        <h3>Eclipse Theia</h3>
+                        <ol class="step-list">
+                            <li>Open Eclipse Theia</li>
+                            <li>Navigate to Extensions view</li>
+                            <li>Search for <strong>"Additional Context Menus"</strong></li>
+                            <li>Click <strong>Install</strong> (automatically uses Open VSX Registry)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="method-actions">
+                        <a href="https://open-vsx.org/extension/VijayGangatharan/additional-context-menus" class="btn btn-secondary" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open in Open VSX
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Manual Installation -->
             <div class="method-card">
                 <div class="method-header">
@@ -115,10 +167,15 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 <div class="req-icon">
                     <i class="fab fa-microsoft"></i>
                 </div>
-                <h3 class="req-title">Visual Studio Code</h3>
+                <h3 class="req-title">VS Code Compatible Editor</h3>
                 <div class="req-details">
-                    <p class="req-version">Version 1.102.0 or higher</p>
-                    <p class="req-note">Latest stable version recommended</p>
+                    <p class="req-version">VS Code 1.102.0+ or compatible</p>
+                    <ul class="req-list">
+                        <li>Visual Studio Code</li>
+                        <li>VSCodium</li>
+                        <li>Gitpod</li>
+                        <li>Eclipse Theia</li>
+                    </ul>
                 </div>
             </div>
             

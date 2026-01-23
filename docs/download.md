@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 'Download Additional Context Menus'
-description: 'Download Additional Context Menus VS Code extension from multiple sources including VS Code Marketplace, GitHub releases, and direct installation options.'
+description: 'Download Additional Context Menus VS Code extension from multiple sources including VS Code Marketplace, Open VSX Registry, GitHub releases, and direct installation options.'
 ---
 
 <!-- Page Header -->
@@ -9,7 +9,7 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
     <div class="container">
         <h1 class="page-title">Download Additional Context Menus</h1>
         <p class="page-description">
-            Get Additional Context Menus for VS Code from your preferred download source.
+            Get Additional Context Menus for VS Code, VSCodium, Gitpod, and Eclipse Theia from your preferred download source.
         </p>
     </div>
 </section>
@@ -55,6 +55,47 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
                     </a>
                     <p class="download-note">
                         Opens in VS Code marketplace for direct installation
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Open VSX Registry -->
+            <div class="download-card">
+                <div class="download-header">
+                    <i class="fas fa-globe"></i>
+                    <h2 class="download-title">Open VSX Registry</h2>
+                    <span class="download-badge">VSCodium, Gitpod, Theia</span>
+                </div>
+                <div class="download-content">
+                    <p class="download-description">
+                        Open-source registry for VS Code-compatible editors like VSCodium, Gitpod, and Eclipse Theia.
+                    </p>
+                    <div class="download-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> VSCodium compatible</li>
+                            <li><i class="fas fa-check"></i> Gitpod integration</li>
+                            <li><i class="fas fa-check"></i> Eclipse Theia support</li>
+                            <li><i class="fas fa-check"></i> Open-source registry</li>
+                        </ul>
+                    </div>
+                    <div class="download-stats">
+                        <div class="stat">
+                            <span class="stat-label">Version</span>
+                            <span class="stat-value">{{ site.extension.version }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Publisher</span>
+                            <span class="stat-value">{{ site.extension.publisher }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="download-actions">
+                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary btn-large" target="_blank">
+                        <i class="fas fa-download"></i>
+                        Install from Open VSX
+                    </a>
+                    <p class="download-note">
+                        Opens in Open VSX Registry for VSCodium and compatible editors
                     </p>
                 </div>
             </div>
@@ -148,6 +189,7 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
         <div class="installation-tabs">
             <div class="tab-buttons">
                 <button class="tab-button active" data-tab="marketplace">Marketplace</button>
+                <button class="tab-button" data-tab="openvsx">Open VSX</button>
                 <button class="tab-button" data-tab="manual">Manual</button>
                 <button class="tab-button" data-tab="cli">CLI</button>
             </div>
@@ -174,6 +216,32 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
                             <div class="step-content">
                                 <h3>Search & Install</h3>
                                 <p>Search for "Additional Context Menus" and click Install</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-panel" id="openvsx">
+                    <div class="install-steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <div class="step-content">
+                                <h3>Open VSCodium/Gitpod/Theia</h3>
+                                <p>Launch your VS Code-compatible editor</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <div class="step-content">
+                                <h3>Open Extensions</h3>
+                                <p>Press <kbd>Ctrl+Shift+X</kbd> or click the Extensions icon</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <div class="step-content">
+                                <h3>Search & Install</h3>
+                                <p>Search for "Additional Context Menus" - automatically installs from Open VSX</p>
                             </div>
                         </div>
                     </div>

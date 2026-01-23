@@ -5,7 +5,7 @@ on:
     branches: ['**']
 
 permissions:
-  contents: read
+  contents: write  # Required for creating releases and uploading assets
 
 jobs:
   # Build job - runs on all branches for continuous validation
@@ -116,7 +116,7 @@ jobs:
 
   # Deploy job - ONLY runs on master branch after all checks pass
   deploy:
-    name: Deploy to VS Code Marketplace
+    name: Deploy to Marketplaces
     needs: [build, lint, security]
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -142,9 +142,234 @@ jobs:
         run: npm run package
 
       - name: Publish to VS Code Marketplace
-        run: npm run publish
+        id: publish-marketplace
+        run: |
+          echo "📦 Publishing to VS Code Marketplace..."
+          npm run publish:marketplace
+          echo "✅ VS Code Marketplace publication successful"
         env:
           VSCE_PAT: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+
+      - name: Publish to Open VSX Registry (with retry)
+        id: publish-ovsx
+        run: |
+          echo "📦 Publishing to Open VSX Registry with retry logic..."
+          if npm run publish:ovsx; then
+            echo "✅ Open VSX Registry publication successful"
+            echo "ovsx_success=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Open VSX Registry publication failed after retries"
+            echo "ovsx_success=false" >> $GITHUB_OUTPUT
+            # Don't fail the entire workflow - Open VSX is secondary
+            exit 0
+          fi
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        continue-on-error: true
+
+      - name: Verify Publications
+        run: |
+          echo "🔍 Verifying publications in registries..."
+          echo "⏳ Waiting 30 seconds for registries to update..."
+          sleep 30
+          npm run verify-publications
+        continue-on-error: true
+
+      # GitHub Release Creation - Automatically create releases after successful publishing
+      - name: Extract Version from Package.json
+        id: extract-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Extracted version: $VERSION"
+
+      - name: Extract Release Notes from CHANGELOG
+        id: extract-changelog
+        run: |
+          # Extract the latest version's changelog content
+          VERSION="${{ steps.extract-version.outputs.version }}"
+          
+          # Create a script to extract changelog content for the current version
+          cat > extract_changelog.js << 'EOF'
+          const fs = require('fs');
+          const version = process.argv[2];
+          
+          try {
+            const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+            
+            // Find the section for the current version
+            const versionPattern = new RegExp(`## \\[${version}\\].*?(?=## \\[|$)`, 's');
+            const match = changelog.match(versionPattern);
+            
+            if (match) {
+              // Clean up the content - remove the version header and trim
+              let content = match[0]
+                .replace(/^## \[.*?\].*?\n/, '')
+                .trim();
+              
+              // If content is empty or too short, provide a default message
+              if (!content || content.length < 10) {
+                content = `Release ${version} of Additional Context Menus extension.\n\nThis release includes improvements and bug fixes. See the full changelog for details.`;
+              }
+              
+              console.log(content);
+            } else {
+              // Fallback if version not found in changelog
+              console.log(`Release ${version} of Additional Context Menus extension.\n\nThis release includes improvements and bug fixes. See the full changelog for details.`);
+            }
+          } catch (error) {
+            console.log(`Release ${version} of Additional Context Menus extension.\n\nThis release includes improvements and bug fixes. See the full changelog for details.`);
+          }
+          EOF
+          
+          # Extract changelog content and save to file
+          RELEASE_NOTES=$(node extract_changelog.js "$VERSION")
+          echo "$RELEASE_NOTES" > release_notes.md
+          
+          # Also set as output (truncated for GitHub output limits)
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "📝 Extracted release notes for version $VERSION"
+
+      - name: Create GitHub Release
+        id: create-release
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.extract-version.outputs.version }}"
+          TAG="${{ steps.extract-version.outputs.tag }}"
+          VSIX_FILE="additional-context-menus-${VERSION}.vsix"
+          
+          echo "🏷️ Creating GitHub release $TAG..."
+          
+          # Verify GitHub CLI is available and authenticated
+          if ! command -v gh &> /dev/null; then
+            echo "❌ Error: GitHub CLI (gh) is not available"
+            exit 1
+          fi
+          
+          echo "✅ GitHub CLI is available"
+          
+          # Verify VSIX file exists
+          if [ ! -f "$VSIX_FILE" ]; then
+            echo "❌ Error: VSIX file $VSIX_FILE not found!"
+            echo "Available files:"
+            ls -la *.vsix || echo "No VSIX files found"
+            exit 1
+          fi
+          
+          echo "📦 VSIX file verified: $VSIX_FILE ($(du -h "$VSIX_FILE" | cut -f1))"
+          
+          # Check if release already exists (in case of retry)
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "⚠️ Release $TAG already exists, deleting and recreating..."
+            gh release delete "$TAG" --yes || true
+          fi
+          
+          # Create the release with the VSIX file attached
+          gh release create "$TAG" \
+            --title "Additional Context Menus v${VERSION}" \
+            --notes-file release_notes.md \
+            --latest \
+            "$VSIX_FILE"
+          
+          if [ $? -eq 0 ]; then
+            echo "✅ GitHub release created successfully!"
+            echo "🔗 Release URL: https://github.com/Vijay431/additional-contexts-menu/releases/tag/$TAG"
+            echo "release_created=true" >> $GITHUB_OUTPUT
+            echo "release_tag=$TAG" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Failed to create GitHub release"
+            echo "release_created=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Publication Summary
+        run: |
+          echo "📊 Final Publication Summary:"
+          echo "================================"
+          echo "✅ VS Code Marketplace: Successfully Published"
+          if [ "${{ steps.create-release.outputs.release_created }}" = "true" ]; then
+            echo "✅ GitHub Release: Created v${{ steps.extract-version.outputs.version }}"
+          else
+            echo "❌ GitHub Release: Creation Failed"
+          fi
+          
+          OVSX_SUCCESS="${{ steps.publish-ovsx.outputs.ovsx_success }}"
+          RELEASE_SUCCESS="${{ steps.create-release.outputs.release_created }}"
+          
+          if [ "$OVSX_SUCCESS" = "true" ] && [ "$RELEASE_SUCCESS" = "true" ]; then
+            echo "✅ Open VSX Registry: Successfully Published"
+            echo ""
+            echo "🎉 COMPLETE SUCCESS: Extension published to both registries and GitHub release created!"
+            echo ""
+            echo "📱 Users can now install from:"
+            echo "  • VS Code Marketplace (VS Code)"
+            echo "  • Open VSX Registry (VSCodium, Gitpod, Theia)"
+            echo "  • GitHub Releases (Manual VSIX installation)"
+          elif [ "$OVSX_SUCCESS" = "true" ] && [ "$RELEASE_SUCCESS" != "true" ]; then
+            echo "✅ Open VSX Registry: Successfully Published"
+            echo ""
+            echo "⚠️  PARTIAL SUCCESS: Extension published to both registries, but GitHub release failed"
+            echo ""
+            echo "📱 Users can install from:"
+            echo "  • VS Code Marketplace (VS Code)"
+            echo "  • Open VSX Registry (VSCodium, Gitpod, Theia)"
+            echo ""
+            echo "🔧 Manual steps for GitHub release:"
+            echo "  1. Create release manually from GitHub web interface"
+            echo "  2. Upload the VSIX file from workflow artifacts"
+          elif [ "$OVSX_SUCCESS" != "true" ] && [ "$RELEASE_SUCCESS" = "true" ]; then
+            echo "❌ Open VSX Registry: Publication Failed"
+            echo ""
+            echo "⚠️  PARTIAL SUCCESS: Extension published to VS Code Marketplace and GitHub release created"
+            echo ""
+            echo "📱 Users can install from:"
+            echo "  • VS Code Marketplace (VS Code)"
+            echo "  • GitHub Releases (Manual VSIX installation)"
+            echo ""
+            echo "🔧 Manual steps for Open VSX:"
+            echo "  1. Check OVSX_PAT secret is valid and not expired"
+            echo "  2. Verify Open VSX Registry is accessible"
+            echo "  3. Run manually: npm run publish:ovsx"
+            echo "  4. Or use: npx ovsx publish *.vsix -p \$OVSX_PAT"
+          else
+            echo "❌ Open VSX Registry: Publication Failed"
+            echo ""
+            echo "⚠️  PARTIAL SUCCESS: Extension published to VS Code Marketplace only"
+            echo ""
+            echo "📱 Users can install from:"
+            echo "  • VS Code Marketplace (VS Code)"
+            echo ""
+            echo "🔧 Manual steps required:"
+            echo "  Open VSX:"
+            echo "    1. Check OVSX_PAT secret is valid and not expired"
+            echo "    2. Verify Open VSX Registry is accessible"
+            echo "    3. Run manually: npm run publish:ovsx"
+            echo "  GitHub Release:"
+            echo "    1. Create release manually from GitHub web interface"
+            echo "    2. Upload the VSIX file from workflow artifacts"
+          fi
+          
+          echo ""
+          echo "📋 Recommended Next Steps:"
+          echo "  • Verify extension appears in both registries (5-10 min delay expected)"
+          if [ "$RELEASE_SUCCESS" = "true" ]; then
+            echo "  • Check GitHub release: https://github.com/Vijay431/additional-contexts-menu/releases/tag/${{ steps.create-release.outputs.release_tag }}"
+          fi
+          echo "  • Test installation from VS Code Marketplace"
+          if [ "$OVSX_SUCCESS" = "true" ]; then
+            echo "  • Test installation from Open VSX (VSCodium/Gitpod)"
+          fi
+          if [ "$RELEASE_SUCCESS" = "true" ]; then
+            echo "  • Test manual VSIX installation from GitHub release"
+          fi
+          echo "  • Monitor download metrics and user feedback"
+          echo "  • Check GitHub Issues for any user reports"
 
       - name: Create Release Artifact
         uses: actions/upload-artifact@v4

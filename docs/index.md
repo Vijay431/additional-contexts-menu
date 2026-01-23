@@ -22,6 +22,10 @@ description: 'Enhanced right-click context menus for Node.js development with in
                         <i class="fas fa-download"></i>
                         Install from Marketplace
                     </a>
+                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary" target="_blank">
+                        <i class="fas fa-globe"></i>
+                        Install from Open VSX
+                    </a>
                     <a href="{{ site.extension.github_url }}" class="btn btn-secondary" target="_blank">
                         <i class="fab fa-github"></i>
                         View on GitHub
@@ -303,12 +307,16 @@ description: 'Enhanced right-click context menus for Node.js development with in
         <div class="cta-content">
             <h2 class="cta-title">Ready to Supercharge Your Code Operations?</h2>
             <p class="cta-description">
-                Join developers who trust Additional Context Menus for reliable, production-ready code operations. With 37 comprehensive tests, Biome-driven tooling, and an active contributor community, it's built for enterprise development.
+                Join developers who trust Additional Context Menus for reliable, production-ready code operations. Available on both VS Code Marketplace and Open VSX Registry for VS Code, VSCodium, Gitpod, and Eclipse Theia. With 37 comprehensive tests, Biome-driven tooling, and an active contributor community, it's built for enterprise development.
             </p>
             <div class="cta-buttons">
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">
                     <i class="fas fa-download"></i>
-                    Install Now - Free
+                    Install from Marketplace
+                </a>
+                <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary btn-large" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    Install from Open VSX
                 </a>
                 <a href="{{ site.baseurl }}/features" class="btn btn-secondary btn-large">
                     <i class="fas fa-code"></i>

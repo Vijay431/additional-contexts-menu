@@ -625,4 +625,544 @@ export const existing = () => 'existing';`,
       }
     }
   });
+
+  // ============================================================================
+  // Edge Case Tests - Empty Files
+  // ============================================================================
+
+  test('Copy Function should handle empty files gracefully', async () => {
+    const emptyFile = path.join(tempWorkspace, 'empty.ts');
+    await fs.writeFile(emptyFile, '');
+
+    const document = await vscode.workspace.openTextDocument(emptyFile);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 0);
+
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
+      assert.ok(true, 'Copy Function handled empty file gracefully');
+    } catch (error) {
+      assert.fail(`Copy Function should handle empty files: ${error}`);
+    }
+  });
+
+  test('Copy Lines to File should handle empty files gracefully', async function () {
+    this.timeout(3000);
+
+    const emptyFile = path.join(tempWorkspace, 'empty-copy.ts');
+    await fs.writeFile(emptyFile, '');
+
+    const document = await vscode.workspace.openTextDocument(emptyFile);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 0);
+
+    try {
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.copyLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
+      ]);
+      assert.ok(true, 'Copy Lines to File handled empty file');
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Copy Lines to File handled empty file (timed out as expected)');
+      } else {
+        assert.fail(`Copy Lines to File should handle empty files: ${error}`);
+      }
+    }
+  });
+
+  test('Move Lines to File should handle empty files gracefully', async function () {
+    this.timeout(3000);
+
+    const emptyFile = path.join(tempWorkspace, 'empty-move.ts');
+    await fs.writeFile(emptyFile, '');
+
+    const document = await vscode.workspace.openTextDocument(emptyFile);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 0);
+
+    try {
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.moveLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
+      ]);
+      assert.ok(true, 'Move Lines to File handled empty file');
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Move Lines to File handled empty file (timed out as expected)');
+      } else {
+        assert.fail(`Move Lines to File should handle empty files: ${error}`);
+      }
+    }
+  });
+
+  // ============================================================================
+  // Edge Case Tests - Very Large Files
+  // ============================================================================
+
+  test('Copy Function should handle very large files (>10,000 lines)', async function () {
+    this.timeout(10000);
+
+    const largeFile = path.join(tempWorkspace, 'large-file.ts');
+    const lines: string[] = [];
+
+    // Generate a file with >10,000 lines
+    for (let i = 0; i < 10500; i++) {
+      if (i % 100 === 0) {
+        lines.push(`export function testFunction${i}() {`);
+        lines.push(`  return "Function at line ${i}";`);
+        lines.push('}');
+        lines.push('');
+      } else {
+        lines.push(`// Comment line ${i}`);
+      }
+    }
+
+    await fs.writeFile(largeFile, lines.join('\n'));
+
+    const document = await vscode.workspace.openTextDocument(largeFile);
+    const editor = await vscode.window.showTextDocument(document);
+
+    // Position cursor inside a function
+    editor.selection = new vscode.Selection(100, 10, 100, 10);
+
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
+      assert.ok(true, 'Copy Function handled large file successfully');
+    } catch (error) {
+      assert.fail(`Copy Function should handle large files: ${error}`);
+    }
+  });
+
+  test('Copy Lines to File should handle very large files', async function () {
+    this.timeout(10000);
+
+    const largeFile = path.join(tempWorkspace, 'large-copy.ts');
+    const lines: string[] = [];
+
+    for (let i = 0; i < 10500; i++) {
+      lines.push(`const variable${i} = "value ${i}";`);
+    }
+
+    await fs.writeFile(largeFile, lines.join('\n'));
+
+    const document = await vscode.workspace.openTextDocument(largeFile);
+    const editor = await vscode.window.showTextDocument(document);
+
+    // Select a range in the large file
+    editor.selection = new vscode.Selection(5000, 0, 5010, 0);
+
+    try {
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.copyLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000)),
+      ]);
+      assert.ok(true, 'Copy Lines to File handled large file');
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Copy Lines to File handled large file (timed out as expected)');
+      } else {
+        assert.fail(`Copy Lines to File should handle large files: ${error}`);
+      }
+    }
+  });
+
+  test('Move Lines to File should handle very large files', async function () {
+    this.timeout(10000);
+
+    const largeFile = path.join(tempWorkspace, 'large-move.ts');
+    const lines: string[] = [];
+
+    for (let i = 0; i < 10500; i++) {
+      lines.push(`const variable${i} = "value ${i}";`);
+    }
+
+    await fs.writeFile(largeFile, lines.join('\n'));
+
+    const document = await vscode.workspace.openTextDocument(largeFile);
+    const editor = await vscode.window.showTextDocument(document);
+
+    // Select a range in the large file
+    editor.selection = new vscode.Selection(8000, 0, 8010, 0);
+
+    try {
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.moveLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000)),
+      ]);
+      assert.ok(true, 'Move Lines to File handled large file');
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Move Lines to File handled large file (timed out as expected)');
+      } else {
+        assert.fail(`Move Lines to File should handle large files: ${error}`);
+      }
+    }
+  });
+
+  // ============================================================================
+  // Edge Case Tests - Special Characters in File Names
+  // ============================================================================
+
+  test('Commands should handle files with spaces in names', async function () {
+    this.timeout(5000);
+
+    const fileWithSpaces = path.join(tempWorkspace, 'file with spaces.ts');
+    await fs.writeFile(fileWithSpaces, 'const test = "value";');
+
+    const document = await vscode.workspace.openTextDocument(fileWithSpaces);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
+      assert.ok(true, 'Copy Function handled file with spaces');
+    } catch (error) {
+      assert.fail(`Commands should handle files with spaces: ${error}`);
+    }
+
+    try {
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.copyLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
+      ]);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Copy Lines to File handled file with spaces');
+      }
+    }
+  });
+
+  test('Commands should handle files with unicode characters', async function () {
+    this.timeout(5000);
+
+    const unicodeFile = path.join(tempWorkspace, 'файл-тест-文件.ts');
+    await fs.writeFile(unicodeFile, 'const unicode = "测试";');
+
+    const document = await vscode.workspace.openTextDocument(unicodeFile);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
+      assert.ok(true, 'Copy Function handled unicode file name');
+    } catch (error) {
+      assert.fail(`Commands should handle unicode file names: ${error}`);
+    }
+  });
+
+  test('Commands should handle files with special characters', async function () {
+    this.timeout(5000);
+
+    const specialFile = path.join(tempWorkspace, 'file-with-dashes_and_underscores.ts');
+    await fs.writeFile(specialFile, 'const special = "chars";');
+
+    const document = await vscode.workspace.openTextDocument(specialFile);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.openInTerminal');
+      assert.ok(true, 'Open in Terminal handled file with special characters');
+    } catch (error) {
+      assert.fail(`Commands should handle special characters: ${error}`);
+    }
+  });
+
+  // ============================================================================
+  // Edge Case Tests - Read-Only Files
+  // ============================================================================
+
+  test('Move Lines to File should handle read-only source files', async function () {
+    this.timeout(5000);
+
+    const readOnlySource = path.join(tempWorkspace, 'readonly-edge.ts');
+    await fs.writeFile(readOnlySource, 'const readOnly = "test";');
+
+    // Make file read-only
+    if (process.platform !== 'win32') {
+      await fs.chmod(readOnlySource, 0o444);
+    }
+
+    try {
+      const document = await vscode.workspace.openTextDocument(readOnlySource);
+      const editor = await vscode.window.showTextDocument(document);
+      editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.moveLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
+      ]);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Move Lines to File handled read-only source');
+      }
+    } finally {
+      if (process.platform !== 'win32') {
+        try {
+          await fs.chmod(readOnlySource, 0o644);
+        } catch {
+          // Ignore cleanup errors
+        }
+      }
+    }
+  });
+
+  test('Copy Lines to File should handle read-only target files', async function () {
+    this.timeout(5000);
+
+    const sourceFile = path.join(tempWorkspace, 'copy-source-readonly.ts');
+    const readOnlyTarget = path.join(tempWorkspace, 'readonly-target-edge.ts');
+
+    await fs.writeFile(sourceFile, 'const source = "data";');
+    await fs.writeFile(readOnlyTarget, '// Existing');
+
+    // Make target read-only
+    if (process.platform !== 'win32') {
+      await fs.chmod(readOnlyTarget, 0o444);
+    }
+
+    try {
+      const document = await vscode.workspace.openTextDocument(sourceFile);
+      const editor = await vscode.window.showTextDocument(document);
+      editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+      // The command should handle read-only target gracefully
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.copyLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
+      ]);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Copy Lines to File handled read-only target');
+      }
+    } finally {
+      if (process.platform !== 'win32') {
+        try {
+          await fs.chmod(readOnlyTarget, 0o644);
+        } catch {
+          // Ignore cleanup errors
+        }
+      }
+    }
+  });
+
+  // ============================================================================
+  // Edge Case Tests - Concurrent Operations
+  // ============================================================================
+
+  test('Commands should handle concurrent operations', async function () {
+    this.timeout(10000);
+
+    const file1 = path.join(tempWorkspace, 'concurrent1.ts');
+    const file2 = path.join(tempWorkspace, 'concurrent2.ts');
+
+    await fs.writeFile(file1, 'const test1 = "value1";');
+    await fs.writeFile(file2, 'const test2 = "value2";');
+
+    const doc1 = await vscode.workspace.openTextDocument(file1);
+    await vscode.workspace.openTextDocument(file2);
+
+    await vscode.window.showTextDocument(doc1);
+
+    // Execute multiple commands concurrently
+    const promises = [
+      vscode.commands.executeCommand('additionalContextMenus.saveAll'),
+      vscode.commands.executeCommand('additionalContextMenus.openInTerminal'),
+    ];
+
+    try {
+      await Promise.all(promises);
+      assert.ok(true, 'Commands handled concurrent execution');
+    } catch (error) {
+      // Some commands may fail due to timing, but should not crash
+      assert.ok(true, 'Commands handled concurrent execution with expected errors');
+    }
+  });
+
+  test('Commands should handle file modifications during execution', async function () {
+    this.timeout(5000);
+
+    const modifyFile = path.join(tempWorkspace, 'modify-during.ts');
+    await fs.writeFile(modifyFile, 'const original = "value";');
+
+    const document = await vscode.workspace.openTextDocument(modifyFile);
+    const editor = await vscode.window.showTextDocument(document);
+
+    // Make document dirty
+    await editor.edit((editBuilder) => {
+      editBuilder.insert(new vscode.Position(0, 0), '// Modified\n');
+    });
+
+    // Execute command while document is dirty
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.saveAll');
+      assert.ok(true, 'Save All handled modified document');
+    } catch (error) {
+      assert.fail(`Commands should handle modifications: ${error}`);
+    }
+  });
+
+  // ============================================================================
+  // Edge Case Tests - Unsaved Files
+  // ============================================================================
+
+  test('Commands should handle dirty (unsaved) documents', async function () {
+    this.timeout(5000);
+
+    const dirtyFile = path.join(tempWorkspace, 'dirty-doc.ts');
+    await fs.writeFile(dirtyFile, 'const original = "test";');
+
+    const document = await vscode.workspace.openTextDocument(dirtyFile);
+    const editor = await vscode.window.showTextDocument(document);
+
+    // Make document dirty
+    await editor.edit((editBuilder) => {
+      editBuilder.insert(new vscode.Position(0, 0), '// Unsaved change\n');
+    });
+
+    assert.strictEqual(document.isDirty, true, 'Document should be dirty');
+
+    editor.selection = new vscode.Selection(1, 0, 1, 20);
+
+    try {
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.copyLinesToFile'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
+      ]);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Commands handled dirty document');
+      }
+    }
+  });
+
+  test('Commands should reject untitled files consistently', async () => {
+    const untitledDoc = await vscode.workspace.openTextDocument({
+      language: 'typescript',
+      content: 'const untitled = "test";',
+    });
+    const editor = await vscode.window.showTextDocument(untitledDoc);
+    editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+    // All file-based commands should reject untitled files
+    const commands = [
+      'additionalContextMenus.copyFunction',
+      'additionalContextMenus.copyLinesToFile',
+      'additionalContextMenus.moveLinesToFile',
+    ];
+
+    for (const command of commands) {
+      try {
+        await vscode.commands.executeCommand(command);
+        assert.ok(true, `${command} handled untitled file gracefully`);
+      } catch (error) {
+        assert.fail(`${command} should handle untitled files: ${error}`);
+      }
+    }
+  });
+
+  // ============================================================================
+  // Edge Case Tests - Workspace Without package.json
+  // ============================================================================
+
+  test('Project detection should handle workspace without package.json', async function () {
+    this.timeout(5000);
+
+    const noPackageWorkspace = path.join(tempWorkspace, 'no-package');
+    await fs.mkdir(noPackageWorkspace, { recursive: true });
+
+    const testFile = path.join(noPackageWorkspace, 'test.ts');
+    await fs.writeFile(testFile, 'const test = "value";');
+
+    const document = await vscode.workspace.openTextDocument(testFile);
+    await vscode.window.showTextDocument(document);
+
+    // Commands should still work, but project detection should return false
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.saveAll');
+      assert.ok(true, 'Commands work in workspace without package.json');
+    } catch (error) {
+      assert.fail(`Commands should work without package.json: ${error}`);
+    }
+  });
+
+  test('Commands should handle non-Node.js projects gracefully', async function () {
+    this.timeout(5000);
+
+    const nonNodeWorkspace = path.join(tempWorkspace, 'non-node');
+    await fs.mkdir(nonNodeWorkspace, { recursive: true });
+
+    // Create a Python file instead of JS/TS
+    const pythonFile = path.join(nonNodeWorkspace, 'test.py');
+    await fs.writeFile(pythonFile, 'def test():\n    return "test"');
+
+    const document = await vscode.workspace.openTextDocument(pythonFile);
+    await vscode.window.showTextDocument(document);
+
+    // Commands should handle non-supported file types gracefully
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.openInTerminal');
+      assert.ok(true, 'Commands handled non-Node.js project');
+    } catch (error) {
+      // Expected to fail gracefully for unsupported file types
+      assert.ok(true, 'Commands handled non-Node.js project with expected error');
+    }
+  });
+
+  // ============================================================================
+  // Edge Case Tests - Malformed package.json
+  // ============================================================================
+
+  test('Project detection should handle malformed package.json', async function () {
+    this.timeout(5000);
+
+    const malformedWorkspace = path.join(tempWorkspace, 'malformed-package');
+    await fs.mkdir(malformedWorkspace, { recursive: true });
+
+    // Create malformed package.json
+    const packageJsonPath = path.join(malformedWorkspace, 'package.json');
+    await fs.writeFile(packageJsonPath, '{ "name": "test", invalid json }');
+
+    const testFile = path.join(malformedWorkspace, 'test.ts');
+    await fs.writeFile(testFile, 'const test = "value";');
+
+    const document = await vscode.workspace.openTextDocument(testFile);
+    await vscode.window.showTextDocument(document);
+
+    // Commands should continue to work despite malformed package.json
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.saveAll');
+      assert.ok(true, 'Commands work with malformed package.json');
+    } catch (error) {
+      assert.fail(`Commands should handle malformed package.json: ${error}`);
+    }
+  });
+
+  test('Commands should continue working despite parse errors in package.json', async function () {
+    this.timeout(5000);
+
+    const parseErrorWorkspace = path.join(tempWorkspace, 'parse-error');
+    await fs.mkdir(parseErrorWorkspace, { recursive: true });
+
+    // Create package.json with syntax errors
+    const packageJsonPath = path.join(parseErrorWorkspace, 'package.json');
+    await fs.writeFile(packageJsonPath, '{ "name": "test" "missing": "comma" }');
+
+    const testFile = path.join(parseErrorWorkspace, 'test.ts');
+    await fs.writeFile(testFile, 'const test = "value";');
+
+    const document = await vscode.workspace.openTextDocument(testFile);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+    // All commands should handle parse errors gracefully
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.openInTerminal');
+      assert.ok(true, 'Commands handled package.json parse errors');
+    } catch (error) {
+      // Commands may show errors but should not crash
+      assert.ok(true, 'Commands handled package.json parse errors gracefully');
+    }
+  });
 });

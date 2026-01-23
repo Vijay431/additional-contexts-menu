@@ -593,12 +593,16 @@ description: 'Explore the comprehensive features and intelligent code operations
         <div class="cta-content">
             <h2 class="cta-title">Experience Intelligent Code Operations</h2>
             <p class="cta-description">
-                Install Additional Context Menus today and enhance your development workflow with smart code operations for modern frameworks. Ready to shape the roadmap? Join the community-driven governance and contribute your expertise.
+                Install Additional Context Menus today and enhance your development workflow with smart code operations for modern frameworks. Available on both VS Code Marketplace and Open VSX Registry for maximum compatibility with VS Code, VSCodium, Gitpod, and Eclipse Theia. Ready to shape the roadmap? Join the community-driven governance and contribute your expertise.
             </p>
             <div class="cta-buttons">
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">
                     <i class="fas fa-download"></i>
                     Install from Marketplace
+                </a>
+                <a href="https://open-vsx.org/extension/VijayGangatharan/additional-context-menus" class="btn btn-primary btn-large" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    Install from Open VSX
                 </a>
                 <a href="{{ site.baseurl }}/installation" class="btn btn-secondary btn-large">
                     <i class="fas fa-book"></i>

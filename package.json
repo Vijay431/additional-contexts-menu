@@ -211,7 +211,9 @@
     "build": "tsx esbuild.config.ts",
     "watch": "tsx esbuild.config.ts --watch",
     "package": "vsce package",
-    "publish": "vsce publish",
+    "publish": "npm run publish:marketplace && npm run publish:ovsx",
+    "publish:marketplace": "vsce publish",
+    "publish:ovsx": "node scripts/publish-ovsx-with-retry.js",
     "lint": "biome lint .",
     "lint:fix": "biome check --write .",
     "test": "rm -rf dist && npm run build && npm run create-minimal && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
@@ -221,7 +223,12 @@
     "create-minimal": "tsx scripts/create-minimal-extension.ts",
     "format": "biome format --write .",
     "format:check": "biome check --linter-enabled=false --organize-imports-enabled=false .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify-auth": "node scripts/verify-auth.js",
+    "verify-publications": "node scripts/verify-publications.js",
+    "validate-workflow": "node scripts/validate-publishing-workflow.js",
+    "validate-workflow:full": "node scripts/validate-publishing-workflow.js --full",
+    "publish:ovsx:manual": "node scripts/manual-publish-ovsx.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -233,11 +240,15 @@
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.6.1",
     "esbuild": "^0.25.8",
+    "fast-check": "^4.4.0",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.0",
+    "markdownlint-cli2": "^0.20.0",
     "mocha": "^11.7.1",
+    "ovsx": "^0.10.7",
     "picocolors": "^1.1.1",
     "tsx": "^4.19.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "yaml": "^2.8.2"
   }
 }
