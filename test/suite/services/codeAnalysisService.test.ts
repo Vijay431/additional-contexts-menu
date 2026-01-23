@@ -627,4 +627,440 @@ const useUser = (id: number) => {
       assert.strictEqual(hookResult?.name, 'useUser');
     });
   });
+
+  suite('Advanced Arrow Function Tests', () => {
+    test('should find arrow function with multiple parameters', async () => {
+      const code = `const multiParam = (a: number, b: string, c: boolean) => {
+  return a + b + c;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'multiParam');
+      assert.strictEqual(result?.type, 'arrow');
+    });
+
+    test('should find arrow function with default parameters', async () => {
+      const code = `const withDefaults = (x = 10, y = 20) => {
+  return x + y;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'withDefaults');
+      assert.strictEqual(result?.type, 'arrow');
+    });
+
+    test('should find arrow function with destructured object parameter', async () => {
+      const code = `const withDestructuring = ({ name, age }) => {
+  return name + age;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'withDestructuring');
+      assert.strictEqual(result?.type, 'arrow');
+    });
+
+    test('should find arrow function with rest parameter', async () => {
+      const code = `const withRest = (...args: number[]) => {
+  return args.reduce((sum, n) => sum + n, 0);
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'withRest');
+      assert.strictEqual(result?.type, 'arrow');
+    });
+
+    test('should find typed arrow function', async () => {
+      const code = `const typed: (x: number) => string = (x) => {
+  return x.toString();
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'typed');
+      assert.strictEqual(result?.type, 'arrow');
+    });
+
+    test('should find async arrow with error handling', async () => {
+      const code = `const fetchWithErrorHandling = async (url: string) => {
+  try {
+    const res = await fetch(url);
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'fetchWithErrorHandling');
+      assert.strictEqual(result?.type, 'async');
+    });
+  });
+
+  suite('Advanced Function Declaration Tests', () => {
+    test('should find function with multiple parameters', async () => {
+      const code = `function multiParam(a: string, b: number, c: boolean): void {
+  console.log(a, b, c);
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'multiParam');
+      assert.strictEqual(result?.type, 'function');
+    });
+
+    test('should find function with default parameters', async () => {
+      const code = `function withDefaults(x = 5, y = 'test') {
+  return x + y;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'withDefaults');
+      assert.strictEqual(result?.type, 'function');
+    });
+
+    test('should find function with return type annotation', async () => {
+      const code = `function typedReturn(): number {
+  return 42;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'typedReturn');
+      assert.strictEqual(result?.type, 'function');
+    });
+
+    test('should find function with rest parameter', async () => {
+      const code = `function sumAll(...numbers: number[]): number {
+  return numbers.reduce((sum, n) => sum + n, 0);
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'sumAll');
+      assert.strictEqual(result?.type, 'function');
+    });
+
+    test('should find function with destructured parameter', async () => {
+      const code = `function destructured({ name, age }: { name: string; age: number }) {
+  return name + age;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'destructured');
+      assert.strictEqual(result?.type, 'function');
+    });
+
+    test('should find generator function', async () => {
+      const code = `function* generateNumbers() {
+  let i = 0;
+  while (i < 3) {
+    yield i++;
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'generateNumbers');
+      assert.strictEqual(result?.type, 'function');
+    });
+  });
+
+  suite('Advanced Class Method Tests', () => {
+    test('should find static method', async () => {
+      const code = `class TestClass {
+  static staticMethod() {
+    return 'static';
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(2, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'staticMethod');
+      assert.strictEqual(result?.type, 'method');
+    });
+
+    test('should find getter', async () => {
+      const code = `class TestClass {
+  private _value = 0;
+
+  get value() {
+    return this._value;
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(4, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'value');
+      assert.strictEqual(result?.type, 'method');
+    });
+
+    test('should find setter', async () => {
+      const code = `class TestClass {
+  private _value = 0;
+
+  set value(val: number) {
+    this._value = val;
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(4, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'value');
+      assert.strictEqual(result?.type, 'method');
+    });
+
+    test('should find private method', async () => {
+      const code = `class TestClass {
+  private privateMethod() {
+    return true;
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(2, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'privateMethod');
+      assert.strictEqual(result?.type, 'method');
+    });
+
+    test('should find method with parameter properties', async () => {
+      const code = `class TestClass {
+  constructor(public name: string, private age: number) {}
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(2, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'constructor');
+    });
+
+    test('should find method with complex parameters', async () => {
+      const code = `class TestClass {
+  complexMethod(name: string, age: number, active = true): string {
+    return name + age + active;
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(2, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'complexMethod');
+      assert.strictEqual(result?.type, 'method');
+    });
+
+    test('should find async static method', async () => {
+      const code = `class TestClass {
+  static async asyncStatic() {
+    await Promise.resolve();
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(2, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'asyncStatic');
+      assert.strictEqual(result?.type, 'async');
+    });
+  });
+
+  suite('Advanced React Component Tests', () => {
+    test('should find component with props interface', async () => {
+      const code = `interface Props {
+  title: string;
+}
+
+const TitleComponent = ({ title }: Props) => {
+  return <div>{title}</div>;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.tsx');
+      const position = new vscode.Position(4, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'TitleComponent');
+      assert.strictEqual(result?.type, 'component');
+    });
+
+    test('should find component with multiple hooks', async () => {
+      const code = `import { useState, useEffect, useMemo } from 'react';
+
+const ComplexComponent = () => {
+  const [count, setCount] = useState(0);
+  const doubled = useMemo(() => count * 2, [count]);
+
+  useEffect(() => {
+    console.log(count);
+  }, [count]);
+
+  return <div>{doubled}</div>;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.tsx');
+      const position = new vscode.Position(2, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'ComplexComponent');
+      assert.strictEqual(result?.type, 'component');
+    });
+
+    test('should find async component', async () => {
+      const code = `const AsyncComponent = async () => {
+  const data = await fetchData();
+  return <div>{data}</div>;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.tsx');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'AsyncComponent');
+      assert.strictEqual(result?.type, 'async');
+    });
+
+    test('should find exported default component', async () => {
+      const code = `export default function DefaultExport() {
+  return <div>Default</div>;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.tsx');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'DefaultExport');
+      assert.strictEqual(result?.isExported, true);
+    });
+  });
+
+  suite('Async Function Variations', () => {
+    test('should find async function with multiple awaits', async () => {
+      const code = `async function multipleAwait() {
+  const a = await Promise.resolve(1);
+  const b = await Promise.resolve(2);
+  return a + b;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'multipleAwait');
+      assert.strictEqual(result?.type, 'async');
+    });
+
+    test('should find async function with promise return type', async () => {
+      const code = `async function withPromiseReturn(): Promise<number> {
+  return 42;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'withPromiseReturn');
+      assert.strictEqual(result?.type, 'async');
+    });
+
+    test('should find async function with callback', async () => {
+      const code = `async function withCallback(cb: () => void) {
+  await Promise.resolve();
+  cb();
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'withCallback');
+      assert.strictEqual(result?.type, 'async');
+    });
+
+    test('should find async arrow with try-catch-finally', async () => {
+      const code = `const robustAsync = async () => {
+  try {
+    return await riskyOperation();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    cleanup();
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'robustAsync');
+      assert.strictEqual(result?.type, 'async');
+    });
+  });
 });
