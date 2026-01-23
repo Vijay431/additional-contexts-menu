@@ -106,13 +106,21 @@ export class TestSetup {
       configurable: true
     });
 
-    // Mock file system
+    // Mock file system (only if not already in VS Code environment)
     if (!workspace.fs) {
       workspace.fs = {};
     }
-    workspace.fs.stat = (uri: vscode.Uri) => {
-      return TestSetup.vscMocks.stat(uri);
-    };
+    // Use Object.defineProperty to handle read-only properties in VS Code environment
+    try {
+      Object.defineProperty(workspace.fs, 'stat', {
+        value: (uri: vscode.Uri) => TestSetup.vscMocks.stat(uri),
+        writable: true,
+        configurable: true
+      });
+    } catch (e) {
+      // If we can't set the property (e.g., in real VS Code), just skip this mock
+      console.debug('Could not mock workspace.fs.stat, skipping');
+    }
   }
 
   /**
@@ -176,7 +184,12 @@ export class TestSetup {
           if (method === 'terminals') {
             delete (vscode.window as any).terminals;
           } else if (originalMethod) {
-            (vscode.window as any)[method] = originalMethod;
+            try {
+              (vscode.window as any)[method] = originalMethod;
+            } catch (e) {
+              // Property might be read-only in VS Code environment
+              console.debug(`Could not restore window.${method}, skipping`);
+            }
           }
           break;
         case 'workspace':
@@ -185,10 +198,24 @@ export class TestSetup {
           } else if (method && method.startsWith('fs.')) {
             const fsMethod = method.replace('fs.', '');
             if (vscode.workspace.fs && originalMethod) {
-              (vscode.workspace.fs as any)[fsMethod] = originalMethod;
+              try {
+                Object.defineProperty(vscode.workspace.fs, fsMethod, {
+                  value: originalMethod,
+                  writable: true,
+                  configurable: true
+                });
+              } catch (e) {
+                // Property might be read-only in VS Code environment
+                console.debug(`Could not restore workspace.fs.${fsMethod}, skipping`);
+              }
             }
           } else if (originalMethod) {
-            (vscode.workspace as any)[method] = originalMethod;
+            try {
+              (vscode.workspace as any)[method] = originalMethod;
+            } catch (e) {
+              // Property might be read-only in VS Code environment
+              console.debug(`Could not restore workspace.${method}, skipping`);
+            }
           }
           break;
         case 'ConfigurationService':

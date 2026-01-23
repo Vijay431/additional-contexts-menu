@@ -10,9 +10,10 @@ export function run(): Promise<void> {
     timeout: 60000, // 60 seconds timeout for E2E tests
   });
 
-  const testsRoot = path.resolve(__dirname, '.');
+  const testsRoot = path.resolve(__dirname, '..');
 
   return new Promise((c, e) => {
+    // Find tests in both e2e and suite directories
     glob('**/**.test.js', { cwd: testsRoot })
       .then((files) => {
         console.log(`📋 Found ${files.length} E2E test file(s):`);

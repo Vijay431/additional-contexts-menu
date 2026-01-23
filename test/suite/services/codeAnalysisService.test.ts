@@ -1063,4 +1063,511 @@ const ComplexComponent = () => {
       assert.strictEqual(result?.type, 'async');
     });
   });
+
+  suite('Advanced Edge Cases - Nested Braces', () => {
+    test('should handle deeply nested functions (5 levels)', async () => {
+      const code = `function level1() {
+  function level2() {
+    function level3() {
+      function level4() {
+        function level5() {
+          return 'deepest';
+        }
+        return level5();
+      }
+      return level4();
+    }
+    return level3();
+  }
+  return level2();
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const level5Pos = new vscode.Position(5, 0);
+      const level1Pos = new vscode.Position(1, 0);
+
+      const level5Result = await codeAnalysisService.findFunctionAtPosition(document, level5Pos);
+      const level1Result = await codeAnalysisService.findFunctionAtPosition(document, level1Pos);
+
+      assert.ok(level5Result);
+      assert.strictEqual(level5Result?.name, 'level5');
+      assert.strictEqual(level5Result?.endLine, 7);
+
+      assert.ok(level1Result);
+      assert.strictEqual(level1Result?.name, 'level1');
+      assert.strictEqual(level1Result?.endLine, 17);
+    });
+
+    test('should handle nested object literals with braces', async () => {
+      const code = `function complexObject() {
+  const config = {
+    database: {
+      host: 'localhost',
+      port: 5432,
+      credentials: {
+        username: 'user',
+        password: 'pass'
+      }
+    },
+    server: {
+      endpoints: {
+        api: '/api/v1',
+        admin: '/admin'
+      }
+    }
+  };
+  return config;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'complexObject');
+      assert.strictEqual(result?.endLine, 21);
+    });
+
+    test('should handle nested arrays with object literals', async () => {
+      const code = `function nestedArrays() {
+  const data = [
+    {
+      id: 1,
+      items: [
+        { name: 'item1', value: 10 },
+        { name: 'item2', value: 20 }
+      ]
+    },
+    {
+      id: 2,
+      items: [
+        { name: 'item3', value: 30 }
+      ]
+    }
+  ];
+  return data;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'nestedArrays');
+      assert.strictEqual(result?.endLine, 21);
+    });
+
+    test('should handle nested try-catch-finally blocks', async () => {
+      const code = `async function nestedErrorHandling() {
+  try {
+    try {
+      await riskyOperation1();
+    } catch (err1) {
+      throw new Error('Wrapped 1');
+    }
+  } catch (err2) {
+    try {
+      await riskyOperation2();
+    } catch (err3) {
+      throw new Error('Wrapped 2');
+    }
+  } finally {
+    cleanup();
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'nestedErrorHandling');
+      assert.strictEqual(result?.endLine, 19);
+    });
+
+    test('should handle nested switch statements with braces', async () => {
+      const code = `function nestedSwitches(value: number) {
+  switch (value) {
+    case 1:
+      switch (value) {
+        case 1:
+          return '1-1';
+        case 2:
+          return '1-2';
+      }
+      break;
+    case 2:
+      switch (value) {
+        case 1:
+          return '2-1';
+        default:
+          return '2-default';
+      }
+  }
+  return 'unknown';
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'nestedSwitches');
+      assert.strictEqual(result?.endLine, 23);
+    });
+
+    test('should handle nested class with methods', async () => {
+      const code = `function outerFunction() {
+  class InnerClass {
+    method1() {
+      if (true) {
+        return 'method1';
+      }
+    }
+
+    method2() {
+      try {
+        return 'method2';
+      } catch (e) {
+        return 'error';
+      }
+    }
+  }
+
+  return new InnerClass();
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'outerFunction');
+      assert.strictEqual(result?.endLine, 23);
+    });
+  });
+
+  suite('Advanced Edge Cases - Braces in Strings', () => {
+    test('should handle braces in single quoted strings', async () => {
+      const code = `function singleQuoteBraces() {
+  const str1 = 'This has { braces } in it';
+  const str2 = 'Nested {{ braces }}';
+  const str3 = 'Unbalanced { braces';
+  const str4 = 'Unbalanced braces }';
+  return str1;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'singleQuoteBraces');
+      assert.strictEqual(result?.endLine, 7);
+    });
+
+    test('should handle braces in double quoted strings', async () => {
+      const code = `function doubleQuoteBraces() {
+  const str1 = "This has { braces } in it";
+  const str2 = "Nested {{ braces }}";
+  const json = "{\"key\": \"value\", \"nested\": {\"a\": 1}}";
+  return str1;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'doubleQuoteBraces');
+      assert.strictEqual(result?.endLine, 6);
+    });
+
+    test('should handle braces in template literals', async () => {
+      const code = `function templateLiteralBraces() {
+  const value = 42;
+  const tpl1 = \`Result: {value}\`;
+  const tpl2 = \`Nested \{\{ braces \}\}\`;
+  const tpl3 = \`Expression \${value} with { braces }\`;
+  const tpl4 = \`Complex \${(() => {
+    return '{ nested }';
+  })()}\`;
+  return tpl1;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'templateLiteralBraces');
+      assert.strictEqual(result?.endLine, 10);
+    });
+
+    test('should handle escaped quotes with braces', async () => {
+      const code = `function escapedQuotesWithBraces() {
+  const str1 = 'don\\'t { count } this';
+  const str2 = "say \\"hello { world }\\"";
+  const str3 = \`template with { braces }\`;
+  return str1;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'escapedQuotesWithBraces');
+      assert.strictEqual(result?.endLine, 6);
+    });
+
+    test('should handle mixed quote types with braces', async () => {
+      const code = `function mixedQuotesWithBraces() {
+  const single = '{ single }';
+  const double = "{ double }";
+  const template = \`{ template }\`;
+  const mixed = "mix 'single' { and } \"double\"";
+  return mixed;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'mixedQuotesWithBraces');
+      assert.strictEqual(result?.endLine, 7);
+    });
+
+    test('should handle regex literals with braces', async () => {
+      const code = `function regexWithBraces() {
+  const regex1 = /\{.*\}/g;
+  const regex2 = /\{\{d+\}\}/;
+  const regex3 = new RegExp('{.*}', 'g');
+  return regex1;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'regexWithBraces');
+      assert.strictEqual(result?.endLine, 6);
+    });
+  });
+
+  suite('Advanced Edge Cases - Braces in Comments', () => {
+    test('should handle braces in single-line comments', async () => {
+      const code = `function singleLineCommentBraces() {
+  // This is a comment with { braces }
+  const x = 1; // Comment { with } braces
+  // Multiple { { { nested } } }
+  return x; // End comment
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'singleLineCommentBraces');
+      assert.strictEqual(result?.endLine, 6);
+    });
+
+    test('should handle braces in multi-line comments', async () => {
+      const code = `function multiLineCommentBraces() {
+  /*
+   * Multi-line comment with { braces }
+   * Nested { { { } } }
+   * More { complex } structures
+   */
+  const x = 1;
+  /* Another { comment } with { braces } */
+  return x;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'multiLineCommentBraces');
+      assert.strictEqual(result?.endLine, 11);
+    });
+
+    test('should handle comments inside nested structures', async () => {
+      const code = `function commentsInNestedStructures() {
+  if (true) {
+    // Comment { with } braces
+    const obj = {
+      // Another { comment }
+      key: 'value',
+      nested: {
+        // Deep { comment }
+        value: 42
+      }
+    };
+    return obj;
+  }
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'commentsInNestedStructures');
+      assert.strictEqual(result?.endLine, 15);
+    });
+
+    test('should handle trailing comments with braces', async () => {
+      const code = `function trailingComments() {
+  const obj = { key: 'value' }; // Comment { with } braces
+  const arr = [1, 2, 3]; // Array { comment }
+  return obj; /* End { comment } */
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'trailingComments');
+      assert.strictEqual(result?.endLine, 5);
+    });
+
+    test('should handle comment-like strings', async () => {
+      const code = `function commentLikeStrings() {
+  const str1 = 'This is // not a comment { with } braces';
+  const str2 = "This is /* not */ a comment";
+  const str3 = \`Not // a comment \${'or /* this */'} { either }\`;
+  return str1;
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'commentLikeStrings');
+      assert.strictEqual(result?.endLine, 6);
+    });
+  });
+
+  suite('Advanced Edge Cases - Complex Scenarios', () => {
+    test('should handle real-world complex function', async () => {
+      const code = `async function fetchDataAndProcess(config: { url: string; options: {} }) {
+    // Configuration with nested braces
+    const requestConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': \`Bearer \${config.apiKey}\`
+      },
+      body: JSON.stringify({
+        query: '{ users { id name } }', // GraphQL query
+        variables: { limit: 10 }
+      })
+    };
+
+    try {
+      const response = await fetch(config.url, requestConfig);
+
+      if (!response.ok) {
+        // Error handling with comment { braces }
+        throw new Error(\`HTTP { \${response.status} }\`);
+      }
+
+      // Process response
+      const data = await response.json();
+      const items = data.items.map((item: { id: number }) => ({
+        ...item,
+        processed: true
+      }));
+
+      /* Return processed items
+       * with multi-line { comment }
+       * containing { braces }
+       */
+      return items;
+    } catch (error) {
+      console.error('Error { in } processing:', error);
+      throw error;
+    }
+  }`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'fetchDataAndProcess');
+      assert.strictEqual(result?.endLine, 50);
+    });
+
+    test('should handle JSX with braces and strings', async () => {
+      const code = `function JSXComponent() {
+  const items = ['{ item1 }', '{ item2 }'];
+
+  return (
+    <div className="container { class }">
+      {/* Comment { with } braces */}
+      {items.map(item => (
+        <span key={item}>
+          {item} {/* Inline { comment } */}
+        </span>
+      ))}
+    </div>
+  );
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.tsx');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'JSXComponent');
+      assert.strictEqual(result?.endLine, 16);
+    });
+
+    test('should handle function with all edge cases combined', async () => {
+      const code = `function allEdgeCases() {
+  // Single-line { comment }
+  /* Multi-line
+     { comment } with braces */
+
+  const strings = {
+    single: '{ single }',
+    double: "{ double }",
+    template: \`{ template }\`,
+    mixed: "mix 'single' and \"double\" { braces }"
+  };
+
+  const nested = {
+    level1: {
+      level2: {
+        level3: {
+          value: 'deep'
+        }
+      }
+    }
+  };
+
+  /* Comment before array */ const arr = [
+    { id: 1, name: 'Item {1}' },
+    { id: 2, data: { nested: '{ value }' } }
+  ];
+
+  return { strings, nested, arr };
+}`;
+      const document = TestHelpers.createMockDocument(code, 'test.ts');
+      const position = new vscode.Position(1, 0);
+
+      const result = await codeAnalysisService.findFunctionAtPosition(document, position);
+
+      assert.ok(result);
+      assert.strictEqual(result?.name, 'allEdgeCases');
+      assert.strictEqual(result?.endLine, 33);
+    });
+  });
 });
