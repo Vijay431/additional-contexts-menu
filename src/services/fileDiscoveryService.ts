@@ -212,10 +212,20 @@ class LRUCache<K, V> {
 export class FileDiscoveryService {
   private static instance: FileDiscoveryService;
   private logger: Logger;
-  private fileCache = new Map<string, CompatibleFile[]>();
+  private fileCache: LRUCache<string, CompatibleFile[]>;
+  private cacheConfig: CacheConfig;
 
   private constructor() {
     this.logger = Logger.getInstance();
+    this.cacheConfig = {
+      enabled: true,
+      maxSize: 100,
+      ttl: 300000, // 5 minutes in milliseconds
+    };
+    this.fileCache = new LRUCache<string, CompatibleFile[]>(
+      this.cacheConfig.maxSize,
+      this.logger,
+    );
   }
 
   public static getInstance(): FileDiscoveryService {
@@ -232,16 +242,23 @@ export class FileDiscoveryService {
     }
 
     const cacheKey = `${workspaceFolder.uri.fsPath}:${sourceExtension}`;
-    if (this.fileCache.has(cacheKey)) {
-      return this.fileCache.get(cacheKey)!;
+
+    // Try to get from cache
+    const cachedFiles = this.fileCache.get(cacheKey);
+    if (cachedFiles !== undefined) {
+      this.logger.debug(`Cache hit for ${sourceExtension} files`);
+      return cachedFiles;
     }
 
+    // Cache miss - scan workspace
     try {
       const compatibleFiles = await this.scanWorkspaceForCompatibleFiles(
         workspaceFolder,
         sourceExtension,
       );
-      this.fileCache.set(cacheKey, compatibleFiles);
+
+      // Store in cache with TTL
+      this.fileCache.set(cacheKey, compatibleFiles, this.cacheConfig.ttl);
 
       this.logger.debug(
         `Found ${compatibleFiles.length} compatible files for extension ${sourceExtension}`,
