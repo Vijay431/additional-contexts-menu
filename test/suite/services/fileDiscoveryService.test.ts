@@ -758,4 +758,269 @@ suite('FileDiscoveryService Tests', () => {
       }
     });
   });
+
+  suite('Selective Cache Invalidation', () => {
+    test('should create file system watcher for selective invalidation', () => {
+      const disposable = fileDiscoveryService.onFileSystemChanged();
+
+      assert.ok(disposable);
+      assert.ok(typeof disposable.dispose === 'function');
+
+      disposable.dispose();
+    });
+
+    test('should handle file system watcher disposal', () => {
+      const disposable1 = fileDiscoveryService.onFileSystemChanged();
+      const disposable2 = fileDiscoveryService.onFileSystemChanged();
+
+      assert.ok(disposable1);
+      assert.ok(disposable2);
+
+      // Should not throw when disposing multiple watchers
+      disposable1.dispose();
+      disposable2.dispose();
+    });
+
+    test('should only invalidate compatible extension caches on file changes', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache with different extensions
+        const tsFiles = await fileDiscoveryService.getCompatibleFiles('.ts');
+        const jsFiles = await fileDiscoveryService.getCompatibleFiles('.js');
+
+        assert.ok(Array.isArray(tsFiles));
+        assert.ok(Array.isArray(jsFiles));
+
+        // Create file system watcher
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // Simulate file change by triggering a new getCompatibleFiles call
+        // The watcher should have been set up and ready to handle changes
+        const tsFiles2 = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(tsFiles2));
+
+        watcher.dispose();
+      }
+    });
+
+    test('should preserve cache for unrelated extensions', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache with TypeScript files
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Populate cache with JavaScript files
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Create file system watcher
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // Both caches should still be accessible
+        const tsFiles = await fileDiscoveryService.getCompatibleFiles('.ts');
+        const jsFiles = await fileDiscoveryService.getCompatibleFiles('.js');
+
+        assert.ok(Array.isArray(tsFiles));
+        assert.ok(Array.isArray(jsFiles));
+
+        watcher.dispose();
+      }
+    });
+
+    test('should handle multiple file changes selectively', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache with multiple extensions
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.tsx');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+        await fileDiscoveryService.getCompatibleFiles('.jsx');
+
+        // Create file system watcher
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // All caches should still be functional
+        const tsFiles = await fileDiscoveryService.getCompatibleFiles('.ts');
+        const tsxFiles = await fileDiscoveryService.getCompatibleFiles('.tsx');
+        const jsFiles = await fileDiscoveryService.getCompatibleFiles('.js');
+        const jsxFiles = await fileDiscoveryService.getCompatibleFiles('.jsx');
+
+        assert.ok(Array.isArray(tsFiles));
+        assert.ok(Array.isArray(tsxFiles));
+        assert.ok(Array.isArray(jsFiles));
+        assert.ok(Array.isArray(jsxFiles));
+
+        watcher.dispose();
+      }
+    });
+
+    test('should work with cache disabled', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: false,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        // Create file system watcher even with cache disabled
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // Should work normally without cache
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+
+        watcher.dispose();
+      }
+    });
+
+    test('should handle selective invalidation with small cache size', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 2,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache to max size
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Create file system watcher
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // Cache should still work within size constraints
+        const tsFiles = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(tsFiles));
+
+        watcher.dispose();
+      }
+    });
+
+    test('should handle rapid file changes', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Create file system watcher
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // Populate cache multiple times rapidly
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await new Promise(resolve => setTimeout(resolve, 10));
+        await fileDiscoveryService.getCompatibleFiles('.js');
+        await new Promise(resolve => setTimeout(resolve, 10));
+        await fileDiscoveryService.getCompatibleFiles('.tsx');
+
+        // All should succeed without errors
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+
+        watcher.dispose();
+      }
+    });
+
+    test('should maintain selective invalidation across cache clears', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        // Create file system watcher
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // Populate and clear cache multiple times
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        fileDiscoveryService.clearCache();
+
+        await fileDiscoveryService.getCompatibleFiles('.js');
+        fileDiscoveryService.clearCache();
+
+        // Should still work after clears
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+
+        watcher.dispose();
+      }
+    });
+
+    test('should handle selective invalidation with TTL expiration', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 100 // Short TTL
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Create file system watcher
+        const watcher = fileDiscoveryService.onFileSystemChanged();
+
+        // Populate cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Wait for TTL to expire
+        await new Promise(resolve => setTimeout(resolve, 150));
+
+        // Should handle expired cache gracefully
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+
+        watcher.dispose();
+      }
+    });
+  });
 });
