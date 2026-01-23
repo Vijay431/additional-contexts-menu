@@ -59,10 +59,35 @@ export class CodeAnalysisService {
     position: vscode.Position,
   ): Promise<FunctionInfo | null> {
     try {
+      const cacheKey = this.generateCacheKey(document);
+
+      // Check cache first
+      if (this.documentCache.has(cacheKey)) {
+        const functions = this.documentCache.get(cacheKey)!;
+
+        const containingFunction = functions.find((func) =>
+          this.isPositionInFunction(position, func, document),
+        );
+
+        if (containingFunction) {
+          this.logger.debug('Function found at position (cached)', {
+            name: containingFunction.name,
+            type: containingFunction.type,
+            line: containingFunction.startLine,
+          });
+        }
+
+        return containingFunction ?? null;
+      }
+
+      // Not in cache, compute and store
       const text = document.getText();
 
       // Find all functions in the document
       const functions = this.findAllFunctions(text, document.languageId);
+
+      // Cache the results
+      this.documentCache.set(cacheKey, functions);
 
       // Find the function that contains the cursor position
       const containingFunction = functions.find((func) =>
