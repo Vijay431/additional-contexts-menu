@@ -90,30 +90,53 @@ export class FileSaveService {
   }
 
   private async getUnsavedFiles(): Promise<vscode.TextDocument[]> {
-    const unsavedFiles: vscode.TextDocument[] = [];
+    // Filter all dirty non-untitled documents first
+    const dirtyDocuments = vscode.workspace.textDocuments.filter(
+      (document) => document.isDirty && !document.isUntitled,
+    );
 
-    // Get all open text documents
-    for (const document of vscode.workspace.textDocuments) {
-      if (document.isDirty && !document.isUntitled) {
-        // Skip read-only files if configured to do so
-        if (this.configService.getSaveAllConfig().skipReadOnly) {
-          const uri = document.uri;
-          if (uri.scheme === 'file') {
-            try {
-              // Check if file exists and is writable
-              await fs.access(uri.fsPath, constants.F_OK | constants.W_OK);
-              unsavedFiles.push(document);
-            } catch (error) {
-              this.logger.warn(`Skipping read-only file: ${document.fileName}`, error);
-            }
-          }
-        } else {
-          unsavedFiles.push(document);
-        }
-      }
+    // If not skipping read-only files, return all dirty documents
+    if (!this.configService.getSaveAllConfig().skipReadOnly) {
+      return dirtyDocuments;
     }
 
-    return unsavedFiles;
+    // Separate file-scheme documents from non-file documents
+    const fileDocuments = dirtyDocuments.filter(
+      (document) => document.uri.scheme === 'file',
+    );
+
+    const nonFileDocuments = dirtyDocuments.filter(
+      (document) => document.uri.scheme !== 'file',
+    );
+
+    // Run fs.access() checks in parallel for better performance
+    const accessChecks = await Promise.allSettled(
+      fileDocuments.map(async (document) => {
+        try {
+          await fs.access(document.uri.fsPath, constants.F_OK | constants.W_OK);
+          return { document, accessible: true };
+        } catch (error) {
+          this.logger.warn(`Skipping read-only file: ${document.fileName}`, error);
+          return { document, accessible: false };
+        }
+      }),
+    );
+
+    // Collect accessible files
+    const accessibleFiles = accessChecks
+      .filter(
+        (
+          result,
+        ): result is PromiseFulfilledResult<{
+          document: vscode.TextDocument;
+          accessible: boolean;
+        }> =>
+          result.status === 'fulfilled' && result.value.accessible,
+      )
+      .map((result) => result.value.document);
+
+    // Combine accessible files with non-file documents
+    return [...accessibleFiles, ...nonFileDocuments];
   }
 
   private async saveFile(document: vscode.TextDocument): Promise<boolean> {
