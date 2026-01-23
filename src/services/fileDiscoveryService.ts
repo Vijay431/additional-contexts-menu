@@ -24,11 +24,22 @@ class LRUCache<K, V> {
 
   /**
    * Get a value from the cache. Updates access tracking for LRU eviction.
-   * Returns undefined if the key doesn't exist.
+   * Returns undefined if the key doesn't exist or has expired.
    */
   public get(key: K): V | undefined {
     const entry = this.cache.get(key);
     if (!entry) {
+      return undefined;
+    }
+
+    // Check if entry has expired
+    if (this.isExpired(entry)) {
+      this.cache.delete(key);
+      this.logger.debug('LRU cache entry expired and removed', {
+        key: String(key),
+        createdAt: new Date(entry.createdAt).toISOString(),
+        ttl: entry.ttl,
+      });
       return undefined;
     }
 
@@ -41,6 +52,7 @@ class LRUCache<K, V> {
 
   /**
    * Set a value in the cache. Enforces size limit by evicting least recently used entries.
+   * Also cleans up expired entries before adding new ones.
    */
   public set(key: K, value: V, ttl?: number): void {
     const now = Date.now();
@@ -56,6 +68,9 @@ class LRUCache<K, V> {
       }
       return;
     }
+
+    // Clean up expired entries before adding new one
+    this.cleanupExpired();
 
     // Check if we need to evict entries before adding new one
     if (this.cache.size >= this.maxSize) {
@@ -74,10 +89,26 @@ class LRUCache<K, V> {
   }
 
   /**
-   * Check if a key exists in the cache.
+   * Check if a key exists in the cache and has not expired.
    */
   public has(key: K): boolean {
-    return this.cache.has(key);
+    const entry = this.cache.get(key);
+    if (!entry) {
+      return false;
+    }
+
+    // Check if entry has expired
+    if (this.isExpired(entry)) {
+      this.cache.delete(key);
+      this.logger.debug('LRU cache entry expired and removed during has check', {
+        key: String(key),
+        createdAt: new Date(entry.createdAt).toISOString(),
+        ttl: entry.ttl,
+      });
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -132,6 +163,46 @@ class LRUCache<K, V> {
         this.logger.debug('LRU cache evicted least recently used entry', {
           key: String(lruKey),
           lastAccessedAt: new Date(lruTime).toISOString(),
+        });
+      }
+    }
+  }
+
+  /**
+   * Check if a cache entry has expired based on its TTL.
+   * An entry expires if the current time is greater than createdAt + ttl.
+   */
+  private isExpired(entry: LRUCacheEntry<V>): boolean {
+    if (entry.ttl === undefined) {
+      return false;
+    }
+    const now = Date.now();
+    const expirationTime = entry.createdAt + entry.ttl;
+    return now > expirationTime;
+  }
+
+  /**
+   * Remove all expired entries from the cache.
+   * This is called automatically during set operations and can be called manually.
+   */
+  public cleanupExpired(): void {
+    const expiredKeys: K[] = [];
+    const entries = Array.from(this.cache.entries());
+
+    for (const [key, entry] of entries) {
+      if (this.isExpired(entry)) {
+        expiredKeys.push(key);
+      }
+    }
+
+    for (const key of expiredKeys) {
+      const entry = this.cache.get(key);
+      this.cache.delete(key);
+      if (entry) {
+        this.logger.debug('LRU cache cleaned up expired entry', {
+          key: String(key),
+          createdAt: new Date(entry.createdAt).toISOString(),
+          ttl: entry.ttl,
         });
       }
     }
