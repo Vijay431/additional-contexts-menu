@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { TerminalService } from '../../../src/services/terminalService';
 import { ConfigurationService } from '../../../src/services/configurationService';
+import { CodeAnalysisService } from '../../../src/services/codeAnalysisService';
 import { Logger } from '../../../src/utils/logger';
 import { VSCodeMocks, MockConfigurationService, TestConfigFactory, TestDataFactory } from './testMocks';
 import { ExtensionConfig } from '../../../src/types/extension';
@@ -220,6 +221,9 @@ export class TestSetup {
 
     // Clear Logger singleton
     (Logger as any).instance = null;
+
+    // Clear CodeAnalysisService singleton
+    (CodeAnalysisService as any).instance = null;
   }
 
   /**
@@ -268,6 +272,19 @@ export class TestSetup {
 
     // Initialize it
     service.initialize();
+
+    return service;
+  }
+
+  /**
+   * Create a fresh CodeAnalysisService instance for testing
+   */
+  public static createCodeAnalysisService(): CodeAnalysisService {
+    // Clear existing singleton
+    (CodeAnalysisService as any).instance = null;
+
+    // Get new instance which will use mocked dependencies
+    const service = CodeAnalysisService.getInstance();
 
     return service;
   }
@@ -394,5 +411,54 @@ export class TestHelpers {
     if (expectedMessage && !message.includes(expectedMessage)) {
       throw new Error(`Expected message to contain '${expectedMessage}', but got '${message}'`);
     }
+  }
+
+  /**
+   * Create a mock document for testing
+   */
+  public static createMockDocument(content: string, languageId: string, uri?: vscode.Uri): vscode.TextDocument {
+    const mockUri = uri || vscode.Uri.file(`/test/${languageId}`);
+    const lines = content.split('\n');
+
+    const document: any = {
+      uri: mockUri,
+      languageId,
+      fileName: mockUri.fsPath,
+      version: 1,
+      isDirty: false,
+      isUntitled: false,
+      isClosed: false,
+      lineCount: lines.length,
+      getText: () => content,
+      getWordRangeAtPosition: () => undefined,
+      validateRange: (range: vscode.Range) => range,
+      validatePosition: (position: vscode.Position) => position,
+      offsetAt: () => 0,
+      positionAt: () => new vscode.Position(0, 0),
+      getTextRange: (range: vscode.Range) => {
+        const startLine = lines[range.start.line] || '';
+        const endLine = lines[range.end.line] || '';
+        if (range.start.line === range.end.line) {
+          return startLine.substring(range.start.character, range.end.character);
+        }
+        return startLine.substring(range.start.character) + '\n' + endLine.substring(0, range.end.character);
+      },
+      lineAt: (lineOrPos: number | vscode.Position) => {
+        const line = typeof lineOrPos === 'number' ? lineOrPos : lineOrPos.line;
+        const text = lines[line] || '';
+        return {
+          lineNumber: line,
+          text,
+          range: new vscode.Range(line, 0, line, text.length),
+          firstNonWhitespaceCharacterIndex: text.search(/\S/),
+          isEmptyOrWhitespace: !text.trim()
+        };
+      },
+      getLine: (line: number) => lines[line] || '',
+      save: () => Promise.resolve(),
+      openEditor: () => Promise.resolve(undefined)
+    };
+
+    return document;
   }
 }

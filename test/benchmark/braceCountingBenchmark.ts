@@ -380,11 +380,11 @@ export function main(): void {
   };
 
   // Allow configuration via environment variables
-  if (process.env.BENCHMARK_ITERATIONS) {
-    config.iterations = parseInt(process.env.BENCHMARK_ITERATIONS, 10);
+  if (process.env['BENCHMARK_ITERATIONS']) {
+    config.iterations = parseInt(process.env['BENCHMARK_ITERATIONS'] || '100', 10);
   }
-  if (process.env.BENCHMARK_WARMUP) {
-    config.warmupRuns = parseInt(process.env.BENCHMARK_WARMUP, 10);
+  if (process.env['BENCHMARK_WARMUP']) {
+    config.warmupRuns = parseInt(process.env['BENCHMARK_WARMUP'] || '10', 10);
   }
 
   try {
