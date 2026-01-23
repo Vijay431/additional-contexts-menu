@@ -208,10 +208,7 @@ export class FileSaveService {
           (error: unknown) => {
             this.logger.error('Error showing warning message', error);
           },
-        )
-        .catch((error: unknown) => {
-          this.logger.error('Unexpected error in warning message handling', error);
-        });
+        );
     }
   }
 

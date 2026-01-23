@@ -215,6 +215,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "rm -rf dist && npm run build && npm run create-minimal && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
+    "test:unit": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && node ./dist/test/suite/runUnitTests.js",
     "test:full": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && SKIP_OPTIMIZATION=true node ./dist/test/e2e/runE2ETest.js",
     "test:minimal": "npm test",
     "test:clean": "rm -rf .vscode-test/minimal-extension .vscode-test/user-data-isolated .vscode-test/user-data-dev",

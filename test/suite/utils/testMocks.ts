@@ -164,6 +164,7 @@ export class VSCodeMocks {
   public terminals: MockTerminal[] = [];
   public workspaceFolders: MockWorkspaceFolder[] = [];
   public fileSystem: Map<string, MockFileStat> = new Map();
+  public filePermissions: Map<string, { canRead: boolean; canWrite: boolean }> = new Map();
 
   private constructor() {}
 
@@ -179,6 +180,7 @@ export class VSCodeMocks {
     instance.terminals = [];
     instance.workspaceFolders = [];
     instance.fileSystem.clear();
+    instance.filePermissions.clear();
   }
 
   // Mock window methods
@@ -245,6 +247,39 @@ export class VSCodeMocks {
 
   public getLastCreatedTerminal(): MockTerminal | undefined {
     return this.terminals[this.terminals.length - 1];
+  }
+
+  public setFilePermissions(path: string, canRead: boolean, canWrite: boolean): void {
+    this.filePermissions.set(path, { canRead, canWrite });
+  }
+
+  public getFilePermissions(path: string): { canRead: boolean; canWrite: boolean } | undefined {
+    return this.filePermissions.get(path);
+  }
+
+  public canAccessFile(path: string, mode: number): boolean {
+    const permissions = this.filePermissions.get(path);
+    if (!permissions) {
+      // Default to full access if not set
+      return true;
+    }
+
+    // Check based on mode constants from fs
+    const F_OK = 0; // File exists
+    const R_OK = 4; // Readable
+    const W_OK = 2; // Writable
+
+    if (mode === F_OK) {
+      return permissions.canRead || permissions.canWrite;
+    } else if (mode === R_OK) {
+      return permissions.canRead;
+    } else if (mode === W_OK) {
+      return permissions.canWrite;
+    } else if (mode === (R_OK | W_OK)) {
+      return permissions.canRead && permissions.canWrite;
+    }
+
+    return false;
   }
 }
 

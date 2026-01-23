@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs/promises';
 import { TerminalService } from '../../../src/services/terminalService';
+import { FileSaveService } from '../../../src/services/fileSaveService';
 import { ConfigurationService } from '../../../src/services/configurationService';
 import { Logger } from '../../../src/utils/logger';
 import { VSCodeMocks, MockConfigurationService, TestConfigFactory, TestDataFactory } from './testMocks';
@@ -38,6 +40,9 @@ export class TestSetup {
 
     // Mock ConfigurationService
     TestSetup.mockConfigurationService();
+
+    // Mock fs module for file access checks
+    TestSetup.mockFsAccess();
 
     // Suppress logger output during tests
     TestSetup.mockLogger();
@@ -160,6 +165,27 @@ export class TestSetup {
   }
 
   /**
+   * Mock fs.access for file permission checks
+   */
+  private static mockFsAccess(): void {
+    // Store original method
+    const originalAccess = (fs as any).access;
+    originalMethods.set('fs.access', originalAccess);
+
+    // Mock fs.access to use our permission system
+    (fs as any).access = (path: string, mode: number) => {
+      const vscMocks = TestSetup.vscMocks;
+      const canAccess = vscMocks.canAccessFile(path, mode);
+
+      if (!canAccess) {
+        throw new Error(`EACCES: permission denied, access '${path}'`);
+      }
+
+      return Promise.resolve();
+    };
+  }
+
+  /**
    * Restore all original methods
    */
   private static restoreOriginalMethods(): void {
@@ -202,6 +228,11 @@ export class TestSetup {
             (Logger.prototype as any)[method] = originalMethod;
           }
           break;
+        case 'fs':
+          if (method && originalMethod) {
+            (fs as any)[method] = originalMethod;
+          }
+          break;
       }
     }
 
@@ -214,6 +245,9 @@ export class TestSetup {
   private static clearSingletons(): void {
     // Clear TerminalService singleton
     (TerminalService as any).instance = null;
+
+    // Clear FileSaveService singleton
+    (FileSaveService as any).instance = null;
 
     // Clear ConfigurationService singleton
     (ConfigurationService as any).instance = null;
@@ -270,6 +304,44 @@ export class TestSetup {
     service.initialize();
 
     return service;
+  }
+
+  /**
+   * Create a fresh FileSaveService instance for testing
+   */
+  public static createFileSaveService(): FileSaveService {
+    // Clear existing singleton
+    (FileSaveService as any).instance = null;
+
+    // Get new instance which will use mocked dependencies
+    const service = FileSaveService.getInstance();
+
+    return service;
+  }
+
+  /**
+   * Mock vscode.workspace.textDocuments for testing
+   */
+  public static mockTextDocuments(documents: vscode.TextDocument[]): void {
+    const workspace = vscode.workspace as any;
+
+    // Store original if not already stored
+    if (!originalMethods.has('workspace.textDocuments')) {
+      originalMethods.set('workspace.textDocuments', workspace.textDocuments);
+    }
+
+    // Mock textDocuments property
+    Object.defineProperty(workspace, 'textDocuments', {
+      get: () => documents,
+      configurable: true
+    });
+  }
+
+  /**
+   * Set file access permissions for testing
+   */
+  public static setFilePermissions(path: string, canRead: boolean, canWrite: boolean): void {
+    TestSetup.vscMocks.setFilePermissions(path, canRead, canWrite);
   }
 }
 
@@ -394,5 +466,47 @@ export class TestHelpers {
     if (expectedMessage && !message.includes(expectedMessage)) {
       throw new Error(`Expected message to contain '${expectedMessage}', but got '${message}'`);
     }
+  }
+
+  /**
+   * Create test scenario with skipReadOnly enabled
+   */
+  public static setupSkipReadOnlyEnabled(): FileSaveService {
+    TestSetup.setup({ saveAll: { showNotification: true, skipReadOnly: true } });
+    return TestSetup.createFileSaveService();
+  }
+
+  /**
+   * Create test scenario with skipReadOnly disabled
+   */
+  public static setupSkipReadOnlyDisabled(): FileSaveService {
+    TestSetup.setup({ saveAll: { showNotification: true, skipReadOnly: false } });
+    return TestSetup.createFileSaveService();
+  }
+
+  /**
+   * Create mock TextDocument for testing
+   */
+  public static createMockDocument(
+    fileName: string,
+    isDirty: boolean,
+    isUntitled: boolean = false,
+    scheme: string = 'file'
+  ): vscode.TextDocument {
+    return {
+      fileName,
+      uri: vscode.Uri.parse(`${scheme}://${fileName}`),
+      isDirty,
+      isUntitled,
+      languageId: 'typescript',
+      version: 1,
+      lineCount: 10,
+      getText: () => 'mock content',
+      getWordRangeAtPosition: () => undefined,
+      validateRange: () => undefined,
+      validatePosition: () => undefined,
+      save: () => Promise.resolve(true),
+      eol: vscode.EndOfLine.LF,
+    } as any;
   }
 }
