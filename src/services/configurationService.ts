@@ -57,6 +57,11 @@ export class ConfigurationService {
           'parent-directory',
         ),
       },
+      cache: {
+        enabled: config.get<boolean>('cache.enabled', true),
+        maxSize: config.get<number>('cache.maxSize', 100),
+        ttl: config.get<number>('cache.ttl', 300000),
+      },
     };
   }
 
@@ -78,6 +83,10 @@ export class ConfigurationService {
 
   public getSaveAllConfig() {
     return this.getConfiguration().saveAll;
+  }
+
+  public getCacheConfig() {
+    return this.getConfiguration().cache;
   }
 
   public onConfigurationChanged(callback: () => void): vscode.Disposable {

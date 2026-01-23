@@ -85,6 +85,11 @@ export interface ExtensionConfig {
     externalTerminalCommand?: string;
     openBehavior: 'parent-directory' | 'workspace-root' | 'current-directory';
   };
+  cache: {
+    enabled: boolean;
+    maxSize: number;
+    ttl: number;
+  };
 }
 
 export interface LRUCacheEntry<T> {
