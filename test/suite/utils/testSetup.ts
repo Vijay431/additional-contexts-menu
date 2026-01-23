@@ -96,8 +96,8 @@ export class TestSetup {
     const workspace = vscode.workspace as any;
 
     // Store original methods
-    originalMethods.set('workspace.workspaceFolders', workspace.workspaceFolders);
-    originalMethods.set('workspace.fs.stat', workspace.fs?.stat);
+    originalMethods.set('workspace.workspaceFolders', Object.getOwnPropertyDescriptor(workspace, 'workspaceFolders'));
+    originalMethods.set('workspace.fs', Object.getOwnPropertyDescriptor(workspace, 'fs'));
 
     // Mock workspaceFolders
     Object.defineProperty(workspace, 'workspaceFolders', {
@@ -105,13 +105,15 @@ export class TestSetup {
       configurable: true
     });
 
-    // Mock file system
-    if (!workspace.fs) {
-      workspace.fs = {};
-    }
-    workspace.fs.stat = (uri: vscode.Uri) => {
-      return TestSetup.vscMocks.stat(uri);
-    };
+    // Mock file system - use Object.defineProperty to handle readonly properties
+    const originalFs = workspace.fs;
+    Object.defineProperty(workspace, 'fs', {
+      get: () => ({
+        ...originalFs,
+        stat: (uri: vscode.Uri) => TestSetup.vscMocks.stat(uri)
+      }),
+      configurable: true
+    });
   }
 
   /**
@@ -163,43 +165,40 @@ export class TestSetup {
    * Restore all original methods
    */
   private static restoreOriginalMethods(): void {
-    for (const [key, originalMethod] of originalMethods.entries()) {
+    for (const [key, originalDescriptor] of originalMethods.entries()) {
       const parts = key.split('.');
       if (parts.length < 2) continue;
 
-      const [object, method] = parts;
-      if (!object || !method) continue;
+      const [object, property] = parts;
+      if (!object || !property) continue;
 
       switch (object) {
         case 'window':
-          if (method === 'terminals') {
+          if (property === 'terminals') {
             delete (vscode.window as any).terminals;
-          } else if (originalMethod) {
-            (vscode.window as any)[method] = originalMethod;
+          } else if (originalDescriptor) {
+            Object.defineProperty(vscode.window, property, originalDescriptor);
           }
           break;
         case 'workspace':
-          if (method === 'workspaceFolders') {
-            delete (vscode.workspace as any).workspaceFolders;
-          } else if (method && method.startsWith('fs.')) {
-            const fsMethod = method.replace('fs.', '');
-            if (vscode.workspace.fs && originalMethod) {
-              (vscode.workspace.fs as any)[fsMethod] = originalMethod;
+          if (property === 'workspaceFolders' || property === 'fs') {
+            if (originalDescriptor) {
+              Object.defineProperty(vscode.workspace, property, originalDescriptor);
+            } else {
+              delete (vscode.workspace as any)[property];
             }
-          } else if (originalMethod) {
-            (vscode.workspace as any)[method] = originalMethod;
           }
           break;
         case 'ConfigurationService':
-          if (method === 'getInstance' && originalMethod) {
-            (ConfigurationService as any).getInstance = originalMethod;
-          } else if (originalMethod) {
-            (ConfigurationService.prototype as any)[method] = originalMethod;
+          if (property === 'getInstance' && originalDescriptor) {
+            (ConfigurationService as any).getInstance = originalDescriptor.value || originalDescriptor;
+          } else if (originalDescriptor) {
+            Object.defineProperty(ConfigurationService.prototype, property, originalDescriptor);
           }
           break;
         case 'Logger':
-          if (originalMethod) {
-            (Logger.prototype as any)[method] = originalMethod;
+          if (originalDescriptor) {
+            Object.defineProperty(Logger.prototype, property, originalDescriptor);
           }
           break;
       }
