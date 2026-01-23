@@ -231,21 +231,56 @@ export class CodeAnalysisService {
       return { endLine: startIndex + 1, endColumn: lines[startIndex]?.length ?? 0 };
     }
 
-    // Track braces to find function end
+    // Track braces to find function end using indexOf for better performance
     for (let i = startIndex; i < lines.length; i++) {
       const line = lines[i];
 
       if (line) {
-        for (let j = 0; j < line.length; j++) {
-          if (line[j] === '{') {
+        let searchPos = 0;
+        while (searchPos < line.length) {
+          // Find next opening or closing brace
+          const openBracePos = line.indexOf('{', searchPos);
+          const closeBracePos = line.indexOf('}', searchPos);
+
+          // Determine which brace comes first (or if any exist)
+          let nextBracePos = -1;
+          let isOpenBrace = false;
+
+          if (openBracePos !== -1 && closeBracePos !== -1) {
+            // Both braces exist, use the closer one
+            if (openBracePos < closeBracePos) {
+              nextBracePos = openBracePos;
+              isOpenBrace = true;
+            } else {
+              nextBracePos = closeBracePos;
+              isOpenBrace = false;
+            }
+          } else if (openBracePos !== -1) {
+            nextBracePos = openBracePos;
+            isOpenBrace = true;
+          } else if (closeBracePos !== -1) {
+            nextBracePos = closeBracePos;
+            isOpenBrace = false;
+          }
+
+          if (nextBracePos === -1) {
+            // No more braces in this line
+            break;
+          }
+
+          // Process the brace we found
+          if (isOpenBrace) {
             braceCount++;
             foundFirstBrace = true;
-          } else if (line[j] === '}') {
+          } else {
             braceCount--;
             if (foundFirstBrace && braceCount === 0) {
-              return { endLine: i + 1, endColumn: j + 1 };
+              return { endLine: i + 1, endColumn: nextBracePos + 1 };
             }
           }
+
+          // Move search position past this brace
+          searchPos = nextBracePos + 1;
         }
       }
 
