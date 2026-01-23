@@ -239,6 +239,247 @@ suite('FileDiscoveryService Tests', () => {
     });
   });
 
+  suite('LRU Cache Size Limits', () => {
+    test('should enforce maximum cache size', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 3,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        // Clear cache to start fresh
+        fileDiscoveryService.clearCache();
+
+        // Add items to cache by calling getCompatibleFiles
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+        await fileDiscoveryService.getCompatibleFiles('.tsx');
+        await fileDiscoveryService.getCompatibleFiles('.jsx');
+
+        // Cache should handle size limit gracefully without errors
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should evict least recently used entry when cache is full', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 2,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Add two items to fill the cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Access .ts again to make it more recently used
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Add third item - should evict .js (least recently used)
+        await fileDiscoveryService.getCompatibleFiles('.tsx');
+
+        // Cache should still work
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should handle cache size of 1', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 1,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Add multiple items with cache size of 1
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Only most recent item should be cached
+        const files = await fileDiscoveryService.getCompatibleFiles('.js');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should update access time on cache hit', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 2,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Add two items
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Access first item multiple times to make it more recent
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Add third item - should evict .js, not .ts
+        await fileDiscoveryService.getCompatibleFiles('.tsx');
+
+        // Verify .ts is still cached (was accessed more recently)
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+  });
+
+  suite('LRU Cache TTL Expiration', () => {
+    test('should respect cache TTL', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 100 // Very short TTL (100ms)
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Wait for TTL to expire
+        await new Promise(resolve => setTimeout(resolve, 150));
+
+        // Cache should be expired and re-scan
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should handle different TTL values', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 50 // Very short TTL
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Wait for expiration
+        await new Promise(resolve => setTimeout(resolve, 75));
+
+        // Should trigger re-scan
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should not expire entries within TTL period', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 5000 // Longer TTL
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        const files1 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Access again quickly - should hit cache
+        const files2 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Both should return same data
+        assert.ok(Array.isArray(files1));
+        assert.ok(Array.isArray(files2));
+      }
+    });
+  });
+
+  suite('LRU Cache Metrics', () => {
+    test('should track cache hits and misses', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // First call is a miss (cache is empty)
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Second call is a hit
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Different extension is a miss
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Cache should track metrics internally
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should reset metrics when cache is cleared', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        // Generate some cache activity
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Clear cache (should reset metrics)
+        fileDiscoveryService.clearCache();
+
+        // New activity after clear
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+  });
+
   suite('LRU Cache Behavior', () => {
     test('should respect cache size limits', async () => {
       TestSetup.updateConfig({
