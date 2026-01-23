@@ -36,6 +36,9 @@ export class TestSetup {
     // Mock vscode.workspace methods
     TestSetup.mockVSCodeWorkspace();
 
+    // Mock vscode.commands
+    TestSetup.mockVSCodeCommands();
+
     // Mock ConfigurationService
     TestSetup.mockConfigurationService();
 
@@ -115,6 +118,21 @@ export class TestSetup {
   }
 
   /**
+   * Mock VS Code commands
+   */
+  private static mockVSCodeCommands(): void {
+    const commands = vscode.commands as any;
+
+    // Store original method
+    originalMethods.set('commands.executeCommand', commands.executeCommand);
+
+    // Mock executeCommand
+    commands.executeCommand = (command: string, ...args: any[]) => {
+      return TestSetup.vscMocks.executeCommand(command, ...args);
+    };
+  }
+
+  /**
    * Mock ConfigurationService
    */
   private static mockConfigurationService(): void {
@@ -190,6 +208,11 @@ export class TestSetup {
             (vscode.workspace as any)[method] = originalMethod;
           }
           break;
+        case 'commands':
+          if (originalMethod) {
+            (vscode.commands as any)[method] = originalMethod;
+          }
+          break;
         case 'ConfigurationService':
           if (method === 'getInstance' && originalMethod) {
             (ConfigurationService as any).getInstance = originalMethod;
@@ -220,6 +243,10 @@ export class TestSetup {
 
     // Clear Logger singleton
     (Logger as any).instance = null;
+
+    // Clear ProjectDetectionService singleton
+    const { ProjectDetectionService } = require('../../../src/services/projectDetectionService');
+    (ProjectDetectionService as any).instance = null;
   }
 
   /**
@@ -270,6 +297,18 @@ export class TestSetup {
     service.initialize();
 
     return service;
+  }
+
+  /**
+   * Create a fresh ProjectDetectionService instance for testing
+   */
+  public static createProjectDetectionService() {
+    // Clear existing singleton
+    const { ProjectDetectionService } = require('../../../src/services/projectDetectionService');
+    (ProjectDetectionService as any).instance = null;
+
+    // Get new instance which will use mocked dependencies
+    return ProjectDetectionService.getInstance();
   }
 }
 

@@ -164,6 +164,7 @@ export class VSCodeMocks {
   public terminals: MockTerminal[] = [];
   public workspaceFolders: MockWorkspaceFolder[] = [];
   public fileSystem: Map<string, MockFileStat> = new Map();
+  public executeCommandCalls: Array<{ key: string; value: any }> = [];
 
   private constructor() {}
 
@@ -179,6 +180,7 @@ export class VSCodeMocks {
     instance.terminals = [];
     instance.workspaceFolders = [];
     instance.fileSystem.clear();
+    instance.executeCommandCalls = [];
   }
 
   // Mock window methods
@@ -245,6 +247,31 @@ export class VSCodeMocks {
 
   public getLastCreatedTerminal(): MockTerminal | undefined {
     return this.terminals[this.terminals.length - 1];
+  }
+
+  // Mock commands methods
+  public executeCommand(command: string, ...args: any[]): Promise<any> {
+    // Track setContext calls
+    if (command === 'setContext') {
+      this.executeCommandCalls.push({
+        key: args[0],
+        value: args[1]
+      });
+    }
+    return Promise.resolve(undefined);
+  }
+
+  public getExecuteCommandCalls(): Array<{ key: string; value: any }> {
+    return this.executeCommandCalls;
+  }
+
+  public getContextValue(key: string): any {
+    const call = this.executeCommandCalls.find(c => c.key === key);
+    return call ? call.value : undefined;
+  }
+
+  public clearExecuteCommandCalls(): void {
+    this.executeCommandCalls = [];
   }
 }
 
