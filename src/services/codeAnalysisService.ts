@@ -357,4 +357,21 @@ export class CodeAnalysisService {
     this.documentCache.clear();
     this.logger.debug('Code analysis cache cleared');
   }
+
+  public onDocumentChanged(): vscode.Disposable {
+    // Clear cache when text documents change
+    return vscode.workspace.onDidChangeTextDocument((event) => {
+      // Clear cache for the specific document that changed
+      const changedUri = event.document.uri.toString();
+
+      // Remove all cache entries for this document (across all versions)
+      for (const [key] of this.documentCache) {
+        if (key.startsWith(changedUri)) {
+          this.documentCache.delete(key);
+        }
+      }
+
+      this.logger.debug(`Code analysis cache cleared for document: ${changedUri}`);
+    });
+  }
 }
