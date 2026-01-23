@@ -222,6 +222,13 @@ export class CodeAnalysisService {
     let endLine = startIndex + 1;
     let endColumn = 0;
 
+    // Track context for edge cases
+    let inSingleLineComment = false;
+    let inMultiLineComment = false;
+    let inSingleQuoteString = false;
+    let inDoubleQuoteString = false;
+    let inTemplateLiteral = false;
+
     // For arrow functions, look for the opening brace or single expression
     const startLine = lines[startIndex];
     const isArrowFunction = startLine?.includes('=>');
@@ -237,7 +244,67 @@ export class CodeAnalysisService {
 
       if (line) {
         let searchPos = 0;
+        // Reset single-line comment flag at the start of each line
+        inSingleLineComment = false;
+
         while (searchPos < line.length) {
+          // Check for comment/string starts before looking for braces
+          if (!inSingleLineComment && !inMultiLineComment &&
+              !inSingleQuoteString && !inDoubleQuoteString && !inTemplateLiteral) {
+            // Check for single-line comment
+            if (line.substr(searchPos, 2) === '//') {
+              inSingleLineComment = true;
+              break; // Skip rest of line
+            }
+            // Check for multi-line comment start
+            if (line.substr(searchPos, 2) === '/*') {
+              inMultiLineComment = true;
+              searchPos += 2;
+              continue;
+            }
+            // Check for multi-line comment end
+            if (inMultiLineComment && line.substr(searchPos, 2) === '*/') {
+              inMultiLineComment = false;
+              searchPos += 2;
+              continue;
+            }
+            // Check for string start
+            if (line[searchPos] === "'") {
+              inSingleQuoteString = true;
+              searchPos++;
+              continue;
+            }
+            if (line[searchPos] === '"') {
+              inDoubleQuoteString = true;
+              searchPos++;
+              continue;
+            }
+            if (line[searchPos] === '`') {
+              inTemplateLiteral = true;
+              searchPos++;
+              continue;
+            }
+          } else if (inSingleQuoteString && line[searchPos] === "'" && !this.isEscaped(line, searchPos)) {
+            inSingleQuoteString = false;
+            searchPos++;
+            continue;
+          } else if (inDoubleQuoteString && line[searchPos] === '"' && !this.isEscaped(line, searchPos)) {
+            inDoubleQuoteString = false;
+            searchPos++;
+            continue;
+          } else if (inTemplateLiteral && line[searchPos] === '`' && !this.isEscaped(line, searchPos)) {
+            inTemplateLiteral = false;
+            searchPos++;
+            continue;
+          }
+
+          // Skip braces inside strings, comments, or template literals
+          if (inSingleLineComment || inMultiLineComment ||
+              inSingleQuoteString || inDoubleQuoteString || inTemplateLiteral) {
+            searchPos++;
+            continue;
+          }
+
           // Find next opening or closing brace
           const openBracePos = line.indexOf('{', searchPos);
           const closeBracePos = line.indexOf('}', searchPos);
@@ -289,6 +356,19 @@ export class CodeAnalysisService {
     }
 
     return { endLine, endColumn };
+  }
+
+  /**
+   * Check if a character at position is escaped (preceded by backslash)
+   */
+  private isEscaped(line: string, pos: number): boolean {
+    let backslashCount = 0;
+    let i = pos - 1;
+    while (i >= 0 && line[i] === '\\') {
+      backslashCount++;
+      i--;
+    }
+    return backslashCount % 2 === 1;
   }
 
   private isPositionInFunction(
