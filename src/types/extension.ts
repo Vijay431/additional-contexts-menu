@@ -94,3 +94,9 @@ export interface LRUCacheEntry<T> {
   accessCount: number;
   ttl?: number;
 }
+
+export interface CacheConfig {
+  enabled: boolean;
+  maxSize: number;
+  ttl: number;
+}
