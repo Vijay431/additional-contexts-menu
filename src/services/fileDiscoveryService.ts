@@ -46,10 +46,14 @@ class LRUCache<K, V> {
     if (this.isExpired(entry)) {
       this.cache.delete(key);
       this.misses++;
-      this.logger.debug('LRU cache miss (expired entry)', {
+      const timeSinceCreation = Date.now() - entry.createdAt;
+      const timeSinceExpiration = timeSinceCreation - (entry.ttl ?? 0);
+      this.logger.debug('LRU cache miss - expired entry removed', {
         key: String(key),
         createdAt: new Date(entry.createdAt).toISOString(),
         ttl: entry.ttl,
+        timeSinceCreation,
+        timeSinceExpiration,
         totalMisses: this.misses,
       });
       return undefined;
@@ -82,9 +86,16 @@ class LRUCache<K, V> {
       entry.value = value;
       entry.lastAccessedAt = now;
       entry.accessCount++;
+      const ttlUpdated = ttl !== undefined && entry.ttl !== ttl;
       if (ttl !== undefined) {
         entry.ttl = ttl;
       }
+      this.logger.debug('LRU cache entry updated', {
+        key: String(key),
+        accessCount: entry.accessCount,
+        ttlUpdated,
+        newTtl: ttl,
+      });
       return;
     }
 
@@ -105,6 +116,13 @@ class LRUCache<K, V> {
       ttl,
     };
     this.cache.set(key, entry);
+
+    this.logger.debug('LRU cache entry added', {
+      key: String(key),
+      ttl,
+      currentSize: this.cache.size,
+      maxSize: this.maxSize,
+    });
   }
 
   /**
@@ -119,10 +137,14 @@ class LRUCache<K, V> {
     // Check if entry has expired
     if (this.isExpired(entry)) {
       this.cache.delete(key);
-      this.logger.debug('LRU cache entry expired and removed during has check', {
+      const timeSinceCreation = Date.now() - entry.createdAt;
+      const timeSinceExpiration = timeSinceCreation - (entry.ttl ?? 0);
+      this.logger.debug('LRU cache entry expired and removed during has() check', {
         key: String(key),
         createdAt: new Date(entry.createdAt).toISOString(),
         ttl: entry.ttl,
+        timeSinceCreation,
+        timeSinceExpiration,
       });
       return false;
     }
@@ -196,8 +218,10 @@ class LRUCache<K, V> {
    * This is called automatically when the cache reaches its size limit.
    */
   private evictLeastRecentlyUsed(): void {
+    const currentSize = this.cache.size;
     let lruKey: K | undefined;
     let lruTime = Infinity;
+    let lruEntry: LRUCacheEntry<V> | undefined;
 
     // Find the entry with the oldest lastAccessedAt time
     const entries = Array.from(this.cache.entries());
@@ -205,15 +229,21 @@ class LRUCache<K, V> {
       if (entry.lastAccessedAt < lruTime) {
         lruTime = entry.lastAccessedAt;
         lruKey = key;
+        lruEntry = entry;
       }
     }
 
-    if (lruKey !== undefined) {
+    if (lruKey !== undefined && lruEntry !== undefined) {
       const deleted = this.cache.delete(lruKey);
       if (deleted) {
         this.logger.debug('LRU cache evicted least recently used entry', {
           key: String(lruKey),
           lastAccessedAt: new Date(lruTime).toISOString(),
+          accessCount: lruEntry.accessCount,
+          ttl: lruEntry.ttl,
+          cacheSize: currentSize,
+          maxSize: this.maxSize,
+          timeSinceLastAccess: Date.now() - lruTime,
         });
       }
     }
@@ -246,16 +276,36 @@ class LRUCache<K, V> {
       }
     }
 
+    // Log summary before cleanup
+    if (expiredKeys.length > 0) {
+      this.logger.debug('LRU cache cleanup starting - expired entries found', {
+        expiredCount: expiredKeys.length,
+        currentCacheSize: this.cache.size,
+      });
+    }
+
     for (const key of expiredKeys) {
       const entry = this.cache.get(key);
       this.cache.delete(key);
       if (entry) {
+        const timeSinceCreation = Date.now() - entry.createdAt;
+        const timeSinceExpiration = timeSinceCreation - (entry.ttl ?? 0);
         this.logger.debug('LRU cache cleaned up expired entry', {
           key: String(key),
           createdAt: new Date(entry.createdAt).toISOString(),
           ttl: entry.ttl,
+          timeSinceCreation,
+          timeSinceExpiration,
         });
       }
+    }
+
+    // Log summary after cleanup
+    if (expiredKeys.length > 0) {
+      this.logger.debug('LRU cache cleanup completed', {
+        entriesRemoved: expiredKeys.length,
+        newCacheSize: this.cache.size,
+      });
     }
   }
 }
