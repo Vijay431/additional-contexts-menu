@@ -1,3 +1,5 @@
+import { constants } from 'fs';
+import * as fs from 'fs/promises';
 import * as vscode from 'vscode';
 
 import { SaveAllResult } from '../types/extension';
@@ -95,15 +97,15 @@ export class FileSaveService {
       if (document.isDirty && !document.isUntitled) {
         // Skip read-only files if configured to do so
         if (this.configService.getSaveAllConfig().skipReadOnly) {
-          try {
-            // Check if file is writable by attempting to get its stats
-            const uri = document.uri;
-            if (uri.scheme === 'file') {
+          const uri = document.uri;
+          if (uri.scheme === 'file') {
+            try {
+              // Check if file exists and is writable
+              await fs.access(uri.fsPath, constants.F_OK | constants.W_OK);
               unsavedFiles.push(document);
+            } catch (error) {
+              this.logger.warn(`Skipping read-only file: ${document.fileName}`, error);
             }
-          } catch {
-            this.logger.warn(`Skipping read-only file: ${document.fileName}`);
-            continue;
           }
         } else {
           unsavedFiles.push(document);
