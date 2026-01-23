@@ -190,36 +190,38 @@ export class ProjectDetectionService {
   public async updateContextVariables(): Promise<void> {
     const projectType = await this.detectProjectType();
 
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.isNodeProject',
-      projectType.isNodeProject,
-    );
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.hasReact',
-      projectType.frameworks.includes('react'),
-    );
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.hasAngular',
-      projectType.frameworks.includes('angular'),
-    );
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.hasExpress',
-      projectType.frameworks.includes('express'),
-    );
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.hasNextjs',
-      projectType.frameworks.includes('nextjs'),
-    );
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.hasTypeScript',
-      projectType.hasTypeScript,
-    );
+    await Promise.all([
+      vscode.commands.executeCommand(
+        'setContext',
+        'additionalContextMenus.isNodeProject',
+        projectType.isNodeProject,
+      ),
+      vscode.commands.executeCommand(
+        'setContext',
+        'additionalContextMenus.hasReact',
+        projectType.frameworks.includes('react'),
+      ),
+      vscode.commands.executeCommand(
+        'setContext',
+        'additionalContextMenus.hasAngular',
+        projectType.frameworks.includes('angular'),
+      ),
+      vscode.commands.executeCommand(
+        'setContext',
+        'additionalContextMenus.hasExpress',
+        projectType.frameworks.includes('express'),
+      ),
+      vscode.commands.executeCommand(
+        'setContext',
+        'additionalContextMenus.hasNextjs',
+        projectType.frameworks.includes('nextjs'),
+      ),
+      vscode.commands.executeCommand(
+        'setContext',
+        'additionalContextMenus.hasTypeScript',
+        projectType.hasTypeScript,
+      ),
+    ]);
 
     this.logger.debug('Context variables updated', projectType);
   }
