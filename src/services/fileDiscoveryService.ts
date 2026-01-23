@@ -390,6 +390,66 @@ export class FileDiscoveryService {
     this.logger.debug('File discovery cache cleared');
   }
 
+  /**
+   * Invalidate cache entries for specific file extensions.
+   * This is used when files are modified to selectively clear only affected cache entries.
+   * @param extensions - Array of file extensions to invalidate (e.g., ['.ts', '.tsx'])
+   */
+  private invalidateCacheForExtensions(extensions: string[]): void {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) {
+      return;
+    }
+
+    const workspacePath = workspaceFolder.uri.fsPath;
+    const keysToDelete: string[] = [];
+
+    // Find all cache keys that match the given extensions
+    for (const key of this.fileCache.keys()) {
+      // Cache key format is: "workspacePath:extension"
+      const keyParts = key.split(':');
+      if (keyParts.length === 2) {
+        const keyExtension = keyParts[1];
+        if (extensions.includes(keyExtension)) {
+          keysToDelete.push(key);
+        }
+      }
+    }
+
+    // Delete the matching cache entries
+    for (const key of keysToDelete) {
+      this.fileCache.delete(key);
+    }
+
+    if (keysToDelete.length > 0) {
+      this.logger.debug('Invalidated cache entries for extensions', {
+        extensions,
+        entriesDeleted: keysToDelete.length,
+      });
+    }
+  }
+
+  /**
+   * Get all compatible extensions for a given file extension.
+   * This uses the same compatibility rules as isCompatibleExtension.
+   * @param extension - File extension (e.g., '.ts', '.js')
+   * @returns Array of compatible extensions
+   */
+  private getCompatibleExtensions(extension: string): string[] {
+    // Normalize extension (remove leading dot if present)
+    const normalizedExt = extension.startsWith('.') ? extension : `.${extension}`;
+
+    // Define compatibility rules
+    const compatibilityRules: Record<string, string[]> = {
+      '.ts': ['.ts', '.tsx'],
+      '.tsx': ['.ts', '.tsx'],
+      '.js': ['.js', '.jsx'],
+      '.jsx': ['.js', '.jsx'],
+    };
+
+    return compatibilityRules[normalizedExt] ?? [normalizedExt];
+  }
+
   public onWorkspaceChanged(): vscode.Disposable {
     return vscode.workspace.onDidChangeWorkspaceFolders(() => {
       this.clearCache();
@@ -397,14 +457,23 @@ export class FileDiscoveryService {
   }
 
   public onFileSystemChanged(): vscode.Disposable {
-    // Clear cache when files are created, deleted, or renamed
+    // Selectively invalidate cache entries when files are created, deleted, or renamed
     const watcher = vscode.workspace.createFileSystemWatcher('**/*.{ts,tsx,js,jsx}');
 
-    const clearCache = () => this.clearCache();
+    const handleFileChange = (uri: vscode.Uri) => {
+      const filePath = uri.fsPath;
+      const extension = path.extname(filePath);
 
-    watcher.onDidCreate(clearCache);
-    watcher.onDidDelete(clearCache);
-    watcher.onDidChange(clearCache);
+      // Get all compatible extensions for the changed file
+      const compatibleExtensions = this.getCompatibleExtensions(extension);
+
+      // Invalidate cache entries for compatible extensions only
+      this.invalidateCacheForExtensions(compatibleExtensions);
+    };
+
+    watcher.onDidCreate(handleFileChange);
+    watcher.onDidDelete(handleFileChange);
+    watcher.onDidChange(handleFileChange);
 
     return watcher;
   }

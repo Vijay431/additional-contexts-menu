@@ -3,7 +3,7 @@
   "spec": "001-add-cache-size-limits-and-ttl-to-filediscoveryserv",
   "state": "building",
   "subtasks": {
-    "completed": 4,
+    "completed": 5,
     "total": 14,
     "in_progress": 1,
     "failed": 0
@@ -18,8 +18,8 @@
     "max": 1
   },
   "session": {
-    "number": 6,
+    "number": 7,
     "started_at": "2026-01-23T22:29:30.388644"
   },
-  "last_update": "2026-01-23T22:40:55.823312"
+  "last_update": "2026-01-23T22:43:11.400349"
 }
