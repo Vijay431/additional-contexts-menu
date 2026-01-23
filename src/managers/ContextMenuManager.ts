@@ -54,6 +54,9 @@ export class ContextMenuManager {
     // Listen for file system changes
     this.disposables.push(this.fileDiscoveryService.onFileSystemChanged());
 
+    // Listen for document changes to invalidate code analysis cache
+    this.disposables.push(this.codeAnalysisService.onDocumentChanged());
+
     this.logger.info('ContextMenuManager initialized successfully');
   }
 
