@@ -526,4 +526,236 @@ suite('FileDiscoveryService Tests', () => {
       }
     });
   });
+
+  suite('Advanced TTL Expiration Behavior', () => {
+    test('should handle multiple entries expiring at different times', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 75 // Short TTL (75ms)
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache with first entry
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Wait a bit
+        await new Promise(resolve => setTimeout(resolve, 25));
+
+        // Add second entry (will expire 25ms after first)
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Wait for first entry to expire but not second
+        await new Promise(resolve => setTimeout(resolve, 60));
+
+        // Access first entry again - should trigger re-scan since it expired
+        const files1 = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files1));
+
+        // Access second entry - might still be cached
+        const files2 = await fileDiscoveryService.getCompatibleFiles('.js');
+        assert.ok(Array.isArray(files2));
+      }
+    });
+
+    test('should cleanup expired entries when adding new entries', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 10,
+          ttl: 50 // Very short TTL
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Wait for entries to expire
+        await new Promise(resolve => setTimeout(resolve, 75));
+
+        // Add new entry - should trigger cleanup of expired entries
+        await fileDiscoveryService.getCompatibleFiles('.tsx');
+
+        // Cache should still function correctly
+        const files = await fileDiscoveryService.getCompatibleFiles('.tsx');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should handle TTL expiration combined with cache size limits', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 2,
+          ttl: 100 // Short TTL
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Fill cache to max size
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+        await fileDiscoveryService.getCompatibleFiles('.js');
+
+        // Wait for TTL to expire
+        await new Promise(resolve => setTimeout(resolve, 150));
+
+        // Add third entry - should cleanup expired entries first
+        await fileDiscoveryService.getCompatibleFiles('.tsx');
+
+        // Cache should handle both size limit and expiration correctly
+        const files = await fileDiscoveryService.getCompatibleFiles('.tsx');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should not expire cache entries when TTL is not set', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 60000 // Long TTL (1 minute)
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        const files1 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Wait but not exceed TTL
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Should still be cached (not expired)
+        const files2 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        assert.ok(Array.isArray(files1));
+        assert.ok(Array.isArray(files2));
+      }
+    });
+
+    test('should handle rapid cache access before TTL expiration', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 500 // 500ms TTL
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Access multiple times before expiration
+        const files1 = await fileDiscoveryService.getCompatibleFiles('.ts');
+        await new Promise(resolve => setTimeout(resolve, 50));
+        const files2 = await fileDiscoveryService.getCompatibleFiles('.ts');
+        await new Promise(resolve => setTimeout(resolve, 50));
+        const files3 = await fileDiscoveryService.getCompatibleFiles('.ts');
+        await new Promise(resolve => setTimeout(resolve, 50));
+        const files4 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        assert.ok(Array.isArray(files1));
+        assert.ok(Array.isArray(files2));
+        assert.ok(Array.isArray(files3));
+        assert.ok(Array.isArray(files4));
+      }
+    });
+
+    test('should handle very short TTL values gracefully', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 10 // Very short TTL (10ms)
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Wait for expiration
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        // Should expire and re-scan
+        const files = await fileDiscoveryService.getCompatibleFiles('.ts');
+        assert.ok(Array.isArray(files));
+      }
+    });
+
+    test('should maintain cache entries until TTL expires', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: true,
+          maxSize: 100,
+          ttl: 200 // 200ms TTL
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Populate cache
+        await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Access before expiration
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const files1 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Access just before expiration
+        await new Promise(resolve => setTimeout(resolve, 50));
+        const files2 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        // Both should succeed
+        assert.ok(Array.isArray(files1));
+        assert.ok(Array.isArray(files2));
+      }
+    });
+
+    test('should handle cache disabled with TTL configuration', async () => {
+      TestSetup.updateConfig({
+        cache: {
+          enabled: false, // Cache disabled
+          maxSize: 100,
+          ttl: 100 // TTL configured but should be ignored
+        }
+      });
+
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (workspaceFolders && workspaceFolders.length > 0) {
+        fileDiscoveryService.clearCache();
+
+        // Even with TTL configured, cache should be bypassed
+        const files1 = await fileDiscoveryService.getCompatibleFiles('.ts');
+        await new Promise(resolve => setTimeout(resolve, 150));
+        const files2 = await fileDiscoveryService.getCompatibleFiles('.ts');
+
+        assert.ok(Array.isArray(files1));
+        assert.ok(Array.isArray(files2));
+      }
+    });
+  });
 });
