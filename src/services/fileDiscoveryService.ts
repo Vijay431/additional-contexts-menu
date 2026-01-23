@@ -16,11 +16,15 @@ class LRUCache<K, V> {
   private cache: Map<K, LRUCacheEntry<V>>;
   private maxSize: number;
   private logger: Logger;
+  private hits: number;
+  private misses: number;
 
   constructor(maxSize: number, logger: Logger) {
     this.maxSize = maxSize;
     this.logger = logger;
     this.cache = new Map<K, LRUCacheEntry<V>>();
+    this.hits = 0;
+    this.misses = 0;
   }
 
   /**
@@ -30,23 +34,37 @@ class LRUCache<K, V> {
   public get(key: K): V | undefined {
     const entry = this.cache.get(key);
     if (!entry) {
+      this.misses++;
+      this.logger.debug('LRU cache miss', {
+        key: String(key),
+        totalMisses: this.misses,
+      });
       return undefined;
     }
 
     // Check if entry has expired
     if (this.isExpired(entry)) {
       this.cache.delete(key);
-      this.logger.debug('LRU cache entry expired and removed', {
+      this.misses++;
+      this.logger.debug('LRU cache miss (expired entry)', {
         key: String(key),
         createdAt: new Date(entry.createdAt).toISOString(),
         ttl: entry.ttl,
+        totalMisses: this.misses,
       });
       return undefined;
     }
 
-    // Update access tracking for LRU
+    // Cache hit - update access tracking for LRU
+    this.hits++;
     entry.lastAccessedAt = Date.now();
     entry.accessCount++;
+
+    this.logger.debug('LRU cache hit', {
+      key: String(key),
+      totalHits: this.hits,
+      hitRate: this.getHitRate(),
+    });
 
     return entry.value;
   }
@@ -121,10 +139,11 @@ class LRUCache<K, V> {
   }
 
   /**
-   * Clear all entries from the cache.
+   * Clear all entries from the cache and reset metrics.
    */
   public clear(): void {
     this.cache.clear();
+    this.resetMetrics();
   }
 
   /**
@@ -139,6 +158,37 @@ class LRUCache<K, V> {
    */
   public keys(): K[] {
     return Array.from(this.cache.keys());
+  }
+
+  /**
+   * Get cache metrics including hits, misses, and hit rate.
+   */
+  public getMetrics(): { hits: number; misses: number; hitRate: number } {
+    return {
+      hits: this.hits,
+      misses: this.misses,
+      hitRate: this.getHitRate(),
+    };
+  }
+
+  /**
+   * Reset cache metrics counters.
+   */
+  public resetMetrics(): void {
+    this.hits = 0;
+    this.misses = 0;
+    this.logger.debug('LRU cache metrics reset');
+  }
+
+  /**
+   * Calculate hit rate as a percentage (0-100).
+   */
+  private getHitRate(): number {
+    const total = this.hits + this.misses;
+    if (total === 0) {
+      return 0;
+    }
+    return (this.hits / total) * 100;
   }
 
   /**
