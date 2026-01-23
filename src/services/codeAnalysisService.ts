@@ -248,6 +248,13 @@ export class CodeAnalysisService {
         inSingleLineComment = false;
 
         while (searchPos < line.length) {
+          // Check for multi-line comment end (when inside a multi-line comment)
+          if (inMultiLineComment && line.substr(searchPos, 2) === '*/') {
+            inMultiLineComment = false;
+            searchPos += 2;
+            continue;
+          }
+
           // Check for comment/string starts before looking for braces
           if (!inSingleLineComment && !inMultiLineComment &&
               !inSingleQuoteString && !inDoubleQuoteString && !inTemplateLiteral) {
@@ -259,12 +266,6 @@ export class CodeAnalysisService {
             // Check for multi-line comment start
             if (line.substr(searchPos, 2) === '/*') {
               inMultiLineComment = true;
-              searchPos += 2;
-              continue;
-            }
-            // Check for multi-line comment end
-            if (inMultiLineComment && line.substr(searchPos, 2) === '*/') {
-              inMultiLineComment = false;
               searchPos += 2;
               continue;
             }
