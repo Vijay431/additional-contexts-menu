@@ -219,6 +219,7 @@
     "test:minimal": "npm test",
     "test:clean": "rm -rf .vscode-test/minimal-extension .vscode-test/user-data-isolated .vscode-test/user-data-dev",
     "test:benchmark": "rm -rf dist && npm run build && tsx test/benchmark/braceCountingBenchmark.ts",
+    "test:manual": "rm -rf dist && npm run build && tsx test/manual/manual-verification-fixture-test.ts",
     "create-minimal": "tsx scripts/create-minimal-extension.ts",
     "format": "prettier --write ."
   },
