@@ -86,3 +86,11 @@ export interface ExtensionConfig {
     openBehavior: 'parent-directory' | 'workspace-root' | 'current-directory';
   };
 }
+
+export interface LRUCacheEntry<T> {
+  value: T;
+  createdAt: number;
+  lastAccessedAt: number;
+  accessCount: number;
+  ttl?: number;
+}
