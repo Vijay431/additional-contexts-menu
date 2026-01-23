@@ -218,6 +218,7 @@
     "test:full": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && SKIP_OPTIMIZATION=true node ./dist/test/e2e/runE2ETest.js",
     "test:minimal": "npm test",
     "test:clean": "rm -rf .vscode-test/minimal-extension .vscode-test/user-data-isolated .vscode-test/user-data-dev",
+    "test:benchmark": "rm -rf dist && npm run build && tsx test/benchmark/braceCountingBenchmark.ts",
     "create-minimal": "tsx scripts/create-minimal-extension.ts",
     "format": "prettier --write ."
   },

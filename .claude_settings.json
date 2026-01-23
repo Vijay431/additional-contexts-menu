@@ -1,0 +1,39 @@
+{
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Glob(./**)",
+      "Grep(./**)",
+      "Read(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Write(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Edit(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Glob(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Grep(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Read(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/.auto-claude/specs/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Write(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/.auto-claude/specs/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Edit(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/worktrees/tasks/005-optimize-brace-counting-algorithm-in-findfunctione/.auto-claude/specs/005-optimize-brace-counting-algorithm-in-findfunctione/**)",
+      "Read(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/**)",
+      "Write(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/**)",
+      "Edit(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/**)",
+      "Glob(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/**)",
+      "Grep(/home/vijay/Programmer/Repos/additional-contexts-menu/.auto-claude/**)",
+      "Bash(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "mcp__context7__resolve-library-id(*)",
+      "mcp__context7__get-library-docs(*)",
+      "mcp__graphiti-memory__search_nodes(*)",
+      "mcp__graphiti-memory__search_facts(*)",
+      "mcp__graphiti-memory__add_episode(*)",
+      "mcp__graphiti-memory__get_episodes(*)",
+      "mcp__graphiti-memory__get_entity_edge(*)"
+    ]
+  }
+}
