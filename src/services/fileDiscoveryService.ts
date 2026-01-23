@@ -113,7 +113,7 @@ class LRUCache<K, V> {
       createdAt: now,
       lastAccessedAt: now,
       accessCount: 1,
-      ttl,
+      ...(ttl !== undefined && { ttl }),
     };
     this.cache.set(key, entry);
 
@@ -502,7 +502,6 @@ export class FileDiscoveryService {
       return;
     }
 
-    const workspacePath = workspaceFolder.uri.fsPath;
     const keysToDelete: string[] = [];
 
     // Find all cache keys that match the given extensions
@@ -511,7 +510,7 @@ export class FileDiscoveryService {
       const keyParts = key.split(':');
       if (keyParts.length === 2) {
         const keyExtension = keyParts[1];
-        if (extensions.includes(keyExtension)) {
+        if (keyExtension && extensions.includes(keyExtension)) {
           keysToDelete.push(key);
         }
       }

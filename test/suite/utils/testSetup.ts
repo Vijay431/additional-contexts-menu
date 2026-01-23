@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { TerminalService } from '../../../src/services/terminalService';
+import { FileDiscoveryService } from '../../../src/services/fileDiscoveryService';
 import { ConfigurationService } from '../../../src/services/configurationService';
 import { Logger } from '../../../src/utils/logger';
 import { VSCodeMocks, MockConfigurationService, TestConfigFactory, TestDataFactory } from './testMocks';
@@ -215,6 +216,9 @@ export class TestSetup {
     // Clear TerminalService singleton
     (TerminalService as any).instance = null;
 
+    // Clear FileDiscoveryService singleton
+    (FileDiscoveryService as any).instance = null;
+
     // Clear ConfigurationService singleton
     (ConfigurationService as any).instance = null;
 
@@ -268,6 +272,19 @@ export class TestSetup {
 
     // Initialize it
     service.initialize();
+
+    return service;
+  }
+
+  /**
+   * Create a fresh FileDiscoveryService instance for testing
+   */
+  public static createFileDiscoveryService() {
+    // Clear existing singleton
+    (FileDiscoveryService as any).instance = null;
+
+    // Get new instance which will use mocked dependencies
+    const service = FileDiscoveryService.getInstance();
 
     return service;
   }

@@ -117,6 +117,11 @@ export class MockConfigurationService {
         externalTerminalCommand: '',
         openBehavior: 'parent-directory',
       },
+      cache: {
+        enabled: true,
+        maxSize: 100,
+        ttl: 300000, // 5 minutes
+      },
       ...config,
     };
   }
@@ -268,6 +273,11 @@ export class TestConfigFactory {
         type: 'integrated',
         externalTerminalCommand: '',
         openBehavior: 'parent-directory',
+      },
+      cache: {
+        enabled: true,
+        maxSize: 100,
+        ttl: 300000, // 5 minutes
       },
     };
   }
