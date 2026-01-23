@@ -352,4 +352,9 @@ export class CodeAnalysisService {
 
     return imports;
   }
+
+  public clearCache(): void {
+    this.documentCache.clear();
+    this.logger.debug('Code analysis cache cleared');
+  }
 }
