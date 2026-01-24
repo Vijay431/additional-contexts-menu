@@ -1,276 +1,360 @@
 # Contributing to Additional Context Menus
 
-Thank you for helping grow Additional Context Menus! This project is a community-driven VS Code extension maintained by Vijay Gangatharan with support from volunteer contributors. We welcome bug reports, feature proposals, documentation improvements, and tooling updates.
+Thank you for your interest in contributing to Additional Context Menus! We welcome contributions from the community and appreciate your help in making this VS Code extension better.
 
----
+## Table of Contents
+
+- [Code of Conduct](#code-of-conduct)
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [Making Changes](#making-changes)
+- [Submitting Changes](#submitting-changes)
+- [Style Guidelines](#style-guidelines)
+- [Testing](#testing)
+- [Documentation](#documentation)
+- [Community](#community)
 
 ## Code of Conduct
 
-Participation in this project is governed by the [Contributor Covenant](CODE_OF_CONDUCT.md). Please read it before starting any contribution. Harassment or abusive behaviour will not be tolerated.
+By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before contributing.
 
----
+## Getting Started
 
-## Ways to Contribute
+### Prerequisites
 
-- 🐛 **Report bugs** using the "Bug report" issue template.
-- 💡 **Suggest features** or improvements via the "Feature request" template or GitHub discussions.
-- 🛠️ **Submit pull requests** that fix issues, improve documentation, add tests, or enhance automation.
-- 📣 **Share feedback** about the user experience, governance, or roadmap in discussions.
+- [Node.js](https://nodejs.org/) (versions 16-24 supported, 18+ recommended for development)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+- [Visual Studio Code](https://code.visualstudio.com/) (for development and testing)
+- [Git](https://git-scm.com/)
 
-Before opening a new issue, please search existing issues to avoid duplicates.
+### Types of Contributions
 
----
+We welcome several types of contributions:
 
-## Development Prerequisites
+- 🐛 **Bug Reports** - Help us identify and fix issues
+- 🚀 **Feature Requests** - Suggest new functionality
+- 📝 **Documentation** - Improve or add documentation
+- 🔧 **Code Contributions** - Fix bugs or implement features
+- 🧪 **Testing** - Add or improve tests
+- 🎨 **Design** - Improve UI/UX or visual assets
 
-- Node.js 16–24 (18+ recommended)
-- npm (bundled with Node.js)
-- Visual Studio Code 1.105.0+ with the Biome extension (`biomejs.biome`)
-- Git
+### Contributor Tutorial
 
-Install dependencies after cloning:
+🎓 **New to contributing?** Check out our [Contributor Tutorial: Adding New Commands](docs/contributor-tutorial.md) for a step-by-step guide on:
+
+- Understanding the extension architecture
+- Learning the command pattern
+- Implementing new features
+- Following best practices
+- Testing and verification
+
+This tutorial is perfect for first-time contributors and anyone looking to add new commands to the extension.
+
+## Development Setup
+
+### 1. Fork and Clone
+
+1. Fork the repository on GitHub
+2. Clone your fork locally:
+
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/additional-contexts-menu.git
+   cd additional-contexts-menu
+   ```
+
+### 2. Install Dependencies
 
 ```bash
-git clone https://github.com/Vijay431/additional-contexts-menu.git
-cd additional-contexts-menu
 npm install
 ```
 
----
-
-## Project Standards
-
-- **Language:** TypeScript (strict mode enabled)
-- **Architecture:** Service-oriented (see `CLAUDE.md` for context)
-- **Lint/Format:** [Biome](https://biomejs.dev/)
-- **Testing:** Mocha with @vscode/test-electron
-- **Versioning:** Semantic Versioning, changelog follows Keep a Changelog format
-
-Please keep changes aligned with the existing style and tailor solutions to the extension's service architecture.
-
----
-
-## Contribution Workflow
-
-1. **Plan**
-   - For significant changes, create an issue or discussion to align on scope.
-   - Confirm that the feature fits the roadmap and is not already underway.
-
-2. **Branch**
-   - Use descriptive branch names: `feature/<topic>`, `fix/<issue-number>`, `docs/<area>`.
-   - Keep pull requests focused and scoped to a single problem.
-
-3. **Implement**
-   - Update or add tests alongside code changes.
-   - Follow existing code conventions and directory layout.
-   - Update documentation when behaviour, APIs, or tooling change.
-
-4. **Quality Gate**
-   ```bash
-   npm ci
-   npm run lint
-   npm run format:check
-   npm run typecheck
-   npm test
-   ```
-   - Use `npm run lint:fix` and `npm run format` for automatic fixes when necessary.
-   - Confirm Git status is clean before submitting your pull request.
-
-5. **Submit**
-   - Fill out the pull request template completely.
-   - Reference related issues using `Fixes #123` syntax when applicable.
-   - Request review from maintainers (CODEOWNERS). Additional reviewers are welcome.
-
-6. **Review**
-   - Be responsive to feedback and keep discussion respectful.
-   - Squash or rebase commits as requested by maintainers.
-
----
-
-## Commit & PR Guidelines
-
-- Use [Conventional Commits](https://www.conventionalcommits.org/) when possible (`feat:`, `fix:`, `docs:`, `chore:`…).
-- Keep commit messages short and descriptive.
-- Document breaking changes clearly in both the commit and pull request description.
-- Large PRs should be split into logical chunks for easier review.
-
----
-
-## Documentation & Changelog
-
-- Update `README.md`, docs under `docs/`, and wiki pages when user-facing behaviour changes.
-- Add an entry to `CHANGELOG.md` under the "Unreleased" section summarising the change and crediting contributors.
-- Reference new governance policies or automation changes where appropriate.
-
----
-
-## Testing Tips
-
-- Use `npm run watch` while iterating to rebuild on changes.
-- Run `npm test` before every PR to execute the optimized test suite.
-- Use `npm run test:full` when modifying core functionality that touches activation or terminal behaviour.
-- Clean test artifacts with `npm run test:clean` if VS Code runs become flaky.
-
----
-
-## Publishing & Distribution
-
-This extension is published to both the VS Code Marketplace and Open VSX Registry for maximum compatibility with VS Code alternatives like VSCodium, Gitpod, and Eclipse Theia.
-
-### Dual Publishing Process
-
-The CI/CD pipeline automatically publishes to both registries when changes are pushed to the master branch:
-
-1. **VS Code Marketplace** - Primary distribution channel for VS Code users
-2. **Open VSX Registry** - Alternative registry for open-source VS Code implementations
-
-The workflow builds a single VSIX package that works for both registries, ensuring consistency across distribution channels. Publishing happens in parallel, with Open VSX failures isolated to prevent blocking marketplace publication.
-
-### Publishing Scripts
-
-| Script | Description |
-|--------|-------------|
-| `npm run package` | Creates the VSIX package locally |
-| `npm run publish:marketplace` | Publishes to VS Code Marketplace only |
-| `npm run publish:ovsx` | Publishes to Open VSX Registry only |
-| `npm run publish` | Publishes to both registries (used in CI/CD) |
-
-### Authentication Setup
-
-For maintainers setting up publishing credentials:
-
-1. **VS Code Marketplace**: Requires `VS_MARKETPLACE_TOKEN` GitHub secret
-2. **Open VSX Registry**: Requires `OVSX_PAT` GitHub secret
-
-See [docs/open-vsx-setup.md](docs/open-vsx-setup.md) for detailed setup instructions.
-
-### Manual Open VSX Publishing
-
-If automated publishing fails or you need to publish manually, follow these steps:
+### 3. Development Commands
 
 ```bash
-# 1. Install the ovsx CLI globally (if not already installed)
-npm install -g ovsx
+# Compile TypeScript using webpack
+npm run compile
 
-# 2. Ensure you have a clean build
-npm ci
-npm run vscode:prepublish
+# Watch mode for development (webpack --watch)
+npm run watch
 
-# 3. Package the extension
+# Production build with optimizations
 npm run package
 
-# 4. Verify the package was created
-ls -la *.vsix
+# Run extension tests
+npm test
 
-# 5. Publish to Open VSX with your personal access token
-ovsx publish additional-context-menus-*.vsix -p YOUR_OVSX_TOKEN
+# Run ESLint on src directory
+npm run lint
 
-# Alternative: Use environment variable for token
-export OVSX_PAT=your_token_here
-ovsx publish additional-context-menus-*.vsix -p $OVSX_PAT
+# Format code using Prettier
+npm run format
 ```
 
-You can also use the retry script for more robust publishing:
+### 4. Launch Development Environment
+
+1. Open the project in VS Code
+2. Press `F5` to launch the Extension Development Host
+3. Test your changes in the new VS Code window
+
+## Making Changes
+
+### Branch Naming
+
+Use descriptive branch names with prefixes:
+
+- `feature/` - New features
+- `fix/` - Bug fixes
+- `docs/` - Documentation changes
+- `refactor/` - Code refactoring
+- `test/` - Testing improvements
+
+Examples:
+
+- `feature/add-context-menu-icons`
+- `fix/function-detection-accuracy`
+- `docs/improve-setup-guide`
+
+### Commit Messages
+
+Follow conventional commit format:
+
+```
+type(scope): description
+
+body (optional)
+
+footer (optional)
+```
+
+Types:
+
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes
+- `refactor`: Code refactoring
+- `test`: Testing changes
+- `chore`: Maintenance tasks
+
+Examples:
+
+- `feat(context-menu): add copy function with AST parsing`
+- `fix(code-analysis): handle edge case for arrow functions`
+- `docs(readme): update installation instructions`
+
+### Code Architecture
+
+Additional Context Menus follows a service-oriented architecture:
+
+```
+src/
+├── extension.ts              # Entry point
+├── managers/
+│   ├── extensionManager.ts   # Lifecycle management
+│   └── contextMenuManager.ts # Context menu control
+├── services/
+│   ├── projectDetectionService.ts # Project detection
+│   ├── configurationService.ts    # Settings integration
+│   ├── fileDiscoveryService.ts    # File operations
+│   ├── fileSaveService.ts         # Save operations
+│   └── codeAnalysisService.ts     # AST analysis
+├── utils/
+│   └── logger.ts             # Logging utilities
+└── types/
+    └── extension.ts          # Type definitions
+```
+
+When making changes:
+
+1. **Follow the existing architecture**
+2. **Add new functionality to appropriate layers**
+3. **Maintain separation of concerns**
+4. **Use proper TypeScript typing**
+
+## Submitting Changes
+
+### Pull Request Process
+
+1. **Update Documentation** - Update README.md, CHANGELOG.md, and code comments
+2. **Add Tests** - Include tests for new functionality
+3. **Run Quality Checks**:
+
+   ```bash
+   npm run lint
+   npm run format
+   npm test
+   npm run compile
+   ```
+
+4. **Create Pull Request** with:
+   - Clear title and description
+   - Link to related issues
+   - Screenshots (if UI changes)
+   - Testing instructions
+
+### Pull Request Template
+
+When creating a PR, please fill out the template with:
+
+- **Description** - What changes were made and why
+- **Type of Change** - Feature, bug fix, documentation, etc.
+- **Testing** - How was this tested
+- **Checklist** - Ensure all requirements are met
+
+### Review Process
+
+1. **Automated Checks** - CI/CD pipeline must pass
+2. **Code Review** - At least one maintainer review
+3. **Testing** - Functional testing on multiple platforms
+4. **Documentation** - Ensure docs are updated
+5. **Merge** - Squash and merge after approval
+
+## Style Guidelines
+
+### TypeScript/JavaScript
+
+- Use **TypeScript** for all new code
+- Enable **strict mode** compliance
+- Use **meaningful variable names**
+- Add **JSDoc comments** for public functions
+- Follow **ESLint rules** configured in the project
+
+### Code Formatting
+
+- Use **Prettier** for consistent formatting
+- Run `npm run format` before committing
+- Use **2 spaces** for indentation
+- Use **semicolons** at line endings
+- Use **single quotes** for strings
+
+### File Organization
+
+- Keep files **focused and small**
+- Use **descriptive file names**
+- Group related functionality
+- Follow the existing **directory structure**
+
+## Testing
+
+### Test Types
+
+1. **Unit Tests** - Test individual functions and components
+2. **Integration Tests** - Test component interactions
+3. **E2E Tests** - Test complete user workflows
+
+### Running Tests
 
 ```bash
-node scripts/publish-ovsx-with-retry.js
+# Run all tests
+npm test
+
+# Compile and run tests
+npm run test:watch
+
+# Compile test files
+npm run compile-tests
 ```
 
-### Troubleshooting Open VSX Publishing Issues
+### Writing Tests
 
-#### Authentication Errors
+- Use **descriptive test names**
+- Follow **AAA pattern** (Arrange, Act, Assert)
+- Test **both success and error cases**
+- Mock external dependencies
+- Update tests when changing functionality
 
-**Symptoms:** "401 Unauthorized" or "Authentication failed" errors
+### Test Structure
 
-**Solutions:**
-1. Verify `OVSX_PAT` secret is correctly set in GitHub repository settings
-2. Check that the Open VSX token hasn't expired (tokens may have expiration dates)
-3. Ensure the token has the necessary publishing permissions
-4. Regenerate the token if needed:
-   - Go to [open-vsx.org](https://open-vsx.org) → Profile → Access Tokens
-   - Create a new token and update the GitHub secret
+```typescript
+suite('Component Name', () => {
+  test('should do something when condition is met', () => {
+    // Arrange
+    const input = 'test input';
 
-#### Network and Timeout Errors
+    // Act
+    const result = functionUnderTest(input);
 
-**Symptoms:** "ETIMEDOUT", "ECONNRESET", or "Network error" messages
-
-**Solutions:**
-1. The CI/CD workflow includes retry logic with exponential backoff
-2. For manual publishing, wait a few minutes and retry
-3. Check [Open VSX status](https://open-vsx.org) for any service outages
-4. Use the retry script: `node scripts/publish-ovsx-with-retry.js`
-
-#### Package Validation Errors
-
-**Symptoms:** "Invalid VSIX package" or metadata validation failures
-
-**Solutions:**
-1. Ensure all required fields are present in `package.json`:
-   - `publisher`, `name`, `displayName`, `description`, `version`
-   - `repository`, `license`, `icon`
-2. Verify the icon file exists and is properly referenced
-3. Run `npm run package` locally and inspect the generated VSIX
-4. Check that the package size is within limits
-
-#### Version Conflict Errors
-
-**Symptoms:** "Version already exists" or version-related errors
-
-**Solutions:**
-1. Ensure the version in `package.json` is incremented
-2. Check both registries to confirm the current published version
-3. Never attempt to republish an existing version number
-4. Use semantic versioning: `major.minor.patch`
-
-#### Token Renewal Process
-
-Open VSX tokens may expire. To renew:
-
-1. Log in to [open-vsx.org](https://open-vsx.org) with your GitHub account
-2. Navigate to Profile → Access Tokens
-3. Generate a new Personal Access Token
-4. Copy the token immediately (it won't be shown again)
-5. Update the `OVSX_PAT` secret in GitHub:
-   - Go to Repository → Settings → Secrets and variables → Actions
-   - Update the `OVSX_PAT` secret with the new token
-6. The next CI/CD run will use the updated token
-
-### Failure Handling
-
-The CI/CD workflow uses `continue-on-error: true` for Open VSX publishing, ensuring that:
-- VS Code Marketplace publishing continues even if Open VSX fails
-- Open VSX issues don't block the primary distribution channel
-- Failed Open VSX publications are logged for manual follow-up
-
-If Open VSX publishing fails in CI/CD:
-1. Check the workflow logs for specific error messages
-2. Attempt manual publishing using the steps above
-3. Create an issue if the problem persists
-
-### Registry URLs
-
-After successful publishing, verify the extension appears at:
-- **VS Code Marketplace**: https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus
-- **Open VSX Registry**: https://open-vsx.org/extension/VijayGangatharan/additional-context-menus
-
-### Verification Scripts
-
-Use the verification scripts to confirm successful publication:
-
-```bash
-# Verify both publications
-node scripts/verify-publications.js
-
-# Verify authentication is working
-node scripts/verify-auth.js
+    // Assert
+    assert.strictEqual(result, expectedOutput);
+  });
+});
 ```
 
----
+## Documentation
 
-## Maintainers & Governance
+### README Updates
 
-- Maintainers review PRs, manage releases, and curate the roadmap.
-- Contributors may be invited to become maintainers after demonstrating sustained, high-quality contributions and community stewardship.
-- Decisions favour consensus. If consensus cannot be reached, the maintainer has final say while documenting rationale.
+When making changes that affect users:
 
-Thank you for putting your time and energy into Additional Context Menus. We appreciate every contribution that improves the experience for the community! 🚀
+- Update feature descriptions
+- Add new configuration options
+- Update screenshots if UI changes
+- Modify installation or usage instructions
+
+### Code Documentation
+
+- Add **JSDoc comments** for public APIs
+- Include **parameter descriptions**
+- Document **return types**
+- Add **usage examples** for complex functions
+
+### CHANGELOG
+
+Update `CHANGELOG.md` for:
+
+- **New features** - Added functionality
+- **Bug fixes** - Resolved issues
+- **Breaking changes** - Incompatible changes
+- **Deprecated features** - Features being removed
+
+## Community
+
+### Getting Help
+
+- **GitHub Issues** - Report bugs or request features
+- **GitHub Discussions** - Ask questions and share ideas
+- **Email** - Contact maintainer at <vijayanand431@gmail.com>
+
+### Recognition
+
+Contributors are recognized in:
+
+- **README.md** - Contributors section
+- **Release Notes** - Major contribution acknowledgments
+- **GitHub** - Contributor graphs and statistics
+
+## Development Tips
+
+### VS Code Extensions
+
+Helpful extensions for development:
+
+- **TypeScript Importer** - Auto-import management
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **GitLens** - Git integration
+
+### Debugging
+
+1. **Use VS Code debugger** - Set breakpoints in source code
+2. **Console logging** - Use the logger utility for debugging
+3. **Extension Host** - Check Developer Tools in Extension Development Host
+4. **Output Channel** - Monitor "Additional Context Menus" output channel
+
+### Performance Considerations
+
+- **Minimize AST parsing operations**
+- **Cache project detection results**
+- **Implement proper disposal** of resources
+- **Test with large codebases** to ensure performance
+
+## Questions?
+
+If you have questions about contributing:
+
+1. Check existing [issues](https://github.com/Vijay431/additional-contexts-menu/issues)
+2. Search [discussions](https://github.com/Vijay431/additional-contexts-menu/discussions)
+3. Create a new issue with the "question" label
+4. Email the maintainer: <vijayanand431@gmail.com>
+
+Thank you for contributing to Additional Context Menus! 🚀

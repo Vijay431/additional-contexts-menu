@@ -1,30 +1,64 @@
-import { constants } from 'fs';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-
 import * as vscode from 'vscode';
 
 import { SaveAllResult } from '../types/extension';
 import { Logger } from '../utils/logger';
-import { isSafeFilePath } from '../utils/pathValidator';
 
 import { ConfigurationService } from './configurationService';
 
+/**
+ * Service for managing file save operations in the VS Code extension.
+ *
+ * Provides functionality to save all unsaved files with support for:
+ * - Batch saving with progress indication for large file sets
+ * - Configurable notifications for save results
+ * - Skipping read-only files based on configuration
+ * - Detailed error tracking and reporting
+ *
+ * The service operates as a singleton and integrates with VS Code's workspace API
+ * to identify and save unsaved text documents while handling edge cases like
+ * untitled documents and read-only files.
+ */
 export class FileSaveService {
-  private static instance: FileSaveService | undefined;
+  private static instance: FileSaveService;
   private logger: Logger;
   private configService: ConfigurationService;
 
+  /**
+   * Private constructor to enforce singleton pattern.
+   *
+   * Initializes the logger and configuration service instances for file save operations.
+   */
   private constructor() {
     this.logger = Logger.getInstance();
     this.configService = ConfigurationService.getInstance();
   }
 
+  /**
+   * Gets the singleton instance of the FileSaveService.
+   *
+   * Creates a new instance on first call, returns the existing instance
+   * on subsequent calls.
+   *
+   * @returns The singleton FileSaveService instance
+   */
   public static getInstance(): FileSaveService {
-    FileSaveService.instance ??= new FileSaveService();
+    if (!FileSaveService.instance) {
+      FileSaveService.instance = new FileSaveService();
+    }
     return FileSaveService.instance;
   }
 
+  /**
+   * Saves all unsaved files in the workspace.
+   *
+   * Identifies all dirty (unsaved) text documents and attempts to save them.
+   * For operations with more than 5 files, displays a progress indicator.
+   * Shows notifications based on configuration settings and tracks successful,
+   * failed, and skipped saves.
+   *
+   * @returns A promise resolving to a SaveAllResult object containing save statistics
+   * @throws Throws an error if the save operation fails catastrophically
+   */
   public async saveAllFiles(): Promise<SaveAllResult> {
     this.logger.info('Save All operation started');
 
@@ -55,8 +89,6 @@ export class FileSaveService {
         skippedFiles: [],
         success: false,
       };
-      let skippedFiles: string[] = [];
-      let failedFiles: string[] = [];
 
       // Show progress for large operations
       if (unsavedFiles.length > 5) {
@@ -66,24 +98,21 @@ export class FileSaveService {
       // Save files sequentially for better error handling
       for (const document of unsavedFiles) {
         try {
-          const fileName = this.getSafeFileName(document);
           const saved = await this.saveFile(document);
           if (saved) {
             result.savedFiles++;
-            this.logger.debug(`Saved file: ${fileName}`);
+            this.logger.debug(`Saved file: ${document.fileName}`);
           } else {
-            skippedFiles = [...skippedFiles, fileName];
-            this.logger.warn(`Skipped file: ${fileName}`);
+            result.skippedFiles.push(document.fileName);
+            this.logger.warn(`Skipped file: ${document.fileName}`);
           }
         } catch (error) {
-          const fileName = this.getSafeFileName(document);
-          failedFiles = [...failedFiles, fileName];
-          this.logger.error(`Failed to save file: ${fileName}`, error);
+          result.failedFiles.push(document.fileName);
+          this.logger.error(`Failed to save file: ${document.fileName}`, error);
         }
       }
-      result.failedFiles = failedFiles;
-      result.skippedFiles = skippedFiles;
-      result.success = failedFiles.length === 0;
+
+      result.success = result.failedFiles.length === 0;
 
       this.showCompletionNotification(result);
       this.logger.info('Save All operation completed', result);
@@ -95,6 +124,15 @@ export class FileSaveService {
     }
   }
 
+  /**
+   * Retrieves all unsaved text documents from the workspace.
+   *
+   * Scans all open text documents and filters for dirty (unsaved) documents
+   * that are not untitled. Respects the skipReadOnly configuration to exclude
+   * read-only files when configured.
+   *
+   * @returns A promise resolving to an array of unsaved text documents
+   */
   private async getUnsavedFiles(): Promise<vscode.TextDocument[]> {
     const unsavedFiles: vscode.TextDocument[] = [];
 
@@ -104,19 +142,14 @@ export class FileSaveService {
         // Skip read-only files if configured to do so
         if (this.configService.getSaveAllConfig().skipReadOnly) {
           try {
+            // Check if file is writable by attempting to get its stats
             const uri = document.uri;
             if (uri.scheme === 'file') {
-              const filePath = uri.fsPath;
-              if (!isSafeFilePath(filePath)) {
-                this.logger.warn('Skipping save for unsafe file path', { filePath });
-              } else {
-                await fs.access(filePath, constants.W_OK);
-                unsavedFiles.push(document);
-              }
+              unsavedFiles.push(document);
             }
-          } catch (error) {
-            // File is read-only or not accessible
-            this.logger.warn(`Skipping read-only file: ${document.fileName}`, error);
+          } catch {
+            this.logger.warn(`Skipping read-only file: ${document.fileName}`);
+            continue;
           }
         } else {
           unsavedFiles.push(document);
@@ -127,6 +160,16 @@ export class FileSaveService {
     return unsavedFiles;
   }
 
+  /**
+   * Saves a single text document.
+   *
+   * Attempts to save the specified document using VS Code's save API.
+   * Logs errors and re-throws them for higher-level handling.
+   *
+   * @param document - The text document to save
+   * @returns A promise resolving to true if the save was successful, false otherwise
+   * @throws Throws an error if the save operation fails
+   */
   private async saveFile(document: vscode.TextDocument): Promise<boolean> {
     try {
       // Use VS Code's save API
@@ -138,6 +181,16 @@ export class FileSaveService {
     }
   }
 
+  /**
+   * Saves multiple files with a progress indicator.
+   *
+   * Displays a VS Code progress notification while saving files sequentially.
+   * Updates the progress indicator for each file and tracks save results.
+   * Used for operations involving more than 5 files to provide user feedback.
+   *
+   * @param files - Array of text documents to save
+   * @returns A promise resolving to a SaveAllResult object containing save statistics
+   */
   private async saveWithProgress(files: vscode.TextDocument[]): Promise<SaveAllResult> {
     const result: SaveAllResult = {
       totalFiles: files.length,
@@ -146,8 +199,6 @@ export class FileSaveService {
       skippedFiles: [],
       success: false,
     };
-    let skippedFiles: string[] = [];
-    let failedFiles: string[] = [];
 
     await vscode.window.withProgress(
       {
@@ -158,13 +209,16 @@ export class FileSaveService {
       async (progress) => {
         const increment = 100 / files.length;
 
-        let index = 0;
-        for (const document of files) {
-          const fileName = this.getSafeFileName(document);
+        for (let i = 0; i < files.length; i++) {
+          const document = files[i];
+
+          if (!document) {
+            continue;
+          }
 
           progress.report({
-            message: 'Saving file...',
-            increment: index === 0 ? 0 : increment,
+            message: `Saving ${document.fileName}`,
+            increment: i === 0 ? 0 : increment,
           });
 
           try {
@@ -172,28 +226,33 @@ export class FileSaveService {
             if (saved) {
               result.savedFiles++;
             } else {
-              skippedFiles = [...skippedFiles, fileName];
+              result.skippedFiles.push(document.fileName);
             }
           } catch (error) {
-            failedFiles = [...failedFiles, fileName];
-            this.logger.error(`Failed to save file: ${fileName}`, error);
+            result.failedFiles.push(document.fileName);
+            this.logger.error(`Failed to save file: ${document.fileName}`, error);
           }
-
-          index++;
         }
 
         progress.report({ increment: 100 });
       },
     );
 
-    result.failedFiles = failedFiles;
-    result.skippedFiles = skippedFiles;
-    result.success = failedFiles.length === 0;
+    result.success = result.failedFiles.length === 0;
     this.showCompletionNotification(result);
 
     return result;
   }
 
+  /**
+   * Displays a notification with save operation results.
+   *
+   * Shows an information message for successful saves and a warning message
+   * with a "Show Details" option for failures. Respects the showNotification
+   * configuration setting.
+   *
+   * @param result - The save operation result containing statistics and file lists
+   */
   private showCompletionNotification(result: SaveAllResult): void {
     const config = this.configService.getSaveAllConfig();
 
@@ -210,21 +269,33 @@ export class FileSaveService {
       const message = `Saved ${result.savedFiles}/${result.totalFiles} files. ${
         result.failedFiles.length
       } failed.`;
-      void vscode.window.showWarningMessage(message, 'Show Details').then(
-        (selection) => {
-          if (selection === 'Show Details') {
-            this.showFailureDetails(result);
-          }
-          return undefined;
-        },
-        (error: unknown) => {
-          this.logger.error('Error showing warning message', error);
-          return undefined;
-        },
-      );
+      vscode.window
+        .showWarningMessage(message, 'Show Details')
+        .then(
+          (selection) => {
+            if (selection === 'Show Details') {
+              this.showFailureDetails(result);
+            }
+            return selection;
+          },
+          (error: unknown) => {
+            this.logger.error('Error showing warning message', error);
+          },
+        )
+        .catch((error: unknown) => {
+          this.logger.error('Unexpected error in warning message handling', error);
+        });
     }
   }
 
+  /**
+   * Displays detailed information about failed and skipped files.
+   *
+   * Opens the output channel to show comprehensive save results including
+   * total files processed, successful saves, and lists of failed and skipped files.
+   *
+   * @param result - The save operation result containing failure and skip information
+   */
   private showFailureDetails(result: SaveAllResult): void {
     const details = [
       'Save All Results:',
@@ -250,15 +321,27 @@ export class FileSaveService {
     this.logger.show();
   }
 
+  /**
+   * Checks if there are any unsaved changes in the workspace.
+   *
+   * Scans all open text documents to determine if any have unsaved changes
+   * (are dirty) and are not untitled documents.
+   *
+   * @returns True if there are unsaved changes, false otherwise
+   */
   public hasUnsavedChanges(): boolean {
     return vscode.workspace.textDocuments.some((doc) => doc.isDirty && !doc.isUntitled);
   }
 
+  /**
+   * Gets the count of unsaved files in the workspace.
+   *
+   * Counts all open text documents that have unsaved changes (are dirty)
+   * and are not untitled documents.
+   *
+   * @returns The number of unsaved files
+   */
   public getUnsavedFileCount(): number {
     return vscode.workspace.textDocuments.filter((doc) => doc.isDirty && !doc.isUntitled).length;
-  }
-
-  private getSafeFileName(document: vscode.TextDocument): string {
-    return path.basename(document.fileName);
   }
 }

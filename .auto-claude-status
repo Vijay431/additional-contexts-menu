@@ -1,0 +1,25 @@
+{
+  "active": true,
+  "spec": "009-fix-command-injection-vulnerability-in-terminal-la",
+  "state": "building",
+  "subtasks": {
+    "completed": 12,
+    "total": 13,
+    "in_progress": 1,
+    "failed": 0
+  },
+  "phase": {
+    "current": "Final Verification and Documentation",
+    "id": null,
+    "total": 3
+  },
+  "workers": {
+    "active": 0,
+    "max": 1
+  },
+  "session": {
+    "number": 1,
+    "started_at": "2026-01-24T07:22:01.152098"
+  },
+  "last_update": "2026-01-24T07:22:01.252990"
+}

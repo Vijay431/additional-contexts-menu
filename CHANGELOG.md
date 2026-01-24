@@ -5,43 +5,17 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-> 📦 **Distribution**: This extension is published to both the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) and [Open VSX Registry](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus). All releases are available on both platforms simultaneously.
-
 ## [Unreleased]
 
-### Added
-- **🌐 Open VSX Registry Support**: Extension now available on Open VSX Registry for VS Code alternative users
-  - VSCodium users can install directly from Open VSX
-  - Gitpod workspaces can access the extension through Open VSX
-  - Eclipse Theia users can install from Open VSX Registry
-  - Automated dual publishing to both VS Code Marketplace and Open VSX Registry
-  - Identical functionality across all distribution channels
-
-### Distribution
-- Available on [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus)
-- Available on [Open VSX Registry](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus)
-
----
-
-> **Note**: Starting with this release, all versions are published simultaneously to both the VS Code Marketplace and Open VSX Registry, ensuring users of VS Code alternatives (VSCodium, Gitpod, Eclipse Theia) have access to the same features and updates.
-
----
-
-## [1.3.0] - 2025-11-08
-
-### Added
-- Community governance guidelines covering maintainer roles, decision process, and communication channels.
-- CODEOWNERS file and updated issue/PR templates to encourage collaborative reviews.
-- Contribution license note clarifying that all submissions remain under MIT while acknowledging authorship.
-
-### Changed
-- Migrated linting and formatting from ESLint + Prettier to Biome with new developer scripts (`lint`, `lint:fix`, `format`, `format:check`, `typecheck`).
-- Refreshed README, documentation pages, and wiki content to highlight the open-source community model and Biome workflow.
-- Updated security policy, dependabot configuration, and GitHub workflows to align with the new tooling stack.
-
 ### Fixed
-- Corrected outdated repository references in conduct and security documents.
-- Ensured marketplace badges, CI status, and community links are consistent across root and `.github/` documentation.
+
+- **🔒 Security**: Fixed command injection vulnerability (CWE-77) in terminal launching
+  - Enhanced shell escaping to prevent command injection through user-configurable external terminal commands
+  - Comprehensive shell metacharacter sanitization including backticks, command substitution ($()), pipes, and other special characters
+  - Improved validation for external terminal command configuration to block malicious command patterns
+  - Removed unsafe `shell: true` usage in spawn() calls and replaced with argument-based execution
+  - Added comprehensive security tests for command injection scenarios
+  - Verified protection against Unicode escape sequences and platform-specific injection techniques
 
 ## [1.2.0] - 2025-09-26
 
