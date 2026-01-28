@@ -31,9 +31,6 @@ CLAUDE.md
 .claude
 TODO.md
 
-
-# Auto Claude data directory
-.auto-claude/
 .automaker
 .kiro
 .worktrees
