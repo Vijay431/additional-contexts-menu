@@ -1,7 +1,7 @@
 {
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
-  "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, TypeScript & JavaScript with intelligent code operations.",
+  "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, Svelte, Vue, TypeScript & JavaScript with intelligent code operations.",
   "version": "1.3.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
@@ -27,21 +27,19 @@
     "angular",
     "express",
     "nextjs",
+    "svelte",
+    "vue",
     "typescript",
     "javascript",
     "nodejs",
     "productivity"
   ],
-  "categories": [
-    "Other"
-  ],
+  "categories": ["Other"],
   "engines": {
     "node": ">=16.0.0 <25.0.0",
     "vscode": "^1.105.0"
   },
-  "activationEvents": [
-    "onStartupFinished"
-  ],
+  "activationEvents": ["onStartupFinished"],
   "contributes": {
     "commands": [
       {
@@ -83,6 +81,731 @@
         "title": "Open in Terminal",
         "category": "Additional Context Menus",
         "icon": "$(terminal)"
+      },
+      {
+        "command": "additionalContextMenus.extractToComponent",
+        "title": "Extract to Component",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.extractToSvelteComponent",
+        "title": "Extract to Svelte Component",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.extractToVueComponent",
+        "title": "Extract to Vue Component",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.extractToAngularComponent",
+        "title": "Extract to Angular Component",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.extractToSolidComponent",
+        "title": "Extract to SolidJS Component",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.extractConditional",
+        "title": "Extract Complex Conditional",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-boolean)"
+      },
+      {
+        "command": "additionalContextMenus.generateAngularService",
+        "title": "Generate Angular Service",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.generateDockerfile",
+        "title": "Generate Dockerfile",
+        "category": "Additional Context Menus",
+        "icon": "$(docker)"
+      },
+      {
+        "command": "additionalContextMenus.generateElectronPreload",
+        "title": "Generate Electron Preload Script",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.scanForSecrets",
+        "title": "Scan File for Secrets",
+        "category": "Additional Context Menus",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "additionalContextMenus.clearSecretDiagnostics",
+        "title": "Clear Secret Diagnostics",
+        "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.sortImports",
+        "title": "Sort Imports",
+        "category": "Additional Context Menus",
+        "icon": "$(sort-precedence)"
+      },
+      {
+        "command": "additionalContextMenus.extractToVueComposable",
+        "title": "Extract to Vue Composable",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.analyzeBundleSize",
+        "title": "Analyze Bundle Size",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.analyzeComplexity",
+        "title": "Analyze Code Complexity",
+        "category": "Additional Context Menus",
+        "icon": "$(codeql)"
+      },
+      {
+        "command": "additionalContextMenus.insertSnippet",
+        "title": "Insert Snippet",
+        "category": "Additional Context Menus",
+        "icon": "$(snippet)"
+      },
+      {
+        "command": "additionalContextMenus.createSnippet",
+        "title": "Create Snippet from Selection",
+        "category": "Additional Context Menus",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "additionalContextMenus.manageSnippets",
+        "title": "Manage Snippets",
+        "category": "Additional Context Menus",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "additionalContextMenus.createBookmark",
+        "title": "Create Bookmark",
+        "category": "Additional Context Menus",
+        "icon": "$(bookmark)"
+      },
+      {
+        "command": "additionalContextMenus.manageBookmarks",
+        "title": "Manage Bookmarks",
+        "category": "Additional Context Menus",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "additionalContextMenus.searchBookmarks",
+        "title": "Search Bookmarks",
+        "category": "Additional Context Menus",
+        "icon": "$(search)"
+      },
+      {
+        "command": "additionalContextMenus.clearFileBookmarks",
+        "title": "Clear File Bookmarks",
+        "category": "Additional Context Menus",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "additionalContextMenus.generateCommitMessage",
+        "title": "Generate Commit Message",
+        "category": "Additional Context Menus",
+        "icon": "$(git-commit)"
+      },
+      {
+        "command": "additionalContextMenus.optimizePrettierConfig",
+        "title": "Optimize Prettier Config",
+        "category": "Additional Context Menus",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "additionalContextMenus.generateComponentProps",
+        "title": "Generate Component Props",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-property)"
+      },
+      {
+        "command": "additionalContextMenus.detectDuplicateCode",
+        "title": "Detect Duplicate Code",
+        "category": "Additional Context Menus",
+        "icon": "$(copies)"
+      },
+      {
+        "command": "additionalContextMenus.detectUnusedDependencies",
+        "title": "Detect Unused Dependencies",
+        "category": "Additional Context Menus",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "additionalContextMenus.analyzeDependencyUpgrades",
+        "title": "Analyze Dependency Upgrades",
+        "category": "Additional Context Menus",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "additionalContextMenus.generateEnvInterface",
+        "title": "Generate TypeScript Interface from .env",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.validateEnvFile",
+        "title": "Validate .env File",
+        "category": "Additional Context Menus",
+        "icon": "$(check)"
+      },
+      {
+        "command": "additionalContextMenus.formatEnvFile",
+        "title": "Format .env File",
+        "category": "Additional Context Menus",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "additionalContextMenus.createEnvFile",
+        "title": "Create .env File",
+        "category": "Additional Context Menus",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "additionalContextMenus.detectErrorPatterns",
+        "title": "Detect Error Patterns",
+        "category": "Additional Context Menus",
+        "icon": "$(error-scope)"
+      },
+      {
+        "command": "additionalContextMenus.clearErrorPatternDiagnostics",
+        "title": "Clear Error Pattern Diagnostics",
+        "category": "Additional Context Menus",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "additionalContextMenus.performSecurityAudit",
+        "title": "Perform Security Audit",
+        "category": "Additional Context Menus",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "additionalContextMenus.clearSecurityAuditDiagnostics",
+        "title": "Clear Security Audit Diagnostics",
+        "category": "Additional Context Menus",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "additionalContextMenus.suggestESLintRules",
+        "title": "Suggest ESLint Rules",
+        "category": "Additional Context Menus",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "additionalContextMenus.validateFileName",
+        "title": "Validate File Name Convention",
+        "category": "Additional Context Menus",
+        "icon": "$(check)"
+      },
+      {
+        "command": "additionalContextMenus.validateConfigSchema",
+        "title": "Validate Config Schema",
+        "category": "Additional Context Menus",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "additionalContextMenus.renameFileConvention",
+        "title": "Rename File to Convention",
+        "category": "Additional Context Menus",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "additionalContextMenus.bulkRenameFiles",
+        "title": "Bulk Rename Files",
+        "category": "Additional Context Menus",
+        "icon": "$(rename)"
+      },
+      {
+        "command": "additionalContextMenus.extractToHook",
+        "title": "Extract to Custom Hook",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-hook)"
+      },
+      {
+        "command": "additionalContextMenus.generateCoverageReport",
+        "title": "Generate Coverage Report",
+        "category": "Additional Context Menus",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "additionalContextMenus.generateNestjsController",
+        "title": "Generate NestJS Controller",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateNestjsModule",
+        "title": "Generate NestJS Module",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateJestTests",
+        "title": "Generate Jest Tests",
+        "category": "Additional Context Menus",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "additionalContextMenus.generateCronJob",
+        "title": "Generate Cron Job",
+        "category": "Additional Context Menus",
+        "icon": "$(clock)"
+      },
+      {
+        "command": "additionalContextMenus.generateMockData",
+        "title": "Generate Mock Data",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-misc)"
+      },
+      {
+        "command": "additionalContextMenus.generatePlaywrightTests",
+        "title": "Generate Playwright Tests",
+        "category": "Additional Context Menus",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "additionalContextMenus.generateVitestTests",
+        "title": "Generate Vitest Tests",
+        "category": "Additional Context Menus",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "additionalContextMenus.generateStorybookStory",
+        "title": "Generate Storybook Story",
+        "category": "Additional Context Menus",
+        "icon": "$(book)"
+      },
+      {
+        "command": "additionalContextMenus.generateGraphqlResolver",
+        "title": "Generate GraphQL Resolver",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateNestjsDTO",
+        "title": "Generate NestJS DTOs",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.generateNestjsEntity",
+        "title": "Generate NestJS Entity",
+        "category": "Additional Context Menus",
+        "icon": "$(database)"
+      },
+      {
+        "command": "additionalContextMenus.generateNestjsGuard",
+        "title": "Generate NestJS Guard",
+        "category": "Additional Context Menus",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "additionalContextMenus.generateGraphqlSchema",
+        "title": "Generate GraphQL Schema",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateNextjsPage",
+        "title": "Generate Next.js Page",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-namespace)"
+      },
+      {
+        "command": "additionalContextMenus.generateNuxtjsPage",
+        "title": "Generate Nuxt 3 Page",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-namespace)"
+      },
+      {
+        "command": "additionalContextMenus.generateSveltekitPage",
+        "title": "Generate SvelteKit Page",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-namespace)"
+      },
+      {
+        "command": "additionalContextMenus.generateSveltekitServer",
+        "title": "Generate SvelteKit Server Endpoint",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateNuxtComposable",
+        "title": "Generate Nuxt Composable",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.generateOpenApiSpec",
+        "title": "Generate OpenAPI Specification",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.profilePerformance",
+        "title": "Profile Performance",
+        "category": "Additional Context Menus",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "additionalContextMenus.analyzeMemoryUsage",
+        "title": "Analyze Memory Usage",
+        "category": "Additional Context Menus",
+        "icon": "$(server-process)"
+      },
+      {
+        "command": "additionalContextMenus.managePackagejsonScripts",
+        "title": "Manage Package.json Scripts",
+        "category": "Additional Context Menus",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "additionalContextMenus.generatePrismaSchema",
+        "title": "Generate Prisma Schema",
+        "category": "Additional Context Menus",
+        "icon": "$(database)"
+      },
+      {
+        "command": "additionalContextMenus.generatePrismaClient",
+        "title": "Generate Prisma Client Wrapper",
+        "category": "Additional Context Menus",
+        "icon": "$(database)"
+      },
+      {
+        "command": "additionalContextMenus.generateReactQueryHooks",
+        "title": "Generate React Query Hooks",
+        "category": "Additional Context Menus",
+        "icon": "$(database)"
+      },
+      {
+        "command": "additionalContextMenus.generateReactContext",
+        "title": "Generate React Context",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-namespace)"
+      },
+      {
+        "command": "additionalContextMenus.generateReactErrorBoundary",
+        "title": "Generate React Error Boundary",
+        "category": "Additional Context Menus",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "additionalContextMenus.generateReactSuspenseBoundary",
+        "title": "Generate React Suspense Boundary",
+        "category": "Additional Context Menus",
+        "icon": "$(loading)"
+      },
+      {
+        "command": "additionalContextMenus.generateReactFormValidator",
+        "title": "Generate React Form Validator",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-field)"
+      },
+      {
+        "command": "additionalContextMenus.generateReactVirtualList",
+        "title": "Generate React Virtual List",
+        "category": "Additional Context Menus",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "additionalContextMenus.generateInfiniteScroll",
+        "title": "Generate React Infinite Scroll",
+        "category": "Additional Context Menus",
+        "icon": "$(list-ordered)"
+      },
+      {
+        "command": "additionalContextMenus.generateSagaPattern",
+        "title": "Generate Saga Pattern Orchestrator",
+        "category": "Additional Context Menus",
+        "icon": "$(git-branch)"
+      },
+      {
+        "command": "additionalContextMenus.createEnum",
+        "title": "Create Enum from String Union",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-enum)"
+      },
+      {
+        "command": "additionalContextMenus.generateSemanticReleaseConfig",
+        "title": "Generate semantic-release Config",
+        "category": "Additional Context Menus",
+        "icon": "$(versions)"
+      },
+      {
+        "command": "additionalContextMenus.generateReadme",
+        "title": "Generate README",
+        "category": "Additional Context Menus",
+        "icon": "$(book)"
+      },
+      {
+        "command": "additionalContextMenus.generateGitignore",
+        "title": "Generate .gitignore",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.generateHuskyHooks",
+        "title": "Generate Husky Git Hooks",
+        "category": "Additional Context Menus",
+        "icon": "$(git-branch)"
+      },
+      {
+        "command": "additionalContextMenus.generateLintStagedConfig",
+        "title": "Generate lint-staged Configuration",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.generateCommitlintConfig",
+        "title": "Generate CommitLint Configuration",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.generateDockerCompose",
+        "title": "Generate docker-compose.yml",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateCucumberSpec",
+        "title": "Generate Cucumber Spec",
+        "category": "Additional Context Menus",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "additionalContextMenus.generateCircuitBreaker",
+        "title": "Generate Circuit Breaker",
+        "category": "Additional Context Menus",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "additionalContextMenus.generateExpressRoute",
+        "title": "Generate Express Route",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateKafkaProducer",
+        "title": "Generate Kafka Producer",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateRabbitMQConsumer",
+        "title": "Generate RabbitMQ Consumer",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateVitePlugin",
+        "title": "Generate Vite Plugin",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.generateRemixRoute",
+        "title": "Generate Remix Route",
+        "category": "Additional Context Menus",
+        "icon": "$(server)"
+      },
+      {
+        "command": "additionalContextMenus.buildMiddlewarePipeline",
+        "title": "Build Express Middleware Pipeline",
+        "category": "Additional Context Menus",
+        "icon": "$(server-process)"
+      },
+      {
+        "command": "additionalContextMenus.generateApiClient",
+        "title": "Generate API Client",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.generateAxiosClient",
+        "title": "Generate Axios Client from OpenAPI",
+        "category": "Additional Context Menus",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "additionalContextMenus.generateVueRouter",
+        "title": "Generate Vue Router",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-route)"
+      },
+      {
+        "command": "additionalContextMenus.generateSvelteAction",
+        "title": "Generate Svelte Action",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.showTaskList",
+        "title": "Show Task List",
+        "category": "Additional Context Menus",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "additionalContextMenus.runTask",
+        "title": "Run Task",
+        "category": "Additional Context Menus",
+        "icon": "$(play)"
+      },
+      {
+        "command": "additionalContextMenus.stopTask",
+        "title": "Stop Task",
+        "category": "Additional Context Menus",
+        "icon": "$(primitive-square)"
+      },
+      {
+        "command": "additionalContextMenus.stopAllTasks",
+        "title": "Stop All Tasks",
+        "category": "Additional Context Menus",
+        "icon": "$(close-all)"
+      },
+      {
+        "command": "additionalContextMenus.showWatchTasks",
+        "title": "Show Watch Tasks",
+        "category": "Additional Context Menus",
+        "icon": "$(eye-watch)"
+      },
+      {
+        "command": "additionalContextMenus.showTaskHistory",
+        "title": "Show Task History",
+        "category": "Additional Context Menus",
+        "icon": "$(history)"
+      },
+      {
+        "command": "additionalContextMenus.refreshTaskList",
+        "title": "Refresh Task List",
+        "category": "Additional Context Menus",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "additionalContextMenus.refactorTypeNarrowing",
+        "title": "Refactor Type Narrowing",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.clearTypeNarrowingDiagnostics",
+        "title": "Clear Type Narrowing Diagnostics",
+        "category": "Additional Context Menus",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "additionalContextMenus.detectUnusedImports",
+        "title": "Detect Unused Imports",
+        "category": "Additional Context Menus",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "additionalContextMenus.clearUnusedImportDiagnostics",
+        "title": "Clear Unused Import Diagnostics",
+        "category": "Additional Context Menus",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "additionalContextMenus.showSuggestionHub",
+        "title": "Show Suggestion Hub",
+        "category": "Additional Context Menus",
+        "icon": "$(lightbulb-autofix)"
+      },
+      {
+        "command": "additionalContextMenus.searchWorkspaceSymbols",
+        "title": "Search Workspace Symbols",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-search)"
+      },
+      {
+        "command": "additionalContextMenus.mapSymbolReferences",
+        "title": "Map Symbol References",
+        "category": "Additional Context Menus",
+        "icon": "$(references)"
+      },
+      {
+        "command": "additionalContextMenus.generateZodSchema",
+        "title": "Generate Zod Schema",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.generateMemoDecorator",
+        "title": "Generate Memo Decorator",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.generateApiDocumentation",
+        "title": "Generate API Documentation",
+        "category": "Additional Context Menus",
+        "icon": "$(book)"
+      },
+      {
+        "command": "additionalContextMenus.generateArchitectureDiagram",
+        "title": "Generate Architecture Diagram",
+        "category": "Additional Context Menus",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "additionalContextMenus.generateMicroserviceEvents",
+        "title": "Generate Microservice Events",
+        "category": "Additional Context Menus",
+        "icon": "$(server-environment)"
+      },
+      {
+        "command": "additionalContextMenus.validateBranchName",
+        "title": "Validate Branch Name",
+        "category": "Additional Context Menus",
+        "icon": "$(check)"
+      },
+      {
+        "command": "additionalContextMenus.showBranchNamingRules",
+        "title": "Show Branch Naming Rules",
+        "category": "Additional Context Menus",
+        "icon": "$(list-ordered)"
+      },
+      {
+        "command": "additionalContextMenus.suggestBranchName",
+        "title": "Suggest Branch Name",
+        "category": "Additional Context Menus",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "additionalContextMenus.generateI18nKeys",
+        "title": "Generate I18n Keys",
+        "category": "Additional Context Menus",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "additionalContextMenus.generateResponseFormatter",
+        "title": "Generate Response Formatter",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-interface)"
+      },
+      {
+        "command": "additionalContextMenus.generatePdfReport",
+        "title": "Generate PDF Report Template",
+        "category": "Additional Context Menus",
+        "icon": "$(file-pdf)"
+      },
+      {
+        "command": "additionalContextMenus.generateRateLimitDashboard",
+        "title": "Generate Rate Limit Dashboard",
+        "category": "Additional Context Menus",
+        "icon": "$(dashboard)"
       }
     ],
     "configuration": {
@@ -100,31 +823,18 @@
         },
         "additionalContextMenus.supportedExtensions": {
           "type": "array",
-          "default": [
-            ".ts",
-            ".tsx",
-            ".js",
-            ".jsx"
-          ],
+          "default": [".ts", ".tsx", ".js", ".jsx"],
           "description": "File extensions where context menus will be shown"
         },
         "additionalContextMenus.copyCode.insertionPoint": {
           "type": "string",
-          "enum": [
-            "smart",
-            "end",
-            "beginning"
-          ],
+          "enum": ["smart", "end", "beginning"],
           "default": "smart",
           "description": "Where to insert copied code in target file"
         },
         "additionalContextMenus.copyCode.handleImports": {
           "type": "string",
-          "enum": [
-            "merge",
-            "duplicate",
-            "skip"
-          ],
+          "enum": ["merge", "duplicate", "skip"],
           "default": "merge",
           "description": "How to handle import statements when copying code"
         },
@@ -145,11 +855,7 @@
         },
         "additionalContextMenus.terminal.type": {
           "type": "string",
-          "enum": [
-            "integrated",
-            "external",
-            "system-default"
-          ],
+          "enum": ["integrated", "external", "system-default"],
           "default": "integrated",
           "description": "Type of terminal to open when using 'Open in Terminal' command"
         },
@@ -160,13 +866,3014 @@
         },
         "additionalContextMenus.terminal.openBehavior": {
           "type": "string",
-          "enum": [
-            "parent-directory",
-            "workspace-root",
-            "current-directory"
-          ],
+          "enum": ["parent-directory", "workspace-root", "current-directory"],
           "default": "parent-directory",
           "description": "Which directory to open in terminal"
+        },
+        "additionalContextMenus.secretDetection.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable secret detection feature"
+        },
+        "additionalContextMenus.secretDetection.scanOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically scan for secrets when saving a file"
+        },
+        "additionalContextMenus.secretDetection.showSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show suggestions for proper secret management when secrets are detected"
+        },
+        "additionalContextMenus.secretDetection.excludedPatterns": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Custom regex patterns to exclude from secret detection (e.g., 'example', 'test', 'placeholder')"
+        },
+        "additionalContextMenus.importSorting.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable import sorting feature"
+        },
+        "additionalContextMenus.importSorting.groupOrder": {
+          "type": "array",
+          "default": ["external", "internal", "relative", "type"],
+          "items": {
+            "type": "string",
+            "enum": ["external", "internal", "relative", "type"]
+          },
+          "description": "Order of import groups: external (node_modules), internal (monorepo packages), relative (./, ../), type (type-only imports)"
+        },
+        "additionalContextMenus.importSorting.sortAlphabetically": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sort imports alphabetically within each group"
+        },
+        "additionalContextMenus.importSorting.groupSeparators": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add blank lines between import groups"
+        },
+        "additionalContextMenus.importSorting.separateTypeImports": {
+          "type": "boolean",
+          "default": false,
+          "description": "Separate type-only imports into their own group"
+        },
+        "additionalContextMenus.importSorting.newlinesBetweenGroups": {
+          "type": "number",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Number of newlines between import groups"
+        },
+        "additionalContextMenus.bundleAnalysis.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable bundle analysis feature"
+        },
+        "additionalContextMenus.bundleAnalysis.autoAnalyzeAfterBuild": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically analyze bundle size after build completes"
+        },
+        "additionalContextMenus.bundleAnalysis.showLargeModuleThreshold": {
+          "type": "number",
+          "default": 50,
+          "minimum": 10,
+          "maximum": 500,
+          "description": "Threshold in KB for highlighting large modules"
+        },
+        "additionalContextMenus.bundleAnalysis.showLargeBundleThreshold": {
+          "type": "number",
+          "default": 200,
+          "minimum": 50,
+          "maximum": 1000,
+          "description": "Threshold in KB for highlighting large bundles"
+        },
+        "additionalContextMenus.complexityAnalysis.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable complexity analysis feature"
+        },
+        "additionalContextMenus.complexityAnalysis.maxFunctionLength": {
+          "type": "number",
+          "default": 50,
+          "minimum": 10,
+          "maximum": 500,
+          "description": "Maximum function length in lines before being flagged as complex"
+        },
+        "additionalContextMenus.complexityAnalysis.maxCyclomaticComplexity": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum cyclomatic complexity before a function is flagged as complex"
+        },
+        "additionalContextMenus.complexityAnalysis.maxNestingDepth": {
+          "type": "number",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 15,
+          "description": "Maximum nesting depth before a function is flagged as complex"
+        },
+        "additionalContextMenus.complexityAnalysis.maxParameters": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 15,
+          "description": "Maximum number of parameters before a function is flagged as complex"
+        },
+        "additionalContextMenus.complexityAnalysis.showSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show refactoring suggestions when complexity issues are detected"
+        },
+        "additionalContextMenus.performanceProfiler.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable performance profiler feature"
+        },
+        "additionalContextMenus.performanceProfiler.minExecutionTime": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Minimum estimated execution time threshold for flagging functions (abstract units)"
+        },
+        "additionalContextMenus.performanceProfiler.minMemoryUsage": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Minimum estimated memory usage threshold for flagging functions (abstract units)"
+        },
+        "additionalContextMenus.performanceProfiler.maxNestingDepth": {
+          "type": "number",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Maximum nesting depth before a function is flagged"
+        },
+        "additionalContextMenus.performanceProfiler.analyzeAsyncOperations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Analyze async operations for potential performance issues"
+        },
+        "additionalContextMenus.performanceProfiler.showOptimizationSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show optimization suggestions when performance bottlenecks are detected"
+        },
+        "additionalContextMenus.memoryUsageAnalyzer.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable memory usage analyzer feature"
+        },
+        "additionalContextMenus.memoryUsageAnalyzer.maxArraySize": {
+          "type": "number",
+          "default": 1000,
+          "minimum": 100,
+          "maximum": 100000,
+          "description": "Maximum array size threshold for flagging large allocations"
+        },
+        "additionalContextMenus.memoryUsageAnalyzer.maxObjectDepth": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Maximum object depth threshold for flagging deep objects"
+        },
+        "additionalContextMenus.memoryUsageAnalyzer.checkEventListeners": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check for event listeners without cleanup (memory leaks)"
+        },
+        "additionalContextMenus.memoryUsageAnalyzer.checkTimers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check for timers without cleanup (memory leaks)"
+        },
+        "additionalContextMenus.memoryUsageAnalyzer.checkClosures": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check for closures that might capture large scopes"
+        },
+        "additionalContextMenus.memoryUsageAnalyzer.showSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show memory optimization suggestions when issues are detected"
+        },
+        "additionalContextMenus.snippetManager.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable snippet manager feature"
+        },
+        "additionalContextMenus.snippetManager.storageLocation": {
+          "type": "string",
+          "enum": ["workspace", "global"],
+          "default": "workspace",
+          "description": "Where to store snippets - workspace (.vscode/snippets) or global storage"
+        },
+        "additionalContextMenus.snippetManager.autoDetectPlaceholders": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect placeholders in snippets using regex pattern"
+        },
+        "additionalContextMenus.snippetManager.placeholderPattern": {
+          "type": "string",
+          "default": "\\$\\{([a-zA-Z_][a-zA-Z0-9_]*)\\}",
+          "description": "Regex pattern to detect placeholders in snippets (must include one capture group for the placeholder name)"
+        },
+        "additionalContextMenus.commitMessageGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable commit message generator feature"
+        },
+        "additionalContextMenus.commitMessageGenerator.includeFileListInBody": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include list of changed files in commit message body"
+        },
+        "additionalContextMenus.commitMessageGenerator.maxSuggestions": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Maximum number of commit message suggestions to generate"
+        },
+        "additionalContextMenus.commitMessageGenerator.defaultCommitType": {
+          "type": "string",
+          "enum": ["feat", "fix", "chore"],
+          "default": "feat",
+          "description": "Default commit type when unsure what to use"
+        },
+        "additionalContextMenus.propsGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable component props generator feature"
+        },
+        "additionalContextMenus.propsGenerator.inferTypesFromUsage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Infer TypeScript types from prop usage patterns"
+        },
+        "additionalContextMenus.propsGenerator.detectOptionalFromDefaults": {
+          "type": "boolean",
+          "default": true,
+          "description": "Detect optional props based on default values in component definition"
+        },
+        "additionalContextMenus.propsGenerator.includeJSDocComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated interfaces"
+        },
+        "additionalContextMenus.propsGenerator.generateExportedInterfaces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate exported interfaces that can be imported by other files"
+        },
+        "additionalContextMenus.propsGenerator.strictTypeInference": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use strict type inference (marks all non-boolean props as required by default)"
+        },
+        "additionalContextMenus.duplicateCodeDetection.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable duplicate code detection feature"
+        },
+        "additionalContextMenus.duplicateCodeDetection.minBlockLines": {
+          "type": "number",
+          "default": 5,
+          "minimum": 3,
+          "maximum": 50,
+          "description": "Minimum number of lines for a code block to be considered for duplicate detection"
+        },
+        "additionalContextMenus.duplicateCodeDetection.minSimilarity": {
+          "type": "number",
+          "default": 0.85,
+          "minimum": 0.5,
+          "maximum": 1.0,
+          "description": "Minimum similarity threshold (0.5 to 1.0) for code blocks to be considered duplicates"
+        },
+        "additionalContextMenus.duplicateCodeDetection.ignoreComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ignore comments when comparing code blocks"
+        },
+        "additionalContextMenus.duplicateCodeDetection.ignoreWhitespace": {
+          "type": "boolean",
+          "default": true,
+          "description": "Normalize whitespace when comparing code blocks"
+        },
+        "additionalContextMenus.duplicateCodeDetection.maxFileCount": {
+          "type": "number",
+          "default": 50,
+          "minimum": 10,
+          "maximum": 500,
+          "description": "Maximum number of files to scan for duplicates"
+        },
+        "additionalContextMenus.duplicateCodeDetection.showSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show refactoring suggestions when duplicate code is detected"
+        },
+        "additionalContextMenus.unusedDependencyDetection.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable unused dependency detection feature"
+        },
+        "additionalContextMenus.unusedDependencyDetection.scanDevDependencies": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include devDependencies when scanning for unused dependencies"
+        },
+        "additionalContextMenus.unusedDependencyDetection.checkMisplacedDependencies": {
+          "type": "boolean",
+          "default": true,
+          "description": "Identify dependencies that should be in devDependencies"
+        },
+        "additionalContextMenus.unusedDependencyDetection.maxFileCount": {
+          "type": "number",
+          "default": 200,
+          "minimum": 50,
+          "maximum": 1000,
+          "description": "Maximum number of files to scan for imports"
+        },
+        "additionalContextMenus.dependencyUpgradeAdvisor.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable dependency upgrade advisor feature"
+        },
+        "additionalContextMenus.dependencyUpgradeAdvisor.checkDevDependencies": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include devDependencies when checking for upgrades"
+        },
+        "additionalContextMenus.dependencyUpgradeAdvisor.checkPreReleases": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include pre-release versions when checking for upgrades"
+        },
+        "additionalContextMenus.dependencyUpgradeAdvisor.severityThreshold": {
+          "type": "string",
+          "enum": ["low", "moderate", "high", "critical"],
+          "default": "moderate",
+          "description": "Minimum severity level for breaking changes to report"
+        },
+        "additionalContextMenus.dependencyUpgradeAdvisor.maxOutdated": {
+          "type": "number",
+          "default": 50,
+          "minimum": 10,
+          "maximum": 200,
+          "description": "Maximum number of outdated dependencies to analyze"
+        },
+        "additionalContextMenus.dependencyUpgradeAdvisor.includePeerDependencies": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include peer dependencies when checking for upgrades"
+        },
+        "additionalContextMenus.dockerfileGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Dockerfile generator feature"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeHealthcheck": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include healthcheck directive in Dockerfile"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeEntrypoint": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include custom entrypoint script"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeEnvironment": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include environment variables in Dockerfile"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeVolumes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include volume mounts in Dockerfile"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeExpose": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include expose directive in Dockerfile"
+        },
+        "additionalContextMenus.dockerfileGenerator.defaultNodeVersion": {
+          "type": "string",
+          "default": "20-alpine",
+          "description": "Default Node.js version for Dockerfile"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeMultiStage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use multi-stage builds for production"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeDockerignore": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate .dockerignore file"
+        },
+        "additionalContextMenus.dockerfileGenerator.includeDockerCompose": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate docker-compose.yml file"
+        },
+        "additionalContextMenus.dockerfileGenerator.targetPort": {
+          "type": "number",
+          "default": 3000,
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Default target port for the application"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Electron main process generator feature"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include TypeScript typing support in generated main process"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.includeIPC": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include IPC handlers setup in generated main process"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.includeSecurity": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include security best practices and configuration"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.includeAutoUpdater": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include auto-updater setup using electron-updater"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.defaultAppName": {
+          "type": "string",
+          "default": "MyElectronApp",
+          "description": "Default app name for generated main process"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.mainWindowPath": {
+          "type": "string",
+          "default": "src",
+          "description": "Path where main process files will be generated"
+        },
+        "additionalContextMenus.electronMainProcessGenerator.preloadPath": {
+          "type": "string",
+          "default": "src/preload",
+          "description": "Path to preload script"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Electron renderer process generator feature"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include TypeScript typing support in generated renderer process"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.includeIPC": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include IPC communication setup in generated renderer process"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.includeReact": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include React framework support"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.includeVue": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include Vue framework support"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.includeSvelte": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include Svelte framework support"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.defaultComponentName": {
+          "type": "string",
+          "default": "AppRenderer",
+          "description": "Default component name for generated renderer process"
+        },
+        "additionalContextMenus.electronRendererProcessGenerator.rendererPath": {
+          "type": "string",
+          "default": "src/renderer",
+          "description": "Path where renderer process files will be generated"
+        },
+        "additionalContextMenus.electronPreloadGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Electron preload generator feature"
+        },
+        "additionalContextMenus.electronPreloadGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include TypeScript typing support in generated preload scripts"
+        },
+        "additionalContextMenus.electronPreloadGenerator.includeSandboxWarning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include sandbox warning comments in generated preload scripts"
+        },
+        "additionalContextMenus.electronPreloadGenerator.defaultApiName": {
+          "type": "string",
+          "default": "ElectronAPI",
+          "description": "Default API name for generated preload scripts"
+        },
+        "additionalContextMenus.electronPreloadGenerator.preloadPath": {
+          "type": "string",
+          "default": "src/preload",
+          "description": "Path where preload script files will be generated"
+        },
+        "additionalContextMenus.envVariableManager.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable environment variable manager feature"
+        },
+        "additionalContextMenus.envVariableManager.autoFormat": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically format .env files on save"
+        },
+        "additionalContextMenus.envVariableManager.sortVariables": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sort variables alphabetically when formatting"
+        },
+        "additionalContextMenus.envVariableManager.generateInterfaces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript interfaces for environment variables"
+        },
+        "additionalContextMenus.envVariableManager.validateOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate .env files when saving"
+        },
+        "additionalContextMenus.envVariableManager.showValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show validation diagnostics in editor"
+        },
+        "additionalContextMenus.envVariableManager.interfaceName": {
+          "type": "string",
+          "default": "EnvConfig",
+          "description": "Name for the generated TypeScript interface"
+        },
+        "additionalContextMenus.errorPatternDetection.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable error pattern detection"
+        },
+        "additionalContextMenus.errorPatternDetection.includeUnhandledPromises": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include unhandled promises in detection"
+        },
+        "additionalContextMenus.errorPatternDetection.includeMissingErrorHandlers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include missing error handlers in detection"
+        },
+        "additionalContextMenus.errorPatternDetection.includeRaceConditions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include race conditions in detection"
+        },
+        "additionalContextMenus.errorPatternDetection.includeEmptyCatchBlocks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include empty catch blocks in detection"
+        },
+        "additionalContextMenus.errorPatternDetection.includeForgottenAwait": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include forgotten await in detection"
+        },
+        "additionalContextMenus.errorPatternDetection.showSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show suggestions for detected error patterns"
+        },
+        "additionalContextMenus.fileNamingConvention.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable file naming convention validation feature"
+        },
+        "additionalContextMenus.fileNamingConvention.validateOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically validate file names on save"
+        },
+        "additionalContextMenus.fileNamingConvention.defaultConvention": {
+          "type": "string",
+          "enum": ["kebab-case", "camelCase", "PascalCase"],
+          "default": "kebab-case",
+          "description": "Default naming convention to validate against"
+        },
+        "additionalContextMenus.fileNamingConvention.showQuickFix": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show quick fix suggestions when naming violations are detected"
+        },
+        "additionalContextMenus.fileNamingConvention.ignorePatterns": {
+          "type": "array",
+          "default": ["^\\.", "^test-", "^spec-"],
+          "items": {
+            "type": "string"
+          },
+          "description": "Regex patterns for file names to ignore during validation (e.g., '^\\\\.', '^test-', '^spec-')"
+        },
+        "additionalContextMenus.fileNamingConvention.fileExtensions": {
+          "type": "array",
+          "default": [".ts", ".tsx", ".js", ".jsx", ".vue", ".svelte"],
+          "items": {
+            "type": "string"
+          },
+          "description": "File extensions to include in naming convention validation"
+        },
+        "additionalContextMenus.fileNamingConvention.severity": {
+          "type": "string",
+          "enum": ["error", "warning", "info"],
+          "default": "warning",
+          "description": "Severity level for naming convention violations"
+        },
+        "additionalContextMenus.bulkFileRenamer.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable bulk file renamer feature"
+        },
+        "additionalContextMenus.bulkFileRenamer.updateImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically update import statements when renaming files"
+        },
+        "additionalContextMenus.bulkFileRenamer.showPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show preview of changes before applying rename operation"
+        },
+        "additionalContextMenus.bulkFileRenamer.handleCircularDependencies": {
+          "type": "boolean",
+          "default": true,
+          "description": "Detect and handle circular dependencies during rename operations"
+        },
+        "additionalContextMenus.bulkFileRenamer.fileExtensions": {
+          "type": "array",
+          "default": [".ts", ".tsx", ".js", ".jsx", ".vue", ".svelte"],
+          "items": {
+            "type": "string"
+          },
+          "description": "File extensions to include in bulk rename operations"
+        },
+        "additionalContextMenus.hookExtraction.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable hook extraction feature"
+        },
+        "additionalContextMenus.hookExtraction.preserveImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Preserve import statements when extracting code into a hook"
+        },
+        "additionalContextMenus.hookExtraction.inferTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically infer TypeScript types for hook parameters and return values"
+        },
+        "additionalContextMenus.hookExtraction.autoDetectHooks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect React hooks in the selected code"
+        },
+        "additionalContextMenus.hookExtraction.defaultHookName": {
+          "type": "string",
+          "default": "useCustomHook",
+          "description": "Default name for extracted custom hooks"
+        },
+        "additionalContextMenus.hookExtraction.hooksDirectory": {
+          "type": "string",
+          "default": "hooks",
+          "description": "Default directory name for storing extracted hooks"
+        },
+        "additionalContextMenus.coverageReporter.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable coverage reporter feature"
+        },
+        "additionalContextMenus.coverageReporter.thresholds.line": {
+          "type": "number",
+          "default": 80,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Minimum line coverage percentage threshold"
+        },
+        "additionalContextMenus.coverageReporter.thresholds.branch": {
+          "type": "number",
+          "default": 75,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Minimum branch coverage percentage threshold"
+        },
+        "additionalContextMenus.coverageReporter.thresholds.function": {
+          "type": "number",
+          "default": 80,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Minimum function coverage percentage threshold"
+        },
+        "additionalContextMenus.coverageReporter.thresholds.statement": {
+          "type": "number",
+          "default": 80,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Minimum statement coverage percentage threshold"
+        },
+        "additionalContextMenus.coverageReporter.showUncoveredLines": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show uncovered lines in the coverage report"
+        },
+        "additionalContextMenus.coverageReporter.trackTrends": {
+          "type": "boolean",
+          "default": true,
+          "description": "Track coverage trends over time"
+        },
+        "additionalContextMenus.coverageReporter.highlightInEditor": {
+          "type": "boolean",
+          "default": true,
+          "description": "Highlight covered and uncovered lines in the editor"
+        },
+        "additionalContextMenus.jestTestGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Jest test generator feature"
+        },
+        "additionalContextMenus.jestTestGenerator.includeEdgeCases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include edge case tests (empty strings, zeros, nulls, etc.)"
+        },
+        "additionalContextMenus.jestTestGenerator.includeErrorCases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error case tests (null/undefined parameters, invalid types, etc.)"
+        },
+        "additionalContextMenus.jestTestGenerator.testDirectory": {
+          "type": "string",
+          "default": "__tests__",
+          "description": "Default directory name for storing generated test files"
+        },
+        "additionalContextMenus.jestTestGenerator.setupType": {
+          "type": "string",
+          "default": "none",
+          "enum": ["none", "basic", "custom"],
+          "enumDescriptions": [
+            "No setup/teardown",
+            "Basic beforeEach/afterEach",
+            "Use custom setup function"
+          ],
+          "description": "Type of test setup to include in generated test suites"
+        },
+        "additionalContextMenus.jestTestGenerator.customSetupPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to custom test setup file (used when setupType is 'custom')"
+        },
+        "additionalContextMenus.kafkaConsumerGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Kafka consumer generator feature"
+        },
+        "additionalContextMenus.kafkaConsumerGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error handling (try-catch) in generated consumer handlers"
+        },
+        "additionalContextMenus.kafkaConsumerGenerator.includeRetryStrategy": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include retry strategy configuration options"
+        },
+        "additionalContextMenus.kafkaConsumerGenerator.includeDeserialization": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include message deserialization helpers for type-safe message handling"
+        },
+        "additionalContextMenus.kafkaConsumerGenerator.defaultConsumerPath": {
+          "type": "string",
+          "default": "src/consumers",
+          "description": "Default directory path for generated Kafka consumer files"
+        },
+        "additionalContextMenus.mockDataGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable mock data generator feature"
+        },
+        "additionalContextMenus.mockDataGenerator.exportData": {
+          "type": "boolean",
+          "default": true,
+          "description": "Export the generated mock data"
+        },
+        "additionalContextMenus.mockDataGenerator.includeTypeAnnotations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include TypeScript type annotations in generated mock data"
+        },
+        "additionalContextMenus.mockDataGenerator.includeJSDoc": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated mock data"
+        },
+        "additionalContextMenus.mockDataGenerator.includeOptionalProperties": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include optional properties in generated mock data"
+        },
+        "additionalContextMenus.mockDataGenerator.includeReadonlyProperties": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include readonly properties in generated mock data"
+        },
+        "additionalContextMenus.mockDataGenerator.includeNullValues": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include null values for nullable properties in generated mock data"
+        },
+        "additionalContextMenus.mockDataGenerator.useFakerPatterns": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use realistic data patterns based on property names (e.g., email addresses for 'email' properties)"
+        },
+        "additionalContextMenus.mockDataGenerator.arraySize": {
+          "type": "number",
+          "default": 3,
+          "description": "Default size for generated array mock data"
+        },
+        "additionalContextMenus.prettierConfigOptimizer.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Prettier config optimizer feature"
+        },
+        "additionalContextMenus.prettierConfigOptimizer.autoDetectProjectPatterns": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect formatting patterns from the codebase"
+        },
+        "additionalContextMenus.prettierConfigOptimizer.scanOnOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically scan codebase when workspace opens"
+        },
+        "additionalContextMenus.prettierConfigOptimizer.maxFilesToScan": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum number of files to scan for pattern detection"
+        },
+        "additionalContextMenus.prettierConfigOptimizer.excludedDirectories": {
+          "type": "array",
+          "default": ["node_modules", "dist", "build", ".git", "coverage"],
+          "description": "Directories to exclude from pattern detection",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalContextMenus.prettierConfigOptimizer.configFileLocations": {
+          "type": "array",
+          "default": [".prettierrc", ".prettierrc.json", "prettier.config.js"],
+          "description": "Config file names to search for",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalContextMenus.prettierConfigOptimizer.suggestOnInconsistency": {
+          "type": "boolean",
+          "default": true,
+          "description": "Suggest config changes when inconsistencies are detected"
+        },
+        "additionalContextMenus.prettierConfigOptimizer.consistencyThreshold": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Consistency threshold (0-1) for suggesting config changes"
+        },
+        "additionalContextMenus.vitestTestGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Vitest test generator feature"
+        },
+        "additionalContextMenus.vitestTestGenerator.includeEdgeCases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include edge case tests (empty strings, zeros, nulls, etc.)"
+        },
+        "additionalContextMenus.vitestTestGenerator.includeErrorCases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error case tests (null/undefined parameters, invalid types, etc.)"
+        },
+        "additionalContextMenus.vitestTestGenerator.testDirectory": {
+          "type": "string",
+          "default": "__tests__",
+          "description": "Default directory name for storing generated test files"
+        },
+        "additionalContextMenus.vitestTestGenerator.setupType": {
+          "type": "string",
+          "default": "none",
+          "enum": ["none", "basic", "custom"],
+          "enumDescriptions": [
+            "No setup/teardown",
+            "Basic beforeEach/afterEach with vi.clearAllMocks",
+            "Use custom setup function"
+          ],
+          "description": "Type of test setup to include in generated test suites"
+        },
+        "additionalContextMenus.vitestTestGenerator.customSetupPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to custom test setup file (used when setupType is 'custom')"
+        },
+        "additionalContextMenus.vitestTestGenerator.includeVitestUi": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include Vitest UI comments for better test visualization"
+        },
+        "additionalContextMenus.vitestTestGenerator.includeCoverageComments": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include coverage collection comments"
+        },
+        "additionalContextMenus.vitestTestGenerator.mockPatterns": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Custom mock patterns for generating mock data"
+        },
+        "additionalContextMenus.vitePluginGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Vite plugin generator feature"
+        },
+        "additionalContextMenus.vitePluginGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code with proper type definitions"
+        },
+        "additionalContextMenus.vitePluginGenerator.includeBuildOptimizations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include build optimization hooks and configurations"
+        },
+        "additionalContextMenus.vitePluginGenerator.includeDevServer": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include dev server configuration hooks"
+        },
+        "additionalContextMenus.vitePluginGenerator.includePlugins": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include plugin composition patterns"
+        },
+        "additionalContextMenus.vitePluginGenerator.defaultPluginName": {
+          "type": "string",
+          "default": "myPlugin",
+          "description": "Default plugin name to use"
+        },
+        "additionalContextMenus.vitePluginGenerator.outputDirectory": {
+          "type": "string",
+          "default": "plugins",
+          "description": "Default directory for generated plugin files"
+        },
+        "additionalContextMenus.vitePluginGenerator.includeRollupConfig": {
+          "type": "boolean",
+          "default": false,
+          "description": "Generate Rollup config file alongside Vite config"
+        },
+        "additionalContextMenus.vitePluginGenerator.includeViteConfig": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate Vite config file with the plugin"
+        },
+        "additionalContextMenus.storybookStoryGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Storybook story generator feature"
+        },
+        "additionalContextMenus.storybookStoryGenerator.includeControls": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Storybook controls (argTypes) for component props"
+        },
+        "additionalContextMenus.storybookStoryGenerator.includeArgsTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include TypeScript arg types for better type safety"
+        },
+        "additionalContextMenus.storybookStoryGenerator.storyDirectory": {
+          "type": "string",
+          "default": ".storybook",
+          "description": "Default directory name for storing generated story files"
+        },
+        "additionalContextMenus.storybookStoryGenerator.framework": {
+          "type": "string",
+          "default": "auto",
+          "enum": ["react", "vue", "svelte", "solid", "auto"],
+          "enumDescriptions": [
+            "React components",
+            "Vue components",
+            "Svelte components",
+            "Solid.js components",
+            "Auto-detect based on file extension and content"
+          ],
+          "description": "Framework to use for generating stories"
+        },
+        "additionalContextMenus.storybookStoryGenerator.storyFormat": {
+          "type": "string",
+          "default": "csf",
+          "enum": ["csf", "mdx"],
+          "enumDescriptions": [
+            "Component Story Format (CSF) - TypeScript/JavaScript",
+            "MDX format with interactive documentation"
+          ],
+          "description": "Story format to generate"
+        },
+        "additionalContextMenus.storybookStoryGenerator.autoGenerateVariants": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically generate variant stories (empty, disabled, etc.)"
+        },
+        "additionalContextMenus.cucumberSpecGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Cucumber spec generator feature"
+        },
+        "additionalContextMenus.cucumberSpecGenerator.includeExamples": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include example tables in generated scenarios"
+        },
+        "additionalContextMenus.cucumberSpecGenerator.includeBackground": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include background section in feature files"
+        },
+        "additionalContextMenus.cucumberSpecGenerator.featureDirectory": {
+          "type": "string",
+          "default": "features",
+          "description": "Default directory name for storing feature files"
+        },
+        "additionalContextMenus.cucumberSpecGenerator.stepDefinitionsDirectory": {
+          "type": "string",
+          "default": "features/step-definitions",
+          "description": "Default directory name for storing step definition files"
+        },
+        "additionalContextMenus.cucumberSpecGenerator.generateTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript step definitions instead of JavaScript"
+        },
+        "additionalContextMenus.playwrightTestGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Playwright test generator feature"
+        },
+        "additionalContextMenus.playwrightTestGenerator.includeEdgeCases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include edge case tests (empty states, loading states, etc.)"
+        },
+        "additionalContextMenus.playwrightTestGenerator.includeErrorCases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error case tests (API errors, network errors, etc.)"
+        },
+        "additionalContextMenus.playwrightTestGenerator.testDirectory": {
+          "type": "string",
+          "default": "e2e",
+          "description": "Default directory name for storing generated E2E test files"
+        },
+        "additionalContextMenus.playwrightTestGenerator.generatePageObjects": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate page object classes for better test maintainability"
+        },
+        "additionalContextMenus.playwrightTestGenerator.pageObjectsDirectory": {
+          "type": "string",
+          "default": "pages",
+          "description": "Default directory name for page object files"
+        },
+        "additionalContextMenus.playwrightTestGenerator.useDataAttributes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Prefer data attributes for selectors (e.g., data-testid)"
+        },
+        "additionalContextMenus.playwrightTestGenerator.waitingStrategy": {
+          "type": "string",
+          "default": "mixed",
+          "enum": ["waitForLoadState", "waitForSelector", "waitForResponse", "mixed"],
+          "enumDescriptions": [
+            "Wait for network idle",
+            "Wait for specific selector",
+            "Wait for API response",
+            "Use combination of strategies"
+          ],
+          "description": "Default waiting strategy for test assertions"
+        },
+        "additionalContextMenus.playwrightTestGenerator.includeAccessibilityTests": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include accessibility tests (requires axe-playwright)"
+        },
+        "additionalContextMenus.playwrightTestGenerator.includeVisualRegression": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include visual regression tests"
+        },
+        "additionalContextMenus.playwrightTestGenerator.customFixturePath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to custom test fixture file"
+        },
+        "additionalContextMenus.nestjsModuleGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable NestJS module generator feature"
+        },
+        "additionalContextMenus.nestjsModuleGenerator.generateImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include imports section in generated modules"
+        },
+        "additionalContextMenus.nestjsModuleGenerator.generateControllers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include controllers section in generated modules"
+        },
+        "additionalContextMenus.nestjsModuleGenerator.generateProviders": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include providers section in generated modules"
+        },
+        "additionalContextMenus.nestjsModuleGenerator.generateExports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include exports section in generated modules"
+        },
+        "additionalContextMenus.nestjsModuleGenerator.addGlobalImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add comments indicating global module imports"
+        },
+        "additionalContextMenus.nestjsModuleGenerator.organizationPattern": {
+          "type": "string",
+          "default": "feature-based",
+          "enum": ["feature-based", "layered"],
+          "enumDescriptions": [
+            "Organize by feature/module",
+            "Organize by layer (controllers, services, etc.)"
+          ],
+          "description": "Default organization pattern for generated modules"
+        },
+        "additionalContextMenus.nestjsEntityGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable NestJS entity generator feature"
+        },
+        "additionalContextMenus.nestjsEntityGenerator.generateRepository": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate repository class with the entity"
+        },
+        "additionalContextMenus.nestjsEntityGenerator.generateDto": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate DTO (Create/Update) classes with the entity"
+        },
+        "additionalContextMenus.nestjsEntityGenerator.generateValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include class-validator decorators in generated code"
+        },
+        "additionalContextMenus.nestjsEntityGenerator.databaseType": {
+          "type": "string",
+          "default": "typeorm",
+          "enum": ["typeorm", "mongoose"],
+          "enumDescriptions": ["Generate TypeORM entities", "Generate Mongoose schemas"],
+          "description": "Database ORM to use for entity generation"
+        },
+        "additionalContextMenus.nestjsEntityGenerator.defaultEntityPath": {
+          "type": "string",
+          "default": "src/entities",
+          "description": "Default path for generated entity files"
+        },
+        "additionalContextMenus.nestjsEntityGenerator.generateSwagger": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Swagger decorators for API documentation"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable NestJS guard generator feature"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.generateJwtStrategy": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate JWT strategy along with the guard"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.generateRolesGuard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate roles-based access control guard"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.generatePermissionsGuard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate permissions-based access control guard"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.generateGlobalGuard": {
+          "type": "boolean",
+          "default": false,
+          "description": "Generate auth module for global guard configuration"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.generateDecorators": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate decorators for roles and permissions"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.defaultGuardName": {
+          "type": "string",
+          "default": "Jwt",
+          "description": "Default guard name to use"
+        },
+        "additionalContextMenus.nestjsGuardGenerator.guardDirectory": {
+          "type": "string",
+          "default": "src/auth/guards",
+          "description": "Default directory for guard files"
+        },
+        "additionalContextMenus.graphqlResolverGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable GraphQL resolver generator feature"
+        },
+        "additionalContextMenus.graphqlResolverGenerator.generateDataLoaders": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate DataLoader classes to prevent N+1 query problems"
+        },
+        "additionalContextMenus.graphqlResolverGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include try-catch error handling in generated resolvers"
+        },
+        "additionalContextMenus.graphqlResolverGenerator.includeAuthGuard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include authentication guards in generated resolvers"
+        },
+        "additionalContextMenus.graphqlResolverGenerator.generateSubscriptions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable GraphQL subscription resolver generation"
+        },
+        "additionalContextMenus.graphqlResolverGenerator.defaultResolverPath": {
+          "type": "string",
+          "default": "src/resolvers",
+          "description": "Default directory path for generated resolver files"
+        },
+        "additionalContextMenus.graphqlResolverGenerator.generateInterfaces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate service interfaces for resolver methods"
+        },
+        "additionalContextMenus.nestjsDTOGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable NestJS DTO generator feature"
+        },
+        "additionalContextMenus.nestjsDTOGenerator.generateValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include class-validator decorators in generated DTOs"
+        },
+        "additionalContextMenus.nestjsDTOGenerator.generateSwagger": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Swagger decorators in generated DTOs"
+        },
+        "additionalContextMenus.nestjsDTOGenerator.defaultDTOSuffix": {
+          "type": "string",
+          "default": "Dto",
+          "description": "Default suffix for DTO classes (e.g., Dto, DTO)"
+        },
+        "additionalContextMenus.nestjsDTOGenerator.createBaseDTO": {
+          "type": "boolean",
+          "default": false,
+          "description": "Create a base DTO class that other DTOs extend"
+        },
+        "additionalContextMenus.nestjsDTOGenerator.includePartialDTO": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include a partial DTO class for update operations"
+        },
+        "additionalContextMenus.nestjsDTOGenerator.generateExampleComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments with examples in generated DTOs"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable GraphQL schema generator feature"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.includeDescriptions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include descriptions for types and fields in the generated schema"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.includeDirectives": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include common GraphQL directives (e.g., @deprecated, @authenticated)"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.defaultSchemaPath": {
+          "type": "string",
+          "default": "src/schema",
+          "description": "Default directory path for generated schema files"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.federationEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Apollo Federation support for the generated schema"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.federationVersion": {
+          "type": "string",
+          "default": "2.1",
+          "enum": ["2.0", "2.1"],
+          "enumDescriptions": ["Apollo Federation 2.0", "Apollo Federation 2.1"],
+          "description": "Apollo Federation version to use"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.generateInputs": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate input types for mutations"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.generateEnums": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate enum types from TypeScript enums"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.generateInterfaces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate interface types from TypeScript interfaces"
+        },
+        "additionalContextMenus.graphqlSchemaGenerator.generateUnions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate union types for discriminated unions"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable GraphQL directive generator feature"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.directivePath": {
+          "type": "string",
+          "default": "src/directives",
+          "description": "Default directory path for generated directive files"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.includeAuthDirectives": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include preset authentication directives (@authenticated, @hasRole, @hasPermission)"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.includeLoggingDirectives": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include preset logging directives (@log, @track)"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.includeFormattingDirectives": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include preset formatting directives (@formatDate, @uppercase, @lowercase, @truncate)"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.includeValidationDirectives": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include preset validation directives (@validate, @email, @length)"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript files for directive implementations"
+        },
+        "additionalContextMenus.graphqlDirectiveGenerator.defaultDirectiveName": {
+          "type": "string",
+          "default": "myDirective",
+          "description": "Default name for custom directives"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Next.js page scaffolder feature"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.directoryPattern": {
+          "type": "string",
+          "default": "app",
+          "enum": ["app", "pages"],
+          "enumDescriptions": ["App directory (Next.js 13+)", "Pages directory (classic)"],
+          "description": "Default directory pattern for page scaffolding"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for pages"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.includeMetadata": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include metadata generation for pages"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.includeLayout": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include layout file generation (App Router only)"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.includeLoading": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include loading state file generation (App Router only)"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.includeError": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include error boundary file generation (App Router only)"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.includeNotFound": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include not found page file generation (App Router only)"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.defaultComponentType": {
+          "type": "string",
+          "default": "server",
+          "enum": ["server", "client"],
+          "enumDescriptions": ["Server Component (default)", "Client Component (uses hooks/state)"],
+          "description": "Default component type for generated pages"
+        },
+        "additionalContextMenus.nextjsPageScaffolder.defaultPath": {
+          "type": "string",
+          "default": "app",
+          "description": "Default directory path for generated pages"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Nuxt 3 page generator feature"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for pages"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.includeMetadata": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include SEO metadata generation for pages"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.includeAsyncData": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include asyncData pattern option for pages"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.includeUseFetch": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include useFetch pattern option for pages"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.includeLayout": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include layout file generation option"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.includeMiddleware": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include middleware file generation option"
+        },
+        "additionalContextMenus.nuxtjsPageGenerator.defaultPagePath": {
+          "type": "string",
+          "default": "pages",
+          "description": "Default directory path for generated pages"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable SvelteKit page generator feature"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for pages"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.includeMetadata": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include SEO metadata generation for pages"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.includeLoadFunction": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include load function generation option"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.includeServerLoad": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include server load function (+page.server.ts) generation option"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.includeActions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include form actions generation option"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include error handling page (+error.svelte) generation option"
+        },
+        "additionalContextMenus.sveltekitPageGenerator.defaultPagePath": {
+          "type": "string",
+          "default": "src/routes",
+          "description": "Default directory path for generated pages"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Nuxt composable generator feature"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for composables"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.includeAutoImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include auto-import statements from Vue and Nuxt"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.includeSSRSupport": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include server-side rendering support in composables"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.includeContextHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include client/server context handling (process.client checks)"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.generateReturnType": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate explicit return type annotations for composables"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.defaultComposableDirectory": {
+          "type": "string",
+          "default": "composables",
+          "description": "Default directory path for generated composables"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.addJSDocComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add JSDoc comments to generated composables"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.includeAsyncReturnType": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Promise return type annotations for async functions"
+        },
+        "additionalContextMenus.nuxtComposableGenerator.generateHelpers": {
+          "type": "boolean",
+          "default": false,
+          "description": "Generate helper functions alongside composables"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Nuxt module generator feature"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for modules"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.includeConfigOptions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include configuration options in generated modules"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.includeLifecycleHooks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include lifecycle hooks in generated modules"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.includePluginRegistration": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include plugin registration support"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.includeCompositionSupport": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include composition API support (addImports)"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.includeModuleTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript type definitions for the module"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.defaultModulePath": {
+          "type": "string",
+          "default": "modules",
+          "description": "Default directory path for generated modules"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.addJSDocComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add JSDoc comments to generated modules"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.generateModuleMeta": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate module meta information (name, version, configKey)"
+        },
+        "additionalContextMenus.nuxtModuleGenerator.includeVersionValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Nuxt version validation in generated modules"
+        },
+        "additionalContextMenus.openApiSpecGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable OpenAPI specification generator feature"
+        },
+        "additionalContextMenus.openApiSpecGenerator.outputFormat": {
+          "type": "string",
+          "enum": ["json", "yaml"],
+          "default": "json",
+          "description": "Output format for the OpenAPI specification"
+        },
+        "additionalContextMenus.openApiSpecGenerator.includeDescriptions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include descriptions in the generated OpenAPI specification"
+        },
+        "additionalContextMenus.openApiSpecGenerator.includeExamples": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include example values in the generated OpenAPI specification"
+        },
+        "additionalContextMenus.openApiSpecGenerator.excludePrivateRoutes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Exclude private routes (prefixed with _) from the specification"
+        },
+        "additionalContextMenus.openApiSpecGenerator.outputDirectory": {
+          "type": "string",
+          "default": "docs/openapi",
+          "description": "Directory where the OpenAPI specification file will be saved"
+        },
+        "additionalContextMenus.openApiSpecGenerator.defaultServerUrl": {
+          "type": "string",
+          "default": "http://localhost:3000",
+          "description": "Default server URL to include in the OpenAPI specification"
+        },
+        "additionalContextMenus.openApiSpecGenerator.includeSecuritySchemes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include security schemes (bearer auth) in the specification"
+        },
+        "additionalContextMenus.packagejsonScriptsManager.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable package.json scripts manager feature"
+        },
+        "additionalContextMenus.packagejsonScriptsManager.showTemplates": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show predefined script templates when adding scripts"
+        },
+        "additionalContextMenus.packagejsonScriptsManager.autoDetectPackageManager": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect package manager (npm, yarn, pnpm) from workspace"
+        },
+        "additionalContextMenus.packagejsonScriptsManager.defaultPackageManager": {
+          "type": "string",
+          "enum": ["npm", "yarn", "pnpm"],
+          "default": "npm",
+          "description": "Default package manager to use when auto-detection is disabled"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Prisma schema generator feature"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.includeComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include comments in the generated Prisma schema"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.includeIndexes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include index configuration when generating models"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.defaultSchemaPath": {
+          "type": "string",
+          "default": "prisma",
+          "description": "Default directory path for generated Prisma schema files"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.defaultDataSourceProvider": {
+          "type": "string",
+          "default": "postgresql",
+          "enum": ["postgresql", "mysql", "sqlite", "sqlserver", "mongodb", "cockroachdb"],
+          "enumDescriptions": [
+            "PostgreSQL database",
+            "MySQL database",
+            "SQLite database",
+            "SQL Server database",
+            "MongoDB database",
+            "CockroachDB database"
+          ],
+          "description": "Default database provider for the data source"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.generateRelations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable relation field generation when creating models"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.generateMigrations": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable migration generation features in the Prisma schema"
+        },
+        "additionalContextMenus.prismaSchemaGenerator.idFieldType": {
+          "type": "string",
+          "default": "Int",
+          "enum": ["Int", "String", "UUID"],
+          "enumDescriptions": ["Integer ID with autoincrement", "String ID", "UUID ID"],
+          "description": "Default field type for the primary key ID field"
+        },
+        "additionalContextMenus.prismaClientGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Prisma client generator feature"
+        },
+        "additionalContextMenus.prismaClientGenerator.outputPath": {
+          "type": "string",
+          "default": "src/repositories",
+          "description": "Default directory path for generated Prisma client wrapper files"
+        },
+        "additionalContextMenus.prismaClientGenerator.includeTransactionMethods": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include transaction methods in generated wrapper"
+        },
+        "additionalContextMenus.prismaClientGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error handling in generated wrapper"
+        },
+        "additionalContextMenus.prismaClientGenerator.includeSoftDelete": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include soft delete method in generated wrapper"
+        },
+        "additionalContextMenus.prismaClientGenerator.includePagination": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include pagination methods in generated wrapper"
+        },
+        "additionalContextMenus.prismaClientGenerator.includeCaching": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include caching layer in extended repository"
+        },
+        "additionalContextMenus.prismaClientGenerator.includeValidation": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include validation methods in extended repository"
+        },
+        "additionalContextMenus.prismaClientGenerator.generateRepositoryInterface": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate repository interface along with implementation"
+        },
+        "additionalContextMenus.prismaClientGenerator.prismaImportPath": {
+          "type": "string",
+          "default": "@prisma/client",
+          "description": "Import path for Prisma client"
+        },
+        "additionalContextMenus.prismaClientGenerator.errorHandlingType": {
+          "type": "string",
+          "default": "try-catch",
+          "enum": ["try-catch", "result-type", "both"],
+          "enumDescriptions": [
+            "Use try-catch blocks",
+            "Use Result type pattern",
+            "Use both approaches"
+          ],
+          "description": "Error handling style to use in generated code"
+        },
+        "additionalContextMenus.reactQueryGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable React Query generator feature"
+        },
+        "additionalContextMenus.reactQueryGenerator.hooksDirectory": {
+          "type": "string",
+          "default": "hooks",
+          "description": "Default directory name for generated React Query hooks"
+        },
+        "additionalContextMenus.reactQueryGenerator.useInfiniteQuery": {
+          "type": "boolean",
+          "default": false,
+          "description": "Generate infinite query hooks for pagination"
+        },
+        "additionalContextMenus.reactQueryGenerator.includeOptimisticUpdates": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include optimistic update patterns in mutations"
+        },
+        "additionalContextMenus.reactQueryGenerator.includeCacheInvalidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include cache invalidation in mutation hooks"
+        },
+        "additionalContextMenus.reactQueryGenerator.generateApiService": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate API service functions alongside hooks"
+        },
+        "additionalContextMenus.readmeGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable README generator feature"
+        },
+        "additionalContextMenus.dockerComposeGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable docker-compose generator feature"
+        },
+        "additionalContextMenus.expressRouteGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Express route generator feature"
+        },
+        "additionalContextMenus.expressRouteGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for routes"
+        },
+        "additionalContextMenus.expressRouteGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include try-catch error handling in generated routes"
+        },
+        "additionalContextMenus.expressRouteGenerator.includeValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include validation patterns in generated routes"
+        },
+        "additionalContextMenus.expressRouteGenerator.includeAsyncAwait": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use async/await in generated route handlers"
+        },
+        "additionalContextMenus.expressRouteGenerator.includeMiddleware": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow adding middleware to generated routes"
+        },
+        "additionalContextMenus.expressRouteGenerator.includeJSDoc": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated routes"
+        },
+        "additionalContextMenus.expressRouteGenerator.defaultRoutePath": {
+          "type": "string",
+          "default": "api/",
+          "description": "Default path prefix for generated routes"
+        },
+        "additionalContextMenus.expressRouteGenerator.routerPattern": {
+          "type": "string",
+          "default": "router",
+          "enum": ["router", "app", "express-router"],
+          "enumDescriptions": ["Use Express.Router()", "Use app directly", "Use express.Router()"],
+          "description": "Router pattern to use for generated routes"
+        },
+        "additionalContextMenus.expressRouteGenerator.exportType": {
+          "type": "string",
+          "default": "named",
+          "enum": ["named", "default"],
+          "enumDescriptions": [
+            "Named export (export { router })",
+            "Default export (export default)"
+          ],
+          "description": "Export style for generated route modules"
+        },
+        "additionalContextMenus.expressRouteGenerator.parameterStyle": {
+          "type": "string",
+          "default": "destructured",
+          "enum": ["destructured", "properties"],
+          "enumDescriptions": [
+            "Destructure from req (const { id } = req.params)",
+            "Direct property access (req.params.id)"
+          ],
+          "description": "How to extract parameters from request object"
+        },
+        "additionalContextMenus.expressRouteGenerator.responsePattern": {
+          "type": "string",
+          "default": "res-json",
+          "enum": ["res-send", "res-json", "res-status"],
+          "enumDescriptions": ["Use res.send()", "Use res.json()", "Use res.status().send()"],
+          "description": "Response pattern to use in generated routes"
+        },
+        "additionalContextMenus.remixRouteGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Remix route generator"
+        },
+        "additionalContextMenus.remixRouteGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code instead of JavaScript"
+        },
+        "additionalContextMenus.remixRouteGenerator.includeLoader": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include loader function for data fetching"
+        },
+        "additionalContextMenus.remixRouteGenerator.includeAction": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include action function for form handling"
+        },
+        "additionalContextMenus.remixRouteGenerator.includeMeta": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include meta function for SEO"
+        },
+        "additionalContextMenus.remixRouteGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error handling in generated functions"
+        },
+        "additionalContextMenus.remixRouteGenerator.includeHeaders": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include headers function for HTTP headers"
+        },
+        "additionalContextMenus.remixRouteGenerator.includeLinks": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include links function for resource links"
+        },
+        "additionalContextMenus.remixRouteGenerator.defaultRoutePath": {
+          "type": "string",
+          "default": "routes/",
+          "description": "Default path prefix for generated routes"
+        },
+        "additionalContextMenus.remixRouteGenerator.exportType": {
+          "type": "string",
+          "default": "named",
+          "enum": ["named", "default"],
+          "enumDescriptions": ["Use named exports", "Use default export"],
+          "description": "Export type for generated routes"
+        },
+        "additionalContextMenus.apiClientGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable API client generator"
+        },
+        "additionalContextMenus.apiClientGenerator.targetFramework": {
+          "type": "string",
+          "default": "react",
+          "enum": ["react", "vue", "angular", "svelte"],
+          "enumDescriptions": [
+            "Generate React client",
+            "Generate Vue client",
+            "Generate Angular client",
+            "Generate Svelte client"
+          ],
+          "description": "Target frontend framework for API client"
+        },
+        "additionalContextMenus.apiClientGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code instead of JavaScript"
+        },
+        "additionalContextMenus.apiClientGenerator.generateFetchClient": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate fetch-based API client"
+        },
+        "additionalContextMenus.apiClientGenerator.generateAxiosClient": {
+          "type": "boolean",
+          "default": false,
+          "description": "Generate axios-based API client"
+        },
+        "additionalContextMenus.apiClientGenerator.outputDirectory": {
+          "type": "string",
+          "default": "src/api",
+          "description": "Output directory for generated API client files"
+        },
+        "additionalContextMenus.apiClientGenerator.baseApiUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Base API URL to prepend to all endpoints (e.g., http://localhost:3000)"
+        },
+        "additionalContextMenus.axiosClientGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Axios client generator"
+        },
+        "additionalContextMenus.axiosClientGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code instead of JavaScript"
+        },
+        "additionalContextMenus.axiosClientGenerator.includeInterceptors": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include request/response interceptors"
+        },
+        "additionalContextMenus.axiosClientGenerator.includeTransformers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include request/response transformers"
+        },
+        "additionalContextMenus.axiosClientGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error handling middleware"
+        },
+        "additionalContextMenus.axiosClientGenerator.includeRetryLogic": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include automatic retry logic"
+        },
+        "additionalContextMenus.axiosClientGenerator.includeRequestCancellation": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include request cancellation support"
+        },
+        "additionalContextMenus.axiosClientGenerator.includeCacheAdapter": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include cache adapter"
+        },
+        "additionalContextMenus.axiosClientGenerator.outputDirectory": {
+          "type": "string",
+          "default": "src/api-client",
+          "description": "Output directory for generated Axios client files"
+        },
+        "additionalContextMenus.axiosClientGenerator.clientClassName": {
+          "type": "string",
+          "default": "ApiClient",
+          "description": "Name for the generated API client class"
+        },
+        "additionalContextMenus.axiosClientGenerator.baseApiUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Base API URL to prepend to all endpoints (e.g., http://localhost:3000)"
+        },
+        "additionalContextMenus.axiosClientGenerator.timeout": {
+          "type": "number",
+          "default": 10000,
+          "minimum": 1000,
+          "maximum": 300000,
+          "description": "Request timeout in milliseconds"
+        },
+        "additionalContextMenus.axiosClientGenerator.generateReactQueryHooks": {
+          "type": "boolean",
+          "default": false,
+          "description": "Generate React Query hooks for API endpoints"
+        },
+        "additionalContextMenus.axiosClientGenerator.generateSwaggerTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript types from OpenAPI spec"
+        },
+        "additionalContextMenus.svelteActionGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Svelte action generator"
+        },
+        "additionalContextMenus.svelteActionGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for Svelte actions"
+        },
+        "additionalContextMenus.svelteActionGenerator.generateInterfaces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript interfaces for action parameters"
+        },
+        "additionalContextMenus.svelteActionGenerator.includeJSDocComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated actions"
+        },
+        "additionalContextMenus.svelteActionGenerator.defaultActionsDirectory": {
+          "type": "string",
+          "default": "src/actions",
+          "description": "Default directory for generated action files"
+        },
+        "additionalContextMenus.svelteActionGenerator.includeUsageExamples": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include usage examples in generated action files"
+        },
+        "additionalContextMenus.sveltekitServerGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable SvelteKit server endpoint generator feature"
+        },
+        "additionalContextMenus.sveltekitServerGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for server endpoints"
+        },
+        "additionalContextMenus.sveltekitServerGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error handling in generated endpoints"
+        },
+        "additionalContextMenus.sveltekitServerGenerator.includeValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include input validation in generated endpoints"
+        },
+        "additionalContextMenus.sveltekitServerGenerator.defaultRoutePath": {
+          "type": "string",
+          "default": "api/",
+          "description": "Default directory path for generated server endpoints"
+        },
+        "additionalContextMenus.sveltekitServerGenerator.exportPattern": {
+          "type": "string",
+          "enum": ["named", "default"],
+          "default": "named",
+          "description": "Export pattern for HTTP method handlers"
+        },
+        "additionalContextMenus.taskRunner.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable task runner integration feature"
+        },
+        "additionalContextMenus.taskRunner.autoDetect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect available task runners in the workspace"
+        },
+        "additionalContextMenus.taskRunner.showOutputPanel": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show output panel when running tasks"
+        },
+        "additionalContextMenus.taskRunner.clearOutputOnRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Clear output panel before running a new task"
+        },
+        "additionalContextMenus.taskRunner.saveOutputToFile": {
+          "type": "boolean",
+          "default": false,
+          "description": "Save task output to a file"
+        },
+        "additionalContextMenus.taskRunner.outputDirectory": {
+          "type": "string",
+          "default": ".task-output",
+          "description": "Directory where task output files will be saved"
+        },
+        "additionalContextMenus.taskRunner.maxOutputLines": {
+          "type": "number",
+          "default": 1000,
+          "minimum": 100,
+          "maximum": 10000,
+          "description": "Maximum number of output lines to keep in memory"
+        },
+        "additionalContextMenus.taskRunner.showErrorParsing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Parse and highlight errors and warnings in task output"
+        },
+        "additionalContextMenus.taskRunner.statusBarEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show task runner status in the status bar"
+        },
+        "additionalContextMenus.taskRunner.supportedRunners": {
+          "type": "array",
+          "default": ["npm", "yarn", "pnpm", "gulp", "grunt", "webpack"],
+          "items": {
+            "type": "string",
+            "enum": ["npm", "yarn", "pnpm", "gulp", "grunt", "webpack"]
+          },
+          "description": "Task runners to detect and support"
+        },
+        "additionalContextMenus.taskRunner.taskListRefreshInterval": {
+          "type": "number",
+          "default": 60000,
+          "minimum": 10000,
+          "maximum": 600000,
+          "description": "Interval in milliseconds to auto-refresh task list"
+        },
+        "additionalContextMenus.taskRunner.defaultTerminalBehavior": {
+          "type": "string",
+          "enum": ["show", "hide", "create-new"],
+          "default": "show",
+          "enumDescriptions": [
+            "Show existing terminal if available",
+            "Keep terminal hidden",
+            "Always create a new terminal"
+          ],
+          "description": "Default behavior for terminal when running tasks"
+        },
+        "additionalContextMenus.watchTaskManager.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable watch task manager feature"
+        },
+        "additionalContextMenus.watchTaskManager.autoDetect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect watch tasks in the workspace"
+        },
+        "additionalContextMenus.watchTaskManager.maxOutputLines": {
+          "type": "number",
+          "default": 1000,
+          "minimum": 100,
+          "maximum": 10000,
+          "description": "Maximum number of output lines to keep in memory"
+        },
+        "additionalContextMenus.watchTaskManager.restartOnFailure": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically restart watch tasks on failure"
+        },
+        "additionalContextMenus.watchTaskManager.maxRestartAttempts": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Maximum number of restart attempts before giving up"
+        },
+        "additionalContextMenus.watchTaskManager.restartDelay": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 500,
+          "maximum": 10000,
+          "description": "Delay in milliseconds before restarting a failed task"
+        },
+        "additionalContextMenus.watchTaskManager.statusBarEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show watch task manager status in the status bar"
+        },
+        "additionalContextMenus.watchTaskManager.showTaskOutput": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show task output when starting a watch task"
+        },
+        "additionalContextMenus.watchTaskManager.dedicatedChannels": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use dedicated output channels for each watch task"
+        },
+        "additionalContextMenus.unusedImportDetection.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable unused import detection feature"
+        },
+        "additionalContextMenus.unusedImportDetection.detectOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically detect unused imports when saving a file"
+        },
+        "additionalContextMenus.unusedImportDetection.showDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show unused imports as warnings in the editor"
+        },
+        "additionalContextMenus.unusedImportDetection.ignoreTypeOnlyImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ignore type-only imports when detecting unused imports"
+        },
+        "additionalContextMenus.unusedImportDetection.ignoreUnusedInTypes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Ignore unused imports that are only used in type annotations"
+        },
+        "additionalContextMenus.unusedImportDetection.includeDefaultImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include default imports in unused import detection"
+        },
+        "additionalContextMenus.unusedImportDetection.includeNamespaceImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include namespace imports in unused import detection"
+        },
+        "additionalContextMenus.unusedImportDetection.autoFixOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically remove unused imports when saving a file"
+        },
+        "additionalContextMenus.unusedImportDetection.excludePatterns": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Regex patterns for import names to exclude from detection (e.g., '^React$', '^_.')"
+        },
+        "additionalContextMenus.suggestionHub.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Suggestion Hub feature"
+        },
+        "additionalContextMenus.suggestionHub.autoAnalyzeOnOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically analyze files when they are opened"
+        },
+        "additionalContextMenus.suggestionHub.maxSuggestionsPerCategory": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum number of suggestions to show per category"
+        },
+        "additionalContextMenus.suggestionHub.severityFilter": {
+          "type": "array",
+          "default": ["critical", "high", "medium", "low", "info"],
+          "items": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          },
+          "description": "Severity levels to include in suggestions"
+        },
+        "additionalContextMenus.suggestionHub.categoryFilter": {
+          "type": "array",
+          "default": [
+            "security",
+            "code-quality",
+            "performance",
+            "maintainability",
+            "best-practices",
+            "error-prevention"
+          ],
+          "items": {
+            "type": "string",
+            "enum": [
+              "security",
+              "code-quality",
+              "performance",
+              "maintainability",
+              "best-practices",
+              "error-prevention"
+            ]
+          },
+          "description": "Categories to include in suggestions"
+        },
+        "additionalContextMenus.suggestionHub.showQuickActions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show quick action buttons for common fixes"
+        },
+        "additionalContextMenus.suggestionHub.groupByCategory": {
+          "type": "boolean",
+          "default": true,
+          "description": "Group suggestions by category"
+        },
+        "additionalContextMenus.suggestionHub.sortBy": {
+          "type": "string",
+          "default": "priority",
+          "enum": ["severity", "category", "file", "priority"],
+          "description": "How to sort suggestions in the hub"
+        },
+        "additionalContextMenus.suggestionHub.enableAutoFix": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable one-click auto-fix for applicable suggestions"
+        },
+        "additionalContextMenus.workspaceSymbolSearch.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable workspace symbol search feature"
+        },
+        "additionalContextMenus.workspaceSymbolSearch.maxResults": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 1000,
+          "description": "Maximum number of results to return for symbol search"
+        },
+        "additionalContextMenus.workspaceSymbolSearch.fuzzyMatchThreshold": {
+          "type": "number",
+          "default": 0.5,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Minimum fuzzy match score threshold (0 to 1, where 1 is exact match)"
+        },
+        "additionalContextMenus.workspaceSymbolSearch.defaultKinds": {
+          "type": "array",
+          "default": ["class", "function", "interface", "method", "variable", "constant"],
+          "items": {
+            "type": "string",
+            "enum": [
+              "class",
+              "constant",
+              "constructor",
+              "enum",
+              "enumMember",
+              "event",
+              "field",
+              "file",
+              "function",
+              "interface",
+              "key",
+              "method",
+              "module",
+              "namespace",
+              "number",
+              "object",
+              "operator",
+              "package",
+              "property",
+              "string",
+              "struct",
+              "typeParameter",
+              "variable"
+            ]
+          },
+          "description": "Default symbol kinds to include in search results"
+        },
+        "additionalContextMenus.workspaceSymbolSearch.showPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show preview of symbol code when searching"
+        },
+        "additionalContextMenus.workspaceSymbolSearch.groupResults": {
+          "type": "boolean",
+          "default": true,
+          "description": "Group search results by workspace and symbol kind"
+        },
+        "additionalContextMenus.symbolReferenceMapper.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable symbol reference mapper feature"
+        },
+        "additionalContextMenus.symbolReferenceMapper.defaultDirection": {
+          "type": "string",
+          "default": "incoming",
+          "enum": ["incoming", "outgoing"],
+          "description": "Default call hierarchy direction to show"
+        },
+        "additionalContextMenus.symbolReferenceMapper.includeImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include import relationships in symbol analysis"
+        },
+        "additionalContextMenus.symbolReferenceMapper.maxResults": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 1000,
+          "description": "Maximum number of results to return for reference mapping"
+        },
+        "additionalContextMenus.symbolReferenceMapper.showReferencesQuickPick": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show references in a quick pick menu for easy navigation"
+        },
+        "additionalContextMenus.symbolReferenceMapper.showCallHierarchyTree": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show call hierarchy in a tree view format"
+        },
+        "additionalContextMenus.zodSchemaGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Zod schema generator feature"
+        },
+        "additionalContextMenus.zodSchemaGenerator.includeJSDoc": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated schemas"
+        },
+        "additionalContextMenus.zodSchemaGenerator.includeErrorMessages": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include custom error messages in validation"
+        },
+        "additionalContextMenus.zodSchemaGenerator.includeRefinements": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include validation refinements for custom error handling"
+        },
+        "additionalContextMenus.zodSchemaGenerator.generateInferredType": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript type inferred from Zod schema"
+        },
+        "additionalContextMenus.zodSchemaGenerator.generateInputOutputTypes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Generate separate input and output types for the schema"
+        },
+        "additionalContextMenus.zodSchemaGenerator.importZod": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Zod import statement in generated schemas"
+        },
+        "additionalContextMenus.zodSchemaGenerator.useConst": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use const instead of export for schema declaration"
+        },
+        "additionalContextMenus.zodSchemaGenerator.useDateCoerce": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use z.coerce.date() for Date type schemas"
+        },
+        "additionalContextMenus.zodSchemaGenerator.defaultSchemaName": {
+          "type": "string",
+          "default": "MySchema",
+          "description": "Default schema name when generating from interfaces"
+        },
+        "additionalContextMenus.zodSchemaGenerator.exportSchema": {
+          "type": "boolean",
+          "default": true,
+          "description": "Export the generated schema by default"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable memo decorator generator feature"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.defaultCacheStrategy": {
+          "type": "string",
+          "enum": ["map", "lru", "ttl", "weak"],
+          "default": "map",
+          "description": "Default cache strategy for memoization decorators"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.defaultTtlMs": {
+          "type": "number",
+          "default": 60000,
+          "minimum": 1000,
+          "maximum": 3600000,
+          "description": "Default TTL for cache entries in milliseconds (for TTL strategy)"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.defaultMaxSize": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 10000,
+          "description": "Default maximum cache size (for LRU strategy)"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.includeJSDoc": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated decorators"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.exportDecorator": {
+          "type": "boolean",
+          "default": true,
+          "description": "Export the generated decorator by default"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.importHelper": {
+          "type": "boolean",
+          "default": true,
+          "description": "Import helper dependencies (e.g., lru-cache) in generated code"
+        },
+        "additionalContextMenus.memoDecoratorGenerator.defaultDecoratorName": {
+          "type": "string",
+          "default": "Memoize",
+          "description": "Default decorator name when generating memoization decorators"
+        },
+        "additionalContextMenus.angularServiceGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Angular service generator feature"
+        },
+        "additionalContextMenus.angularServiceGenerator.includeHttpClient": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include HttpClient in generated Angular services"
+        },
+        "additionalContextMenus.angularServiceGenerator.generateCrudMethods": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate CRUD methods (getAll, getById, create, update, delete) by default"
+        },
+        "additionalContextMenus.angularServiceGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include RxJS error handling with catchError in generated methods"
+        },
+        "additionalContextMenus.angularServiceGenerator.includeJSDocComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments for generated methods"
+        },
+        "additionalContextMenus.angularServiceGenerator.defaultServicePath": {
+          "type": "string",
+          "default": "src/services",
+          "description": "Default path where Angular services will be generated"
+        },
+        "additionalContextMenus.angularServiceGenerator.providedInRoot": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use providedIn: 'root' for @Injectable decorator"
+        },
+        "additionalContextMenus.angularServiceGenerator.defaultApiUrl": {
+          "type": "string",
+          "default": "https://api.example.com",
+          "description": "Default base API URL for HTTP requests"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable API documentation generator feature"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.includePrivate": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include private members in documentation"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.includeProtected": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include protected members in documentation"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.outputFormat": {
+          "type": "string",
+          "enum": ["markdown", "html"],
+          "default": "markdown",
+          "description": "Output format for generated documentation"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.includeExamples": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include @example tags from JSDoc in documentation"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.includeTypeDefinitions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include type aliases and interfaces in documentation"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.groupByCategory": {
+          "type": "boolean",
+          "default": true,
+          "description": "Group documentation by category (classes, functions, interfaces)"
+        },
+        "additionalContextMenus.apiDocumentationGenerator.addTableOfContents": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add table of contents to generated documentation"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable architecture diagram generator feature"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.outputFormat": {
+          "type": "string",
+          "enum": ["mermaid", "plantuml"],
+          "default": "mermaid",
+          "enumDescriptions": [
+            "Generate Mermaid diagram format",
+            "Generate PlantUML diagram format"
+          ],
+          "description": "Output format for architecture diagrams"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.includePatterns": {
+          "type": "array",
+          "default": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+          "items": {
+            "type": "string"
+          },
+          "description": "Glob patterns for files to include in diagram analysis"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.excludeDirectories": {
+          "type": "array",
+          "default": ["node_modules", "dist", "build", ".git", "coverage"],
+          "items": {
+            "type": "string"
+          },
+          "description": "Directory names to exclude from diagram analysis"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.moduleDepth": {
+          "type": "number",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Directory depth to use for module grouping (1-5)"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.includeExternalDependencies": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include external npm package dependencies in the diagram"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.includeFileCount": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show file count in each module node"
+        },
+        "additionalContextMenus.architectureDiagramGenerator.includeStyles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include styling information in the diagram"
+        },
+        "additionalContextMenus.microserviceEventGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable microservice event generator"
+        },
+        "additionalContextMenus.microserviceEventGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error handling in generated code"
+        },
+        "additionalContextMenus.microserviceEventGenerator.defaultBrokerType": {
+          "type": "string",
+          "enum": ["rabbitmq", "kafka"],
+          "default": "rabbitmq",
+          "description": "Default message broker type"
+        },
+        "additionalContextMenus.microserviceEventGenerator.maxConcurrentMessages": {
+          "type": "number",
+          "default": 10,
+          "description": "Maximum number of concurrent messages to process"
+        },
+        "additionalContextMenus.microserviceEventGenerator.defaultOutputPath": {
+          "type": "string",
+          "default": "src",
+          "description": "Default output path for generated files"
+        },
+        "additionalContextMenus.microserviceEventGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code"
+        },
+        "additionalContextMenus.microserviceEventGenerator.generateDocumentation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate documentation comments"
+        },
+        "additionalContextMenus.branchNamingConvention.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable branch naming convention validation"
+        },
+        "additionalContextMenus.branchNamingConvention.validateOnCheckout": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate branch name when checking out branches"
+        },
+        "additionalContextMenus.branchNamingConvention.validateOnCreate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate branch name when creating new branches"
+        },
+        "additionalContextMenus.branchNamingConvention.enabledPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["feature", "bugfix", "hotfix"],
+          "description": "Enabled branch naming patterns"
+        },
+        "additionalContextMenus.branchNamingConvention.severity": {
+          "type": "string",
+          "enum": ["error", "warning", "info"],
+          "default": "warning",
+          "description": "Severity level for validation violations"
+        },
+        "additionalContextMenus.branchNamingConvention.excludedBranches": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["main", "master", "develop", "dev", "staging", "production"],
+          "description": "Branch names excluded from validation"
+        },
+        "additionalContextMenus.branchNamingConvention.customPatterns": {
+          "type": "object",
+          "default": {},
+          "description": "Custom branch naming patterns as regex patterns"
+        },
+        "additionalContextMenus.branchNamingConvention.allowIssueNumbers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow issue numbers in branch names"
+        },
+        "additionalContextMenus.branchNamingConvention.issueNumberPattern": {
+          "type": "string",
+          "default": "^(JIRA|GH|ABC)-[0-9]+",
+          "description": "Regex pattern for issue numbers"
+        },
+        "additionalContextMenus.branchNamingConvention.maxLength": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 255,
+          "description": "Maximum branch name length"
+        },
+        "additionalContextMenus.branchNamingConvention.minLength": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Minimum branch name length"
+        },
+        "additionalContextMenus.branchNamingConvention.suggestBranchNames": {
+          "type": "boolean",
+          "default": true,
+          "description": "Suggest branch names when validation fails"
+        },
+        "additionalContextMenus.responseFormatterGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable response formatter generator"
+        },
+        "additionalContextMenus.responseFormatterGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for formatters"
+        },
+        "additionalContextMenus.responseFormatterGenerator.includeJSDoc": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated code"
+        },
+        "additionalContextMenus.responseFormatterGenerator.defaultFormatterPath": {
+          "type": "string",
+          "default": "src/utils",
+          "description": "Default output directory for response formatters"
+        },
+        "additionalContextMenus.responseFormatterGenerator.includeMetaFields": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include metadata fields in responses"
+        },
+        "additionalContextMenus.responseFormatterGenerator.includePagination": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include pagination support in formatters"
+        },
+        "additionalContextMenus.responseFormatterGenerator.includeErrorCodes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error code definitions"
+        },
+        "additionalContextMenus.responseFormatterGenerator.generateMiddleware": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate Express middleware for response formatting"
+        },
+        "additionalContextMenus.responseFormatterGenerator.generateUsageExamples": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include usage examples in generated code"
+        },
+        "additionalContextMenus.pdfReportGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable PDF Report Generator"
+        },
+        "additionalContextMenus.pdfReportGenerator.library": {
+          "type": "string",
+          "enum": ["pdfkit", "jsPDF"],
+          "default": "pdfkit",
+          "description": "PDF generation library to use"
+        },
+        "additionalContextMenus.pdfReportGenerator.outputDirectory": {
+          "type": "string",
+          "default": "reports",
+          "description": "Output directory for generated PDF report templates"
+        },
+        "additionalContextMenus.pdfReportGenerator.margin": {
+          "type": "number",
+          "default": 50,
+          "description": "Page margin in points"
+        },
+        "additionalContextMenus.pdfReportGenerator.includeHeaders": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include header methods in generated template"
+        },
+        "additionalContextMenus.pdfReportGenerator.includeFooters": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include footer methods in generated template"
+        },
+        "additionalContextMenus.pdfReportGenerator.includeTables": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include table methods in generated template"
+        },
+        "additionalContextMenus.pdfReportGenerator.includeCharts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include chart placeholder methods in generated template"
+        },
+        "additionalContextMenus.pdfReportGenerator.defaultFontSize": {
+          "type": "number",
+          "default": 11,
+          "description": "Default font size for text content"
+        },
+        "additionalContextMenus.pdfReportGenerator.generateTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate TypeScript code for PDF template"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Rate Limit Dashboard Generator"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.includeTypeScript": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include TypeScript type definitions in generated code"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.includeErrorHandling": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include error handling in generated code"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.includeJSDoc": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include JSDoc comments in generated code"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.framework": {
+          "type": "string",
+          "enum": ["react", "vue", "angular", "svelte"],
+          "default": "react",
+          "description": "UI framework for the dashboard component"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.includeRealtimeUpdates": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include real-time update functionality"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.includeCharts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include chart visualizations"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.includeExport": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include metrics export functionality"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.outputDirectory": {
+          "type": "string",
+          "default": "src/dashboards",
+          "description": "Output directory for generated dashboard files"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.backendType": {
+          "type": "string",
+          "enum": ["memory", "redis", "database"],
+          "default": "memory",
+          "description": "Backend storage type for metrics"
+        },
+        "additionalContextMenus.rateLimitDashboardGenerator.defaultDashboardName": {
+          "type": "string",
+          "default": "RateLimitMonitor",
+          "description": "Default name for the dashboard"
         }
       }
     },
@@ -188,6 +3895,51 @@
           "group": "1_modification@3"
         },
         {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.extractToComponent",
+          "group": "1_modification@4"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.hasSvelte && resourceExtname =~ /\\.svelte$/",
+          "command": "additionalContextMenus.extractToSvelteComponent",
+          "group": "1_modification@4"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.hasSvelte",
+          "command": "additionalContextMenus.generateSvelteAction",
+          "group": "1_modification@13"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.hasVue && resourceExtname =~ /\\.vue$/",
+          "command": "additionalContextMenus.extractToVueComponent",
+          "group": "1_modification@4"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.hasAngular && resourceExtname =~ /\\.html$/",
+          "command": "additionalContextMenus.extractToAngularComponent",
+          "group": "1_modification@4"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.hasSolid && resourceExtname =~ /\\.(tsx|jsx)$/",
+          "command": "additionalContextMenus.extractToSolidComponent",
+          "group": "1_modification@4"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.extractConditional",
+          "group": "1_modification@5"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.hasAngular && resourceExtname =~ /\\.(ts|tsx)$/",
+          "command": "additionalContextMenus.generateAngularService",
+          "group": "1_modification@5"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateDockerfile",
+          "group": "1_modification@6"
+        },
+        {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.saveAll",
           "group": "2_workspace@1"
@@ -196,6 +3948,491 @@
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.openInTerminal",
           "group": "2_workspace@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.scanForSecrets",
+          "group": "3_security@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx|vue|svelte)$/",
+          "command": "additionalContextMenus.performSecurityAudit",
+          "group": "3_security@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.clearSecurityAuditDiagnostics",
+          "group": "3_security@3"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.sortImports",
+          "group": "1_modification@5"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.hasVue && resourceExtname =~ /\\.(ts|tsx|js|jsx|vue)$/",
+          "command": "additionalContextMenus.extractToVueComposable",
+          "group": "1_modification@6"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.analyzeBundleSize",
+          "group": "4_analysis@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx|vue|svelte|html)$/",
+          "command": "additionalContextMenus.analyzeComplexity",
+          "group": "4_analysis@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx|vue|svelte|html)$/",
+          "command": "additionalContextMenus.profilePerformance",
+          "group": "4_analysis@3"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx|vue|svelte|html)$/",
+          "command": "additionalContextMenus.analyzeMemoryUsage",
+          "group": "4_analysis@4"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.createSnippet",
+          "group": "5_snippets@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.insertSnippet",
+          "group": "5_snippets@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.manageSnippets",
+          "group": "5_snippets@3"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.createBookmark",
+          "group": "6_bookmarks@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.manageBookmarks",
+          "group": "6_bookmarks@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.searchBookmarks",
+          "group": "6_bookmarks@3"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.clearFileBookmarks",
+          "group": "6_bookmarks@4"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateCommitMessage",
+          "group": "7_workspace@4"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.optimizePrettierConfig",
+          "group": "7_workspace@5"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.generateComponentProps",
+          "group": "4_analysis@3"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.detectDuplicateCode",
+          "group": "4_analysis@4"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.detectUnusedDependencies",
+          "group": "4_analysis@5"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.analyzeDependencyUpgrades",
+          "group": "4_analysis@6"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.env$/",
+          "command": "additionalContextMenus.generateEnvInterface",
+          "group": "1_modification@7"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.env$/",
+          "command": "additionalContextMenus.validateEnvFile",
+          "group": "1_modification@8"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.env$/",
+          "command": "additionalContextMenus.formatEnvFile",
+          "group": "1_modification@9"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.createEnvFile",
+          "group": "2_workspace@5"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.detectErrorPatterns",
+          "group": "3_analysis@6"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.clearErrorPatternDiagnostics",
+          "group": "3_analysis@7"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx|json)$/",
+          "command": "additionalContextMenus.suggestESLintRules",
+          "group": "4_analysis@8"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.validateFileName",
+          "group": "5_naming@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceFilename =~ /(tsconfig|\\.eslintrc|eslint\\.config|\\.prettierrc|prettier\\.config)/",
+          "command": "additionalContextMenus.validateConfigSchema",
+          "group": "5_naming@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.renameFileConvention",
+          "group": "5_naming@3"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.bulkRenameFiles",
+          "group": "5_naming@4"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.extractToHook",
+          "group": "1_modification@7"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateCoverageReport",
+          "group": "4_analysis@9"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateNestjsModule",
+          "group": "1_modification@9"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateNestjsEntity",
+          "group": "1_modification@10"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateNestjsGuard",
+          "group": "1_modification@11"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateGraphqlResolver",
+          "group": "1_modification@12"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx|gql|graphql)$/",
+          "command": "additionalContextMenus.generateGraphqlSchema",
+          "group": "1_modification@12"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.generateJestTests",
+          "group": "1_modification@10"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.cronJobGenerator.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateCronJob",
+          "group": "1_modification@10.5"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.mockDataGenerator.enabled && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.generateMockData",
+          "group": "1_modification@10"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.generatePlaywrightTests",
+          "group": "1_modification@11"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.generateVitestTests",
+          "group": "1_modification@12"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js|vue|svelte)$/",
+          "command": "additionalContextMenus.generateStorybookStory",
+          "group": "1_modification@13"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.generateCucumberSpec",
+          "group": "1_modification@14"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateCircuitBreaker",
+          "group": "1_modification@15"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateNuxtjsPage",
+          "group": "1_modification@16"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateSveltekitPage",
+          "group": "1_modification@15.5"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateSveltekitServer",
+          "group": "1_modification@15.6"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(tsx|jsx|ts|js)$/",
+          "command": "additionalContextMenus.generateNuxtComposable",
+          "group": "1_modification@16"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateOpenApiSpec",
+          "group": "1_modification@17"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceFilename == package.json",
+          "command": "additionalContextMenus.managePackagejsonScripts",
+          "group": "6_workspace@7"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generatePrismaSchema",
+          "group": "1_modification@16"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generatePrismaClient",
+          "group": "1_modification@17"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateReactQueryHooks",
+          "group": "1_modification@18"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateReactContext",
+          "group": "1_modification@19"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateReactErrorBoundary",
+          "group": "1_modification@20"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateReactSuspenseBoundary",
+          "group": "1_modification@21"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateReactFormValidator",
+          "group": "1_modification@22"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateReactVirtualList",
+          "group": "1_modification@23"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateReadme",
+          "group": "1_modification@24"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateGitignore",
+          "group": "1_modification@20"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateHuskyHooks",
+          "group": "1_modification@21"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateLintStagedConfig",
+          "group": "1_modification@22"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateCommitlintConfig",
+          "group": "1_modification@23"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateDockerCompose",
+          "group": "1_modification@24"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateExpressRoute",
+          "group": "1_modification@25"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateKafkaProducer",
+          "group": "1_modification@26"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateRabbitMQConsumer",
+          "group": "1_modification@27"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateVitePlugin",
+          "group": "1_modification@24"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateRemixRoute",
+          "group": "1_modification@25"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.buildMiddlewarePipeline",
+          "group": "1_modification@26"
+        },
+        {
+          "when": "editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateApiClient",
+          "group": "1_modification@27"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(json|yaml|yml)$/",
+          "command": "additionalContextMenus.generateAxiosClient",
+          "group": "1_modification@28"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateVueRouter",
+          "group": "1_modification@29"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.refactorTypeNarrowing",
+          "group": "4_analysis@10"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.clearTypeNarrowingDiagnostics",
+          "group": "4_analysis@11"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.detectUnusedImports",
+          "group": "4_analysis@12"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.clearUnusedImportDiagnostics",
+          "group": "4_analysis@13"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx|vue|svelte)$/",
+          "command": "additionalContextMenus.showSuggestionHub",
+          "group": "4_analysis@1"
+        },
+        {
+          "when": "additionalContextMenus.enabled",
+          "command": "additionalContextMenus.searchWorkspaceSymbols",
+          "group": "2_workspace@6"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx|vue|svelte)$/",
+          "command": "additionalContextMenus.mapSymbolReferences",
+          "group": "4_analysis@5"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateZodSchema",
+          "group": "1_modification@25"
+        },
+        {
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateMemoDecorator",
+          "group": "1_modification@26"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateApiDocumentation",
+          "group": "4_analysis@14"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateArchitectureDiagram",
+          "group": "4_analysis@15"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateMicroserviceEvents",
+          "group": "4_analysis@16"
+        },
+        {
+          "when": "additionalContextMenus.enabled",
+          "command": "additionalContextMenus.validateBranchName",
+          "group": "5_git@1"
+        },
+        {
+          "when": "additionalContextMenus.enabled",
+          "command": "additionalContextMenus.showBranchNamingRules",
+          "group": "5_git@2"
+        },
+        {
+          "when": "additionalContextMenus.enabled",
+          "command": "additionalContextMenus.suggestBranchName",
+          "group": "5_git@3"
+        },
+        {
+          "when": "additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateI18nKeys",
+          "group": "10_i18n@1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateResponseFormatter",
+          "group": "9_generators@30"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateSagaPattern",
+          "group": "9_generators@35"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.createEnum",
+          "group": "9_generators@36"
+        },
+        {
+          "when": "additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "command": "additionalContextMenus.generateSemanticReleaseConfig",
+          "group": "9_generators@37"
         }
       ]
     }

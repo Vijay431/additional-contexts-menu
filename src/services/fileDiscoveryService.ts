@@ -1,6 +1,6 @@
 import { constants } from 'fs';
-import * as fs from 'fs/promises';
 import * as path from 'path';
+import * as fs from 'fs/promises';
 
 import * as vscode from 'vscode';
 
@@ -17,6 +17,7 @@ export class FileDiscoveryService {
     ['.tsx', ['.ts', '.tsx']],
     ['.js', ['.js', '.jsx']],
     ['.jsx', ['.js', '.jsx']],
+    ['.svelte', ['.svelte']],
   ]);
 
   private constructor() {
@@ -117,6 +118,8 @@ export class FileDiscoveryService {
         return '**/*.{js,jsx}';
       case '.jsx':
         return '**/*.{js,jsx}';
+      case '.svelte':
+        return '**/*.svelte';
       default:
         return `**/*${sourceExtension}`;
     }
@@ -201,7 +204,7 @@ export class FileDiscoveryService {
 
   public onFileSystemChanged(): vscode.Disposable {
     // Clear cache when files are created, deleted, or renamed
-    const watcher = vscode.workspace.createFileSystemWatcher('**/*.{ts,tsx,js,jsx}');
+    const watcher = vscode.workspace.createFileSystemWatcher('**/*.{ts,tsx,js,jsx,svelte}');
 
     const clearCache = () => this.clearCache();
 

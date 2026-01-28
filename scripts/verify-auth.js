@@ -44,7 +44,7 @@ if (!fs.existsSync(packageJsonPath)) {
 
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 const requiredFields = ['name', 'version', 'publisher', 'license', 'repository'];
-const missingFields = requiredFields.filter(field => !packageJson[field]);
+const missingFields = requiredFields.filter((field) => !packageJson[field]);
 
 if (missingFields.length > 0) {
   console.error(`❌ Missing required fields in package.json: ${missingFields.join(', ')}`);
@@ -54,17 +54,17 @@ if (missingFields.length > 0) {
 console.log('✅ package.json has all required fields for Open VSX');
 
 // Check if VSIX file exists (for manual publishing verification)
-const vsixFiles = fs.readdirSync('.').filter(file => file.endsWith('.vsix'));
+const vsixFiles = fs.readdirSync('.').filter((file) => file.endsWith('.vsix'));
 if (vsixFiles.length > 0) {
   console.log(`✅ Found VSIX file(s): ${vsixFiles.join(', ')}`);
-  
+
   // Test authentication by attempting to verify (dry run)
   try {
     console.log('🔄 Testing Open VSX authentication...');
     // Note: This is a dry run that doesn't actually publish
-    execSync(`npx ovsx verify ${vsixFiles[0]}`, { 
+    execSync(`npx ovsx verify ${vsixFiles[0]}`, {
       encoding: 'utf8',
-      env: { ...process.env, OVSX_PAT: ovxsPat }
+      env: { ...process.env, OVSX_PAT: ovxsPat },
     });
     console.log('✅ Open VSX authentication is working');
   } catch (error) {

@@ -1,5 +1,5 @@
-import * as fs from 'fs/promises';
 import * as path from 'path';
+import * as fs from 'fs/promises';
 
 import * as vscode from 'vscode';
 
@@ -153,9 +153,19 @@ export class ProjectDetectionService {
       frameworks.push('svelte');
     }
 
+    // SolidJS
+    if (dependencies['solid-js']) {
+      frameworks.push('solid');
+    }
+
     // Nest.js
     if (dependencies['@nestjs/core']) {
       frameworks.push('nestjs');
+    }
+
+    // Nuxt.js
+    if (dependencies['nuxt']) {
+      frameworks.push('nuxtjs');
     }
 
     return frameworks;
@@ -170,6 +180,7 @@ export class ProjectDetectionService {
       'next',
       'vue',
       'svelte',
+      'solid-js',
       '@angular/core',
       '@nestjs/core',
       'typescript',
@@ -244,6 +255,26 @@ export class ProjectDetectionService {
       'setContext',
       'additionalContextMenus.hasNextjs',
       projectType.frameworks.includes('nextjs'),
+    );
+    await vscode.commands.executeCommand(
+      'setContext',
+      'additionalContextMenus.hasSvelte',
+      projectType.frameworks.includes('svelte'),
+    );
+    await vscode.commands.executeCommand(
+      'setContext',
+      'additionalContextMenus.hasVue',
+      projectType.frameworks.includes('vue'),
+    );
+    await vscode.commands.executeCommand(
+      'setContext',
+      'additionalContextMenus.hasSolid',
+      projectType.frameworks.includes('solid'),
+    );
+    await vscode.commands.executeCommand(
+      'setContext',
+      'additionalContextMenus.hasNuxtjs',
+      projectType.frameworks.includes('nuxtjs'),
     );
     await vscode.commands.executeCommand(
       'setContext',

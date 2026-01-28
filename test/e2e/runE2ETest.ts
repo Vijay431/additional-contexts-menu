@@ -1,7 +1,7 @@
-import * as path from 'path';
-import * as fs from 'fs';
-import { runTests } from '@vscode/test-electron';
 import { execSync } from 'child_process';
+import * as fs from 'fs';
+import * as path from 'path';
+import { runTests } from '@vscode/test-electron';
 
 /**
  * Find the project root directory by looking for package.json

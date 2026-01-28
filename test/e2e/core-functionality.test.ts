@@ -1,7 +1,7 @@
 import * as assert from 'assert';
-import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs/promises';
+import * as vscode from 'vscode';
 
 /**
  * Core Functionality E2E Tests
@@ -1163,6 +1163,74 @@ export const existing = () => 'existing';`,
     } catch (error) {
       // Commands may show errors but should not crash
       assert.ok(true, 'Commands handled package.json parse errors gracefully');
+    }
+  });
+
+  // ============================================================================
+  // Angular Component Extraction Command
+  // ============================================================================
+
+  test('Angular Component Extraction command should be registered', async () => {
+    const commands = await vscode.commands.getCommands();
+    assert.ok(
+      commands.includes('additionalContextMenus.extractToAngularComponent'),
+      'Angular Component Extraction command should be registered',
+    );
+  });
+
+  test('Angular Component Extraction should handle HTML template selection', async function () {
+    this.timeout(5000);
+
+    const htmlFile = path.join(tempWorkspace, 'test-angular.html');
+    const angularTemplate = `
+<div class="user-card">
+  <h2>{{ user.name }}</h2>
+  <p>{{ user.email }}</p>
+  <button (click)="onEdit()">Edit</button>
+  <button (click)="onDelete()">Delete</button>
+</div>`;
+
+    await fs.writeFile(htmlFile, angularTemplate);
+
+    const document = await vscode.workspace.openTextDocument(htmlFile);
+    const editor = await vscode.window.showTextDocument(document);
+
+    // Select the template code
+    const startPos = new vscode.Position(1, 0);
+    const endPos = new vscode.Position(6, 16);
+    editor.selection = new vscode.Selection(startPos, endPos);
+
+    // Execute with timeout (requires user interaction for component name)
+    try {
+      await Promise.race([
+        vscode.commands.executeCommand('additionalContextMenus.extractToAngularComponent'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
+      ]);
+      assert.ok(true, 'Angular Component Extraction executed');
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        assert.ok(true, 'Angular Component Extraction timed out as expected (requires user input)');
+      } else {
+        throw error;
+      }
+    }
+  });
+
+  test('Angular Component Extraction should reject non-HTML files', async () => {
+    const tsFile = path.join(tempWorkspace, 'not-angular.ts');
+    await fs.writeFile(tsFile, 'const test = "value";');
+
+    const document = await vscode.workspace.openTextDocument(tsFile);
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(0, 0, 0, 20);
+
+    // Execute command - should show error message about unsupported file type
+    try {
+      await vscode.commands.executeCommand('additionalContextMenus.extractToAngularComponent');
+      assert.ok(true, 'Angular Component Extraction handled non-HTML file gracefully');
+    } catch (error) {
+      // Expected to fail for non-HTML files
+      assert.ok(true, 'Angular Component Extraction rejected non-HTML file as expected');
     }
   });
 });

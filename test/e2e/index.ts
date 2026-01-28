@@ -1,6 +1,6 @@
 import * as path from 'path';
-import Mocha from 'mocha';
 import { glob } from 'fast-glob';
+import Mocha from 'mocha';
 
 export function run(): Promise<void> {
   // Create the mocha test
@@ -17,12 +17,12 @@ export function run(): Promise<void> {
     // Find both E2E tests and unit tests
     Promise.all([
       glob('**/**.test.js', { cwd: testsRoot }),
-      glob('**/**.test.js', { cwd: suiteRoot })
+      glob('**/**.test.js', { cwd: suiteRoot }),
     ])
       .then(([e2eFiles, unitFiles]) => {
         const totalFiles = e2eFiles.length + unitFiles.length;
         console.log(`📋 Found ${totalFiles} test file(s):`);
-        
+
         if (e2eFiles.length > 0) {
           console.log(`  E2E tests (${e2eFiles.length}):`);
           e2eFiles.forEach((f) => {
@@ -30,7 +30,7 @@ export function run(): Promise<void> {
             mocha.addFile(path.resolve(testsRoot, f));
           });
         }
-        
+
         if (unitFiles.length > 0) {
           console.log(`  Unit tests (${unitFiles.length}):`);
           unitFiles.forEach((f) => {
