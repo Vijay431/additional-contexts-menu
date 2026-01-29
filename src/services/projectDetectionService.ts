@@ -153,11 +153,6 @@ export class ProjectDetectionService {
       frameworks.push('svelte');
     }
 
-    // SolidJS
-    if (dependencies['solid-js']) {
-      frameworks.push('solid');
-    }
-
     // Nest.js
     if (dependencies['@nestjs/core']) {
       frameworks.push('nestjs');
@@ -180,7 +175,6 @@ export class ProjectDetectionService {
       'next',
       'vue',
       'svelte',
-      'solid-js',
       '@angular/core',
       '@nestjs/core',
       'typescript',
@@ -265,11 +259,6 @@ export class ProjectDetectionService {
       'setContext',
       'additionalContextMenus.hasVue',
       projectType.frameworks.includes('vue'),
-    );
-    await vscode.commands.executeCommand(
-      'setContext',
-      'additionalContextMenus.hasSolid',
-      projectType.frameworks.includes('solid'),
     );
     await vscode.commands.executeCommand(
       'setContext',

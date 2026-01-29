@@ -9,7 +9,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **🗑️ Massive Service Simplification**: Reduced extension from 75+ services to 10 focused services (7 business + 3 support services)
+- **Deleted Services**: Removed ~68 unnecessary services including component extraction, test generators, API generators, and various analysis tools
+- **Cleaned Commands**: Removed ~60 unused commands from package.json and ContextMenuManager.ts
+
+### Changed
+- **📦 Updated ContextMenuManager**: Completely refactored to use only 10 essential services
+- **📋 Updated package.json**: Streamlined commands section to reflect new feature set
+- **📚 Updated README.md**: Rewrote documentation to accurately describe simplified feature set
+
+### Fixed
+- **🔧 Build Errors**: Fixed TypeScript compilation errors and missing imports
+
+## [1.3.0] - 2026-01-29
+
+### Breaking Changes
+- **Removed Commands**: The following commands are no longer available:
+  - Extract to Component (React, Svelte, Vue, Angular)
+  - Generate Angular Service
+  - Scan for Secrets
+  - Sort Imports
+  - Extract to Vue Composable
+  - Analyze Bundle Size
+  - Analyze Code Complexity
+  - Insert/Create/Manage Snippets
+  - Create/Manage Bookmarks
+  - Generate Commit Message
+  - Generate Component Props
+  - Detect Duplicate Code
+  - Detect Unused Dependencies
+  - Generate TypeScript Interface from .env
+  - Validate/Format/Create .env File (old env manager)
+  - Detect Error Patterns
+  - Suggest ESLint Rules
+  - Extract to Hook
+  - Generate Coverage Report
+  - NestJS generators (Controller, Module, Service, DTO, Entity, Guard)
+  - Test generators (Jest, Playwright, Vitest, React Testing Library)
+  - GraphQL generators (Resolver, Schema)
+  - Next.js Page generator
+  - Nuxt.js generators (Page, Composable, Server Route)
+  - OpenAPI Specification
+  - Profile Performance
+  - Manage Package.json Scripts
+  - Prisma generators (Schema, Client)
+  - React Query Hooks
+  - Generate README
+  - Generate Changelog
+  - Express Route generator
+  - Generate API Client
+  - Vue Router generator
+  - Svelte Action generator
+  - Task management (Show List, Run, Stop, Stop All, Show History, Refresh)
+  - Refactor Type Narrowing
+  - Detect/Handle Unused Imports
+  - Suggestion Hub
+  - Search Workspace Symbols
+  - Map Symbol References
+  - Generate Zod Schema
+  - Generate Architecture Diagram
+  - Generate API Documentation
+  - Branch naming (Validate, Show Rules, Suggest)
+  - Copy/Move Lines to File (removed to streamline)
+  - Bulk Rename Files (kept - simplified)
+
 ### Added
+- **Generate Enum from Type**: New service to generate TypeScript enums from string literal union types
+- **Generate .env File**: New service to create .env files from .env.example templates
+- **Generate .gitignore**: New service to create .gitignore files with common patterns (Node.js, IDE, OS, logs, etc.)
+
+### Summary
+- **Total Services**: Reduced from 75+ to 10 (7 business + 3 support)
+- **Business Services**: Bulk File Renamer, File Naming Convention, File Save, Project Detection, Enum Generator, Env File Generator, Gitignore Generator
+- **Support Services**: Configuration Service, Code Analysis Service, File Discovery Service, Terminal Service (from FileSaveService and new services that use it)
+- **Active Commands**: 8 core commands focused on essential file management and code generation tasks
+- **Code Quality**: Improved maintainability and reduced complexity with ~90% fewer services
+- **Bundle Size**: Reduced from previous large bundle size to optimized size
 - **🌐 Open VSX Registry Support**: Extension now available on Open VSX Registry for VS Code alternative users
   - VSCodium users can install directly from Open VSX
   - Gitpod workspaces can access the extension through Open VSX
