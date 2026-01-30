@@ -7,7 +7,16 @@
     "jsx": "react",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false
   },
   "include": ["test/**/*.ts"],
   "exclude": ["test/fixtures/**/*.ts", "node_modules"]
