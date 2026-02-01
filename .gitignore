@@ -44,6 +44,8 @@ Thumbs.db
 # ============================================
 .claude/
 .auto-claude/
+.sisyphus/
+.opencode/
 .auto-claude-security.json
 .claude_settings.json
 .specify/
