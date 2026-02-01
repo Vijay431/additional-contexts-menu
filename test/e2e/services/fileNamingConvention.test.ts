@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import * as fs from 'node:fs/promises';
+import * as assert from 'assert';
 
 import { E2ETestSetup } from '../utils/e2eTestSetup';
 import { FileTestHelpers } from '../utils/fileHelpers';
