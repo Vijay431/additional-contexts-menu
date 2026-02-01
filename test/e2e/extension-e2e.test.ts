@@ -805,7 +805,7 @@ export function rapidFunction3() { return 'test3'; }`;
       for (let i = 0; i < 5; i++) {
         editor.selection = new vscode.Selection((i % 3) + 1, 10, (i % 3) + 1, 10);
         const cmd = vscode.commands.executeCommand('additionalContextMenus.copyFunction');
-        promises.push(await cmdPromise);
+        promises.push(await cmd);
         await new Promise((resolve) => setTimeout(resolve, 50)); // Small delay
       }
 
@@ -907,7 +907,7 @@ function edgeCaseFunction() {
       const savePromises = [];
       for (let i = 0; i < 3; i++) {
         const cmd = vscode.commands.executeCommand('additionalContextMenus.saveAll');
-        savePromises.push(promise.resolve(cmd));
+        savePromises.push(Promise.resolve(cmd));
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
