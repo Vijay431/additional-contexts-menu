@@ -9,11 +9,11 @@ import * as fs from 'fs-extra';
  * These tests validate the complete functionality of the Additional Context Menus extension
  * in realistic user scenarios. Tests run in actual VS Code environment with real files.
  */
-suite('Additional Context Menus - E2E Tests', () => {
+suite('Additional Context Menus - E2E Tests', function () {
   let tempWorkspace: string;
   let extension: vscode.Extension<any>;
 
-  suiteSetup(async () => {
+  suiteSetup(async function () {
     // Get the extension
     extension = vscode.extensions.getExtension('VijayGangatharan.additional-context-menus')!;
     assert.ok(extension, 'Extension should be found');
@@ -35,7 +35,7 @@ suite('Additional Context Menus - E2E Tests', () => {
     await fs.ensureDir(tempWorkspace);
   });
 
-  suiteTeardown(async () => {
+  suiteTeardown(async function () {
     // Clean up temporary workspace
     if (await fs.pathExists(tempWorkspace)) {
       await fs.remove(tempWorkspace);
@@ -45,7 +45,7 @@ suite('Additional Context Menus - E2E Tests', () => {
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
   });
 
-  setup(async () => {
+  setup(async function () {
     // Reset configuration to default values before each test
     const config = vscode.workspace.getConfiguration('additionalContextMenus');
 
@@ -79,13 +79,13 @@ suite('Additional Context Menus - E2E Tests', () => {
   // Extension Lifecycle Tests
   // ============================================================================
 
-  suite('Extension Lifecycle', () => {
-    test('should properly activate Extension', () => {
+  suite('Extension Lifecycle', function () {
+    test('should properly activate Extension', function () {
       assert.ok(extension, 'Extension should exist');
       assert.strictEqual(extension.isActive, true, 'Extension should be active');
     });
 
-    test('should register all extension commands', async () => {
+    test('should register all extension commands', async function () {
       const commands = await vscode.commands.getCommands();
 
       // Filter to just our extension's commands for debugging
@@ -115,7 +115,7 @@ suite('Additional Context Menus - E2E Tests', () => {
       }
     });
 
-    test('should be available Configuration with correct defaults', () => {
+    test('should be available Configuration with correct defaults', function () {
       const config = vscode.workspace.getConfiguration('additionalContextMenus');
 
       // Verify configuration properties exist and have correct defaults
@@ -136,8 +136,8 @@ suite('Additional Context Menus - E2E Tests', () => {
   // Extension Commands E2E Tests
   // ============================================================================
 
-  suite('Extension Commands', () => {
-    test('should work correctly Enable/Disable commands', async () => {
+  suite('Extension Commands', function () {
+    test('should work correctly Enable/Disable commands', async function () {
       // Test disable command
       await vscode.commands.executeCommand('additionalContextMenus.disable');
       await new Promise((resolve) => setTimeout(resolve, 100)); // Allow time for config update
@@ -153,19 +153,19 @@ suite('Additional Context Menus - E2E Tests', () => {
       assert.strictEqual(config.get('enabled'), true, 'Extension should be enabled');
     });
 
-    test('should execute without errors Show Output Channel command', async () => {
+    test('should execute without errors Show Output Channel command', async function () {
       // This should not throw any errors
       await vscode.commands.executeCommand('additionalContextMenus.showOutputChannel');
       assert.ok(true, 'Show output channel command executed successfully');
     });
 
-    test('should execute without errors Debug Context Variables command', async () => {
+    test('should execute without errors Debug Context Variables command', async function () {
       // This should not throw any errors
       await vscode.commands.executeCommand('additionalContextMenus.debugContextVariables');
       assert.ok(true, 'Debug context variables command executed successfully');
     });
 
-    test('should execute without errors Refresh Context Variables command', async () => {
+    test('should execute without errors Refresh Context Variables command', async function () {
       // This should not throw any errors
       await vscode.commands.executeCommand('additionalContextMenus.refreshContextVariables');
       assert.ok(true, 'Refresh context variables command executed successfully');
@@ -196,7 +196,7 @@ suite('Additional Context Menus - E2E Tests', () => {
       }
     });
 
-    test('should work correctly Enable/Disable Keybindings commands', async () => {
+    test('should work correctly Enable/Disable Keybindings commands', async function () {
       // Test disable keybindings command
       await vscode.commands.executeCommand('additionalContextMenus.disableKeybindings');
       await new Promise((resolve) => setTimeout(resolve, 100)); // Allow time for config update
@@ -226,7 +226,7 @@ suite('Additional Context Menus - E2E Tests', () => {
       }
     });
 
-    test('should save dirty documents Save All command', async () => {
+    test('should save dirty documents Save All command', async function () {
       // Create a test file
       const testFile = path.join(tempWorkspace, 'test-save.ts');
       await fs.writeFile(testFile, 'const original = "test";');
@@ -254,7 +254,7 @@ suite('Additional Context Menus - E2E Tests', () => {
   // File Type Support Tests
   // ============================================================================
 
-  suite('File Type Support', () => {
+  suite('File Type Support', function () {
     async function createAndTestFile(fileName: string, content: string, expectedToWork = true) {
       const filePath = path.join(tempWorkspace, fileName);
       await fs.writeFile(filePath, content);
@@ -284,7 +284,7 @@ suite('Additional Context Menus - E2E Tests', () => {
       }
     }
 
-    test('should work with TypeScript files (.ts)', async () => {
+    test('should work with TypeScript files (.ts)', async function () {
       const tsContent = `
 export function calculateSum(a: number, b: number): number {
   return a + b;
@@ -297,7 +297,7 @@ export const multiplyNumbers = (x: number, y: number): number => {
       await createAndTestFile('typescript-test.ts', tsContent);
     });
 
-    test('should work with TypeScript React files (.tsx)', async () => {
+    test('should work with TypeScript React files (.tsx)', async function () {
       const tsxContent = `
 import React from 'react';
 
@@ -326,7 +326,7 @@ export const UserCard: React.FC<Props> = ({ name, age }) => {
       await createAndTestFile('react-component.tsx', tsxContent);
     });
 
-    test('should work with JavaScript files (.js)', async () => {
+    test('should work with JavaScript files (.js)', async function () {
       const jsContent = `
 function processData(data) {
   return data.map(item => item.value).filter(Boolean);
@@ -341,7 +341,7 @@ module.exports = { processData, formatString };`;
       await createAndTestFile('javascript-test.js', jsContent);
     });
 
-    test('should work with JavaScript React files (.jsx)', async () => {
+    test('should work with JavaScript React files (.jsx)', async function () {
       const jsxContent = `
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -377,8 +377,8 @@ export { Button };`;
   // Code Operations Tests
   // ============================================================================
 
-  suite('Code Operations', () => {
-    test('should work with function declarations Copy Function command', async () => {
+  suite('Code Operations', function () {
+    test('should work with function declarations Copy Function command', async function () {
       const filePath = path.join(tempWorkspace, 'functions.ts');
       const content = `
 export function getUserById(id: string): Promise<User> {
@@ -522,8 +522,8 @@ const keepThisFunction = () => {
   // Error Handling Tests
   // ============================================================================
 
-  suite('Error Handling', () => {
-    test('should handle no active editor gracefully Commands', async () => {
+  suite('Error Handling', function () {
+    test('should handle no active editor gracefully Commands', async function () {
       // Close all editors
       await vscode.commands.executeCommand('workbench.action.closeAllEditors');
 
@@ -544,7 +544,7 @@ const keepThisFunction = () => {
       }
     });
 
-    test('should handle empty selection gracefully Commands', async () => {
+    test('should handle empty selection gracefully Commands', async function () {
       const testFile = path.join(tempWorkspace, 'empty-selection.ts');
       await fs.writeFile(testFile, 'const test = "value";');
 
@@ -569,7 +569,7 @@ const keepThisFunction = () => {
       }
     });
 
-    test('should handle malformed files gracefully Extension', async () => {
+    test('should handle malformed files gracefully Extension', async function () {
       const malformedFile = path.join(tempWorkspace, 'malformed.ts');
       // Create file with syntax errors
       await fs.writeFile(
@@ -599,8 +599,8 @@ function unclosedFunction() {
   // Configuration Tests
   // ============================================================================
 
-  suite('Configuration Changes', () => {
-    test('Extension should respond to configuration changes', async () => {
+  suite('Configuration Changes', function () {
+    test('Extension should respond to configuration changes', async function () {
       // Test enabling/disabling
       let config = vscode.workspace.getConfiguration('additionalContextMenus');
       await config.update('enabled', false, vscode.ConfigurationTarget.Global);
@@ -639,8 +639,8 @@ function unclosedFunction() {
   // Integration with VS Code Features
   // ============================================================================
 
-  suite('VS Code Integration', () => {
-    test('Extension should work with VS Code workspace features', async () => {
+  suite('VS Code Integration', function () {
+    test('Extension should work with VS Code workspace features', async function () {
       // Test that extension works with workspace folders
       const workspaceFolders = vscode.workspace.workspaceFolders;
 
@@ -692,7 +692,7 @@ export default function TestComponent() {
       }
     });
 
-    test('Extension should handle multiple open editors', async () => {
+    test('Extension should handle multiple open editors', async function () {
       // Create multiple files
       const files = ['file1.ts', 'file2.js', 'file3.tsx'];
       const documents: vscode.TextDocument[] = [];
@@ -732,7 +732,7 @@ export const ${fileName.replace('.', '_')}Function = () => {
   // Error Boundary Edge Cases
   // ============================================================================
 
-  suite('Error Boundary Edge Cases', () => {
+  suite('Error Boundary Edge Cases', function () {
     test('should handle extremely large files gracefully', async function () {
       this.timeout(10000);
 
@@ -763,7 +763,7 @@ export function largeFunction${i}() {
       }
     });
 
-    test('should handle files with special characters in paths', async () => {
+    test('should handle files with special characters in paths', async function () {
       const specialCharsDir = path.join(tempWorkspace, 'special chars & symbols!');
       await fs.ensureDir(specialCharsDir);
 
@@ -801,7 +801,7 @@ export function rapidFunction3() { return 'test3'; }`;
       const editor = await vscode.window.showTextDocument(document);
 
       // Execute multiple commands rapidly
-      const promises = [];
+      const promises: unknown[] = [];
       for (let i = 0; i < 5; i++) {
         editor.selection = new vscode.Selection((i % 3) + 1, 10, (i % 3) + 1, 10);
         const cmd = vscode.commands.executeCommand('additionalContextMenus.copyFunction');
@@ -817,7 +817,7 @@ export function rapidFunction3() { return 'test3'; }`;
       }
     });
 
-    test('should handle files with invalid UTF-8 sequences gracefully', async () => {
+    test('should handle files with invalid UTF-8 sequences gracefully', async function () {
       const invalidFile = path.join(tempWorkspace, 'invalid-utf8.js');
 
       // Create file with some problematic content (but still parseable JS)
@@ -849,8 +849,8 @@ function edgeCaseFunction() {
   // Performance and Stress Testing
   // ============================================================================
 
-  suite('Performance and Stress Testing', () => {
-    test('should handle deeply nested function structures', async () => {
+  suite('Performance and Stress Testing', function () {
+    test('should handle deeply nested function structures', async function () {
       const nestedFile = path.join(tempWorkspace, 'deeply-nested.ts');
 
       // Create deeply nested structure
@@ -904,7 +904,7 @@ function edgeCaseFunction() {
       }
 
       // Execute multiple Save All commands concurrently
-      const savePromises = [];
+      const savePromises: Promise<unknown>[] = [];
       for (let i = 0; i < 3; i++) {
         const cmd = vscode.commands.executeCommand('additionalContextMenus.saveAll');
         savePromises.push(Promise.resolve(cmd));
@@ -926,7 +926,7 @@ function edgeCaseFunction() {
       this.timeout(15000);
 
       // Create multiple large arrays to simulate memory pressure
-      const memoryConsumers = [];
+      const memoryConsumers: any[][] = [];
       for (let i = 0; i < 5; i++) {
         memoryConsumers.push(new Array(100000).fill(`memory-consumer-${i}`));
       }
@@ -983,7 +983,7 @@ export default function MemoryIntensiveComponent() {
   // Advanced Configuration Edge Cases
   // ============================================================================
 
-  suite('Advanced Configuration Edge Cases', () => {
+  suite('Advanced Configuration Edge Cases', function () {
     test('Should handle rapid configuration changes', async function () {
       this.timeout(8000);
 
@@ -1016,7 +1016,7 @@ export default function MemoryIntensiveComponent() {
       }
     });
 
-    test('Should handle invalid configuration values gracefully', async () => {
+    test('Should handle invalid configuration values gracefully', async function () {
       const config = vscode.workspace.getConfiguration('additionalContextMenus');
 
       // Store original values
@@ -1061,7 +1061,7 @@ export default function MemoryIntensiveComponent() {
       }
     });
 
-    test('Should handle configuration with extreme values', async () => {
+    test('Should handle configuration with extreme values', async function () {
       const config = vscode.workspace.getConfiguration('additionalContextMenus');
       const originalExtensions = config.get('supportedExtensions');
 
@@ -1101,8 +1101,8 @@ export default function MemoryIntensiveComponent() {
   // Multi-workspace and File System Edge Cases
   // ============================================================================
 
-  suite('Multi-workspace and File System Edge Cases', () => {
-    test('Should handle nested project structures', async () => {
+  suite('Multi-workspace and File System Edge Cases', function () {
+    test('Should handle nested project structures', async function () {
       // Create nested project structure
       const parentProject = path.join(tempWorkspace, 'parent-project');
       const childProject = path.join(parentProject, 'child-project');
@@ -1172,7 +1172,7 @@ export function childService() {
       }
     });
 
-    test('Should handle very long file paths', async () => {
+    test('Should handle very long file paths', async function () {
       // Create deeply nested directory structure
       let deepPath = tempWorkspace;
       for (let i = 0; i < 10; i++) {
@@ -1205,7 +1205,7 @@ export function functionWithVeryLongNameThatTestsVariousLimits() {
       }
     });
 
-    test('Should handle files with no extension', async () => {
+    test('Should handle files with no extension', async function () {
       const noExtFile = path.join(tempWorkspace, 'Dockerfile');
       const content = `
 # This is a Dockerfile without extension
@@ -1268,8 +1268,8 @@ CMD ["npm", "start"]`;
   // AST Parsing and Concurrent Operations Edge Cases
   // ============================================================================
 
-  suite('AST Parsing and Concurrent Operations Edge Cases', () => {
-    test('Should handle complex TypeScript syntax edge cases', async () => {
+  suite('AST Parsing and Concurrent Operations Edge Cases', function () {
+    test('Should handle complex TypeScript syntax edge cases', async function () {
       const complexFile = path.join(tempWorkspace, 'complex-syntax.ts');
       const content = `
 // Complex TypeScript with edge cases
@@ -1339,7 +1339,7 @@ export const complexArrowFunction = <T extends string | number>(
       }
     });
 
-    test('Should handle JSX with complex props and nested components', async () => {
+    test('Should handle JSX with complex props and nested components', async function () {
       const jsxFile = path.join(tempWorkspace, 'complex-jsx.tsx');
       const content = `
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
@@ -1482,7 +1482,10 @@ export class TestClass {
         },
       ];
 
-      type DocAndEditor = { doc: vscode.TextDocument; editor: vscode.TextEditor };
+      interface DocAndEditor {
+        doc: vscode.TextDocument;
+        editor: vscode.TextEditor;
+      }
       const documentPairs: DocAndEditor[] = [];
       for (const file of files) {
         const filePath = path.join(tempWorkspace, file.name);
@@ -1500,7 +1503,7 @@ export class TestClass {
           await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
           return { success: true, file: files[index]!.name };
         } catch (_error) {
-          return { success: false, file: files[index]!.name, error };
+          return { success: false, file: files[index]!.name, error: _error };
         }
       });
 
@@ -1514,7 +1517,7 @@ export class TestClass {
       assert.ok(true, 'Extension handled concurrent copy operations');
     });
 
-    test('Should handle malformed but parseable JavaScript edge cases', async () => {
+    test('Should handle malformed but parseable JavaScript edge cases', async function () {
       const malformedFile = path.join(tempWorkspace, 'malformed-edge-cases.js');
       const content = `
 // Edge cases that are syntactically valid but unusual

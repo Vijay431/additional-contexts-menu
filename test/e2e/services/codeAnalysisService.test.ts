@@ -5,24 +5,24 @@ import { E2ETestSetup } from '../utils/e2eTestSetup';
 import { FileTestHelpers } from '../utils/fileHelpers';
 import { WorkspaceTestHelpers } from '../utils/workspaceHelpers';
 
-suite('Code Analysis Service - E2E Tests', () => {
+suite('Code Analysis Service - E2E Tests', function () {
   let testContext: Awaited<ReturnType<typeof E2ETestSetup.setup>>;
 
-  suiteSetup(async () => {
+  suiteSetup(async function () {
     testContext = await E2ETestSetup.setup('codeAnalysisService');
     assert.ok(testContext.extension?.isActive, 'Extension should be active');
   });
 
-  suiteTeardown(async () => {
+  suiteTeardown(async function () {
     await E2ETestSetup.teardown();
   });
 
-  setup(async () => {
+  setup(async function () {
     await E2ETestSetup.resetConfig();
   });
 
-  suite('Function Declaration Detection', () => {
-    test('should find regular function declarations', async () => {
+  suite('Function Declaration Detection', function () {
+    test('should find regular function declarations', async function () {
       const testFile = `${testContext.tempWorkspace}/functions.ts`;
       const content = `
 export function getUserById(id: string) {
@@ -42,7 +42,7 @@ const calculateTotal = (items: any[]) => {
       assert.ok(true, 'Function declaration detected');
     });
 
-    test('should find exported functions', async () => {
+    test('should find exported functions', async function () {
       const testFile = `${testContext.tempWorkspace}/exported.ts`;
       const content = `
 export function exportedFunction() {
@@ -63,8 +63,8 @@ function nonExportedFunction() {
     });
   });
 
-  suite('Arrow Function Detection', () => {
-    test('should find const arrow functions', async () => {
+  suite('Arrow Function Detection', function () {
+    test('should find const arrow functions', async function () {
       const testFile = `${testContext.tempWorkspace}/arrows.ts`;
       const content = `
 const arrowFunction = (data: any[]) => {
@@ -84,7 +84,7 @@ const asyncArrow = async () => {
       assert.ok(true, 'Arrow function detected');
     });
 
-    test('should detect single-expression arrow functions', async () => {
+    test('should detect single-expression arrow functions', async function () {
       const testFile = `${testContext.tempWorkspace}/single-expr.ts`;
       const content = `
 const identity = x => x;
@@ -100,8 +100,8 @@ const double = x => x * 2;
     });
   });
 
-  suite('React Component Detection', () => {
-    test('should find functional components', async () => {
+  suite('React Component Detection', function () {
+    test('should find functional components', async function () {
       const testFile = `${testContext.tempWorkspace}/component.tsx`;
       const content = `
 import React from 'react';
@@ -121,7 +121,7 @@ export default MyComponent;
       assert.ok(true, 'React component detected');
     });
 
-    test('should detect uppercase component names', async () => {
+    test('should detect uppercase component names', async function () {
       const testFile = `${testContext.tempWorkspace}/uppercase.tsx`;
       const content = `
 const UserProfile = () => {
@@ -141,7 +141,7 @@ const HeaderBar = () => {
       assert.ok(true, 'Uppercase component names detected');
     });
 
-    test('should detect React hooks', async () => {
+    test('should detect React hooks', async function () {
       const testFile = `${testContext.tempWorkspace}/hooks.ts`;
       const content = `
 import { useState, useEffect } from 'react';
@@ -168,8 +168,8 @@ export default useCounter;
     });
   });
 
-  suite('Function at Cursor Position', () => {
-    test('should return function containing cursor', async () => {
+  suite('Function at Cursor Position', function () {
+    test('should return function containing cursor', async function () {
       const testFile = `${testContext.tempWorkspace}/cursor.ts`;
       const content = `
 function outerFunction() {
@@ -192,7 +192,7 @@ function anotherFunction() {
       assert.ok(true, 'Function containing cursor returned');
     });
 
-    test('should return null when cursor outside function', async () => {
+    test('should return null when cursor outside function', async function () {
       const testFile = `${testContext.tempWorkspace}/outside.ts`;
       const content = `
 const constant = 'constant';
@@ -211,8 +211,8 @@ function testFunction() {
     });
   });
 
-  suite('Import Extraction', () => {
-    test('should extract import statements', async () => {
+  suite('Import Extraction', function () {
+    test('should extract import statements', async function () {
       const testFile = `${testContext.tempWorkspace}/imports.ts`;
       const content = `
 import { useState } from 'react';
@@ -233,7 +233,7 @@ export function myComponent() {
       assert.ok(true, 'Import statements extracted');
     });
 
-    test('should handle named imports', async () => {
+    test('should handle named imports', async function () {
       const testFile = `${testContext.tempWorkspace}/named.ts`;
       const content = `
 import { useState, useEffect } from 'react';
@@ -250,7 +250,7 @@ export function test() {}
       assert.ok(true, 'Named imports extracted');
     });
 
-    test('should handle default imports', async () => {
+    test('should handle default imports', async function () {
       const testFile = `${testContext.tempWorkspace}/default.ts`;
       const content = `
 import React from 'react';
@@ -268,8 +268,8 @@ export function test() {}
     });
   });
 
-  suite('Error Handling', () => {
-    test('should handle malformed code gracefully', async () => {
+  suite('Error Handling', function () {
+    test('should handle malformed code gracefully', async function () {
       const testFile = `${testContext.tempWorkspace}/malformed.ts`;
       const content = `
 function incomplete( {
@@ -288,7 +288,7 @@ const syntaxError =
       }
     });
 
-    test('should handle empty file gracefully', async () => {
+    test('should handle empty file gracefully', async function () {
       const testFile = `${testContext.tempWorkspace}/empty.ts`;
       const content = '';
       await FileTestHelpers.createFile(testFile, content);
@@ -303,7 +303,7 @@ const syntaxError =
       }
     });
 
-    test('should handle comments only file gracefully', async () => {
+    test('should handle comments only file gracefully', async function () {
       const testFile = `${testContext.tempWorkspace}/comments.ts`;
       const content = `
 // This is a comment
@@ -318,7 +318,7 @@ export function test() {}
         await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
         assert.ok(true, 'Comments only file handled gracefully');
       } catch (_error) {
-        assert.ok(true, 'Comments only file handled with error: ' + (error as Error).message);
+        assert.ok(true, 'Comments only file handled with error: ' + (_error as Error).message);
       }
     });
   });

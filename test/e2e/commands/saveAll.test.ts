@@ -6,24 +6,24 @@ import { E2ETestSetup } from '../utils/e2eTestSetup';
 import { FileTestHelpers } from '../utils/fileHelpers';
 import { WorkspaceTestHelpers } from '../utils/workspaceHelpers';
 
-suite('Save All - E2E Tests', () => {
+suite('Save All - E2E Tests', function () {
   let testContext: Awaited<ReturnType<typeof E2ETestSetup.setup>>;
 
-  suiteSetup(async () => {
+  suiteSetup(async function () {
     testContext = await E2ETestSetup.setup('saveAll');
     assert.ok(testContext.extension?.isActive, 'Extension should be active');
   });
 
-  suiteTeardown(async () => {
+  suiteTeardown(async function () {
     await E2ETestSetup.teardown();
   });
 
-  setup(async () => {
+  setup(async function () {
     await E2ETestSetup.resetConfig();
   });
 
-  suite('Command Registration', () => {
-    test('should register Save All command', async () => {
+  suite('Command Registration', function () {
+    test('should register Save All command', async function () {
       const commands = await vscode.commands.getCommands();
       assert.ok(
         commands.includes('additionalContextMenus.saveAll'),
@@ -32,8 +32,8 @@ suite('Save All - E2E Tests', () => {
     });
   });
 
-  suite('Basic Functionality', () => {
-    test('should save all dirty documents', async () => {
+  suite('Basic Functionality', function () {
+    test('should save all dirty documents', async function () {
       const file1 = path.join(testContext.tempWorkspace, 'dirty1.ts');
       const file2 = path.join(testContext.tempWorkspace, 'dirty2.ts');
       const file3 = path.join(testContext.tempWorkspace, 'dirty3.ts');
@@ -64,7 +64,7 @@ suite('Save All - E2E Tests', () => {
       assert.ok(!editor3?.document.isDirty, 'Document 3 should be saved');
     });
 
-    test('should skip read-only files when configured', async () => {
+    test('should skip read-only files when configured', async function () {
       await vscode.workspace
         .getConfiguration('additionalContextMenus')
         .update('saveAll.skipReadOnly', true, vscode.ConfigurationTarget.Workspace);
@@ -90,7 +90,7 @@ suite('Save All - E2E Tests', () => {
       await WorkspaceTestHelpers.closeAllEditors();
     });
 
-    test('should handle no dirty files', async () => {
+    test('should handle no dirty files', async function () {
       const file1 = path.join(testContext.tempWorkspace, 'clean1.ts');
       const file2 = path.join(testContext.tempWorkspace, 'clean2.ts');
 
@@ -110,8 +110,8 @@ suite('Save All - E2E Tests', () => {
       assert.ok(true, 'Save All with no dirty files completed successfully');
     });
 
-    test('should show progress notification for 5+ files', async () => {
-      const files = [];
+    test('should show progress notification for 5+ files', async function () {
+      const files: string[] = [];
       for (let i = 1; i <= 5; i++) {
         const file = path.join(testContext.tempWorkspace, `file${i}.ts`);
         await FileTestHelpers.createFile(file, `const data${i} = "value";`);
@@ -129,8 +129,8 @@ suite('Save All - E2E Tests', () => {
     });
   });
 
-  suite('Error Handling', () => {
-    test('should handle save errors gracefully', async () => {
+  suite('Error Handling', function () {
+    test('should handle save errors gracefully', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'save-error.ts');
 
       await FileTestHelpers.createFile(testFile, 'const data = "test";');

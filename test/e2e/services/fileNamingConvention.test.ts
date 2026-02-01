@@ -7,24 +7,24 @@ import { E2ETestSetup } from '../utils/e2eTestSetup';
 import { FileTestHelpers } from '../utils/fileHelpers';
 import { WorkspaceTestHelpers } from '../utils/workspaceHelpers';
 
-suite('File Naming Convention Service - E2E Tests', () => {
+suite('File Naming Convention Service - E2E Tests', function () {
   let testContext: Awaited<ReturnType<typeof E2ETestSetup.setup>>;
 
-  suiteSetup(async () => {
+  suiteSetup(async function () {
     testContext = await E2ETestSetup.setup('fileNamingConvention');
     assert.ok(testContext.extension?.isActive, 'Extension should be active');
   });
 
-  suiteTeardown(async () => {
+  suiteTeardown(async function () {
     await E2ETestSetup.teardown();
   });
 
-  setup(async () => {
+  setup(async function () {
     await E2ETestSetup.resetConfig();
   });
 
-  suite('Convention Validation', () => {
-    test('should validate kebab-case file name', async () => {
+  suite('Convention Validation', function () {
+    test('should validate kebab-case file name', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'my-component.ts');
       await FileTestHelpers.createFile(testFile, 'const value = "test";');
       const document = await WorkspaceTestHelpers.openFile(testFile);
@@ -36,7 +36,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
     });
 
-    test('should validate camelCase file name', async () => {
+    test('should validate camelCase file name', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'myComponent.ts');
       await FileTestHelpers.createFile(testFile, 'const value = "test";');
       const document = await WorkspaceTestHelpers.openFile(testFile);
@@ -47,7 +47,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
     });
 
-    test('should validate PascalCase file name', async () => {
+    test('should validate PascalCase file name', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'my-component.ts');
       await FileTestHelpers.createFile(testFile, 'const value = "test";');
       const document = await WorkspaceTestHelpers.openFile(testFile);
@@ -58,7 +58,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
     });
 
-    test('should detect naming violation', async () => {
+    test('should detect naming violation', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'MyComponent.tsx');
       await FileTestHelpers.createFile(
         testFile,
@@ -74,13 +74,14 @@ suite('File Naming Convention Service - E2E Tests', () => {
 
       const diagnostics = vscode.languages.getDiagnostics();
       const fileDiagnostic = diagnostics.find(([uri, _diags]) => uri.fsPath === testFile);
-      const hasDiagnostics = fileDiagnostic?.[1]?.length > 0;
+      const hasDiagnostics =
+        fileDiagnostic && fileDiagnostic[1] !== undefined && fileDiagnostic[1].length > 0;
       assert.ok(hasDiagnostics, 'Should have diagnostic for naming violation');
     });
   });
 
-  suite('Single File Rename', () => {
-    test('should rename to kebab-case', async () => {
+  suite('Single File Rename', function () {
+    test('should rename to kebab-case', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'MyComponent.ts');
       const targetFile = path.join(testContext.tempWorkspace, 'my-component.ts');
 
@@ -96,7 +97,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await FileTestHelpers.assertFileNotExists(testFile);
     });
 
-    test('should rename to camelCase', async () => {
+    test('should rename to camelCase', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'my-component.ts');
       const targetFile = path.join(testContext.tempWorkspace, 'MyComponent.ts');
 
@@ -112,7 +113,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await FileTestHelpers.assertFileNotExists(testFile);
     });
 
-    test('should rename to PascalCase', async () => {
+    test('should rename to PascalCase', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'my-component.ts');
       const targetFile = path.join(testContext.tempWorkspace, 'MyComponent.ts');
 
@@ -129,8 +130,8 @@ suite('File Naming Convention Service - E2E Tests', () => {
     });
   });
 
-  suite('Bulk Folder Rename', () => {
-    test('should rename all files in folder to kebab-case', async () => {
+  suite('Bulk Folder Rename', function () {
+    test('should rename all files in folder to kebab-case', async function () {
       const testDir = path.join(testContext.tempWorkspace, 'src/components');
       await fs.mkdir(testDir, { recursive: true });
 
@@ -154,7 +155,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       }
     });
 
-    test('should handle file exists conflict', async () => {
+    test('should handle file exists conflict', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'conflict.ts');
       const targetFile = path.join(testContext.tempWorkspace, 'new-conflict.ts');
 
@@ -172,7 +173,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       }
     });
 
-    test('should preserve file extensions', async () => {
+    test('should preserve file extensions', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'component.tsx');
       const targetFile = path.join(testContext.tempWorkspace, 'Component.ts');
 
@@ -192,8 +193,8 @@ suite('File Naming Convention Service - E2E Tests', () => {
     });
   });
 
-  suite('Error Handling', () => {
-    test('should handle no active editor gracefully', async () => {
+  suite('Error Handling', function () {
+    test('should handle no active editor gracefully', async function () {
       await WorkspaceTestHelpers.closeAllEditors();
 
       try {
@@ -204,7 +205,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       }
     });
 
-    test('should handle write permission errors gracefully', async () => {
+    test('should handle write permission errors gracefully', async function () {
       const testFile = path.join(testContext.tempWorkspace, 'readonly.ts');
       await fs.chmod(testFile, 0o444);
 
@@ -219,12 +220,14 @@ suite('File Naming Convention Service - E2E Tests', () => {
       }
     });
 
-    test('should handle untitled document gracefully', async () => {
+    test('should handle untitled document gracefully', async function () {
       const document = await vscode.workspace.openTextDocument(
         vscode.Uri.parse('untitled:Untitled-1'),
       );
 
-      WorkspaceTestHelpers.setCursorPosition(document, 0, 20);
+      const editor = await vscode.window.showTextDocument(document);
+
+      WorkspaceTestHelpers.setCursorPosition(editor, 0, 20);
 
       try {
         await vscode.commands.executeCommand('additionalContextMenus.renameFileConvention');
