@@ -211,6 +211,9 @@ suite('Enum Generator Service - E2E Tests', () => {
       await FileTestHelpers.createFile(testFile, 'const test = "value";');
       const document = await WorkspaceTestHelpers.openFile(testFile);
       const editor = WorkspaceTestHelpers.getActiveEditor();
+      if (!editor) {
+        throw new Error('No active editor');
+      }
       WorkspaceTestHelpers.selectRange(editor, 0, 0, 0, 0);
 
       try {
@@ -227,6 +230,9 @@ suite('Enum Generator Service - E2E Tests', () => {
       );
 
       const editor = WorkspaceTestHelpers.getActiveEditor();
+      if (!editor) {
+        throw new Error('No active editor');
+      }
       WorkspaceTestHelpers.selectRange(editor, 0, 0, 0, 0);
 
       try {
@@ -250,7 +256,11 @@ type Props = {
 `;
       await FileTestHelpers.createFile(testFile, content);
       const document = await WorkspaceTestHelpers.openFile(testFile);
-      WorkspaceTestHelpers.selectRange(document, 6, 8, 14);
+      const editor = WorkspaceTestHelpers.getActiveEditor();
+      if (!editor) {
+        throw new Error('No active editor');
+      }
+      WorkspaceTestHelpers.selectRange(editor, 6, 8, 6, 14);
 
       await vscode.commands.executeCommand('additionalContextMenus.generateEnum');
 
