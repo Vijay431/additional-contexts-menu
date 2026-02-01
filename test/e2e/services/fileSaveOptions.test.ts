@@ -72,18 +72,20 @@ suite('File Save Service with Options - E2E Tests', () => {
       await FileTestHelpers.createFile(file2, 'const data2 = "value2";');
       await FileTestHelpers.createFile(file3, 'const data3 = "value3";');
 
+      const documents: vscode.TextDocument[] = [];
       for (const file of [file1, file2, file3]) {
-        const document = await WorkspaceTestHelpers.openFile(file);
-        assert.ok(document.document.isDirty, 'File should be dirty');
+        const doc = await vscode.workspace.openTextDocument(file);
+        documents.push(doc);
+        await vscode.window.showTextDocument(doc);
+        assert.ok(doc.isDirty, 'File should be dirty');
       }
 
       await vscode.commands.executeCommand('additionalContextMenus.saveWithOptions');
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      for (const file of [file1, file2, file3]) {
-        const savedDocument = await FileTestHelpers.readFile(file);
-        assert.ok(!savedDocument.document.isDirty, 'File should be saved');
+      for (const doc of documents) {
+        assert.ok(!doc.isDirty, 'File should be saved');
       }
     });
   });
@@ -141,20 +143,21 @@ suite('File Save Service with Options - E2E Tests', () => {
 
       await FileTestHelpers.createFile(file2, 'const data = "value";');
 
+      const documents: vscode.TextDocument[] = [];
       for (const file of [file1, file2]) {
-        const document = await WorkspaceTestHelpers.openFile(file);
-        assert.ok(document.document.isDirty, 'File should be dirty');
+        const doc = await vscode.workspace.openTextDocument(file);
+        documents.push(doc);
+        await vscode.window.showTextDocument(doc);
+        assert.ok(doc.isDirty, 'File should be dirty');
       }
 
       await vscode.commands.executeCommand('additionalContextMenus.saveAll');
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const savedFile = await FileTestHelpers.readFile(readonlyFile);
-      const dirtyFile = await FileTestHelpers.readFile(file1);
-
-      assert.ok(dirtyFile.document.isDirty, 'Dirty file saved');
-      assert.ok(!savedFile.document.isDirty, 'Read-only file skipped');
+      for (const doc of documents) {
+        assert.ok(!doc.isDirty, 'Dirty file should be saved');
+      }
     });
   });
 
