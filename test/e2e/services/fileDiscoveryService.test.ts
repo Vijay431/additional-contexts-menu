@@ -155,10 +155,10 @@ suite('File Discovery Service - E2E Tests', () => {
         ]);
         assert.ok(true, 'QuickPick shown');
       } catch (_error) {
-        if (error instanceof Error && error.message === 'Timeout') {
+        if (_error instanceof Error && _error.message === 'Timeout') {
           assert.ok(true, 'QuickPick timed out as expected (user input required)');
         } else {
-          throw error;
+          throw _error;
         }
       }
     });
@@ -174,10 +174,10 @@ suite('File Discovery Service - E2E Tests', () => {
         ]);
         assert.ok(true, 'Empty file list handled gracefully');
       } catch (_error) {
-        if (error instanceof Error && error.message === 'Timeout') {
+        if (_error instanceof Error && _error.message === 'Timeout') {
           assert.ok(true, 'Command timed out as expected');
         } else {
-          throw error;
+          throw _error;
         }
       }
     });

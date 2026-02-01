@@ -284,7 +284,7 @@ const syntaxError =
         await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
         assert.ok(true, 'Malformed code handled gracefully');
       } catch (_error) {
-        assert.ok(true, 'Malformed code handled with error: ' + (error as Error).message);
+        assert.ok(true, 'Malformed code handled with error: ' + (_error as Error).message);
       }
     });
 
@@ -299,7 +299,7 @@ const syntaxError =
         await vscode.commands.executeCommand('additionalContextMenus.copyFunction');
         assert.ok(true, 'Empty file handled gracefully');
       } catch (_error) {
-        assert.ok(true, 'Empty file handled with error: ' + (error as Error).message);
+        assert.ok(true, 'Empty file handled with error: ' + (_error as Error).message);
       }
     });
 

@@ -162,10 +162,10 @@ export const existing = () => 'existing';`,
       ]);
       assert.ok(true, 'Copy Lines to File executed');
     } catch (_error) {
-      if (error instanceof Error && error.message === 'Timeout') {
+      if (_error instanceof Error && _error.message === 'Timeout') {
         assert.ok(true, 'Copy Lines to File timed out as expected (requires user input)');
       } else {
-        throw error;
+        throw _error;
       }
     }
   });
@@ -202,10 +202,10 @@ const temporaryFunction = () => {
       ]);
       assert.ok(true, 'Move Lines to File executed');
     } catch (_error) {
-      if (error instanceof Error && error.message === 'Timeout') {
+      if (_error instanceof Error && _error.message === 'Timeout') {
         assert.ok(true, 'Move Lines to File timed out as expected (requires user input)');
       } else {
-        throw error;
+        throw _error;
       }
     }
   });
@@ -303,7 +303,7 @@ const temporaryFunction = () => {
         await vscode.commands.executeCommand(command);
         assert.ok(true, `${command} handled no active editor gracefully`);
       } catch (_error) {
-        assert.fail(`${command} should handle no active editor gracefully: ${error}`);
+        assert.fail(`${command} should handle no active editor gracefully: ${_error}`);
       }
     }
   });
@@ -328,7 +328,7 @@ const temporaryFunction = () => {
         await vscode.commands.executeCommand(command);
         assert.ok(true, `${command} handled empty selection gracefully`);
       } catch (_error) {
-        assert.fail(`${command} should handle empty selection gracefully: ${error}`);
+        assert.fail(`${command} should handle empty selection gracefully: ${_error}`);
       }
     }
   });
@@ -356,7 +356,7 @@ const temporaryFunction = () => {
         await vscode.commands.executeCommand('additionalContextMenus.openInTerminal');
         assert.ok(true, `Terminal opened successfully for ${file.name}`);
       } catch (_error) {
-        assert.fail(`Terminal should open for ${file.name}: ${error}`);
+        assert.fail(`Terminal should open for ${file.name}: ${_error}`);
       }
     }
   });

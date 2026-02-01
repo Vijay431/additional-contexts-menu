@@ -224,7 +224,7 @@ const useUserData = (userId: string) => {
         assert.ok(true, 'Handled no active editor gracefully');
       } catch (_error) {
         // Expected to show warning message and not throw
-        assert.fail(`Should not throw error: ${error}`);
+        assert.fail(`Should not throw error: ${_error}`);
       }
     });
 
@@ -249,7 +249,7 @@ export function myFunction() {
         // Should show warning but not throw
         assert.ok(true, 'Handled cursor outside function gracefully');
       } catch (_error) {
-        assert.fail(`Should not throw error: ${error}`);
+        assert.fail(`Should not throw error: ${_error}`);
       }
     });
   });

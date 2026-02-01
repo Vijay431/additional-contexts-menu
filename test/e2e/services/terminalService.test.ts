@@ -229,7 +229,7 @@ suite('Terminal Service - E2E Tests', () => {
         await vscode.commands.executeCommand('additionalContextMenus.openInTerminal');
         assert.ok(true, 'Handled no active editor gracefully');
       } catch (_error) {
-        assert.ok(true, 'Handled no active editor error: ' + (error as Error).message);
+        assert.ok(true, 'Handled no active editor error: ' + (_error as Error).message);
       }
     });
 
@@ -246,7 +246,7 @@ suite('Terminal Service - E2E Tests', () => {
         await vscode.commands.executeCommand('additionalContextMenus.openInTerminal');
         assert.ok(true, 'Handled invalid directory gracefully');
       } catch (_error) {
-        assert.ok(true, 'Handled invalid directory error: ' + (error as Error).message);
+        assert.ok(true, 'Handled invalid directory error: ' + (_error as Error).message);
       }
     });
   });

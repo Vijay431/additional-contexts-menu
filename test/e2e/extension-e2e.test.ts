@@ -215,7 +215,7 @@ suite('Additional Context Menus - E2E Tests', () => {
           'Enable keybindings command executed (may have timed out due to user confirmation)',
         );
       } catch (_error) {
-        if (error instanceof Error && _error.message === 'Timeout') {
+        if (_error instanceof Error && _error.message === 'Timeout') {
           assert.ok(
             true,
             'Enable keybindings command timed out as expected (requires user confirmation)',
@@ -460,7 +460,7 @@ export const existingFunction = () => {
         await Promise.race([commandPromise, timeoutPromise]);
         assert.ok(true, 'Copy Lines to File command executed without crashing');
       } catch (_error) {
-        if (error instanceof Error && _error.message.includes('timed out')) {
+        if (_error instanceof Error && _error.message.includes('timed out')) {
           assert.ok(true, 'Copy Lines to File command timed out as expected (user input required)');
         } else {
           assert.ok(true, 'Copy Lines to File handled gracefully in test environment');
@@ -509,7 +509,7 @@ const keepThisFunction = () => {
         await Promise.race([commandPromise, timeoutPromise]);
         assert.ok(true, 'Move Lines to File command executed without crashing');
       } catch (_error) {
-        if (error instanceof Error && _error.message.includes('timed out')) {
+        if (_error instanceof Error && _error.message.includes('timed out')) {
           assert.ok(true, 'Move Lines to File command timed out as expected (user input required)');
         } else {
           assert.ok(true, 'Move Lines to File handled gracefully in test environment');

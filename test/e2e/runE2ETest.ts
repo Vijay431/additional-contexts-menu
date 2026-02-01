@@ -63,8 +63,8 @@ async function createMinimalExtension(projectRoot: string): Promise<string> {
     const minimalExtensionPath = path.join(projectRoot, '.vscode-test', 'minimal-extension');
     return minimalExtensionPath.replace(/\\/g, '/');
   } catch (_error) {
-    console.error('❌ Failed to create minimal extension:', error);
-    throw error;
+    console.error('❌ Failed to create minimal extension:', _error);
+    throw _error;
   }
 }
 
@@ -102,7 +102,10 @@ function cleanupOldVSCodeVersions(projectRoot: string): void {
       console.log(`   ✅ Kept latest version: ${versionPaths[0]!.name}`);
     }
   } catch (_error) {
-    console.warn('⚠️  Warning: Could not clean up old VS Code versions:', (error as Error).message);
+    console.warn(
+      '⚠️  Warning: Could not clean up old VS Code versions:',
+      (_error as Error).message,
+    );
   }
 }
 
@@ -139,7 +142,7 @@ function cleanupTestArtifacts(projectRoot: string): void {
       console.log('   ✅ Cleaned isolated user data');
     }
   } catch (_error) {
-    console.warn('⚠️  Warning: Could not clean up test artifacts:', (error as Error).message);
+    console.warn('⚠️  Warning: Could not clean up test artifacts:', (_error as Error).message);
   }
 }
 
