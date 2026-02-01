@@ -5,9 +5,83 @@ import * as vscode from 'vscode';
 
 import { ProjectType } from '../types/extension';
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
+
+/**
+ * Project Detection Service
+ *
+ * Automatic project type and framework detection with extension recommendations
+ * and .vscode/settings.json auto-update support.
+ *
+ * @description
+ * This service analyzes the workspace to detect project type and frameworks.
+ * Updates VS Code context variables for menu visibility and can automatically
+ * update .vscode/settings.json with recommended extensions.
+ *
+ * Key Features:
+ * - Framework detection (React, Angular, Express, Next.js, Vue, Svelte, Nest.js)
+ * - TypeScript detection (tsconfig.json, @types/node dependency)
+ * - Context variable updates for menu visibility
+ * - Extension recommendation system
+ * - .vscode/settings.json auto-update
+ * - Workspace change handling
+ * - Detection caching for performance
+ *
+ * Detected Frameworks:
+ * - React: presence of 'react' dependency
+ * - Angular: presence of '@angular/core' dependency
+ * - Express: presence of 'express' dependency
+ * - Next.js: presence of 'next' dependency
+ * - Vue.js: presence of 'vue' dependency
+ * - Svelte: presence of 'svelte' dependency
+ * - Nest.js: presence of '@nestjs/core' dependency
+ * - TypeScript: presence of tsconfig.json or '@types/node' dependency
+ *
+ * Extension Recommendations:
+ * - TypeScript projects: dbaeumer.vscode-eslint, esbenp.prettier-vscode
+ * - Angular projects: Angular.ng-template, dbaeumer.vscode-eslint
+ * - React projects: dbaeumer.vscode-eslint, esbenp.prettier-vscode
+ * - Next.js projects: dbaeumer.vscode-eslint, bradlc.vscode-tailwindcss
+ * - Vue projects: Vue.volar, dbaeumer.vscode-eslint
+ * - Svelte projects: svelte.svelte-vscode, dbaeumer.vscode-eslint
+ *
+ * Use Cases:
+ * - Automatic project detection on workspace open
+ * - Framework-aware menu display
+ * - Recommended extensions suggestions
+ * - IDE configuration automation
+ * - Multi-framework project detection
+ *
+ * @example
+ * // Get service instance
+ * const detectionService = ProjectDetectionService.getInstance();
+ *
+ * // Detect project type
+ * const projectType = await detectionService.detectProjectType();
+ * console.log(`Is Node.js: ${projectType.isNodeProject}`);
+ * console.log(`Frameworks: ${projectType.frameworks.join(', ')}`);
+ * console.log(`Has TypeScript: ${projectType.hasTypeScript}`);
+ *
+ * // Update context variables
+ * await detectionService.updateContextVariables();
+ * // Updates: additionalContextMenus.hasReact, hasAngular, hasExpress, etc.
+ *
+ * // Auto-update .vscode/settings.json
+ * // Automatically called on workspace open if configured
+ * // Updates recommendations array with framework-specific extensions
+ *
+ * @see ConfigurationService - Provides projectDetection.autoUpdateSettings
+ * @see CodeAnalysisService - May use for code analysis
+ *
+ * @category Configuration & State
+ * @subpackage Project Intelligence
+ *
+ * @author Vijay Gangatharan <vijayanand431@gmail.com>
+ * @since 1.3.0
+ */
 
 export class ProjectDetectionService {
-  private static instance: ProjectDetectionService;
+  private static instance: ProjectDetectionService | undefined;
   private logger: Logger;
   private projectTypeCache = new Map<string, ProjectType>();
 
@@ -16,9 +90,7 @@ export class ProjectDetectionService {
   }
 
   public static getInstance(): ProjectDetectionService {
-    if (!ProjectDetectionService.instance) {
-      ProjectDetectionService.instance = new ProjectDetectionService();
-    }
+    ProjectDetectionService.instance ??= new ProjectDetectionService();
     return ProjectDetectionService.instance;
   }
 
@@ -55,7 +127,12 @@ export class ProjectDetectionService {
       }
 
       // Parse package.json
-      const packageData = await fs.readFile(packageJsonPath, 'utf-8');
+      const resolvedPackageJsonPath = path.resolve(packageJsonPath);
+      if (!isSafeFilePath(resolvedPackageJsonPath)) {
+        return this.createProjectType(false, [], false, 'none');
+      }
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- path validated by isSafeFilePath()
+      const packageData = await fs.readFile(resolvedPackageJsonPath, 'utf-8');
       const packageJson = JSON.parse(packageData);
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
 
@@ -150,7 +227,7 @@ export class ProjectDetectionService {
       'rollup',
     ];
 
-    return nodeIndicators.some((indicator) => dependencies[indicator] !== undefined);
+    return nodeIndicators.some((indicator) => indicator in dependencies);
   }
 
   private determineSupportLevel(

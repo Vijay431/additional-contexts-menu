@@ -5,8 +5,54 @@ import { Logger } from '../utils/logger';
 
 import { ConfigurationService } from './configurationService';
 
+/**
+ * File Save Service
+ *
+ * Enhanced file save operations with progress feedback, read-only handling,
+ * and configurable notifications.
+ *
+ * @description
+ * This service provides improved save functionality for VS Code workspaces.
+ * Handles multiple files simultaneously with progress feedback and error reporting.
+ *
+ * Key Features:
+ * - Save all dirty documents with progress tracking
+ * - Visual progress notification for large operations (5+ files)
+ * - Read-only file handling (configurable skip)
+ * - Configurable success/failure notifications
+ * - Detailed error reporting with failure counts
+ * - Support for workspace multi-root scenarios
+ *
+ * Use Cases:
+ * - Saving all modified files before commit
+ * - Bulk save operations before builds
+ * - Quick workspace save with error handling
+ * - Automated save operations in CI/CD workflows
+ *
+ * @example
+ * // Get service instance
+ * const saveService = FileSaveService.getInstance();
+ *
+ * // Save all dirty files
+ * const result = await saveService.saveAllFiles();
+ * console.log(`Saved ${result.savedFiles}/${result.totalFiles} files`);
+ *
+ * // Check for unsaved changes
+ * if (saveService.hasUnsavedChanges()) {
+ *   console.log(`Has ${saveService.getUnsavedFileCount()} unsaved files`);
+ * }
+ *
+ * @see ConfigurationService - Provides saveAll configuration
+ * @see ContextMenuManager - Uses this service for save operations
+ *
+ * @category File Operations
+ * @subcategory File Management
+ *
+ * @author Vijay Gangatharan <vijayanand431@gmail.com>
+ * @since 1.0.0
+ */
 export class FileSaveService {
-  private static instance: FileSaveService;
+  private static instance: FileSaveService | undefined;
   private logger: Logger;
   private configService: ConfigurationService;
 
@@ -16,9 +62,7 @@ export class FileSaveService {
   }
 
   public static getInstance(): FileSaveService {
-    if (!FileSaveService.instance) {
-      FileSaveService.instance = new FileSaveService();
-    }
+    FileSaveService.instance ??= new FileSaveService();
     return FileSaveService.instance;
   }
 
@@ -144,7 +188,7 @@ export class FileSaveService {
         const increment = 100 / files.length;
 
         for (let i = 0; i < files.length; i++) {
-          const document = files[i];
+          const document = files.at(i);
 
           if (!document) {
             continue;
@@ -194,8 +238,7 @@ export class FileSaveService {
       const message = `Saved ${result.savedFiles}/${result.totalFiles} files. ${
         result.failedFiles.length
       } failed.`;
-      vscode.window
-        .showWarningMessage(message, 'Show Details')
+      Promise.resolve(vscode.window.showWarningMessage(message, 'Show Details'))
         .then(
           (selection) => {
             if (selection === 'Show Details') {

@@ -6,38 +6,151 @@ labels: enhancement, context-menu
 assignees: ''
 ---
 
-**Which context menu command needs enhancement?**
+## Which Context Menu Command Needs Enhancement?
 
 - [ ] Copy Function
-- [ ] Copy to Existing File
-- [ ] Move to Existing File
+- [ ] Copy Function to File
+- [ ] Move Function to File
+- [ ] Copy Content to File
+- [ ] Move Content to File
 - [ ] Save All
-- [ ] Other:
+- [ ] Open in Terminal
+- [ ] Generate Enum from Union Type
+- [ ] Generate .env File
+- [ ] Generate Cron Expression
+- [ ] Rename File to Convention
+- [ ] Other: **\*\***\_\_\_\_**\*\***
 
-**Current Behavior**
+## Current Behavior
+
 Describe how the context menu currently works and what could be improved.
 
-**Proposed Enhancement**
+**What Happens Now:**
+Describe the current behavior.
+
+**What's Wrong:**
+What's problematic or missing?
+
+## Proposed Enhancement
+
 Describe the specific improvement you'd like to see.
 
-**Framework Specific**
-Is this enhancement specific to certain frameworks?
+**Enhancement Type:**
 
-- [ ] React
-- [ ] Angular
-- [ ] Express
-- [ ] Next.js
-- [ ] All frameworks
-- [ ] TypeScript specific
-- [ ] JavaScript specific
+- [ ] Add new functionality
+- [ ] Improve existing functionality
+- [ ] Fix UX/usability issue
+- [ ] Improve performance
+- [ ] Better error handling
+- [ ] Better feedback/notifications
+- [ ] Other: **\*\***\_\_\_\_**\*\***
 
-**Use Case**
+**Desired Behavior:**
+Describe how it should work after enhancement.
+
+## Enhancement Impact
+
+**Who Benefits:**
+
+- [ ] All users
+- [ ] Specific framework users
+- [ ] Specific project types
+- [ ] Specific file types
+- [ ] Power users
+- [ ] Beginners
+
+**Use Case:**
 Provide a specific development scenario where this enhancement would be valuable.
 
-**Technical Details**
-Any technical considerations or implementation suggestions.
+**Before (Current):**
 
-**Priority**
+```
+[Describe current workflow or code]
+```
+
+**After (Enhanced):**
+
+```
+[Describe improved workflow or code]
+```
+
+## Technical Details
+
+**Affected Components:**
+
+- [ ] Code Analysis Service
+- [ ] Configuration Service
+- [ ] File Discovery Service
+- [ ] File Save Service
+- [ ] Terminal Service
+- [ ] Project Detection Service
+- [ ] Generator Services
+- [ ] Context Menu Manager
+- [ ] Other: **\*\***\_\_\_\_**\*\***
+
+**Implementation Considerations:**
+Any technical constraints or considerations?
+
+**Breaking Changes:**
+
+- [ ] No breaking changes
+- [ ] Minor changes (internal APIs)
+- [ ] May require migration
+
+## UI/UX Considerations
+
+**Menu Placement:**
+Where should this appear in the context menu?
+
+- [ ] Keep current position
+- [ ] Move to different group
+- [ ] Reorder items
+- [ ] Other: **\*\***\_\_\_\_**\*\***
+
+**Visibility/Context:**
+When should this menu item appear?
+
+- [ ] All conditions (current behavior)
+- [ ] Only for certain file types
+- [ ] Only for certain frameworks
+- [ ] Only when specific conditions met
+- [ ] Other: **\*\***\_\_\_\_**\*\***
+
+**User Feedback:**
+What feedback should users receive?
+
+- [ ] Success notification
+- [ ] Error message
+- [ ] Progress indicator
+- [ ] Confirmation dialog
+- [ ] No feedback needed
+- [ ] Other: **\*\***\_\_\_\_**\*\***
+
+## Alternative Approaches
+
+Have you considered other approaches?
+
+**Alternative 1:**
+
+```
+[Describe alternative approach]
+```
+
+**Alternative 2:**
+
+```
+[Describe alternative approach]
+```
+
+## Additional Context
+
+- **Screenshots:** [Attach screenshots if applicable]
+- **Code Examples:** [Provide relevant code]
+- **Workarounds:** [Any current workarounds]
+- **Related Issues:** [Link to related issues]
+
+## Priority
+
 How important is this enhancement to your workflow?
 
 - [ ] Critical - Blocks current workflow
@@ -45,5 +158,14 @@ How important is this enhancement to your workflow?
 - [ ] Medium - Nice to have improvement
 - [ ] Low - Minor quality of life improvement
 
-**Additional context**
-Code examples, screenshots, or other context about the enhancement request.
+## Complexity
+
+How complex would this enhancement be?
+
+- [ ] Simple - Quick fix
+- [ ] Moderate - Some development time
+- [ ] Complex - Significant changes
+
+---
+
+**Thank you for suggesting context menu enhancements!** ✨

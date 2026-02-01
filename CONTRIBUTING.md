@@ -23,7 +23,7 @@ By participating in this project, you are expected to uphold our [Code of Conduc
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (versions 16-24 supported, 18+ recommended for development)
-- [npm](https://www.npmjs.com/) (comes with Node.js)
+- [PNPM](https://pnpm.io/) (install with `npm install -g pnpm`)
 - [Visual Studio Code](https://code.visualstudio.com/) (for development and testing)
 - [Git](https://git-scm.com/)
 
@@ -53,29 +53,29 @@ We welcome several types of contributions:
 ### 2. Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. Development Commands
 
 ```bash
-# Compile TypeScript using webpack
-npm run compile
+# Compile TypeScript using esbuild
+pnpm run build
 
-# Watch mode for development (webpack --watch)
-npm run watch
+# Watch mode for development (esbuild --watch)
+pnpm run watch
 
 # Production build with optimizations
-npm run package
+pnpm run package
 
 # Run extension tests
-npm test
+pnpm test
 
 # Run ESLint on src directory
-npm run lint
+pnpm run lint
 
 # Format code using Prettier
-npm run format
+pnpm run format
 ```
 
 ### 4. Launch Development Environment
@@ -168,10 +168,10 @@ When making changes:
 3. **Run Quality Checks**:
 
    ```bash
-   npm run lint
-   npm run format
-   npm test
-   npm run compile
+   pnpm run lint
+   pnpm run format
+   pnpm test
+   pnpm run build
    ```
 
 4. **Create Pull Request** with:
@@ -234,13 +234,13 @@ When creating a PR, please fill out the template with:
 
 ```bash
 # Run all tests
-npm test
+pnpm test
 
 # Compile and run tests
-npm run test:watch
+pnpm run test:watch
 
 # Compile test files
-npm run compile-tests
+pnpm run build-tests
 ```
 
 ### Writing Tests

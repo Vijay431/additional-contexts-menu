@@ -83,7 +83,7 @@ function initializeScrollEffects() {
 
   // Observe elements for animation
   const animateElements = document.querySelectorAll(
-    '.feature-card, .step, .command-card, .architecture-card, .metric-card, .screenshot-item, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card'
+    '.feature-card, .step, .command-card, .architecture-card, .metric-card, .screenshot-item, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card',
   );
 
   animateElements.forEach((el) => {
@@ -200,7 +200,7 @@ function initializeTabSwitching() {
 function initializeInteractiveElements() {
   // Add hover effects to cards
   const cards = document.querySelectorAll(
-    '.feature-card, .command-card, .architecture-card, .metric-card, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card'
+    '.feature-card, .command-card, .architecture-card, .metric-card, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card',
   );
 
   cards.forEach((card) => {
@@ -215,7 +215,7 @@ function initializeInteractiveElements() {
 
   // Add click handlers for download buttons
   const downloadButtons = document.querySelectorAll(
-    '.btn[href*="marketplace"], .btn[href*="releases"]'
+    '.btn[href*="marketplace"], .btn[href*="releases"]',
   );
 
   downloadButtons.forEach((button) => {
@@ -429,14 +429,14 @@ window.addEventListener(
   'scroll',
   throttle(function () {
     // Handle scroll events with throttling
-  }, 16)
+  }, 16),
 ); // ~60fps
 
 window.addEventListener(
   'resize',
   debounce(function () {
     // Handle resize events with debouncing
-  }, 250)
+  }, 250),
 );
 
 // Export functions for global use

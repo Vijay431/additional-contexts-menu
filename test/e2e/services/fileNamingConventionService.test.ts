@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import * as assert from 'assert';
 import * as path from 'path';
@@ -29,7 +30,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       const commands = await vscode.commands.getCommands();
       assert.ok(
         commands.includes('additionalContextMenus.validateFileName'),
-        'Validate File Name command should be registered'
+        'Validate File Name command should be registered',
       );
     });
   });
@@ -44,7 +45,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await vscode.commands.executeCommand('additionalContextMenus.validateFileName');
 
       const diagnostic = vscode.languages.getDiagnostics();
-      const fileDiagnostic = diagnostic.find(d => d.uri.fsPath === testFile);
+      const fileDiagnostic = diagnostic.find((d) => d.uri.fsPath === testFile);
       assert.ok(fileDiagnostic?.range?.length === 1, 'Should have diagnostic for naming violation');
     });
 
@@ -57,7 +58,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await vscode.commands.executeCommand('additionalContextMenus.validateFileName');
 
       const diagnostic = vscode.languages.getDiagnostics();
-      const fileDiagnostic = diagnostic.find(d => d.uri.fsPath === testFile);
+      const fileDiagnostic = diagnostic.find((d) => d.uri.fsPath === testFile);
       assert.ok(fileDiagnostic?.range?.length === 1, 'Should have diagnostic for naming violation');
     });
 
@@ -70,7 +71,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await vscode.commands.executeCommand('additionalContextMenus.validateFileName');
 
       const diagnostic = vscode.languages.getDiagnostics();
-      const fileDiagnostic = diagnostic.find(d => d.uri.fsPath === testFile);
+      const fileDiagnostic = diagnostic.find((d) => d.uri.fsPath === testFile);
       assert.ok(fileDiagnostic?.range?.length === 1, 'Should have diagnostic for naming violation');
     });
   });
@@ -207,11 +208,15 @@ suite('File Naming Convention Service - E2E Tests', () => {
 
       await vscode.commands.executeCommand('additionalContextMenus.bulkRenameConvention');
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       for (const file of files) {
-        await FileTestHelpers.assertFileExists(path.join(testDir, file.replace('component', 'renamed')));
-        await FileTestHelpers.assertFileNotExists(path.join(testDir, file.replace('component', 'original')));
+        await FileTestHelpers.assertFileExists(
+          path.join(testDir, file.replace('component', 'renamed')),
+        );
+        await FileTestHelpers.assertFileNotExists(
+          path.join(testDir, file.replace('component', 'original')),
+        );
       }
 
       const finalDocument = await WorkspaceTestHelpers.openFile(path.join(testDir, files[0]));
@@ -234,7 +239,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.bulkRenameConvention');
         assert.fail('Should have thrown error for file exists');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled file exists conflict gracefully');
       }
     });
@@ -265,7 +270,15 @@ suite('File Naming Convention Service - E2E Tests', () => {
       WorkspaceTestHelpers.setCursorPosition(document, 0, 0);
 
       const selectedItem = await vscode.window.showQuickPick(
-        ['kebab-case', 'camelCase', 'PascalCase', 'snake_case', 'UPPER_CASE', 'Train-Case', 'dot.case'],
+        [
+          'kebab-case',
+          'camelCase',
+          'PascalCase',
+          'snake_case',
+          'UPPER_CASE',
+          'Train-Case',
+          'dot.case',
+        ],
         { placeHolder: 'Select naming convention' },
       );
 
@@ -278,12 +291,11 @@ suite('File Naming Convention Service - E2E Tests', () => {
       const document = await WorkspaceTestHelpers.openFile(testFile);
       WorkspaceTestHelpers.setCursorPosition(document, 0, 0);
 
-      await vscode.window.showQuickPick(
-        ['kebab-case', 'camelCase', 'PascalCase'],
-        { placeHolder: 'Select naming convention' },
-      );
+      await vscode.window.showQuickPick(['kebab-case', 'camelCase', 'PascalCase'], {
+        placeHolder: 'Select naming convention',
+      });
 
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       assert.ok(true, 'QuickPick cancelled by user');
     });
   });
@@ -298,7 +310,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await vscode.commands.executeCommand('additionalContextMenus.validateFileName');
 
       const diagnostics = vscode.languages.getDiagnostics();
-      const fileDiagnostic = diagnostics.find(d => d.uri.fsPath === testFile);
+      const fileDiagnostic = diagnostics.find((d) => d.uri.fsPath === testFile);
       assert.ok(fileDiagnostic?.range?.length > 0, 'Should have diagnostic shown');
     });
   });
@@ -310,7 +322,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.renameFileConvention');
         assert.ok(true, 'Handled no active editor gracefully');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled no active editor error gracefully');
       }
     });
@@ -325,7 +337,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.renameFileConvention');
         assert.ok(true, 'Handled permission error gracefully');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled permission error gracefully');
       }
     });
@@ -339,7 +351,7 @@ suite('File Naming Convention Service - E2E Tests', () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.renameFileConvention');
         assert.ok(true, 'Handled empty selection gracefully');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled empty selection gracefully');
       }
     });

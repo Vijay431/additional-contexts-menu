@@ -6,8 +6,68 @@ import { Logger } from '../utils/logger';
 
 import { ConfigurationService } from './configurationService';
 
+/**
+ * Terminal Service
+ *
+ * Cross-platform terminal integration for VS Code with intelligent
+ * directory selection and platform-specific terminal support.
+ *
+ * @description
+ * This service provides terminal opening functionality that works across
+ * Windows, macOS, and Linux. Supports multiple terminal types and
+ * configurable directory opening behavior.
+ *
+ * Key Features:
+ * - Cross-platform terminal integration (Windows, macOS, Linux)
+ * - Multiple terminal type support (integrated, external, system-default)
+ * - Configurable directory opening behavior
+ * - Path validation and resolution
+ * - Custom terminal command support with templates
+ * - Parent directory detection
+ *
+ * Terminal Types:
+ * - integrated: VS Code's integrated terminal
+ * - external: Custom external terminal command
+ * - system-default: OS default terminal
+ *
+ * Open Behavior:
+ * - parent-directory: Opens folder containing the file
+ * - workspace-root: Opens project root directory
+ * - current-directory: Opens exact file location
+ *
+ * Use Cases:
+ * - Opening terminal in project directory
+ * - Quick terminal access from editor
+ * - Cross-platform terminal management
+ * - Running build/test commands from terminal
+ *
+ * @example
+ * // Get service instance
+ * const terminalService = TerminalService.getInstance();
+ * await terminalService.initialize();
+ *
+ * // Open terminal for current file
+ * await terminalService.openInTerminal('/path/to/file.ts');
+ *
+ * // Get configured terminal type
+ * const type = terminalService.getTerminalType();
+ * console.log(`Terminal type: ${type}`);
+ *
+ * // Get target directory
+ * const targetDir = terminalService.getTargetDirectory('/project/src/file.ts');
+ * console.log(`Will open: ${targetDir}`);
+ *
+ * @see ConfigurationService - Provides terminal configuration
+ * @see ContextMenuManager - Uses this service for Open in Terminal
+ *
+ * @category Project Operations
+ * @subcategory Terminal Integration
+ *
+ * @author Vijay Gangatharan <vijayanand431@gmail.com>
+ * @since 1.2.0
+ */
 export class TerminalService {
-  private static instance: TerminalService;
+  private static instance: TerminalService | undefined;
   private logger: Logger;
   private configService: ConfigurationService;
 
@@ -17,9 +77,7 @@ export class TerminalService {
   }
 
   public static getInstance(): TerminalService {
-    if (!TerminalService.instance) {
-      TerminalService.instance = new TerminalService();
-    }
+    TerminalService.instance ??= new TerminalService();
     return TerminalService.instance;
   }
 
@@ -37,7 +95,7 @@ export class TerminalService {
 
       const directoryPath = this.getTargetDirectory(filePath);
 
-      if (!await this.validatePath(directoryPath)) {
+      if (!(await this.validatePath(directoryPath))) {
         throw new Error(`Invalid or inaccessible directory: ${directoryPath}`);
       }
 
@@ -45,7 +103,6 @@ export class TerminalService {
 
       vscode.window.showInformationMessage(`Terminal opened in ${path.basename(directoryPath)}`);
       this.logger.info('Terminal opened successfully', { directory: directoryPath });
-
     } catch (error) {
       this.handleTerminalError(error as Error);
       throw error;
@@ -71,7 +128,6 @@ export class TerminalService {
         default:
           throw new Error(`Unsupported terminal type: ${terminalType}`);
       }
-
     } catch (error) {
       this.logger.error('Failed to open directory in terminal', error);
 
@@ -95,7 +151,6 @@ export class TerminalService {
 
       terminal.show();
       this.logger.debug('Integrated terminal created', { name: terminalName, cwd: directoryPath });
-
     } catch (error) {
       this.logger.error('Failed to create integrated terminal', error);
       throw new Error('Failed to open integrated terminal');
@@ -120,7 +175,6 @@ export class TerminalService {
       terminal.dispose();
 
       this.logger.debug('External terminal command executed', { command });
-
     } catch (error) {
       this.logger.error('Failed to open external terminal', error);
       throw new Error('Failed to open external terminal');
@@ -162,7 +216,6 @@ export class TerminalService {
       terminal.dispose();
 
       this.logger.debug('System default terminal command executed', { platform, command });
-
     } catch (error) {
       this.logger.error('Failed to open system default terminal', error);
       throw new Error('Failed to open system default terminal');

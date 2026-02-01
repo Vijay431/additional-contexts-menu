@@ -6,9 +6,68 @@ import * as vscode from 'vscode';
 
 import { CompatibleFile } from '../types/extension';
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
 
+/**
+ * File Discovery Service
+ *
+ * Discovers and filters files in the workspace for code operations.
+ * Provides caching for performance and handles file system changes.
+ *
+ * @description
+ * This service scans the workspace for compatible files based on file extensions,
+ * filters them appropriately, and provides a convenient interface for file selection.
+ * Uses VS Code's file search API for optimal performance.
+ *
+ * Key Features:
+ * - Workspace file scanning with pattern matching
+ * - File extension compatibility rules (.ts ↔ .tsx, .js ↔ .jsx)
+ * - Last-modified sorting for easy file selection
+ * - Result caching for improved performance
+ * - File system change monitoring (create, delete, rename)
+ * - File accessibility validation
+ * - QuickPick integration for user-friendly file selection
+ *
+ * Compatibility Rules:
+ * - TypeScript (.ts/.tsx) ↔ TypeScript (.ts/.tsx)
+ * - JavaScript (.js/.jsx) ↔ JavaScript (.js/.jsx)
+ * - Cross-compatibility between TS and JS (limited)
+ *
+ * Use Cases:
+ * - Finding target files for Copy/Move operations
+ * - Filtering files by extension compatibility
+ * - Getting most recently modified files
+ * - Validating target file accessibility
+ *
+ * @example
+ * // Get service instance
+ * const discoveryService = FileDiscoveryService.getInstance();
+ *
+ * // Find compatible files for TypeScript
+ * const files = await discoveryService.getCompatibleFiles('.ts');
+ * console.log(`Found ${files.length} compatible files`);
+ *
+ * // Show file selector to user
+ * const selectedPath = await discoveryService.showFileSelector(files);
+ * if (selectedPath) {
+ *   console.log(`User selected: ${selectedPath}`);
+ * }
+ *
+ * // Check if extension is compatible
+ * const isCompatible = discoveryService.isCompatibleExtension('.ts', '.tsx');
+ * console.log(`.ts is compatible with .tsx: ${isCompatible}`);
+ *
+ * @see CodeAnalysisService - Used together for file operations
+ * @see ContextMenuManager - Uses this service for file selection
+ *
+ * @category File Operations
+ * @subcategory File Discovery
+ *
+ * @author Vijay Gangatharan <vijayanand431@gmail.com>
+ * @since 1.0.0
+ */
 export class FileDiscoveryService {
-  private static instance: FileDiscoveryService;
+  private static instance: FileDiscoveryService | undefined = undefined;
   private logger: Logger;
   private fileCache = new Map<string, CompatibleFile[]>();
 
@@ -17,10 +76,7 @@ export class FileDiscoveryService {
   }
 
   public static getInstance(): FileDiscoveryService {
-    if (!FileDiscoveryService.instance) {
-      FileDiscoveryService.instance = new FileDiscoveryService();
-    }
-    return FileDiscoveryService.instance;
+    return FileDiscoveryService.instance ?? new FileDiscoveryService();
   }
 
   public async getCompatibleFiles(sourceExtension: string): Promise<CompatibleFile[]> {
@@ -64,7 +120,11 @@ export class FileDiscoveryService {
 
     for (const fileUri of files) {
       try {
-        const filePath = fileUri.fsPath;
+        const filePath = path.resolve(fileUri.fsPath);
+        if (!isSafeFilePath(filePath)) {
+          continue;
+        }
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- path validated by isSafeFilePath()
         const stats = await fs.stat(filePath);
         const extension = path.extname(filePath);
 
@@ -120,7 +180,9 @@ export class FileDiscoveryService {
       '.jsx': ['.js', '.jsx'],
     };
 
-    const compatibleExtensions = compatibilityRules[sourceExt] ?? [sourceExt];
+    const compatibleExtensions = compatibilityRules[
+      sourceExt as keyof typeof compatibilityRules
+    ] ?? [sourceExt];
     return compatibleExtensions.includes(targetExt);
   }
 

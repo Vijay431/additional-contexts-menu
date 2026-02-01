@@ -23,8 +23,6 @@ suite('TerminalService Tests', () => {
       assert.strictEqual(parentDir, '/home/user/project/src');
     });
 
-
-
     test('should get parent directory for target behavior', () => {
       const service = TestHelpers.setupWithOpenBehavior('parent-directory');
       const paths = TestHelpers.getTestPaths();
@@ -45,7 +43,6 @@ suite('TerminalService Tests', () => {
       const targetDir = service.getTargetDirectory(paths.unixFile);
       assert.strictEqual(targetDir, paths.unixFile);
     });
-
   });
 
   suite('Path Validation', () => {
@@ -70,7 +67,6 @@ suite('TerminalService Tests', () => {
       const isValid = await terminalService.validatePath(paths.unixFile);
       assert.strictEqual(isValid, false);
     });
-
   });
 
   suite('Terminal Type Configuration', () => {
@@ -90,7 +86,6 @@ suite('TerminalService Tests', () => {
       const terminalType = service.getTerminalType();
       assert.strictEqual(terminalType, 'system-default');
     });
-
   });
 
   suite('Terminal Creation', () => {
@@ -110,7 +105,6 @@ suite('TerminalService Tests', () => {
           if (latestTerminal) {
             assert.ok(latestTerminal.name.includes('Terminal'));
           }
-
         } catch (error) {
           assert.fail(`Failed to create integrated terminal: ${error}`);
         }
@@ -118,10 +112,7 @@ suite('TerminalService Tests', () => {
         console.log('Skipping terminal creation test - no workspace folders available');
       }
     });
-
   });
-
-
 
   suite('Integration Tests', () => {
     test('should complete full workflow for valid file', async () => {
@@ -144,7 +135,7 @@ suite('TerminalService Tests', () => {
       const behaviors: Array<'parent-directory' | 'workspace-root' | 'current-directory'> = [
         'parent-directory',
         'workspace-root',
-        'current-directory'
+        'current-directory',
       ];
 
       for (const behavior of behaviors) {
@@ -164,8 +155,6 @@ suite('TerminalService Tests', () => {
         TestHelpers.assertTerminalCreated('Terminal');
       }
     });
-
-
   });
 
   suite('Configuration Integration', () => {
@@ -178,12 +167,11 @@ suite('TerminalService Tests', () => {
         terminal: {
           type: 'external',
           externalTerminalCommand: 'test-command',
-          openBehavior: 'workspace-root'
-        }
+          openBehavior: 'workspace-root',
+        },
       });
 
       assert.strictEqual(terminalService.getTerminalType(), 'external');
     });
-
   });
 });

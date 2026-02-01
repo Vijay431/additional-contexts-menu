@@ -27,7 +27,7 @@ suite('Env File Generator Service - E2E Tests', () => {
       const commands = await vscode.commands.getCommands();
       assert.ok(
         commands.includes('additionalContextMenus.generateEnvFile'),
-        'Generate Env File command should be registered'
+        'Generate Env File command should be registered',
       );
     });
   });
@@ -37,12 +37,15 @@ suite('Env File Generator Service - E2E Tests', () => {
       const envExampleFile = path.join(testContext.tempWorkspace, '.env.example');
       const envFile = path.join(testContext.tempWorkspace, '.env');
 
-      await FileTestHelpers.createFile(envExampleFile, `
+      await FileTestHelpers.createFile(
+        envExampleFile,
+        `
 # Environment variables
 NODE_ENV=development
 PORT=3000
 HOST=localhost
-`);
+`,
+      );
       await FileTestHelpers.createFile(envFile, '');
 
       const document = await WorkspaceTestHelpers.openFile(envExampleFile);
@@ -59,12 +62,15 @@ HOST=localhost
       const envExampleFile = path.join(testContext.tempWorkspace, '.env.example');
       const envLocalFile = path.join(testContext.tempWorkspace, '.env.local');
 
-      await FileTestHelpers.createFile(envExampleFile, `
+      await FileTestHelpers.createFile(
+        envExampleFile,
+        `
 # Environment variables
 NODE_ENV=development
 PORT=3000
 HOST=localhost
-`);
+`,
+      );
       await FileTestHelpers.createFile(envLocalFile, '');
 
       const document = await WorkspaceTestHelpers.openFile(envExampleFile);
@@ -181,7 +187,7 @@ This is also a comment
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnvFile');
         assert.fail('Should have rejected file name without dot');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Rejected file name without dot as expected');
       }
     });
@@ -199,7 +205,7 @@ This is also a comment
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnvFile');
         assert.fail('Should have rejected empty file name');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Rejected empty file name as expected');
       }
     });
@@ -217,7 +223,7 @@ This is also a comment
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnvFile');
         assert.ok(true, 'Handled missing .env.example gracefully');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled missing .env.example gracefully');
       }
     });
@@ -233,11 +239,11 @@ This is also a comment
           try {
             await vscode.commands.executeCommand('additionalContextMenus.generateEnvFile');
             assert.ok(true, 'Handled no workspace folders gracefully');
-          } catch (error) {
+          } catch (_error) {
             assert.ok(true, 'Handled no workspace folders error gracefully');
           }
         }
-      } catch (error) {
+      } catch (_error) {
         assert.fail('Should have checked for workspace folders');
       }
     });
@@ -257,7 +263,10 @@ TEST_VAR=value`;
       await vscode.commands.executeCommand('additionalContextMenus.generateEnvFile');
 
       const activeEditor = WorkspaceTestHelpers.getActiveEditor();
-      assert.ok(activeEditor?.document.uri.fsPath === envFile, 'Generated file should be opened in editor');
+      assert.ok(
+        activeEditor?.document.uri.fsPath === envFile,
+        'Generated file should be opened in editor',
+      );
     });
   });
 
@@ -267,11 +276,14 @@ TEST_VAR=value`;
       const envFile1 = path.join(testContext.tempWorkspace, '.env');
       const envFile2 = path.join(testContext.tempWorkspace, '.env.local');
 
-      await FileTestHelpers.createFile(envExampleFile, `
+      await FileTestHelpers.createFile(
+        envExampleFile,
+        `
 # Shared variables
 SHARED_VAR=shared
 SHARED_SECRET=secret
-`);
+`,
+      );
 
       await FileTestHelpers.createFile(envFile1, '');
       await FileTestHelpers.createFile(envFile2, '');
@@ -292,10 +304,13 @@ SHARED_SECRET=secret
       const envExampleFile = path.join(testContext.tempWorkspace, '.env.example');
       const envFile = path.join(testContext.tempWorkspace, '.env');
 
-      await FileTestHelpers.createFile(envFile, `
+      await FileTestHelpers.createFile(
+        envFile,
+        `
 # Existing variable
 EXISTING_VAR=existing_value
-`);
+`,
+      );
 
       await FileTestHelpers.createFile(envFile, '');
 

@@ -26,7 +26,7 @@ suite('Additional Context Menus - Core Functionality Tests', () => {
 
     if (!extension.isActive) {
       await extension.activate();
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     assert.strictEqual(extension.isActive, true, 'Extension should be active');
@@ -40,7 +40,7 @@ suite('Additional Context Menus - Core Functionality Tests', () => {
     // Clean up
     try {
       await fs.rmdir(tempWorkspace, { recursive: true });
-    } catch (error) {
+    } catch (_error) {
       // Ignore cleanup errors
     }
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
@@ -50,14 +50,14 @@ suite('Additional Context Menus - Core Functionality Tests', () => {
     // Reset to default enabled state
     const config = vscode.workspace.getConfiguration('additionalContextMenus');
     await config.update('enabled', true, vscode.ConfigurationTarget.Workspace);
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   // ============================================================================
   // Core Command Registration
   // ============================================================================
 
-  test('All 7 core commands should be registered', async () => {
+  test('should register all 7 core commands', async () => {
     const commands = await vscode.commands.getCommands();
     const expectedCommands = [
       'additionalContextMenus.copyFunction',
@@ -66,14 +66,11 @@ suite('Additional Context Menus - Core Functionality Tests', () => {
       'additionalContextMenus.saveAll',
       'additionalContextMenus.openInTerminal',
       'additionalContextMenus.enable',
-      'additionalContextMenus.disable'
+      'additionalContextMenus.disable',
     ];
 
     for (const command of expectedCommands) {
-      assert.ok(
-        commands.includes(command),
-        `Command ${command} should be registered`
-      );
+      assert.ok(commands.includes(command), `Command ${command} should be registered`);
     }
   });
 
@@ -81,17 +78,17 @@ suite('Additional Context Menus - Core Functionality Tests', () => {
   // Enable/Disable Commands (Command Palette Only)
   // ============================================================================
 
-  test('Enable/Disable commands should work correctly', async () => {
+  test('should work correctly Enable/Disable commands', async () => {
     // Test disable command
     await vscode.commands.executeCommand('additionalContextMenus.disable');
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     let config = vscode.workspace.getConfiguration('additionalContextMenus');
     assert.strictEqual(config.get('enabled'), false, 'Extension should be disabled');
 
     // Test enable command
     await vscode.commands.executeCommand('additionalContextMenus.enable');
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     config = vscode.workspace.getConfiguration('additionalContextMenus');
     assert.strictEqual(config.get('enabled'), true, 'Extension should be enabled');
@@ -129,19 +126,25 @@ const calculateTotal = (items: any[]) => {
   // Copy Lines to File Command
   // ============================================================================
 
-  test('Copy Lines to File should handle text selection', async function() {
+  test('should handle text selection Copy Lines to File command', async function () {
     this.timeout(3000);
 
     const sourceFile = path.join(tempWorkspace, 'source.ts');
     const targetFile = path.join(tempWorkspace, 'target.ts');
 
-    await fs.writeFile(sourceFile, `
+    await fs.writeFile(
+      sourceFile,
+      `
 const utility = (data: any[]) => {
   return data.filter(item => item.active);
-};`);
+};`,
+    );
 
-    await fs.writeFile(targetFile, `
-export const existing = () => 'existing';`);
+    await fs.writeFile(
+      targetFile,
+      `
+export const existing = () => 'existing';`,
+    );
 
     const document = await vscode.workspace.openTextDocument(sourceFile);
     const editor = await vscode.window.showTextDocument(document);
@@ -155,10 +158,10 @@ export const existing = () => 'existing';`);
     try {
       await Promise.race([
         vscode.commands.executeCommand('additionalContextMenus.copyLinesToFile'),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000))
+        new Promise((_resolve, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
       ]);
       assert.ok(true, 'Copy Lines to File executed');
-    } catch (error) {
+    } catch (_error) {
       if (error instanceof Error && error.message === 'Timeout') {
         assert.ok(true, 'Copy Lines to File timed out as expected (requires user input)');
       } else {
@@ -171,14 +174,17 @@ export const existing = () => 'existing';`);
   // Move Lines to File Command
   // ============================================================================
 
-  test('Move Lines to File should handle text selection', async function() {
+  test('should handle text selection Move Lines to File command', async function () {
     this.timeout(3000);
 
     const sourceFile = path.join(tempWorkspace, 'move-source.ts');
-    await fs.writeFile(sourceFile, `
+    await fs.writeFile(
+      sourceFile,
+      `
 const temporaryFunction = () => {
   return 'This will be moved';
-};`);
+};`,
+    );
 
     const document = await vscode.workspace.openTextDocument(sourceFile);
     const editor = await vscode.window.showTextDocument(document);
@@ -192,10 +198,10 @@ const temporaryFunction = () => {
     try {
       await Promise.race([
         vscode.commands.executeCommand('additionalContextMenus.moveLinesToFile'),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000))
+        new Promise((_resolve, reject) => setTimeout(() => reject(new Error('Timeout')), 2000)),
       ]);
       assert.ok(true, 'Move Lines to File executed');
-    } catch (error) {
+    } catch (_error) {
       if (error instanceof Error && error.message === 'Timeout') {
         assert.ok(true, 'Move Lines to File timed out as expected (requires user input)');
       } else {
@@ -208,7 +214,7 @@ const temporaryFunction = () => {
   // Save All Command
   // ============================================================================
 
-  test('Save All should save dirty documents', async () => {
+  test('should save dirty documents Save All command', async () => {
     const testFile = path.join(tempWorkspace, 'save-test.ts');
     await fs.writeFile(testFile, 'const original = "test";');
 
@@ -216,7 +222,7 @@ const temporaryFunction = () => {
     const editor = await vscode.window.showTextDocument(document);
 
     // Make document dirty
-    await editor.edit(editBuilder => {
+    await editor.edit((editBuilder) => {
       editBuilder.insert(new vscode.Position(0, 0), '// Modified\n');
     });
 
@@ -232,7 +238,7 @@ const temporaryFunction = () => {
   // Open in Terminal Command
   // ============================================================================
 
-  test('Open in Terminal should execute without errors', async () => {
+  test('should execute without errors Open in Terminal command', async () => {
     const testFile = path.join(tempWorkspace, 'terminal-test.ts');
     await fs.writeFile(testFile, 'console.log("test");');
 
@@ -248,7 +254,7 @@ const temporaryFunction = () => {
   // Accessibility Tests (Command Palette + Right-Click Menu)
   // ============================================================================
 
-  test('Main features should be accessible via both command palette and right-click', async () => {
+  test('should be accessible via both command palette and right-click Main features', async () => {
     // Test that 5 main features are available in command palette
     const commands = await vscode.commands.getCommands();
     const mainFeatures = [
@@ -256,23 +262,24 @@ const temporaryFunction = () => {
       'additionalContextMenus.copyLinesToFile',
       'additionalContextMenus.moveLinesToFile',
       'additionalContextMenus.saveAll',
-      'additionalContextMenus.openInTerminal'
+      'additionalContextMenus.openInTerminal',
     ];
 
     for (const command of mainFeatures) {
-      assert.ok(commands.includes(command),
-        `Main feature ${command} should be available in command palette`);
+      assert.ok(
+        commands.includes(command),
+        `Main feature ${command} should be available in command palette`,
+      );
     }
 
     // Management commands should only be in command palette
-    const managementCommands = [
-      'additionalContextMenus.enable',
-      'additionalContextMenus.disable'
-    ];
+    const managementCommands = ['additionalContextMenus.enable', 'additionalContextMenus.disable'];
 
     for (const command of managementCommands) {
-      assert.ok(commands.includes(command),
-        `Management command ${command} should be available in command palette`);
+      assert.ok(
+        commands.includes(command),
+        `Management command ${command} should be available in command palette`,
+      );
     }
   });
 
@@ -280,7 +287,7 @@ const temporaryFunction = () => {
   // Error Handling
   // ============================================================================
 
-  test('Commands should handle no active editor gracefully', async () => {
+  test('should handle no active editor gracefully', async () => {
     // Close all editors
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
 
@@ -288,14 +295,14 @@ const temporaryFunction = () => {
       'additionalContextMenus.copyFunction',
       'additionalContextMenus.copyLinesToFile',
       'additionalContextMenus.moveLinesToFile',
-      'additionalContextMenus.openInTerminal'
+      'additionalContextMenus.openInTerminal',
     ];
 
     for (const command of commands) {
       try {
         await vscode.commands.executeCommand(command);
         assert.ok(true, `${command} handled no active editor gracefully`);
-      } catch (error) {
+      } catch (_error) {
         assert.fail(`${command} should handle no active editor gracefully: ${error}`);
       }
     }
@@ -313,14 +320,14 @@ const temporaryFunction = () => {
 
     const selectionCommands = [
       'additionalContextMenus.copyLinesToFile',
-      'additionalContextMenus.moveLinesToFile'
+      'additionalContextMenus.moveLinesToFile',
     ];
 
     for (const command of selectionCommands) {
       try {
         await vscode.commands.executeCommand(command);
         assert.ok(true, `${command} handled empty selection gracefully`);
-      } catch (error) {
+      } catch (_error) {
         assert.fail(`${command} should handle empty selection gracefully: ${error}`);
       }
     }
@@ -335,7 +342,7 @@ const temporaryFunction = () => {
       { name: 'test.ts', content: 'const ts = "typescript";' },
       { name: 'test.js', content: 'const js = "javascript";' },
       { name: 'test.tsx', content: 'const tsx = () => <div>React</div>;' },
-      { name: 'test.jsx', content: 'const jsx = () => <div>React</div>;' }
+      { name: 'test.jsx', content: 'const jsx = () => <div>React</div>;' },
     ];
 
     for (const file of testFiles) {
@@ -348,7 +355,7 @@ const temporaryFunction = () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.openInTerminal');
         assert.ok(true, `Terminal opened successfully for ${file.name}`);
-      } catch (error) {
+      } catch (_error) {
         assert.fail(`Terminal should open for ${file.name}: ${error}`);
       }
     }

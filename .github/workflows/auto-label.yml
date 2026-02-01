@@ -1,0 +1,141 @@
+name: Auto-Label Pull Requests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  auto-label:
+    name: Auto-Label PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files_separator: ' '
+
+      - name: Determine Labels
+        id: labels
+        run: |
+          LABELS=()
+
+          # Service/Component Labels
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'codeAnalysisService'; then
+            LABELS+=('service/code-analysis')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'configurationService'; then
+            LABELS+=('service/configuration')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'fileDiscoveryService'; then
+            LABELS+=('service/file-discovery')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'fileSaveService'; then
+            LABELS+=('service/file-save')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'terminalService'; then
+            LABELS+=('service/terminal')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'projectDetectionService'; then
+            LABELS+=('service/project-detection')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'enumGeneratorService\|envFileGeneratorService\|cronJobTimerGeneratorService\|fileNamingConventionService'; then
+            LABELS+=('service/generators')
+          fi
+
+          # Manager Labels
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q 'ExtensionManager\|ContextMenuManager'; then
+            LABELS+=('manager')
+          fi
+
+          # Type Labels
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q '\.md$'; then
+            LABELS+=('docs')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q '^test/'; then
+            LABELS+=('test')
+          fi
+          if echo '${{ steps.changed-files.outputs.all_changed_files }}' | grep -q '^\.github/workflows/'; then
+            LABELS+=('ci')
+          fi
+
+          # Build JSON array for GitHub API
+          JSON_LABELS=$(printf '%s\n' "${LABELS[@]}" | jq -R . | jq -s .)
+
+          # Save labels to file
+          echo "$JSON_LABELS" > labels.json
+          cat labels.json
+
+      - name: Get Branch Name
+        id: branch
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Add Branch-Based Labels
+        run: |
+          LABELS=$(cat labels.json)
+
+          # Branch pattern labels
+          if echo '${{ steps.branch.outputs.branch }}' | grep -q '^feat/'; then
+            LABELS=$(echo "$LABELS" | jq --arg label "feature" '. += [$label] | unique')
+          fi
+          if echo '${{ steps.branch.outputs.branch }}' | grep -q '^fix/'; then
+            LABELS=$(echo "$LABELS" | jq --arg label "bug" '. += [$label] | unique')
+          fi
+          if echo '${{ steps.branch.outputs.branch }}' | grep -q '^docs/'; then
+            LABELS=$(echo "$LABELS" | jq --arg label "docs" '. += [$label] | unique')
+          fi
+          if echo '${{ steps.branch.outputs.branch }}' | grep -q '^refactor/'; then
+            LABELS=$(echo "$LABELS" | jq --arg label "refactor" '. += [$label] | unique')
+          fi
+          if echo '${{ steps.branch.outputs.branch }}' | grep -q '^test/'; then
+            LABELS=$(echo "$LABELS" | jq --arg label "test" '. += [$label] | unique')
+          fi
+          if echo '${{ steps.branch.outputs.branch }}' | grep -q '^perf/'; then
+            LABELS=$(echo "$LABELS" | jq --arg label "perf" '. += [$label] | unique')
+          fi
+          if echo '${{ steps.branch.outputs.branch }}' | grep -q '^wip/'; then
+            LABELS=$(echo "$LABELS" | jq --arg label "wip" '. += [$label] | unique')
+          fi
+
+          # Save updated labels
+          echo "$LABELS" > labels.json
+          cat labels.json
+
+      - name: Check for Breaking Changes
+        run: |
+          LABELS=$(cat labels.json)
+
+          # Check commit messages for "BREAKING CHANGE"
+          if git log --format="%B" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -q "BREAKING CHANGE"; then
+            LABELS=$(echo "$LABELS" | jq --arg label "breaking" '. += [$label] | unique')
+          fi
+
+          echo "$LABELS" > labels.json
+          cat labels.json
+
+      - name: Add Labels to PR
+        run: |
+          LABELS=$(cat labels.json | jq -r '.[]' | tr '\n' ',' | sed 's/,$//')
+
+          if [ -n "$LABELS" ]; then
+            gh pr edit ${{ github.event.pull_request.number }} \
+              --repo ${{ github.repository }} \
+              --add-label "$LABELS"
+            echo "Added labels: $LABELS"
+          else
+            echo "No labels to add"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}

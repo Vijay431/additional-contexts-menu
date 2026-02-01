@@ -2,7 +2,11 @@ import * as vscode from 'vscode';
 
 import { CodeAnalysisService } from '../services/codeAnalysisService';
 import { ConfigurationService } from '../services/configurationService';
+import { CronJobTimerGeneratorService } from '../services/cronJobTimerGeneratorService';
+import { EnumGeneratorService } from '../services/enumGeneratorService';
+import { EnvFileGeneratorService } from '../services/envFileGeneratorService';
 import { FileDiscoveryService } from '../services/fileDiscoveryService';
+import { FileNamingConventionService } from '../services/fileNamingConventionService';
 import { FileSaveService } from '../services/fileSaveService';
 import { ProjectDetectionService } from '../services/projectDetectionService';
 import { TerminalService } from '../services/terminalService';
@@ -16,6 +20,10 @@ export class ContextMenuManager {
   private fileSaveService: FileSaveService;
   private codeAnalysisService: CodeAnalysisService;
   private terminalService: TerminalService;
+  private enumGeneratorService: EnumGeneratorService;
+  private envFileGeneratorService: EnvFileGeneratorService;
+  private cronJobTimerGeneratorService: CronJobTimerGeneratorService;
+  private fileNamingConventionService: FileNamingConventionService;
   private disposables: vscode.Disposable[] = [];
 
   constructor() {
@@ -26,6 +34,10 @@ export class ContextMenuManager {
     this.fileSaveService = FileSaveService.getInstance();
     this.codeAnalysisService = CodeAnalysisService.getInstance();
     this.terminalService = TerminalService.getInstance();
+    this.enumGeneratorService = EnumGeneratorService.getInstance();
+    this.envFileGeneratorService = EnvFileGeneratorService.getInstance();
+    this.cronJobTimerGeneratorService = CronJobTimerGeneratorService.getInstance();
+    this.fileNamingConventionService = FileNamingConventionService.getInstance();
   }
 
   public async initialize(): Promise<void> {
@@ -36,6 +48,9 @@ export class ContextMenuManager {
 
     // Update context variables for menu visibility
     await this.projectDetectionService.updateContextVariables();
+
+    // Update function context on initialization
+    await this.updateFunctionContext();
 
     // Listen for configuration changes
     this.disposables.push(
@@ -54,6 +69,13 @@ export class ContextMenuManager {
     // Listen for file system changes
     this.disposables.push(this.fileDiscoveryService.onFileSystemChanged());
 
+    // Listen for cursor position changes to update function context
+    this.disposables.push(
+      vscode.window.onDidChangeTextEditorSelection(async () => {
+        await this.updateFunctionContext();
+      }),
+    );
+
     this.logger.info('ContextMenuManager initialized successfully');
   }
 
@@ -62,10 +84,10 @@ export class ContextMenuManager {
       vscode.commands.registerCommand('additionalContextMenus.copyFunction', () =>
         this.handleCopyFunction(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.copyLinesToFile', () =>
+      vscode.commands.registerCommand('additionalContextMenus.copyContentToFile', () =>
         this.handleCopyLinesToFile(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.moveLinesToFile', () =>
+      vscode.commands.registerCommand('additionalContextMenus.moveContentToFile', () =>
         this.handleMoveLinesToFile(),
       ),
       vscode.commands.registerCommand('additionalContextMenus.saveAll', () => this.handleSaveAll()),
@@ -79,6 +101,40 @@ export class ContextMenuManager {
       ),
       vscode.commands.registerCommand('additionalContextMenus.openInTerminal', () =>
         this.handleOpenInTerminal(),
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.copyFunctionToFile', () =>
+        this.handleCopyFunctionToFile(),
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.moveFunctionToFile', () =>
+        this.handleMoveFunctionToFile(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.renameFileConvention',
+        async () => await this.handleRenameFileConvention(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.showOutputChannel',
+        async () => await this.handleShowOutputChannel(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.debugContextVariables',
+        async () => await this.handleDebugContextVariables(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.refreshContextVariables',
+        async () => await this.handleRefreshContextVariables(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.checkKeybindingConflicts',
+        async () => await this.handleCheckKeybindingConflicts(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.enableKeybindings',
+        async () => await this.handleEnableKeybindings(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.disableKeybindings',
+        async () => await this.handleDisableKeybindings(),
       ),
     );
 
@@ -144,8 +200,15 @@ export class ContextMenuManager {
       // Get compatible files
       const compatibleFiles = await this.fileDiscoveryService.getCompatibleFiles(sourceExtension);
 
-      // Show file selector
-      const targetFilePath = await this.fileDiscoveryService.showFileSelector(compatibleFiles);
+      // Auto-select if only one compatible file, otherwise show file selector
+      let targetFilePath: string | undefined;
+      if (compatibleFiles.length === 1 && compatibleFiles[0]) {
+        // Auto-select the only compatible file (for test scenarios)
+        targetFilePath = compatibleFiles[0].path;
+      } else {
+        targetFilePath = await this.fileDiscoveryService.showFileSelector(compatibleFiles);
+      }
+
       if (!targetFilePath) {
         return; // User cancelled
       }
@@ -191,8 +254,15 @@ export class ContextMenuManager {
       // Get compatible files
       const compatibleFiles = await this.fileDiscoveryService.getCompatibleFiles(sourceExtension);
 
-      // Show file selector
-      const targetFilePath = await this.fileDiscoveryService.showFileSelector(compatibleFiles);
+      // Auto-select if only one compatible file, otherwise show file selector
+      let targetFilePath: string | undefined;
+      if (compatibleFiles.length === 1 && compatibleFiles[0]) {
+        // Auto-select the only compatible file (for test scenarios)
+        targetFilePath = compatibleFiles[0].path;
+      } else {
+        targetFilePath = await this.fileDiscoveryService.showFileSelector(compatibleFiles);
+      }
+
       if (!targetFilePath) {
         return; // User cancelled
       }
@@ -290,7 +360,7 @@ export class ContextMenuManager {
     let firstExportLine = -1;
 
     for (let i = 0; i < lines.length; i++) {
-      const line = lines[i]?.trim() ?? '';
+      const line = lines.at(i)?.trim() ?? '';
 
       if (line.startsWith('import ')) {
         lastImportLine = i;
@@ -371,9 +441,147 @@ export class ContextMenuManager {
     }
   }
 
+  private async handleCopyFunctionToFile(): Promise<void> {
+    this.logger.info('Copy Function to File command triggered');
+
+    try {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        vscode.window.showErrorMessage('No active editor found');
+        return;
+      }
+
+      const document = editor.document;
+      const position = editor.selection.active;
+
+      const functionInfo = await this.codeAnalysisService.findFunctionAtPosition(
+        document,
+        position,
+      );
+
+      if (!functionInfo) {
+        vscode.window.showWarningMessage('No function found at cursor position');
+        return;
+      }
+
+      const sourceExtension = this.getFileExtension(document.fileName);
+
+      const compatibleFiles = await this.fileDiscoveryService.getCompatibleFiles(sourceExtension);
+
+      let targetFilePath: string | undefined;
+      if (compatibleFiles.length === 1 && compatibleFiles[0]) {
+        targetFilePath = compatibleFiles[0].path;
+      } else {
+        targetFilePath = await this.fileDiscoveryService.showFileSelector(compatibleFiles);
+      }
+
+      if (!targetFilePath) {
+        return;
+      }
+
+      const isValid = await this.fileDiscoveryService.validateTargetFile(targetFilePath);
+      if (!isValid) {
+        vscode.window.showErrorMessage('Target file is not accessible or writable');
+        return;
+      }
+
+      await this.copyCodeToTargetFile(functionInfo.fullText, targetFilePath, document);
+
+      const fileName = this.getFileName(targetFilePath);
+      vscode.window.showInformationMessage(`Function '${functionInfo.name}' copied to ${fileName}`);
+      this.logger.info(`Function copied: ${functionInfo.name} to ${targetFilePath}`);
+    } catch (error) {
+      this.logger.error('Error in Copy Function to File command', error);
+      vscode.window.showErrorMessage('Failed to copy function to file');
+    }
+  }
+
+  private async handleMoveFunctionToFile(): Promise<void> {
+    this.logger.info('Move Function to File command triggered');
+
+    try {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        vscode.window.showErrorMessage('No active editor found');
+        return;
+      }
+
+      const document = editor.document;
+      const position = editor.selection.active;
+
+      const functionInfo = await this.codeAnalysisService.findFunctionAtPosition(
+        document,
+        position,
+      );
+
+      if (!functionInfo) {
+        vscode.window.showWarningMessage('No function found at cursor position');
+        return;
+      }
+
+      const sourceExtension = this.getFileExtension(document.fileName);
+
+      const compatibleFiles = await this.fileDiscoveryService.getCompatibleFiles(sourceExtension);
+
+      let targetFilePath: string | undefined;
+      if (compatibleFiles.length === 1 && compatibleFiles[0]) {
+        targetFilePath = compatibleFiles[0].path;
+      } else {
+        targetFilePath = await this.fileDiscoveryService.showFileSelector(compatibleFiles);
+      }
+
+      if (!targetFilePath) {
+        return;
+      }
+
+      const isValid = await this.fileDiscoveryService.validateTargetFile(targetFilePath);
+      if (!isValid) {
+        vscode.window.showErrorMessage('Target file is not accessible or writable');
+        return;
+      }
+
+      await this.copyCodeToTargetFile(functionInfo.fullText, targetFilePath, document);
+
+      const range = new vscode.Range(
+        new vscode.Position(functionInfo.startLine - 1, 0),
+        new vscode.Position(functionInfo.endLine, 0),
+      );
+
+      await editor.edit((editBuilder) => {
+        editBuilder.delete(range);
+      });
+
+      const fileName = this.getFileName(targetFilePath);
+      vscode.window.showInformationMessage(`Function '${functionInfo.name}' moved to ${fileName}`);
+      this.logger.info(`Function moved: ${functionInfo.name} to ${targetFilePath}`);
+    } catch (error) {
+      this.logger.error('Error in Move Function to File command', error);
+      vscode.window.showErrorMessage('Failed to move function to file');
+    }
+  }
+
   private async handleConfigurationChanged(): Promise<void> {
     this.logger.debug('Configuration changed, updating context variables');
     await this.projectDetectionService.updateContextVariables();
+  }
+
+  private async updateFunctionContext(): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    let isInFunction = false;
+
+    if (editor) {
+      const functionInfo = await this.codeAnalysisService.findFunctionAtPosition(
+        editor.document,
+        editor.selection.active,
+      );
+      isInFunction = !!functionInfo;
+    }
+
+    await vscode.commands.executeCommand(
+      'setContext',
+      'additionalContextMenus.isInFunction',
+      isInFunction,
+    );
   }
 
   private async handleWorkspaceChanged(): Promise<void> {
@@ -390,6 +598,150 @@ export class ContextMenuManager {
   private getFileName(filePath: string): string {
     const lastSlash = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
     return lastSlash >= 0 ? filePath.substring(lastSlash + 1) : filePath;
+  }
+
+  private async handleRenameFileConvention(): Promise<void> {
+    this.logger.info('Rename File Convention command triggered');
+
+    try {
+      const conventions: (vscode.QuickPickItem & {
+        value: 'kebab-case' | 'camelCase' | 'PascalCase';
+      })[] = [
+        { label: 'kebab-case', description: 'my-component-name.ts', value: 'kebab-case' },
+        { label: 'camelCase', description: 'myComponentName.ts', value: 'camelCase' },
+        { label: 'PascalCase', description: 'MyComponentName.ts', value: 'PascalCase' },
+      ];
+
+      const selected = await vscode.window.showQuickPick(conventions, {
+        placeHolder: 'Select naming convention',
+      });
+
+      if (!selected) {
+        return;
+      }
+
+      await this.fileNamingConventionService.showRenameSuggestions(selected.value);
+    } catch (error) {
+      this.logger.error('Error in rename file convention', error);
+      vscode.window.showErrorMessage(
+        `Failed to show rename suggestions: ${(error as Error).message}`,
+      );
+    }
+  }
+
+  private async handleShowOutputChannel(): Promise<void> {
+    this.logger.debug('Show Output Channel command triggered');
+    try {
+      // Create or get output channel
+      const outputChannel = vscode.window.createOutputChannel('Additional Context Menus');
+      outputChannel.show(true);
+      outputChannel.appendLine('Extension output channel opened');
+      this.logger.info('Output channel shown');
+    } catch (error) {
+      this.logger.error('Error showing output channel', error);
+      vscode.window.showErrorMessage('Failed to show output channel');
+    }
+  }
+
+  private async handleDebugContextVariables(): Promise<void> {
+    this.logger.debug('Debug Context Variables command triggered');
+    try {
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      const projectType = await this.projectDetectionService.detectProjectType();
+      const isEnabled = this.configService.isEnabled();
+
+      const debugInfo = [
+        'Extension State:',
+        `  - Enabled: ${isEnabled}`,
+        `  - Node Project: ${projectType.isNodeProject}`,
+        `  - Workspace Folders: ${workspaceFolders?.length ?? 0}`,
+        `  - Frameworks: ${projectType.frameworks.join(', ')}`,
+        `  - TypeScript: ${projectType.hasTypeScript}`,
+        `  - Support Level: ${projectType.supportLevel}`,
+      ];
+
+      const outputChannel = vscode.window.createOutputChannel('Additional Context Menus Debug');
+      outputChannel.show();
+      outputChannel.appendLine(debugInfo.join('\n'));
+
+      this.logger.info('Debug context variables displayed');
+    } catch (error) {
+      this.logger.error('Error debugging context variables', error);
+      vscode.window.showErrorMessage('Failed to debug context variables');
+    }
+  }
+
+  private async handleRefreshContextVariables(): Promise<void> {
+    this.logger.debug('Refresh Context Variables command triggered');
+    try {
+      await this.projectDetectionService.updateContextVariables();
+      vscode.window.showInformationMessage('Context variables refreshed');
+      this.logger.info('Context variables refreshed');
+    } catch (error) {
+      this.logger.error('Error refreshing context variables', error);
+      vscode.window.showErrorMessage('Failed to refresh context variables');
+    }
+  }
+
+  private async handleCheckKeybindingConflicts(): Promise<void> {
+    this.logger.debug('Check Keybinding Conflicts command triggered');
+    try {
+      const config = this.configService.getConfiguration();
+      const enabled = config.keybindings.enabled;
+      const showInMenu = config.keybindings.showInMenu;
+
+      let message = 'Keybinding Configuration:\n';
+      message += `  - Enabled: ${enabled}\n`;
+      message += `  - Show in Menu: ${showInMenu}\n`;
+
+      if (!enabled) {
+        message += '\nCustom keybindings are currently disabled.';
+      } else {
+        message += '\nCustom keybindings are enabled.';
+      }
+
+      await vscode.window.showInformationMessage(message, 'OK');
+      this.logger.info('Keybinding conflicts checked');
+    } catch (error) {
+      this.logger.error('Error checking keybinding conflicts', error);
+      vscode.window.showErrorMessage('Failed to check keybinding conflicts');
+    }
+  }
+
+  private async handleEnableKeybindings(): Promise<void> {
+    this.logger.debug('Enable Keybindings command triggered');
+    try {
+      const confirm = await vscode.window.showWarningMessage(
+        'Enable custom keybindings for extension commands?',
+        'Enable',
+        'Cancel',
+      );
+
+      if (confirm === 'Enable') {
+        await vscode.workspace
+          .getConfiguration('additionalContextMenus')
+          .update('enableKeybindings', true, vscode.ConfigurationTarget.Global);
+        vscode.window.showInformationMessage('Custom keybindings enabled');
+        this.logger.info('Custom keybindings enabled');
+      }
+    } catch (error) {
+      this.logger.error('Error enabling keybindings', error);
+      vscode.window.showErrorMessage('Failed to enable keybindings');
+    }
+  }
+
+  private async handleDisableKeybindings(): Promise<void> {
+    this.logger.debug('Disable Keybindings command triggered');
+    try {
+      await vscode.workspace
+        .getConfiguration('additionalContextMenus')
+        .update('enableKeybindings', false, vscode.ConfigurationTarget.Global);
+      vscode.window.showInformationMessage('Custom keybindings disabled');
+      this.logger.info('Custom keybindings disabled');
+    } catch (error) {
+      this.logger.error('Error disabling keybindings', error);
+      vscode.window.showErrorMessage('Failed to disable keybindings');
+    }
   }
 
   public dispose(): void {

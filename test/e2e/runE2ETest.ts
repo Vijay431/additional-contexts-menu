@@ -4,6 +4,27 @@ import { runTests } from '@vscode/test-electron';
 import { execSync } from 'child_process';
 
 /**
+ * Headless Mode Configuration
+ *
+ * The tests can run in headless mode (default) for faster execution in CI/CD environments.
+ * To disable headless mode and run with UI visible, set HEADLESS=false:
+ *
+ *   HEADLESS=false pnpm test
+ *
+ * Available test scripts:
+ * - pnpm test              (canonical: headless + optimized)
+ * - pnpm test:headless     (alias for pnpm test)
+ * - pnpm test:headless:full (alias for SKIP_OPTIMIZATION=true pnpm run test:full)
+ * - pnpm test:ui           (alias for HEADLESS=false pnpm test)
+ * - pnpm test:full         (canonical: full setup without minimal package)
+ * - pnpm test:ci           (alias for HEADLESS=true SKIP_OPTIMIZATION=false pnpm test)
+ *
+ * Use environment variables for flexibility:
+ * - HEADLESS=false         - Run with VS Code UI visible
+ * - SKIP_OPTIMIZATION=true - Use full extension package (no minimal package)
+ */
+
+/**
  * Find the project root directory by looking for package.json
  * This works regardless of where the compiled test files are located
  */
@@ -19,7 +40,7 @@ function findProjectRoot(startDir: string): string {
         if (packageJson.name === 'additional-context-menus') {
           return currentDir;
         }
-      } catch (error) {
+      } catch (_error) {
         // Continue searching if package.json is malformed
       }
     }
@@ -41,7 +62,7 @@ async function createMinimalExtension(projectRoot: string): Promise<string> {
 
     const minimalExtensionPath = path.join(projectRoot, '.vscode-test', 'minimal-extension');
     return minimalExtensionPath.replace(/\\/g, '/');
-  } catch (error) {
+  } catch (_error) {
     console.error('❌ Failed to create minimal extension:', error);
     throw error;
   }
@@ -60,14 +81,14 @@ function cleanupOldVSCodeVersions(projectRoot: string): void {
 
   try {
     const items = fs.readdirSync(vscodeTestPath);
-    const vscodeVersions = items.filter(item => item.startsWith('vscode-'));
+    const vscodeVersions = items.filter((item) => item.startsWith('vscode-'));
 
     if (vscodeVersions.length > 1) {
       // Sort by creation time, keep only the latest
-      const versionPaths = vscodeVersions.map(version => ({
+      const versionPaths = vscodeVersions.map((version) => ({
         name: version,
         path: path.join(vscodeTestPath, version),
-        mtime: fs.statSync(path.join(vscodeTestPath, version)).mtime
+        mtime: fs.statSync(path.join(vscodeTestPath, version)).mtime,
       }));
 
       versionPaths.sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
@@ -80,7 +101,7 @@ function cleanupOldVSCodeVersions(projectRoot: string): void {
 
       console.log(`   ✅ Kept latest version: ${versionPaths[0]!.name}`);
     }
-  } catch (error) {
+  } catch (_error) {
     console.warn('⚠️  Warning: Could not clean up old VS Code versions:', (error as Error).message);
   }
 }
@@ -117,7 +138,7 @@ function cleanupTestArtifacts(projectRoot: string): void {
       fs.rmSync(userDataPath, { recursive: true, force: true });
       console.log('   ✅ Cleaned isolated user data');
     }
-  } catch (error) {
+  } catch (_error) {
     console.warn('⚠️  Warning: Could not clean up test artifacts:', (error as Error).message);
   }
 }
@@ -128,11 +149,19 @@ async function main() {
   try {
     // Check if optimization should be skipped
     const skipOptimization = process.env['SKIP_OPTIMIZATION'] === 'true';
+    // Check if running in headless mode (default: true)
+    const headless = process.env['HEADLESS'] !== 'false';
 
     if (skipOptimization) {
       console.log('🚀 Starting Additional Context Menus E2E Tests (Full Setup)...');
     } else {
       console.log('🚀 Starting Optimized Additional Context Menus E2E Tests...');
+    }
+
+    if (headless) {
+      console.log('🖥️  Running in headless mode');
+    } else {
+      console.log('🖼️  Running with UI visible');
     }
 
     // Find the project root dynamically
@@ -167,16 +196,23 @@ async function main() {
 
     // Build launch args based on optimization mode
     const launchArgs: string[] = [
-      '--disable-extensions',          // Disable other extensions during testing
-      '--disable-workspace-trust',     // Skip workspace trust dialog
-      extensionDevelopmentPath,        // Open the extension workspace
+      '--disable-extensions', // Disable other extensions during testing
+      '--disable-workspace-trust', // Skip workspace trust dialog
+      extensionDevelopmentPath, // Open the extension workspace
     ];
+
+    // Add headless-specific flags
+    if (headless) {
+      launchArgs.push(
+        '--disable-gpu', // Disable GPU acceleration for headless
+        '--no-sandbox', // Required for headless environments
+      );
+    }
 
     if (!skipOptimization) {
       // Add optimization flags only for optimized mode
       launchArgs.push(
-        '--no-sandbox',                  // Faster startup in test environment
-        '--disable-dev-shm-usage',       // Lower memory usage
+        '--disable-dev-shm-usage', // Lower memory usage
         '--disable-background-timer-throttling', // Consistent test timing
         '--disable-backgrounding-occluded-windows', // Performance optimization
         '--disable-renderer-backgrounding', // Prevent background throttling
@@ -199,11 +235,18 @@ async function main() {
     console.log('✅ All E2E tests completed successfully!');
 
     if (!skipOptimization) {
-      console.log('📊 Resource optimization active: minimal extension package + isolated user data');
+      console.log(
+        '📊 Resource optimization active: minimal extension package + isolated user data',
+      );
     } else {
       console.log('📊 Full setup mode: using complete project directory');
     }
 
+    if (headless) {
+      console.log('🖥️  Tests ran in headless mode');
+    } else {
+      console.log('🖼️  Tests ran with UI visible');
+    }
   } catch (err) {
     console.error('❌ E2E tests failed:', err);
     process.exit(1);

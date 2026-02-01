@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as assert from 'assert';
 import * as path from 'path';
 import * as fs from 'node:fs/promises';

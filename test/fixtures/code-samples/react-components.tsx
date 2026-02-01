@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+/* eslint-enable */
 import React, { useState, useEffect, useCallback } from 'react';
 
 // Functional component with props
@@ -142,7 +145,7 @@ export function UserList({
     userList: any[],
     search: string,
     sortField: string,
-    order: string
+    order: string,
   ) => {
     let filtered = userList;
 
@@ -150,7 +153,7 @@ export function UserList({
       filtered = userList.filter(
         (user) =>
           user.name.toLowerCase().includes(search.toLowerCase()) ||
-          user.email.toLowerCase().includes(search.toLowerCase())
+          user.email.toLowerCase().includes(search.toLowerCase()),
       );
     }
 

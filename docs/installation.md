@@ -117,7 +117,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </div>
                 <h3 class="req-title">Visual Studio Code</h3>
                 <div class="req-details">
-                    <p class="req-version">Version 1.102.0 or higher</p>
+                    <p class="req-version">Version 1.108.1 or higher</p>
                     <p class="req-note">Latest stable version recommended</p>
                 </div>
             </div>
@@ -142,7 +142,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </div>
                 <h3 class="req-title">Node.js Runtime</h3>
                 <div class="req-details">
-                    <p class="req-version">Node.js 16-24 supported</p>
+                    <p class="req-version">Node.js 20+ required for development</p>
                     <p class="req-note">For development and build tools</p>
                     <p class="req-note">Extension runs in VS Code host</p>
                 </div>
@@ -161,6 +161,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Post-Installation Setup -->
@@ -303,13 +304,15 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </p>
                 <div class="config-code">
                     <pre><code>{
-  "additionalContextMenus.terminal.type": "external",
-  "additionalContextMenus.terminal.externalTerminalCommand": "wt -d {{directory}}",
-  "additionalContextMenus.terminal.openBehavior": "parent-directory",
-  "additionalContextMenus.copyCode.preserveComments": true
+
+"additionalContextMenus.terminal.type": "external",
+"additionalContextMenus.terminal.externalTerminalCommand": "wt -d {{directory}}",
+"additionalContextMenus.terminal.openBehavior": "parent-directory",
+"additionalContextMenus.copyCode.preserveComments": true
 }</code></pre>
-                </div>
-            </div>
+
+</div>
+</div>
 
             <div class="config-card">
                 <h3 class="config-title">
@@ -321,16 +324,19 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </p>
                 <div class="config-code">
                     <pre><code>{
-  "additionalContextMenus.enabled": true,
-  "additionalContextMenus.saveAll.showNotification": false,
-  "additionalContextMenus.copyCode.insertionPoint": "smart",
-  "additionalContextMenus.copyCode.handleImports": "merge",
-  "additionalContextMenus.supportedExtensions": [".ts", ".tsx", ".js", ".jsx"]
+
+"additionalContextMenus.enabled": true,
+"additionalContextMenus.saveAll.showNotification": false,
+"additionalContextMenus.copyCode.insertionPoint": "smart",
+"additionalContextMenus.copyCode.handleImports": "merge",
+"additionalContextMenus.supportedExtensions": [".ts", ".tsx", ".js", ".jsx"]
 }</code></pre>
-                </div>
-            </div>
-        </div>
-    </div>
+
+</div>
+</div>
+</div>
+</div>
+
 </section>
 
 <!-- Troubleshooting -->

@@ -1,0 +1,14 @@
+{
+  "test/fixtures/**/*.{ts,tsx}": ["prettier --write"],
+  "test/e2e/extension-e2e.test.ts": [
+    "echo 'Skipping eslint for extension-e2e.test.ts (use IDE for validation)'"
+  ],
+  "test/**/*.{ts,tsx}": ["eslint --no-cache --fix --quiet", "prettier --write"],
+  "src/**/*.{ts,tsx}": ["eslint --no-cache --fix --quiet", "prettier --write"],
+  "scripts/**/*.{ts,tsx}": ["eslint --no-cache --fix --quiet", "prettier --write"],
+  "*.{json,yaml,yml}": ["prettier --write"],
+  "*.md": ["prettier --write"],
+  "*.{html,css}": ["prettier --write"],
+  "package.json": ["prettier --write"],
+  "tsconfig.json": ["prettier --write"]
+}

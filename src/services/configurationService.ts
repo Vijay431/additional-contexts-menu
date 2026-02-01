@@ -3,8 +3,71 @@ import * as vscode from 'vscode';
 import { ExtensionConfig } from '../types/extension';
 import { Logger } from '../utils/logger';
 
+/**
+ * Configuration Service
+ *
+ * Manages VS Code configuration settings for the Additional Context Menus extension.
+ * Provides type-safe access to extension settings with change event handling.
+ *
+ * @description
+ * This service is the central configuration manager for the entire extension.
+ * It handles reading, updating, and monitoring configuration changes
+ * in VS Code's settings system.
+ *
+ * Key Features:
+ * - Singleton pattern for global access across the extension
+ * - Type-safe configuration retrieval with proper TypeScript types
+ * - Automatic default value handling
+ * - Configuration change event handling with filtering
+ * - Update methods for individual settings or full config
+ *
+ * Configuration Structure:
+ * - enabled: Enable/disable extension globally
+ * - autoDetectProjects: Automatic project detection
+ * - supportedExtensions: File extensions for context menu display
+ * - copyCode: Settings for copy code operations
+ * - saveAll: Settings for save all operation
+ * - terminal: Terminal integration settings
+ *
+ * Use Cases:
+ * - Checking if extension is enabled before showing menus
+ * - Getting supported file extensions for filtering
+ * - Retrieving copy/terminal settings for operations
+ * - Listening for configuration changes to update UI
+ * - Updating individual settings from user preferences
+ *
+ * @example
+ * // Get configuration service instance
+ * const configService = ConfigurationService.getInstance();
+ *
+ * // Check if extension is enabled
+ * if (configService.isEnabled()) {
+ *   console.log('Extension is active');
+ * }
+ *
+ * // Get supported extensions
+ * const extensions = configService.getSupportedExtensions();
+ * console.log(`Supported: ${extensions.join(', ')}`);
+ *
+ * // Listen for configuration changes
+ * const disposable = configService.onConfigurationChanged(() => {
+ *   console.log('Settings changed');
+ * });
+ *
+ * // Update a setting
+ * await configService.updateConfiguration('enabled', false);
+ *
+ * @see ExtensionManager - Uses this service for configuration management
+ * @see ContextMenuManager - Uses this service for feature toggles
+ *
+ * @category Configuration & State
+ * @subcategory Settings Management
+ *
+ * @author Vijay Gangatharan <vijayanand431@gmail.com>
+ * @since 1.0.0
+ */
 export class ConfigurationService {
-  private static instance: ConfigurationService;
+  private static instance: ConfigurationService | undefined;
   private logger: Logger;
   private readonly configSection = 'additionalContextMenus';
 
@@ -13,9 +76,7 @@ export class ConfigurationService {
   }
 
   public static getInstance(): ConfigurationService {
-    if (!ConfigurationService.instance) {
-      ConfigurationService.instance = new ConfigurationService();
-    }
+    ConfigurationService.instance ??= new ConfigurationService();
     return ConfigurationService.instance;
   }
 
@@ -56,6 +117,10 @@ export class ConfigurationService {
           'terminal.openBehavior',
           'parent-directory',
         ),
+      },
+      keybindings: {
+        enabled: config.get<boolean>('enableKeybindings', false),
+        showInMenu: config.get<boolean>('showKeybindingsInMenu', true),
       },
     };
   }

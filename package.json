@@ -2,7 +2,7 @@
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
   "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, TypeScript & JavaScript with intelligent code operations.",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
   "icon": "logo.png",
@@ -18,6 +18,7 @@
     "url": "https://github.com/Vijay431/additional-contexts-menu/issues"
   },
   "homepage": "https://github.com/Vijay431/additional-contexts-menu#readme",
+  "packageManager": "pnpm@9.15.0",
   "keywords": [
     "context",
     "menu",
@@ -36,8 +37,8 @@
     "Other"
   ],
   "engines": {
-    "node": ">=16.0.0 <25.0.0",
-    "vscode": "^1.102.0"
+    "node": ">=20.0.0",
+    "vscode": "^1.108.1"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -51,14 +52,14 @@
         "icon": "$(symbol-function)"
       },
       {
-        "command": "additionalContextMenus.copyLinesToFile",
-        "title": "Copy Lines to File",
+        "command": "additionalContextMenus.copyContentToFile",
+        "title": "Copy Content to File",
         "category": "Additional Context Menus",
         "icon": "$(copy)"
       },
       {
-        "command": "additionalContextMenus.moveLinesToFile",
-        "title": "Move Lines to File",
+        "command": "additionalContextMenus.moveContentToFile",
+        "title": "Move Content to File",
         "category": "Additional Context Menus",
         "icon": "$(arrow-right)"
       },
@@ -83,6 +84,42 @@
         "title": "Open in Terminal",
         "category": "Additional Context Menus",
         "icon": "$(terminal)"
+      },
+      {
+        "command": "additionalContextMenus.copyFunctionToFile",
+        "title": "Copy Function to File",
+        "category": "Additional Context Menus",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "additionalContextMenus.moveFunctionToFile",
+        "title": "Move Function to File",
+        "category": "Additional Context Menus",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "additionalContextMenus.generateEnum",
+        "title": "Generate Enum from Union Type",
+        "category": "Additional Context Menus",
+        "icon": "$(symbol-enum)"
+      },
+      {
+        "command": "additionalContextMenus.generateEnvFile",
+        "title": "Generate .env File",
+        "category": "Additional Context Menus",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "additionalContextMenus.generateCronTimer",
+        "title": "Generate Cron Expression",
+        "category": "Additional Context Menus",
+        "icon": "$(clock)"
+      },
+      {
+        "command": "additionalContextMenus.renameFileConvention",
+        "title": "Rename File to Convention",
+        "category": "Additional Context Menus",
+        "icon": "$(edit)"
       }
     ],
     "configuration": {
@@ -178,13 +215,23 @@
           "group": "1_modification@1"
         },
         {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.copyFunctionToFile",
+          "group": "1_modification@1.1"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.moveFunctionToFile",
+          "group": "1_modification@1.2"
+        },
+        {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
-          "command": "additionalContextMenus.copyLinesToFile",
+          "command": "additionalContextMenus.copyContentToFile",
           "group": "1_modification@2"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
-          "command": "additionalContextMenus.moveLinesToFile",
+          "command": "additionalContextMenus.moveContentToFile",
           "group": "1_modification@3"
         },
         {
@@ -198,11 +245,55 @@
           "group": "2_workspace@2"
         }
       ]
-    }
+    },
+    "keybindings": [
+      {
+        "command": "additionalContextMenus.copyFunction",
+        "key": "ctrl+alt+shift+f",
+        "mac": "cmd+alt+shift+f",
+        "when": "editorTextFocus && additionalContextMenus.enabled"
+      },
+      {
+        "command": "additionalContextMenus.copyFunctionToFile",
+        "key": "ctrl+alt+shift+e",
+        "mac": "cmd+alt+shift+e",
+        "when": "editorTextFocus && additionalContextMenus.enabled"
+      },
+      {
+        "command": "additionalContextMenus.copyContentToFile",
+        "key": "ctrl+alt+shift+c",
+        "mac": "cmd+alt+shift+c",
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled"
+      },
+      {
+        "command": "additionalContextMenus.moveFunctionToFile",
+        "key": "ctrl+alt+shift+r",
+        "mac": "cmd+alt+shift+r",
+        "when": "editorTextFocus && additionalContextMenus.enabled"
+      },
+      {
+        "command": "additionalContextMenus.moveContentToFile",
+        "key": "ctrl+alt+shift+m",
+        "mac": "cmd+alt+shift+m",
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled"
+      },
+      {
+        "command": "additionalContextMenus.saveAll",
+        "key": "ctrl+alt+shift+a",
+        "mac": "cmd+alt+shift+a",
+        "when": "additionalContextMenus.enabled"
+      },
+      {
+        "command": "additionalContextMenus.openInTerminal",
+        "key": "ctrl+alt+shift+t",
+        "mac": "cmd+alt+shift+t",
+        "when": "editorTextFocus && additionalContextMenus.enabled"
+      }
+    ]
   },
   "vsce": {
     "baseImageUrl": "./logo.png",
-    "dependencies": true,
+    "dependencies": false,
     "yarn": false
   },
   "main": "./dist/extension.js",
@@ -211,42 +302,53 @@
     "build": "tsx esbuild.config.ts",
     "watch": "tsx esbuild.config.ts --watch",
     "package": "vsce package",
+    "package:openvsx": "ovsx package",
     "publish": "vsce publish",
+    "publish:openvsx": "ovsx publish",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "rm -rf dist && npm run build && npm run create-minimal && tsc -p ./tsconfig.test.json && node ./dist/test/e2e/runE2ETest.js",
-    "test:full": "rm -rf dist && npm run build && tsc -p ./tsconfig.test.json && SKIP_OPTIMIZATION=true node ./dist/test/e2e/runE2ETest.js",
-    "test:minimal": "npm test",
+    "lint-staged": "lint-staged",
+    "format": "prettier --write .",
+    "test": "rm -rf dist && pnpm run build && pnpm run create-minimal && tsc -p ./tsconfig.test.json && HEADLESS=true node ./dist/test/e2e/runE2ETest.js",
+    "test:all": "pnpm run lint && pnpm run build && pnpm run vscode:prepublish",
+    "test:full": "rm -rf dist && pnpm run build && tsc -p ./tsconfig.test.json && SKIP_OPTIMIZATION=true node ./dist/test/e2e/runE2ETest.js",
+    "test:minimal": "pnpm test",
     "test:clean": "rm -rf .vscode-test/minimal-extension .vscode-test/user-data-isolated .vscode-test/user-data-dev",
-    "create-minimal": "tsx scripts/create-minimal-extension.ts",
-    "format": "prettier --write ."
+    "test:headless": "pnpm test",
+    "test:headless:full": "SKIP_OPTIMIZATION=true pnpm run test:full",
+    "test:ui": "HEADLESS=false pnpm test",
+    "test:ci": "HEADLESS=true SKIP_OPTIMIZATION=false pnpm test",
+    "create-minimal": "tsx scripts/create-minimal-extension.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
-    "@stylistic/eslint-plugin": "^5.2.2",
+    "@stylistic/eslint-plugin": "^5.7.1",
     "@types/fs-extra": "^11.0.4",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^16.18.126",
-    "@types/vscode": "^1.102.0",
-    "@typescript-eslint/eslint-plugin": "^8.44.1",
-    "@typescript-eslint/parser": "^8.44.1",
+    "@types/node": "^20.19.30",
+    "@types/vscode": "^1.108.1",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/vsce": "^3.6.1",
-    "esbuild": "^0.25.8",
-    "eslint": "^9.31.0",
+    "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.25.12",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-mocha": "^11.1.0",
+    "eslint-plugin-mocha": "11.2.0",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-security": "^3.0.1",
     "fast-glob": "^3.3.3",
-    "fs-extra": "^11.3.0",
-    "mocha": "^11.7.1",
-    "picocolors": "^1.1.1",
-    "prettier": "^3.6.2",
-    "tsx": "^4.19.2",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.38.0"
+    "fs-extra": "^11.3.3",
+    "lint-staged": "^15.2.11",
+    "mocha": "^11.7.5",
+    "ovsx": "^0.10.8",
+    "prettier": "^3.8.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
   }
 }

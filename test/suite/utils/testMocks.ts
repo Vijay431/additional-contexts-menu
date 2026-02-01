@@ -22,7 +22,7 @@ export class MockTerminal implements vscode.Terminal {
     this.processId = Promise.resolve(12345);
     this.state = {
       isInteractedWith: false,
-      shell: undefined
+      shell: undefined,
     };
     this.shellIntegration = undefined;
   }
@@ -117,6 +117,10 @@ export class MockConfigurationService {
         externalTerminalCommand: '',
         openBehavior: 'parent-directory',
       },
+      keybindings: {
+        enabled: false,
+        showInMenu: true,
+      },
       ...config,
     };
   }
@@ -153,7 +157,11 @@ export class MockConfigurationService {
     return new vscode.Disposable(() => {});
   }
 
-  async updateConfiguration<T>(_key: string, _value: T, _target?: vscode.ConfigurationTarget): Promise<void> {
+  async updateConfiguration<T>(
+    _key: string,
+    _value: T,
+    _target?: vscode.ConfigurationTarget,
+  ): Promise<void> {
     // Mock implementation
   }
 }
@@ -269,16 +277,24 @@ export class TestConfigFactory {
         externalTerminalCommand: '',
         openBehavior: 'parent-directory',
       },
+      keybindings: {
+        enabled: false,
+        showInMenu: true,
+      },
     };
   }
 
-  public static createForTerminalType(type: 'integrated' | 'external' | 'system-default'): ExtensionConfig {
+  public static createForTerminalType(
+    type: 'integrated' | 'external' | 'system-default',
+  ): ExtensionConfig {
     const config = TestConfigFactory.createDefault();
     config.terminal.type = type;
     return config;
   }
 
-  public static createForOpenBehavior(behavior: 'parent-directory' | 'workspace-root' | 'current-directory'): ExtensionConfig {
+  public static createForOpenBehavior(
+    behavior: 'parent-directory' | 'workspace-root' | 'current-directory',
+  ): ExtensionConfig {
     const config = TestConfigFactory.createDefault();
     config.terminal.openBehavior = behavior;
     return config;
@@ -299,9 +315,7 @@ export class TestDataFactory {
   }
 
   public static createTypicalWorkspace(): MockWorkspaceFolder[] {
-    return [
-      new MockWorkspaceFolder('/home/user/project', 'project', 0),
-    ];
+    return [new MockWorkspaceFolder('/home/user/project', 'project', 0)];
   }
 
   public static createMultiWorkspace(): MockWorkspaceFolder[] {

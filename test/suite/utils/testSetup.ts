@@ -2,7 +2,12 @@ import * as vscode from 'vscode';
 import { TerminalService } from '../../../src/services/terminalService';
 import { ConfigurationService } from '../../../src/services/configurationService';
 import { Logger } from '../../../src/utils/logger';
-import { VSCodeMocks, MockConfigurationService, TestConfigFactory, TestDataFactory } from './testMocks';
+import {
+  VSCodeMocks,
+  MockConfigurationService,
+  TestConfigFactory,
+  TestDataFactory,
+} from './testMocks';
 import { ExtensionConfig } from '../../../src/types/extension';
 
 /**
@@ -85,7 +90,7 @@ export class TestSetup {
     // Mock terminals property
     Object.defineProperty(window, 'terminals', {
       get: () => TestSetup.vscMocks.terminals,
-      configurable: true
+      configurable: true,
     });
   }
 
@@ -102,13 +107,15 @@ export class TestSetup {
     // Mock workspaceFolders
     Object.defineProperty(workspace, 'workspaceFolders', {
       get: () => TestSetup.vscMocks.getWorkspaceFolders(),
-      configurable: true
+      configurable: true,
     });
 
     // Mock file system
     if (!workspace.fs) {
       workspace.fs = {};
     }
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
     workspace.fs.stat = (uri: vscode.Uri) => {
       return TestSetup.vscMocks.stat(uri);
     };
@@ -121,16 +128,19 @@ export class TestSetup {
     const configServiceProto = ConfigurationService.prototype as any;
 
     // Store original methods
-    originalMethods.set('ConfigurationService.getConfiguration', configServiceProto.getConfiguration);
+    originalMethods.set(
+      'ConfigurationService.getConfiguration',
+      configServiceProto.getConfiguration,
+    );
     originalMethods.set('ConfigurationService.isEnabled', configServiceProto.isEnabled);
     originalMethods.set('ConfigurationService.getInstance', ConfigurationService.getInstance);
 
     // Mock methods
-    configServiceProto.getConfiguration = function() {
+    configServiceProto.getConfiguration = function () {
       return TestSetup.mockConfigService.getConfiguration();
     };
 
-    configServiceProto.isEnabled = function() {
+    configServiceProto.isEnabled = function () {
       return TestSetup.mockConfigService.isEnabled();
     };
 
@@ -181,8 +191,10 @@ export class TestSetup {
         case 'workspace':
           if (method === 'workspaceFolders') {
             delete (vscode.workspace as any).workspaceFolders;
+            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
           } else if (method && method.startsWith('fs.')) {
             const fsMethod = method.replace('fs.', '');
+            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (vscode.workspace.fs && originalMethod) {
               (vscode.workspace.fs as any)[fsMethod] = originalMethod;
             }
@@ -244,7 +256,7 @@ export class TestSetup {
    */
   public static setWorkspaceFolders(folders: string[]): void {
     const workspaceFolders = folders.map((path, index) =>
-      TestDataFactory.createWorkspaceFolder(path, `project${index}`)
+      TestDataFactory.createWorkspaceFolder(path, `project${index}`),
     );
     TestSetup.vscMocks.setWorkspaceFolders(workspaceFolders);
   }
@@ -264,6 +276,7 @@ export class TestSetup {
     (TerminalService as any).instance = null;
 
     // Get new instance which will use mocked dependencies
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     const service = TerminalService.getInstance();
 
     // Initialize it
@@ -288,7 +301,9 @@ export class TestHelpers {
   /**
    * Create test scenario with external terminal configuration
    */
-  public static setupExternalTerminal(command = 'gnome-terminal --working-directory={{directory}}'): TerminalService {
+  public static setupExternalTerminal(
+    command = 'gnome-terminal --working-directory={{directory}}',
+  ): TerminalService {
     TestSetup.setup(TestConfigFactory.createWithExternalTerminal(command));
     return TestSetup.createTerminalService();
   }
@@ -304,7 +319,9 @@ export class TestHelpers {
   /**
    * Create test scenario with specific open behavior
    */
-  public static setupWithOpenBehavior(behavior: 'parent-directory' | 'workspace-root' | 'current-directory'): TerminalService {
+  public static setupWithOpenBehavior(
+    behavior: 'parent-directory' | 'workspace-root' | 'current-directory',
+  ): TerminalService {
     TestSetup.setup(TestConfigFactory.createForOpenBehavior(behavior));
     return TestSetup.createTerminalService();
   }
@@ -356,11 +373,15 @@ export class TestHelpers {
     }
 
     if (expectedName && !terminal.name.includes(expectedName)) {
-      throw new Error(`Expected terminal name to contain '${expectedName}', but got '${terminal.name}'`);
+      throw new Error(
+        `Expected terminal name to contain '${expectedName}', but got '${terminal.name}'`,
+      );
     }
 
     if (expectedCwd && terminal.creationOptions.cwd !== expectedCwd) {
-      throw new Error(`Expected terminal cwd to be '${expectedCwd}', but got '${terminal.creationOptions.cwd}'`);
+      throw new Error(
+        `Expected terminal cwd to be '${expectedCwd}', but got '${terminal.creationOptions.cwd}'`,
+      );
     }
   }
 

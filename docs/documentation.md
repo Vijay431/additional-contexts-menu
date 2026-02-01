@@ -62,7 +62,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     </div>
                     <div class="component">
                         <h4>CodeAnalysisService</h4>
-                        <p>Parses and analyzes JavaScript/TypeScript code</p>
+                        <p>AST-based function detection using TypeScript Compiler API</p>
                     </div>
                     <div class="component">
                         <h4>TerminalService</h4>
@@ -80,6 +80,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Build System -->
@@ -116,6 +117,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Commands API -->
@@ -142,7 +144,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     </div>
 
                     <div class="command-item">
-                        <h4 class="command-name">additionalContextMenus.copyLinesToFile</h4>
+                        <h4 class="command-name">additionalContextMenus.copyContentToFile</h4>
                         <p class="command-desc">Copy selected code to another file with import handling</p>
                         <div class="command-details">
                             <p><strong>Accessibility:</strong> Right-click menu + Command Palette</p>
@@ -151,7 +153,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     </div>
 
                     <div class="command-item">
-                        <h4 class="command-name">additionalContextMenus.moveLinesToFile</h4>
+                        <h4 class="command-name">additionalContextMenus.moveContentToFile</h4>
                         <p class="command-desc">Move selected code to another file (copy + delete)</p>
                         <div class="command-details">
                             <p><strong>Accessibility:</strong> Right-click menu + Command Palette</p>
@@ -201,6 +203,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Development Guide -->
@@ -218,21 +221,23 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                 <h3>Setup & Build</h3>
                 <div class="code-block">
                     <pre><code>git clone https://github.com/Vijay431/additional-contexts-menu.git
+
 cd additional-contexts-menu
-npm install
-npm run build
-npm test</code></pre>
-                </div>
-            </div>
+pnpm install
+pnpm run build
+pnpm test</code></pre>
+
+</div>
+</div>
 
             <div class="dev-section">
                 <h3>Development Commands</h3>
                 <ul>
-                    <li><code>npm run build</code> - Primary build using esbuild</li>
-                    <li><code>npm run watch</code> - Development watch mode</li>
-                    <li><code>npm run package</code> - Production build</li>
-                    <li><code>npm run lint</code> - ESLint code quality check</li>
-                    <li><code>npm test</code> - Run comprehensive test suite</li>
+                    <li><code>pnpm run build</code> - Primary build using esbuild</li>
+                    <li><code>pnpm run watch</code> - Development watch mode</li>
+                    <li><code>pnpm run package</code> - Production build</li>
+                    <li><code>pnpm run lint</code> - ESLint code quality check</li>
+                    <li><code>pnpm test</code> - Run comprehensive test suite</li>
                 </ul>
             </div>
 
@@ -247,6 +252,7 @@ npm test</code></pre>
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Performance -->
@@ -288,4 +294,5 @@ npm test</code></pre>
             </div>
         </div>
     </div>
+
 </section>

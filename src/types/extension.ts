@@ -85,4 +85,8 @@ export interface ExtensionConfig {
     externalTerminalCommand?: string;
     openBehavior: 'parent-directory' | 'workspace-root' | 'current-directory';
   };
+  keybindings: {
+    enabled: boolean;
+    showInMenu: boolean;
+  };
 }

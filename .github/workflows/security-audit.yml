@@ -9,7 +9,7 @@ on:
     branches: ['master']
     paths:
       - 'package.json'
-      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
 
 permissions:
   contents: read
@@ -31,16 +31,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Install PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Run Security Audit
         id: audit
         run: |
-          echo "Running npm audit..."
-          npm audit --json > audit-results.json || true
+          echo "Running pnpm audit..."
+          pnpm audit --json > audit-results.json || true
 
           # Count vulnerabilities by severity
           HIGH=$(jq '.vulnerabilities | to_entries | map(select(.value.severity == "high")) | length' audit-results.json)
@@ -70,7 +75,7 @@ jobs:
         id: outdated
         run: |
           echo "Checking for outdated packages..."
-          npm outdated --json > outdated-packages.json || true
+          pnpm outdated --json > outdated-packages.json || true
 
           # Count outdated packages
           OUTDATED_COUNT=$(jq '. | length' outdated-packages.json)
@@ -91,15 +96,15 @@ jobs:
           echo "Attempting to fix vulnerabilities automatically..."
 
           # Try to fix vulnerabilities
-          npm audit fix --dry-run > fix-preview.txt 2>&1 || true
+          pnpm audit fix --dry-run > fix-preview.txt 2>&1 || true
 
           # Check if fixes are available
           if grep -q "fixed" fix-preview.txt; then
             echo "auto_fixes_available=true" >> $GITHUB_OUTPUT
-            npm audit fix > fix-results.txt 2>&1 || true
+            pnpm audit fix > fix-results.txt 2>&1 || true
 
-            # Check if package-lock.json was modified
-            if git diff --quiet package-lock.json; then
+            # Check if pnpm-lock.yaml was modified
+            if git diff --quiet pnpm-lock.yaml; then
               echo "fixes_applied=false" >> $GITHUB_OUTPUT
             else
               echo "fixes_applied=true" >> $GITHUB_OUTPUT
@@ -114,12 +119,12 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'security: automated npm audit fix'
+          commit-message: 'security: automated pnpm audit fix'
           title: '🔒 Automated Security Updates'
           body: |
             ## Automated Security Updates
 
-            This PR contains automated fixes for npm security vulnerabilities detected during the daily security audit.
+            This PR contains automated fixes for pnpm security vulnerabilities detected during the daily security audit.
 
             ### Security Audit Results
             $(cat audit-summary.md)
@@ -159,10 +164,10 @@ jobs:
 
             ${auditSummary}
 
-            ## Next Steps
+             ## Next Steps
 
             1. **Immediate Action Required**: Review and address critical and high-severity vulnerabilities
-            2. **Update Dependencies**: Run \`npm update\` and \`npm audit fix\` manually
+            2. **Update Dependencies**: Run \`pnpm update\` and \`pnpm audit fix\` manually
             3. **Test Thoroughly**: Ensure all functionality works after updates
             4. **Security Review**: Consider additional security measures if needed
 

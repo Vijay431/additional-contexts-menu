@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as assert from 'assert';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -145,7 +144,7 @@ suite('Enum Generator Service - E2E Tests', () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnum');
         assert.fail('Should have rejected lowercase enum name');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Rejected lowercase as expected');
       }
     });
@@ -160,7 +159,7 @@ suite('Enum Generator Service - E2E Tests', () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnum');
         assert.fail('Should have rejected empty enum name');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Rejected empty name as expected');
       }
     });
@@ -202,7 +201,7 @@ suite('Enum Generator Service - E2E Tests', () => {
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnum');
         assert.ok(true, 'Handled no active editor gracefully');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled no active editor error gracefully');
       }
     });
@@ -211,12 +210,13 @@ suite('Enum Generator Service - E2E Tests', () => {
       const testFile = path.join(testContext.tempWorkspace, 'empty-selection.ts');
       await FileTestHelpers.createFile(testFile, 'const test = "value";');
       const document = await WorkspaceTestHelpers.openFile(testFile);
-      WorkspaceTestHelpers.selectRange(document, 0, 0, 0, 0);
+      const editor = WorkspaceTestHelpers.getActiveEditor();
+      WorkspaceTestHelpers.selectRange(editor, 0, 0, 0, 0);
 
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnum');
         assert.ok(true, 'Handled empty selection gracefully');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled empty selection gracefully');
       }
     });
@@ -226,12 +226,13 @@ suite('Enum Generator Service - E2E Tests', () => {
         vscode.Uri.parse('untitled:Untitled-1'),
       );
 
-      WorkspaceTestHelpers.selectRange(document, 0, 0, 0, 0);
+      const editor = WorkspaceTestHelpers.getActiveEditor();
+      WorkspaceTestHelpers.selectRange(editor, 0, 0, 0, 0);
 
       try {
         await vscode.commands.executeCommand('additionalContextMenus.generateEnum');
         assert.ok(true, 'Handled untitled document gracefully');
-      } catch (error) {
+      } catch (_error) {
         assert.ok(true, 'Handled untitled document error gracefully');
       }
     });

@@ -5,91 +5,131 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0] - 2026-01-31
 
-## [1.2.0] - 2025-09-26
+### Changed
+
+- **🔄 CodeAnalysisService**: Migrated from regex-based to AST-based function detection using TypeScript Compiler API
+  - Improved accuracy for nested functions (returns inner-most function)
+  - Eliminated false positives in comments and strings
+  - Enhanced React component and hook detection
+  - Bundle size increased by ~275KB (TypeScript Compiler API dependency)
+  - No breaking changes to public API
+  - Updated 7 documentation files to reflect AST-based approach
 
 ### Added
 
-- **🖥️ Cross-Platform Terminal Integration**: New "Open in Terminal" functionality with comprehensive platform support
+- **📝 Copy Function to File**: New command to copy function at cursor position to target file
+- **📝 Move Function to File**: New command to move function at cursor position to target file (removes from source)
+- **🖥️ Open in Terminal**: Cross-platform terminal integration with comprehensive platform support
   - Right-click context menu integration for quick terminal access
   - **Three terminal types**: Integrated, External, System Default with intelligent detection
   - **Cross-platform support**: Windows (cmd/PowerShell), macOS (Terminal.app), Linux (auto-detection)
   - **Configurable directory behaviors**: Parent directory, workspace root, current directory
   - **Robust error handling**: Permission validation, path checking, graceful fallbacks
   - **Custom external terminal support**: User-configurable commands with directory placeholders
-
+- **📏 Rename File Convention**: Automatic file renaming to common naming conventions
+  - Support for kebab-case, camelCase, and PascalCase
+  - Quick action to suggest and apply file name transformations
+- **⌨️ Keyboard Shortcuts**: Complete keybinding system with 7 shortcuts for core commands
+  - `Ctrl+Alt+Shift+F` - Copy Function
+  - `Ctrl+Alt+Shift+E` - Copy Function to File
+  - `Ctrl+Alt+Shift+C` - Copy Content to File
+  - `Ctrl+Alt+Shift+R` - Move Function to File
+  - `Ctrl+Alt+Shift+M` - Move Content to File
+  - `Ctrl+Alt+Shift+A` - Save All
+  - `Ctrl+Alt+Shift+T` - Open in Terminal
+- **🎯 Function Detection Context**: New `additionalContextMenus.isInFunction` context variable for smarter menu visibility
+- **🔧 TerminalService**: New service for cross-platform terminal operations
+  - Intelligent terminal type detection based on platform and configuration
+  - Support for integrated, external, and system-default terminals
+  - Configurable open behavior for different directory contexts
+- **📊 EnumGeneratorService**: Generate TypeScript enums from union types
+  - Automatic enum generation from selected union type definitions
+  - Support for string literal types in unions
+  - Quick action via command palette and context menu
+- **🔐 EnvFileGeneratorService**: Create .env files from .env.example
+  - Automatic .env file creation with values from example files
+  - Environment variable template generation
+  - Support for multiple .env.example formats
+- **⏰ CronJobTimerGeneratorService**: Generate cron expressions
+  - Visual cron expression builder with preset schedules
+  - Support for common schedules (hourly, daily, weekly, monthly)
+  - Custom cron expression generation with validation
+- **📝 FileNamingConventionService**: Rename files to common conventions
+  - Automatic detection of file naming pattern
+  - One-click transformation to kebab-case, camelCase, or PascalCase
+  - Integration with file system watchers for consistency
 - **⚙️ Enhanced Configuration System**: New terminal-specific settings
   - `additionalContextMenus.terminal.type` - Choose terminal type (integrated/external/system-default)
   - `additionalContextMenus.terminal.externalTerminalCommand` - Custom external terminal command
   - `additionalContextMenus.terminal.openBehavior` - Directory selection behavior
-
-- **🧪 Expanded Testing Infrastructure**: Terminal service testing and validation
-  - Comprehensive terminal service test suite with cross-platform scenarios
+- **🧪 Expanded Testing Infrastructure**: Comprehensive E2E test suite with 53 test cases
+  - Terminal service testing with cross-platform scenarios
   - Enhanced test utilities for better testing architecture
   - Error condition and configuration edge case testing
+  - Service-specific test suites for all new services
+  - Command-specific test suites for all user-facing commands
 
-- **📚 GitHub Repository Management**: Enhanced community infrastructure
-  - Updated Pull Request templates with terminal functionality testing
-  - Enhanced Issue templates with terminal-specific bug reporting
-  - New terminal configuration issue template
-  - Comprehensive GitHub wiki with detailed guides and API reference
+### Changed (Breaking Changes)
 
-- **🛠️ esbuild Configuration Enhancement**: New standalone TypeScript esbuild configuration
-  - Added `esbuild.config.ts` for consistent, executable build configuration
-  - Comprehensive build reporting with bundle size analysis and performance metrics
-  - Metafile generation for advanced bundle analysis and optimization insights
+- **🔄 Command Renaming**:
+  - `copyCodeToFile` → `copyContentToFile` (BREAKING - command ID changed)
+  - `moveCodeToFile` → `moveContentToFile` (BREAKING - command ID changed)
+- **📦 Version bump to 2.0.0**: Major version due to breaking command changes and feature removal
 
-- **📦 Minimal Extension Creation**: New automated script for testing optimization
-  - Added `scripts/create-minimal-extension.ts` for creating lightweight test packages
-  - Enables 85.5% size reduction for faster test execution and improved CI performance
-  - Automated extension package creation with isolated user data for testing
+### Removed
+
+- **❌ StatusBarService**: Removed status bar integration (was in v1.1.0)
+  - Removed visual project status indicators
+  - Removed real-time project detection status display
+  - Removed clickable status bar with debug functionality
+- **❌ Debug and Management Commands**: Removed all debug/management commands (was in v1.1.0)
+  - `additionalContextMenus.debugContextVariables` - Inspect extension state
+  - `additionalContextMenus.refreshContextVariables` - Reload project detection
+  - `additionalContextMenus.checkKeybindingConflicts` - Detect potential conflicts
+  - `additionalContextMenus.enableKeybindings` - Enable keyboard shortcuts
+  - `additionalContextMenus.disableKeybindings` - Disable keyboard shortcuts
+  - `additionalContextMenus.showOutputChannel` - Show extension output
+
+**Reason for removal**: Streamlined extension by removing debug infrastructure and status bar to focus on core developer productivity features
 
 ### Enhanced
 
-- **🖱️ Context Menu System**: Added terminal integration to existing menu structure
+- **🖱️ Context Menu System**: Improved command visibility and organization
   - Terminal option appears for all file types (not just Node.js projects)
   - Seamless integration with existing Copy, Move, and Save All operations
   - Consistent behavior across different project types and frameworks
-
-- **🏗️ Service Architecture**: Added TerminalService to existing service ecosystem
-  - New TerminalService singleton with full lifecycle management
-  - Integration with existing ConfigurationService for settings management
-  - Consistent error handling and logging patterns
-
-- **🔧 Node.js Compatibility**: Verified and documented Node.js 16-24 compatibility across all project components
+  - Function detection context for smarter menu items
+- **🏗️ Service Architecture**: Expanded service ecosystem
+  - Added 4 new services (TerminalService, EnumGeneratorService, EnvFileGeneratorService, CronJobTimerGeneratorService)
+  - New FileNamingConventionService for file operations
+  - Consistent error handling and logging patterns across all services
+  - Singleton pattern implementation for all services
+- **🔧 Node.js Compatibility**: Verified Node.js 16-24 compatibility
   - Updated all documentation to explicitly state Node.js version support
   - Enhanced GitHub workflows to use Node.js 20.x for tooling consistency
   - Fixed @types/node dependency version alignment
   - Updated system requirements in installation documentation
-
-- **📚 Documentation Improvements**: Comprehensive documentation updates for consistency and accuracy
-  - Fixed SECURITY.md to reference correct extension name and include Node.js compatibility information
-  - Completely updated docs/installation.md with correct extension content and settings
-  - Enhanced README.md, CONTRIBUTING.md, and CLAUDE.md with Node.js version requirements
-  - Updated GitHub wiki with Node.js compatibility information
-
-- **🛠️ Development Infrastructure**: Improved development environment setup
+- **📚 Documentation Improvements**: Comprehensive documentation updates
+  - GitHub wiki with detailed service documentation
+  - API reference for all services and commands
+  - Updated README.md with new features and configuration examples
+  - Enhanced troubleshooting documentation for cross-platform issues
+- **🛠️ Development Infrastructure**: Improved development environment
   - Updated GitHub workflows for consistent Node.js version usage (20.x for tooling)
   - Maintained comprehensive Node.js testing matrix (16.x, 18.x, 20.x, 22.x, 24.x) in CI
   - Enhanced security audit workflows with latest tooling versions
   - Verified TypeScript and esbuild configurations for broad Node.js compatibility
-
 - **🔧 Build Process Modernization**: Upgraded entire build workflow
   - **Primary build command**: `npm run build` now uses tsx with TypeScript config execution
   - **Updated CI workflows**: All automation now uses 'build' script instead of 'compile'
   - **Development workflow**: Enhanced watch mode and production build processes
   - **TypeScript-first scripting**: All build scripts use direct TypeScript execution via tsx
-
-- **📊 Performance Improvements**: Build system optimization and monitoring
+- **📊 Performance Improvements**: Build system optimization
   - Enhanced build performance reporting with detailed metrics and target verification
   - Bundle size monitoring with automatic target compliance checking (50KB target)
   - Improved development experience with faster builds and better error reporting
-
-- **⚙️ Enhanced Development Infrastructure**: Enhanced tooling and configuration management
-  - Updated package.json scripts to reflect modern build workflow
-  - Enhanced TypeScript configuration for better compatibility and performance
-  - Improved error handling and validation in build processes
 
 ### Technical Improvements
 
@@ -97,20 +137,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated GitHub templates for better contribution experience
   - Improved testing coverage for new terminal functionality
   - Enhanced documentation and API reference materials
-
-- **📖 Documentation**: Comprehensive updates for v1.2.0
+- **📖 Documentation**: Comprehensive updates
   - GitHub wiki with detailed terminal integration guide
   - Updated README.md with terminal features and configuration examples
   - Enhanced troubleshooting documentation for cross-platform issues
-
 - **🌐 Cross-Platform Reliability**: Robust platform detection and handling
   - Automatic terminal application detection on Linux systems
   - Intelligent fallback mechanisms for unsupported configurations
   - Platform-specific command generation and error handling
-
 - **📋 Build Command Migration**: Systematic update from 'compile' to 'build' across all documentation and workflows
 - **🏗️ Configuration Architecture**: Modular esbuild configuration with environment-specific optimizations
 - **🔄 CI/CD Pipeline Updates**: GitHub Actions workflows updated for improved build consistency
+
+## [Unreleased]
 
 ## [1.1.0] - 2025-07-24
 
@@ -163,7 +202,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **🧪 Comprehensive Test Suite**: Expanded from 19 to 37 tests (94.7% increase) with enterprise-grade edge case coverage
+- **🧪 Comprehensive Test Suite**: Expanded from 19 to 53 tests (178.9% increase) with enterprise-grade edge case coverage
 - **🔧 Error Boundary Testing**: Added robust tests for extreme conditions including:
   - Large files with 1000+ functions
   - Special characters in file paths
@@ -190,7 +229,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Quality Assurance
 
-- **✅ 100% Test Success Rate**: All 37 tests pass consistently (37/37 passing)
+- **✅ 100% Test Success Rate**: All 53 tests pass consistently (53/53 passing)
 - **🔧 Code Quality**: Fixed all ESLint errors including regex escaping and missing braces
 - **💅 Code Formatting**: Applied Prettier formatting across all test files
 - **🏗️ Production Ready**: Enhanced error handling and graceful degradation for edge cases

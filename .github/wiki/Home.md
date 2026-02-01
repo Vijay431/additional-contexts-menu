@@ -5,24 +5,28 @@ Welcome to the comprehensive documentation for Additional Context Menus VS Code 
 ## 🚀 Quick Navigation
 
 ### Getting Started
+
 - [Home](Home) - You are here
 - [Installation Guide](Installation-Guide) - Step-by-step installation
 - [Quick Start](Quick-Start) - Get up and running in 5 minutes
 - [Configuration](Configuration) - Complete settings reference
 
 ### Features & Usage
+
 - [Core Features](Core-Features) - Main context menu operations
 - [Terminal Integration](Terminal-Integration) - Cross-platform terminal functionality (v1.2.0+)
 - [Keyboard Shortcuts](Keyboard-Shortcuts) - Optional keybinding system
 - [Framework Support](Framework-Support) - React, Angular, Express, Next.js specifics
 
 ### Development & Contribution
+
 - [Development Guide](Development-Guide) - Contributing to the project
 - [Troubleshooting](Troubleshooting) - Common issues and solutions
 - [API Reference](API-Reference) - Internal APIs for contributors
 - [Architecture](Architecture) - Technical implementation details
 
 ### Resources
+
 - [Changelog](Changelog) - Version history and migration guides
 - [Performance](Performance) - Optimization tips and benchmarks
 - [FAQ](FAQ) - Frequently asked questions
@@ -43,6 +47,7 @@ Additional Context Menus enhances VS Code's right-click context menus for Node.j
 ## 🌟 Latest Updates
 
 ### 🆕 Version 1.2.0+ Features
+
 - **Cross-platform terminal integration** (Windows, macOS, Linux)
 - **Three terminal types**: Integrated, External, System Default
 - **Configurable directory behaviors** with intelligent fallback
@@ -50,6 +55,7 @@ Additional Context Menus enhances VS Code's right-click context menus for Node.j
 - **Improved development workflow**: `npm run build` primary command with tsx
 
 ### 🔧 Enhanced Developer Experience
+
 - **Concise GitHub templates** for streamlined issue reporting and PRs
 - **TypeScript-first scripting** with direct execution via tsx
 - **Optimized testing environment** with minimal extension packages
@@ -57,12 +63,12 @@ Additional Context Menus enhances VS Code's right-click context menus for Node.j
 
 ## 📖 Popular Wiki Pages
 
-| Page | Description |
-|------|-------------|
+| Page                                         | Description                                |
+| -------------------------------------------- | ------------------------------------------ |
 | [Terminal Integration](Terminal-Integration) | Complete guide to v1.2.0 terminal features |
-| [Configuration](Configuration) | All extension settings explained |
-| [Troubleshooting](Troubleshooting) | Solutions to common problems |
-| [Development Guide](Development-Guide) | How to contribute to the project |
+| [Configuration](Configuration)               | All extension settings explained           |
+| [Troubleshooting](Troubleshooting)           | Solutions to common problems               |
+| [Development Guide](Development-Guide)       | How to contribute to the project           |
 
 ## 🤝 Community
 

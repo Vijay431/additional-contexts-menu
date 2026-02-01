@@ -5,8 +5,14 @@
  * - Separation of concerns: Strict rules for production code, relaxed for tests
  * - Type safety: Enforce TypeScript best practices in source files
  * - Security: Detect and prevent common vulnerabilities
- * - Consistency: Uniform code style across codebase
+ * - Consistency: Prettier handles formatting, ESLint enforces code quality
  * - Maintainability: Clear documentation for all configuration choices
+ *
+ * Prettier Integration:
+ * - Prettier handles all formatting rules (indentation, quotes, semicolons, etc.)
+ * - eslint-config-prettier disables conflicting ESLint formatting rules
+ * - eslint-plugin-prettier reports Prettier violations as ESLint errors
+ * - All @stylistic ESLint rules are disabled to avoid conflicts with Prettier
  *
  * Configuration Structure:
  * 1. Global Ignores - Applies to all configurations
@@ -25,12 +31,13 @@
 // Each plugin provides specific linting capabilities
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import stylistic from '@stylistic/eslint-plugin';
 import security from 'eslint-plugin-security';
 import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-node';
 import promisePlugin from 'eslint-plugin-promise';
 import mochaPlugin from 'eslint-plugin-mocha';
+import prettier from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 
 export default tseslint.config(
   // ============================================
@@ -86,6 +93,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended, // TypeScript recommended rules
   ...tseslint.configs.stylistic, // TypeScript stylistic rules
   security.configs.recommended, // Security vulnerability detection
+  prettierConfig, // Disable ESLint rules that conflict with Prettier
 
   // ============================================
   // STRICT CONFIGURATION - Source Files (src/)
@@ -103,7 +111,7 @@ export default tseslint.config(
     // Purpose: Enable plugins that provide additional linting rules
     // Rationale: Each plugin adds specialized linting capabilities
     plugins: {
-      '@stylistic': stylistic, // Code style and formatting rules
+      prettier: prettier, // Prettier integration for formatting
       security: security, // Security vulnerability detection
       import: importPlugin, // Import/export management
       node: nodePlugin, // Node.js specific patterns
@@ -147,28 +155,38 @@ export default tseslint.config(
     // ============================================
 
     // ============================================
-    // Category: STYLISTIC RULES - Code Formatting Standards
+    // Category: PRETTIER RULES - Code Formatting
     // ============================================
-    // Purpose: Enforce consistent code formatting across the codebase
-    // Rationale: Uniform style improves readability and reduces merge conflicts
+    // Purpose: Enforce Prettier formatting as ESLint errors
+    // Rationale: Prettier handles all formatting (indentation, quotes, semicolons, etc.)
     rules: {
-      curly: ['error', 'all'],
-      // Reason: Always use braces for all control structures (improves clarity)
+      'prettier/prettier': 'error',
+      // Reason: Report Prettier formatting issues as ESLint errors
 
-      '@stylistic/semi': ['error', 'always'],
-      // Reason: Enforce semicolons to avoid ASI (Automatic Semicolon Insertion) issues
+      // ============================================
+      // Category: DISABLED @STYLISTIC RULES - Handled by Prettier
+      // ============================================
+      // Purpose: All @stylistic rules disabled to avoid conflicts with Prettier
+      // Rationale: Prettier provides consistent, opinionated formatting
+      // Note: Below rules are commented out as Prettier handles formatting
 
-      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
-      // Reason: Single quotes for consistency, allow double quotes when single quotes in string
+      // curly: ['error', 'all'],
+      // // Reason: Prettier handles brace style
 
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      // Reason: Trailing commas help with diffs and cleaner code
+      // '@stylistic/semi': ['error', 'always'],
+      // // Reason: Prettier handles semicolons
 
-      '@stylistic/indent': ['error', 2],
-      // Reason: 2 spaces is the project standard for indentation
+      // '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+      // // Reason: Prettier handles quote style
 
-      '@stylistic/max-len': ['error', { code: 100, ignoreUrls: true }],
-      // Reason: 100 chars keeps code readable, URLs are exempt
+      // '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      // // Reason: Prettier handles trailing commas
+
+      // '@stylistic/indent': ['error', 2],
+      // // Reason: Prettier handles indentation
+
+      // '@stylistic/max-len': ['error', { code: 100, ignoreUrls: true }],
+      // // Reason: Prettier handles line length
 
       // ============================================
       // Category: TYPESCRIPT RULES - Strict Type Safety
@@ -513,6 +531,7 @@ export default tseslint.config(
     // PLUGINS - Activate Test-Specific Plugins
     // ============================================
     plugins: {
+      prettier: prettier, // Prettier integration for formatting
       mocha: mochaPlugin, // Mocha test framework rules
     },
 
@@ -828,25 +847,26 @@ export default tseslint.config(
       // Reason: Allow let for reassignment in tests
 
       // ============================================
-      // Category: STYLISTIC RULES - RELAXED
+      // Category: DISABLED @STYLISTIC RULES - Handled by Prettier
       // ============================================
-      // Purpose: Minimal formatting rules for tests
-      // Rationale: Allow flexible formatting for test readability
+      // Purpose: All @stylistic rules disabled to avoid conflicts with Prettier
+      // Rationale: Prettier provides consistent, opinionated formatting
+      // Note: Below rules are commented out as Prettier handles formatting
 
-      '@stylistic/max-len': ['error', { code: 120 }],
-      // Reason: Allow longer lines in tests (120 instead of 100)
+      // '@stylistic/max-len': ['error', { code: 120 }],
+      // // Reason: Prettier handles line length
 
-      '@stylistic/semi': 'off',
-      // Reason: No semicolon enforcement
+      // '@stylistic/semi': 'off',
+      // // Reason: Prettier handles semicolons
 
-      '@stylistic/quotes': 'off',
-      // Reason: No quote style enforcement
+      // '@stylistic/quotes': 'off',
+      // // Reason: Prettier handles quote style
 
-      '@stylistic/comma-dangle': 'off',
-      // Reason: No comma-dangle enforcement
+      // '@stylistic/comma-dangle': 'off',
+      // // Reason: Prettier handles trailing commas
 
-      '@stylistic/indent': 'off',
-      // Reason: No indent enforcement
+      // '@stylistic/indent': 'off',
+      // // Reason: Prettier handles indentation
     },
   },
 
