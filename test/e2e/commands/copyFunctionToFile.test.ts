@@ -79,7 +79,7 @@ const arrow = (param: string) => param.toUpperCase();
       const doc = await vscode.workspace.openTextDocument(testFile);
       const _editor = await vscode.window.showTextDocument(doc);
 
-      editor.selection = new vscode.Selection(2, 0, 2, 0);
+      _editor.selection = new vscode.Selection(2, 0, 2, 0);
 
       assert.ok(true, 'Arrow function should be detected');
     });
@@ -96,7 +96,7 @@ async function fetchData() {
       const doc = await vscode.workspace.openTextDocument(testFile);
       const _editor = await vscode.window.showTextDocument(doc);
 
-      editor.selection = new vscode.Selection(1, 0, 1, 0);
+      _editor.selection = new vscode.Selection(1, 0, 1, 0);
 
       assert.ok(true, 'Async function should be detected');
     });
@@ -113,7 +113,7 @@ function regularFunc() {
       const doc = await vscode.workspace.openTextDocument(testFile);
       const _editor = await vscode.window.showTextDocument(doc);
 
-      editor.selection = new vscode.Selection(1, 0, 1, 0);
+      _editor.selection = new vscode.Selection(1, 0, 1, 0);
 
       assert.ok(true, 'Regular function should be detected');
     });
@@ -130,7 +130,7 @@ const MyComponent = () => {
       const doc = await vscode.workspace.openTextDocument(testFile);
       const _editor = await vscode.window.showTextDocument(doc);
 
-      editor.selection = new vscode.Selection(1, 0, 1, 0);
+      _editor.selection = new vscode.Selection(1, 0, 1, 0);
 
       assert.ok(true, 'React component should be detected');
     });
@@ -147,7 +147,7 @@ const useCustomHook = () => {
       const doc = await vscode.workspace.openTextDocument(testFile);
       const _editor = await vscode.window.showTextDocument(doc);
 
-      editor.selection = new vscode.Selection(1, 0, 1, 0);
+      _editor.selection = new vscode.Selection(1, 0, 1, 0);
 
       assert.ok(true, 'React hook should be detected');
     });
@@ -169,7 +169,7 @@ function getUser(): User {
       const doc = await vscode.workspace.openTextDocument(testFile);
       const _editor = await vscode.window.showTextDocument(doc);
 
-      editor.selection = new vscode.Selection(5, 0, 5, 0);
+      _editor.selection = new vscode.Selection(5, 0, 5, 0);
 
       assert.ok(true, 'TypeScript function should be detected');
     });
@@ -186,7 +186,7 @@ const jsFunction = function() {
       const doc = await vscode.workspace.openTextDocument(testFile);
       const _editor = await vscode.window.showTextDocument(doc);
 
-      editor.selection = new vscode.Selection(2, 0, 2, 0);
+      _editor.selection = new vscode.Selection(2, 0, 2, 0);
 
       assert.ok(true, 'JavaScript function should be detected');
     });
