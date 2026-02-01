@@ -695,7 +695,7 @@ export default function TestComponent() {
     test('Extension should handle multiple open editors', async () => {
       // Create multiple files
       const files = ['file1.ts', 'file2.js', 'file3.tsx'];
-      const documents = [];
+      const documents: vscode.TextDocument[] = [];
 
       for (const fileName of files) {
         const filePath = path.join(tempWorkspace, fileName);
@@ -1482,16 +1482,17 @@ export class TestClass {
         },
       ];
 
-      const documents = [];
+      type DocAndEditor = { doc: vscode.TextDocument; editor: vscode.TextEditor };
+      const documentPairs: DocAndEditor[] = [];
       for (const file of files) {
         const filePath = path.join(tempWorkspace, file.name);
         await fs.writeFile(filePath, file.content);
         const doc = await vscode.workspace.openTextDocument(filePath);
-        documents.push({ doc, editor: await vscode.window.showTextDocument(doc) });
+        documentPairs.push({ doc, editor: await vscode.window.showTextDocument(doc) });
       }
 
       // Execute concurrent copy operations
-      const concurrentPromises = documents.map(async ({ editor }, index) => {
+      const concurrentPromises = documentPairs.map(async ({ editor }, index) => {
         // Position at first function
         editor.selection = new vscode.Selection(1, 10, 1, 10);
 
