@@ -73,8 +73,9 @@ suite('File Naming Convention Service - E2E Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const diagnostics = vscode.languages.getDiagnostics();
-      const fileDiagnostic = diagnostics.find((d) => d.uri.fsPath === testFile);
-      assert.ok(fileDiagnostic?.range?.length, 'Should have diagnostic for naming violation');
+      const fileDiagnostic = diagnostics.find(([uri, _diags]) => uri.fsPath === testFile);
+      const hasDiagnostics = fileDiagnostic?.[1]?.length > 0;
+      assert.ok(hasDiagnostics, 'Should have diagnostic for naming violation');
     });
   });
 
