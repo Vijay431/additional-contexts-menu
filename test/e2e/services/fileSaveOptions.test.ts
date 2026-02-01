@@ -132,7 +132,7 @@ suite('File Save Service with Options - E2E Tests', () => {
         .update('saveAll.skipReadOnly', true, vscode.ConfigurationTarget.Workspace);
 
       const readonlyFile = path.join(testContext.tempWorkspace, 'readonly.ts');
-      await FileTestHelpers.chmod(readonlyFile, 0o444);
+      await fs.chmod(readonlyFile, 0o444);
 
       const file1 = path.join(testContext.tempWorkspace, 'dirty1.ts');
       await FileTestHelpers.createFile(file1, 'const data = "value";');
