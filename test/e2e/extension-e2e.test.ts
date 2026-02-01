@@ -887,7 +887,7 @@ function edgeCaseFunction() {
       this.timeout(10000);
 
       // Create multiple files
-      const files = [];
+      const files: vscode.TextDocument[] = [];
       for (let i = 0; i < 10; i++) {
         const filePath = path.join(tempWorkspace, `concurrent-${i}.ts`);
         await fs.writeFile(filePath, `export const value${i} = ${i};`);
@@ -1492,7 +1492,7 @@ export class TestClass {
       }
 
       // Execute concurrent copy operations
-      const concurrentPromises = documentPairs.map(async ({ editor }, index) => {
+      const concurrentPromises = documentPairs.map(async ({ doc, editor }, index) => {
         // Position at first function
         editor.selection = new vscode.Selection(1, 10, 1, 10);
 
