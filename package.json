@@ -82,7 +82,7 @@
     "Other"
   ],
   "engines": {
-    "node": ">=24",
+    "node": ">=18",
     "vscode": "^1.108.1"
   },
   "activationEvents": [
@@ -90,8 +90,7 @@
     "onLanguage:typescript",
     "onLanguage:typescriptreact",
     "onLanguage:javascript",
-    "onLanguage:javascriptreact",
-    "onCommand:additionalContextMenus.enable"
+    "onLanguage:javascriptreact"
   ],
   "contributes": {
     "commands": [
