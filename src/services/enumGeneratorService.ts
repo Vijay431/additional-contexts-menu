@@ -1,5 +1,13 @@
 import * as vscode from 'vscode';
 
+import type { IAccessibilityService } from '../di/interfaces/IAccessibilityService';
+import type {
+  IEnumGeneratorService,
+  EnumNamingConvention,
+} from '../di/interfaces/IEnumGeneratorService';
+import type { ILogger } from '../di/interfaces/ILogger';
+import { AccessibilityService } from '../services/accessibilityService';
+import { formatAccessibleInputPrompt } from '../utils/accessibilityHelper';
 import { Logger } from '../utils/logger';
 
 /**
@@ -13,67 +21,61 @@ import { Logger } from '../utils/logger';
  * e.g., type Status = "pending" | "approved" | "rejected"
  * Handles value name conversion and validation.
  *
- * Key Features:
- * - Union type parsing (type alias and inline types)
- * - String literal extraction from union types
- * - Enum value name conversion (kebab-case → PascalCase)
- * - PascalCase validation for enum names
- * - Smart code insertion at cursor position
- * - File handling (requires saved files)
- *
- * Supported Patterns:
- * - Type alias: type Status = "pending" | "approved" | "rejected"
- * - Inline type: status: "active" | "inactive"
- * - Property type: interface User { role: "admin" | "user" | "guest" }
- *
- * Value Conversion Rules:
- * - my-status → MyStatus (capitalize, convert hyphens)
- * - user_id → UserId (capitalize, convert underscores)
- * - API_KEY → ApiKey (uppercase to camelCase)
- * - is-active → IsActive (kebab to PascalCase)
- * - Spaces removed and converted appropriately
- *
- * Use Cases:
- * - Converting union types to enums for better type safety
- * - Improving IDE autocomplete with enum values
- * - Migrating from union types to enums
- * - Type safety improvements
- *
  * @example
- * // Get service instance
- * const enumService = EnumGeneratorService.getInstance();
+ * ```typescript
+ * // Using DI (recommended)
+ * constructor(@inject(TYPES.EnumGeneratorService) private enumGen: IEnumGeneratorService) {}
  *
- * // Generate enum from selected union type
- * await enumService.generateEnumFromSelection();
- * // User selects enum name "Status"
- * // Result:
- * // export enum Status {
- * //   Pending = "pending",
- * //   Approved = "approved",
- * //   Rejected = "rejected",
- * // }
+ * // Using singleton (legacy)
+ * const enumService = EnumGeneratorService.getInstance();
+ * ```
  *
  * @see ConfigurationService - Not used directly but follows patterns
  * @see CodeAnalysisService - Works with code analysis
  *
  * @category Code Generation
- * @subpackage TypeScript
+ * @subcategory TypeScript
  *
  * @author Vijay Gangatharan <vijayanand431@gmail.com>
  * @since 1.3.0
  */
 
-export class EnumGeneratorService {
+export class EnumGeneratorService implements IEnumGeneratorService {
   private static instance: EnumGeneratorService | undefined;
-  private logger: Logger;
+  private logger: ILogger;
+  private accessibilityService: IAccessibilityService;
 
-  private constructor() {
-    this.logger = Logger.getInstance();
+  private constructor(logger: ILogger, accessibilityService: IAccessibilityService) {
+    this.logger = logger;
+    this.accessibilityService = accessibilityService;
   }
 
+  /**
+   * Get the singleton instance (legacy pattern)
+   *
+   * @deprecated Use DI injection instead
+   */
   public static getInstance(): EnumGeneratorService {
-    EnumGeneratorService.instance ??= new EnumGeneratorService();
-    return EnumGeneratorService.instance;
+    return (
+      EnumGeneratorService.instance ??
+      new EnumGeneratorService(Logger.getInstance(), AccessibilityService.getInstance())
+    );
+  }
+
+  /**
+   * Create a new EnumGeneratorService instance (DI pattern)
+   *
+   * This method is used by the DI container.
+   *
+   * @param logger - The logger instance to use
+   * @param accessibilityService - The accessibility service instance
+   * @returns A new EnumGeneratorService instance
+   */
+  public static create(
+    logger: ILogger,
+    accessibilityService: IAccessibilityService,
+  ): EnumGeneratorService {
+    return new EnumGeneratorService(logger, accessibilityService);
   }
 
   public async generateEnumFromSelection(): Promise<void> {
@@ -83,6 +85,7 @@ export class EnumGeneratorService {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
         vscode.window.showErrorMessage('No active editor found');
+        await this.accessibilityService.announceError('Generate Enum', 'No active editor found');
         return;
       }
 
@@ -92,12 +95,20 @@ export class EnumGeneratorService {
         vscode.window.showErrorMessage(
           'Cannot generate enum from untitled file. Please save the file first.',
         );
+        await this.accessibilityService.announceError(
+          'Generate Enum',
+          'Cannot generate enum from untitled file. Please save the file first.',
+        );
         return;
       }
 
       const selection = editor.selection;
       if (selection.isEmpty) {
         vscode.window.showWarningMessage('No code selected. Please select a type definition.');
+        await this.accessibilityService.announce(
+          'No code selected. Please select a type definition.',
+          'minimal',
+        );
         return;
       }
 
@@ -107,6 +118,10 @@ export class EnumGeneratorService {
       if (!unionType) {
         vscode.window.showWarningMessage(
           'Selected code does not appear to be a TypeScript union type.',
+        );
+        await this.accessibilityService.announce(
+          'Selected code is not a valid TypeScript union type',
+          'minimal',
         );
         return;
       }
@@ -125,14 +140,22 @@ export class EnumGeneratorService {
 
       await document.save();
 
-      vscode.window.showInformationMessage(`Generated enum '${enumName}' successfully`);
+      const valueCount = unionType.values.length;
+      vscode.window.showInformationMessage(
+        `Generated enum '${enumName}' with ${valueCount} values`,
+      );
+      await this.accessibilityService.announceSuccess(
+        'Generate Enum',
+        `Enum '${enumName}' generated with ${valueCount} values`,
+      );
       this.logger.info(`Enum generated successfully: ${enumName}`, {
         variableName: unionType.variableName,
-        valueCount: unionType.values.length,
+        valueCount,
       });
     } catch (error) {
       this.logger.error('Error generating enum', error);
       vscode.window.showErrorMessage(`Failed to generate enum: ${(error as Error).message}`);
+      await this.accessibilityService.announceError('Generate Enum', (error as Error).message);
     }
   }
 
@@ -183,19 +206,28 @@ export class EnumGeneratorService {
   }
 
   private async promptForEnumName(defaultName: string): Promise<string | undefined> {
+    const prompt = formatAccessibleInputPrompt(
+      'Enter enum name',
+      'Must start with uppercase letter and contain only letters and numbers',
+    );
+
     const enumName = await vscode.window.showInputBox({
-      prompt: 'Enter enum name',
+      prompt,
       placeHolder: defaultName,
       validateInput: (value) => {
         if (!value || value.trim().length === 0) {
-          return 'Enum name cannot be empty';
+          return 'Error: Enum name cannot be empty';
         }
         if (!/^[A-Z][a-zA-Z0-9]*$/.test(value)) {
-          return 'Enum name must start with uppercase letter and contain only letters and numbers';
+          return 'Error: Enum name must start with uppercase letter and contain only letters and numbers';
         }
-        return null;
+        return undefined;
       },
     });
+
+    if (enumName) {
+      await this.accessibilityService.announce(`Enum name set to ${enumName}`, 'normal');
+    }
 
     return enumName;
   }
@@ -218,5 +250,57 @@ export class EnumGeneratorService {
       .replace(/^_+/, '')
       .replace(/_+(.)/g, (match, letter) => letter.toUpperCase())
       .replace(/([a-z])([A-Z])/g, '$1_$2');
+  }
+
+  public generateEnum(
+    values: string[],
+    enumName: string,
+    convention: EnumNamingConvention,
+  ): string {
+    const enumEntries = values.map((value) => ({
+      name: this.formatEnumMember(value, convention),
+      value,
+    }));
+    const lines = [
+      `export enum ${enumName} {`,
+      ...enumEntries.map((entry) => `  ${entry.name} = '${entry.value}'`),
+      '}',
+    ];
+    return lines.join('\n');
+  }
+
+  public formatEnumMember(value: string, convention: EnumNamingConvention): string {
+    switch (convention) {
+      case 'PascalCase':
+        return this.toPascalCase(value);
+      case 'UPPER_CASE':
+        return this.toUpperCaseSnake(value);
+      case 'camelCase':
+        return this.toCamelCase(value);
+      default:
+        return this.convertToEnumValueName(value);
+    }
+  }
+
+  private toPascalCase(value: string): string {
+    return value
+      .replace(/[^a-zA-Z0-9]/g, ' ')
+      .replace(/\b\w/g, (letter) => letter.toUpperCase())
+      .replace(/\s/g, '');
+  }
+
+  private toUpperCaseSnake(value: string): string {
+    return this.convertToEnumValueName(value).toUpperCase();
+  }
+
+  private toCamelCase(value: string): string {
+    const pascalCase = this.toPascalCase(value);
+    return pascalCase.charAt(0).toLowerCase() + pascalCase.slice(1);
+  }
+
+  public extractUnionValues(selectedText: string): string[] {
+    // Extract all quoted strings from the selection
+    const values = selectedText.match(/"[^"]+"/g);
+    return values ? values.map((v) => v.slice(1, -1)) : [];
   }
 }

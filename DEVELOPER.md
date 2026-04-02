@@ -1,6 +1,6 @@
 # Developer Guide
 
-Complete guide for setting up, developing, testing, and contributing to the Additional Context Menus VS Code extension.
+Complete guide for setting up, developing, and contributing to the Additional Context Menus VS Code extension.
 
 ## Table of Contents
 
@@ -8,11 +8,9 @@ Complete guide for setting up, developing, testing, and contributing to the Addi
 - [Prerequisites](#prerequisites)
 - [Project Setup](#project-setup)
 - [Development Workflow](#development-workflow)
-- [Testing](#testing)
 - [Code Quality](#code-quality)
 - [Packaging & Publishing](#packaging--publishing)
 - [Project Structure](#project-structure)
-- [Testing Infrastructure](#testing-infrastructure)
 - [Debugging](#debugging)
 - [Troubleshooting](#troubleshooting)
 - [Resources](#resources)
@@ -34,10 +32,7 @@ pnpm install
 # 3. Build the extension
 pnpm run build
 
-# 4. Run default e2e tests
-pnpm test
-
-# 5. Start development
+# 4. Start development
 pnpm run watch
 
 # 6. Open in VS Code and press F5 to launch Extension Development Host
@@ -129,8 +124,6 @@ pnpm install
 
 - **TypeScript** - Language and compiler
 - **esbuild** - Fast bundler for compilation
-- **@vscode/test-electron** - VS Code extension testing
-- **Mocha** - Test framework
 - **ESLint** - Linting and code quality
 - **Prettier** - Code formatting
 - **@types/vscode** - VS Code API type definitions
@@ -159,7 +152,7 @@ pnpm run build
 pnpm run watch
 ```
 
-**Build output:** `dist/extension.js` (~47KB optimized bundle)
+**Build output:** `dist/extension.js` (~60KB core + 26KB lazy-loaded services)
 
 ---
 
@@ -167,20 +160,15 @@ pnpm run watch
 
 ### Development Commands Reference
 
-| Command                   | Description                         | Use Case                             | Performance              |
-| ------------------------- | ----------------------------------- | ------------------------------------ | ------------------------ |
-| `pnpm run build`          | Build extension using esbuild       | Production builds, pre-commit checks | ⚡ ~1 second             |
-| `pnpm run watch`          | Watch mode for development          | Active development, rapid iteration  | 🔄 Instant rebuilds      |
-| `pnpm run package`        | Production build with optimizations | Creating VSIX for publishing         | 📦 Optimized bundle      |
-| `pnpm run lint`           | Run ESLint on src directory         | Code quality checks                  | 🎨 Fast analysis         |
-| `pnpm run lint:fix`       | Fix ESLint issues automatically     | Quick code cleanup                   | 🔧 Auto-fix issues       |
-| `pnpm run format`         | Format code using Prettier          | Consistent code style                | ✨ Fast formatting       |
-| `pnpm test`               | Default optimized e2e testing       | Main development testing             | 🧪 85.5% smaller, faster |
-| `pnpm run test:headless`  | Alias for `pnpm test`               | CI/CD pipelines                      | 🚀 Faster, no GUI        |
-| `pnpm run test:ui`        | UI-based e2e testing (alias)        | Manual testing, debugging            | 👁️ Visual feedback       |
-| `pnpm run test:full`      | Full project testing                | Complete validation                  | 🔄 Comprehensive         |
-| `pnpm run create-minimal` | Create minimal extension package    | Testing with small package           | 📦 1MB vs 250MB          |
-| `pnpm run publish`        | Publish to VS Code Marketplace      | Releasing to users                   | 🚀 Production deployment |
+| Command             | Description                         | Use Case                                        | Performance              |
+| ------------------- | ----------------------------------- | ----------------------------------------------- | ------------------------ |
+| `pnpm run build`    | Build extension using esbuild       | Production builds, pre-commit checks            | ⚡ ~1 second             |
+| `pnpm run watch`    | Watch mode for development          | Active development, rapid iteration             | 🔄 Instant rebuilds      |
+| `pnpm run package`  | Production build with optimizations | Creating VSIX for publishing                    | 📦 Optimized bundle      |
+| `pnpm run lint`     | Run ESLint on src directory         | Code quality checks (uses tsconfig.eslint.json) | 🎨 Fast analysis         |
+| `pnpm run lint:fix` | Fix ESLint issues automatically     | Quick code cleanup                              | 🔧 Auto-fix issues       |
+| `pnpm run format`   | Format code using Prettier          | Consistent code style                           | ✨ Fast formatting       |
+| `pnpm run publish`  | Publish to VS Code Marketplace      | Releasing to users                              | 🚀 Production deployment |
 
 ### Day-to-Day Development
 
@@ -201,11 +189,11 @@ pnpm run watch
 3. A new VS Code window (Extension Development Host) will launch
 4. Your extension will be loaded in this window
 
-#### 3. Test Your Changes
+#### 3. Verify Your Changes
 
 - In the Extension Development Host, open a Node.js project
-- Right-click in TypeScript/JavaScript files to test context menus
-- Use Command Palette (`Ctrl+Shift+P`) to test commands
+- Right-click in TypeScript/JavaScript files to verify context menus
+- Use Command Palette (`Ctrl+Shift+P`) to verify commands
 - Check the Output panel for extension logs (select "Additional Context Menus")
 
 #### 4. Debug Your Code
@@ -220,7 +208,7 @@ pnpm run watch
 - Make changes to your code
 - Watch mode automatically recompiles
 - In Extension Development Host, press `Ctrl+R` to reload window
-- Test your changes again
+- Verify your changes again
 
 ### Feature Development Workflow
 
@@ -243,31 +231,9 @@ git checkout -b feature/your-feature-name
 # Start watch mode
 pnpm run watch
 
-# Make code changes
-# Add tests for new functionality
-# Run tests frequently
-pnpm test
-
 # Check code quality
 pnpm run lint
 pnpm run format
-```
-
-#### 3. Run Tests
-
-```bash
-# Run default e2e tests
-pnpm test
-
-# Or run tests with headless mode (faster)
-pnpm run test:headless
-
-# Full test suite for validation
-pnpm run test:full
-
-# Use environment variables for flexibility
-HEADLESS=false pnpm test           # Run with UI visible
-SKIP_OPTIMIZATION=true pnpm run test:full  # Full setup without minimal package
 ```
 
 #### 4. Build and Verify
@@ -275,9 +241,6 @@ SKIP_OPTIMIZATION=true pnpm run test:full  # Full setup without minimal package
 ```bash
 # Production build
 pnpm run build
-
-# Create minimal extension for testing
-pnpm run create-minimal
 
 # Test manually in Extension Development Host
 # Press F5 to launch and test
@@ -293,7 +256,7 @@ git add .
 git commit -m "feat(feature-name): add description of your feature"
 
 # Format: type(scope): description
-# Types: feat, fix, docs, style, refactor, test, chore
+# Types: feat, fix, docs, style, refactor, chore
 ```
 
 #### 6. Push and Create PR
@@ -328,277 +291,6 @@ git push origin main
 git checkout feature/your-feature-name
 git rebase main
 ```
-
----
-
-## Testing
-
-### Testing Overview
-
-The project uses a comprehensive e2e testing framework with **@vscode/test-electron** and **Mocha**. Tests validate extension functionality in a real VS Code environment.
-
-### Test Structure
-
-```
-test/
-├── e2e/                          # End-to-end tests
-│   ├── extension-e2e.test.ts      # Main test runner
-│   ├── runE2ETest.ts              # Test execution script
-│   ├── index.ts                   # Test entry point
-│   ├── commands/                 # Command-specific tests
-│   │   ├── copyFunction.test.ts
-│   │   ├── copyFunctionToFile.test.ts
-│   │   ├── moveFunctionToFile.test.ts
-│   │   ├── copyContentToFile.test.ts
-│   │   ├── moveContentToFile.test.ts
-│   │   ├── saveAll.test.ts
-│   │   ├── openInTerminal.test.ts
-│   │   ├── enable.test.ts
-│   │   └── disable.test.ts
-│   ├── services/                 # Service-level tests
-│   │   ├── codeAnalysisService.test.ts
-│   │   ├── configurationService.test.ts
-│   │   ├── fileDiscoveryService.test.ts
-│   │   ├── fileNamingConvention.test.ts
-│   │   ├── fileSaveOptions.test.ts
-│   │   ├── envFileGenerator.test.ts
-│   │   ├── enumGenerator.test.ts
-│   │   ├── cronJobTimerGenerator.test.ts
-│   │   ├── projectDetectionService.test.ts
-│   │   └── terminalService.test.ts
-│   ├── integration/              # Integration tests
-│   │   └── multiWorkspace.test.ts
-│   ├── edge-cases/               # Edge case tests
-│   │   └── stressTests.test.ts
-│   ├── cross-platform/           # Cross-platform tests
-│   │   └── pathHandling.test.ts
-│   ├── core-functionality.test.ts # Core feature tests
-│   └── utils/                    # Test utilities
-│       ├── e2eTestSetup.ts       # Test setup helpers
-│       ├── serviceTestBase.ts    # Service test base class
-│       ├── fileHelpers.ts        # File manipulation utilities
-│       ├── workspaceHelpers.ts   # Workspace setup helpers
-│       ├── projectFixtures.ts    # Test project fixtures
-│       └── commandValidator.ts  # Command validation utilities
-├── suite/                        # Unit/integration test suite
-│   ├── services/
-│   │   └── terminalService.test.ts
-│   └── utils/
-│       ├── testSetup.ts
-│       └── testMocks.ts
-└── fixtures/                     # Test fixtures
-    ├── code-samples/
-    │   └── utility-functions.ts
-    ├── sample-angular-service.ts
-    ├── sample-express-routes.ts
-    └── projects/
-        └── express-api/
-            └── src/routes/users.ts
-```
-
-### Running Tests
-
-#### Default Testing (Optimized)
-
-```bash
-# Runs tests with minimal extension package (85.5% smaller)
-pnpm test
-
-# This command does:
-# 1. Clean dist directory
-# 2. Build extension (pnpm run build)
-# 3. Create minimal extension package (pnpm run create-minimal)
-# 4. Compile test files (tsc -p tsconfig.test.json)
-# 5. Run e2e tests in headless mode (HEADLESS=true)
-
-# Output location: dist/test/e2e/
-```
-
-**Why use this:** Fastest option for development, uses optimized extension package (~1MB vs ~250MB).
-
-#### Headless Testing
-
-```bash
-# Run tests without VS Code UI (no window)
-pnpm run test:headless  # Alias for pnpm test
-
-# Or use environment variable directly
-HEADLESS=true pnpm test
-# Best for: CI/CD pipelines, quick feedback
-```
-
-**Use cases:**
-
-- CI/CD pipelines
-- Quick validation during development
-- Running on servers without display
-
-#### UI Testing
-
-```bash
-# Run tests with VS Code UI visible
-pnpm run test:ui  # Alias for HEADLESS=false pnpm test
-
-# Or use environment variable directly
-HEADLESS=false pnpm test
-# Opens actual VS Code windows during tests
-# Best for: Debugging, manual testing
-```
-
-**Use cases:**
-
-- Debugging failing tests
-- Visualizing test execution
-- Manual verification
-
-#### Full Testing
-
-```bash
-# Run tests with complete extension package
-pnpm run test:full
-
-# Skips minimal extension optimization
-# Uses full extension with all dev dependencies
-# Environment variable: SKIP_OPTIMIZATION=true
-
-# For headless full testing, use:
-SKIP_OPTIMIZATION=true pnpm run test:full
-# Or the alias: pnpm run test:headless:full
-```
-
-**Use cases:**
-
-- Pre-release validation
-- Testing with complete extension
-- Backwards compatibility checks
-
-#### CI Testing
-
-```bash
-# Optimized for CI/CD environments
-pnpm run test:ci  # Alias for HEADLESS=true SKIP_OPTIMIZATION=false pnpm test
-
-# Or use environment variables directly
-HEADLESS=true SKIP_OPTIMIZATION=false pnpm test
-# Balances speed and completeness
-```
-
-**Use cases:**
-
-- GitHub Actions
-- Travis CI, CircleCI, etc.
-- Automated testing pipelines
-
-#### Clean Test Artifacts
-
-```bash
-# Remove test artifacts and temporary files
-pnpm run test:clean
-
-# Removes:
-# - .vscode-test/minimal-extension/
-# - .vscode-test/user-data-isolated/
-# - .vscode-test/user-data-dev/
-```
-
-### Writing Tests
-
-#### Test File Structure
-
-```typescript
-// test/e2e/commands/myFeature.test.ts
-
-import * as assert from 'assert';
-import * as vscode from 'vscode';
-import { after, before } from 'mocha';
-
-suite('My Feature E2E Tests', () => {
-  let extensionContext: vscode.ExtensionContext;
-
-  before(async () => {
-    // Setup before all tests
-    // Load extension, create test files, etc.
-  });
-
-  after(async () => {
-    // Cleanup after all tests
-    // Close files, delete temp files, etc.
-  });
-
-  test('should do something when condition is met', async () => {
-    // Arrange
-    const expected = 'result';
-
-    // Act
-    const result = await vscode.commands.executeCommand('myExtension.myCommand');
-
-    // Assert
-    assert.strictEqual(result, expected);
-  });
-});
-```
-
-#### Using Test Utilities
-
-```typescript
-// Import test helpers
-import {
-  createTestFile,
-  deleteTestFile,
-  openTestFile,
-  getActiveEditor,
-} from '../utils/fileHelpers';
-import { setupTestWorkspace } from '../utils/workspaceHelpers';
-import { CommandValidator } from '../utils/commandValidator';
-
-suite('Feature Tests', () => {
-  let testFileUri: vscode.Uri;
-
-  before(async () => {
-    // Setup test workspace
-    await setupTestWorkspace('react-project');
-
-    // Create test file
-    testFileUri = await createTestFile(
-      'test.ts',
-      `
-      function testFunction() {
-        return 'test';
-      }
-    `,
-    );
-
-    // Open test file in editor
-    await openTestFile(testFileUri);
-  });
-
-  test('should validate command execution', async () => {
-    const validator = new CommandValidator();
-
-    // Execute command
-    await vscode.commands.executeCommand('myExtension.myCommand');
-
-    // Validate execution
-    const result = await validator.validate('myExtension.myCommand');
-    assert.strictEqual(result.success, true);
-  });
-
-  after(async () => {
-    // Cleanup
-    await deleteTestFile(testFileUri);
-  });
-});
-```
-
-### Testing Best Practices
-
-1. **Isolate Tests** - Each test should be independent and cleanup after itself
-2. **Use Describe/Suite** - Group related tests logically
-3. **Arrange-Act-Assert** - Follow AAA pattern for clarity
-4. **Mock External Dependencies** - Use test utilities for mocking
-5. **Test Edge Cases** - Include tests for unusual scenarios
-6. **Performance Testing** - Include stress tests for performance validation
-7. **Cross-Platform** - Test on Windows, macOS, and Linux when possible
 
 ---
 
@@ -667,14 +359,17 @@ pnpm run build
 # Checks for type errors during compilation
 ```
 
-#### Compile Test Files
+#### ESLint Type-Aware Rules
+
+ESLint uses `tsconfig.eslint.json` (not `tsconfig.json`) for type-aware lint rules. This file:
+
+- Extends `tsconfig.json` with `noEmit: true` and `allowJs: true`
+- Includes `src/**/*`, `scripts/**/*`, and `esbuild.config.ts`
+- Keeps lint configuration decoupled from the production build
 
 ```bash
-# Compile test files for validation
-tsc -p ./tsconfig.test.json
-
-# Ensures test files are type-safe
-# Catches type errors in test code
+# Run type-aware linting
+pnpm run lint
 ```
 
 ### Pre-commit Checks
@@ -686,10 +381,6 @@ Before committing, run these checks:
 pnpm run lint          # Check code quality
 pnpm run format         # Format code
 pnpm run build          # Type check and build
-pnpm test               # Run tests
-
-# Or use the combined check
-pnpm run test:all
 ```
 
 ---
@@ -704,8 +395,8 @@ pnpm run test:all
 # Build extension with esbuild
 pnpm run build
 
-# Creates: dist/extension.js (~47KB)
-# Optimizations enabled: minification, tree-shaking
+# Creates: dist/extension.js (~60KB core + 26KB lazy services)
+# Optimizations enabled: minification, tree-shaking, lazy loading
 ```
 
 #### Package VSIX
@@ -853,7 +544,6 @@ additional-contexts-menu/
 │   ├── installation.md         # Installation guide
 │   └── documentation.md        # Technical documentation
 ├── scripts/                    # Build and utility scripts
-│   ├── create-minimal-extension.ts  # Creates minimal test package
 │   └── generate-changelog.js   # Changelog generator
 ├── src/                        # Source code
 │   ├── extension.ts            # Extension entry point
@@ -875,16 +565,10 @@ additional-contexts-menu/
 │   │   └── extension.ts
 │   └── utils/                  # Utility functions
 │       └── logger.ts
-├── test/                       # Test files
-│   ├── e2e/                    # E2E tests
-│   ├── suite/                  # Unit/integration tests
-│   └── fixtures/               # Test fixtures and samples
 ├── .editorconfig               # Editor configuration
-├── .eslintrc.json              # ESLint configuration
 ├── .gitignore                  # Git ignore rules
 ├── .prettierrc                 # Prettier configuration
 ├── .vscodeignore               # Files to exclude from VSIX
-├── .vscode-test.mjs            # VS Code test configuration
 ├── CHANGELOG.md                # Version history
 ├── CODE_OF_CONDUCT.md          # Code of conduct
 ├── CONTRIBUTING.md             # Contribution guidelines
@@ -898,8 +582,7 @@ additional-contexts-menu/
 ├── README.md                   # Project documentation
 ├── SECURITY.md                 # Security policy
 ├── tsconfig.json               # TypeScript configuration
-├── tsconfig.test.json          # TypeScript test configuration
-└── TODO.md                     # TODO list
+└── tsconfig.eslint.json        # TypeScript config for ESLint (extends tsconfig.json, noEmit, includes scripts/)
 ```
 
 ### Source Code Architecture
@@ -931,7 +614,7 @@ export function deactivate() {
 
 #### Services (Singleton Pattern)
 
-The extension uses 10 specialized services, all following singleton pattern:
+The extension uses 11 specialized services, all following singleton pattern:
 
 | Service                        | Purpose                                                    | Key Methods                                    |
 | ------------------------------ | ---------------------------------------------------------- | ---------------------------------------------- |
@@ -945,6 +628,7 @@ The extension uses 10 specialized services, all following singleton pattern:
 | `EnvFileGeneratorService`      | Creates .env files                                         | `generateEnvFile()`                            |
 | `CronJobTimerGeneratorService` | Generates cron expressions                                 | `generateCronExpression()`                     |
 | `FileNamingConventionService`  | Enforces naming conventions                                | `checkConvention()`, `renameFile()`            |
+| `AccessibilityService`         | Screen reader support and announcements                    | `announce()`, `announceSuccess()`              |
 
 #### Types
 
@@ -953,262 +637,6 @@ The extension uses 10 specialized services, all following singleton pattern:
 #### Utilities
 
 **`src/utils/logger.ts`** - Logging utility for debugging
-
----
-
-## Testing Infrastructure
-
-### Minimal Extension Package
-
-The project uses a sophisticated testing optimization that creates a minimal extension package (~1MB instead of ~250MB).
-
-#### How It Works
-
-```bash
-# Create minimal extension for testing
-pnpm run create-minimal
-```
-
-The `create-minimal-extension.ts` script:
-
-1. **Creates a clean directory** at `.vscode-test/minimal-extension/`
-2. **Copies essential files only:**
-   - `README.md`, `LICENSE`, `logo.png`
-   - `dist/extension.js` and `dist/extension.js.map`
-3. **Creates minimal package.json** with only runtime fields:
-   - Name, version, publisher, main entry point
-   - Contributes (commands, settings, menus)
-   - Excludes: devDependencies, scripts, test files
-4. **Saves space** by excluding:
-   - `node_modules/`
-   - `.git/`
-   - `test/` directory
-   - Build scripts and dev tools
-
-**Space Savings:**
-
-| Metric              | Original | Minimal | Savings         |
-| ------------------- | -------- | ------- | --------------- |
-| Package Size        | ~250MB   | ~1MB    | 99.6% reduction |
-| Test Execution Time | ~45s     | ~15s    | 67% faster      |
-| Memory Usage        | ~800MB   | ~300MB  | 63% reduction   |
-
-#### When to Use Minimal vs Full
-
-**Use Minimal (`pnpm test`):**
-
-- Development and iterative testing
-- CI/CD pipelines for speed
-- Most test scenarios
-- Feature validation
-
-**Use Full (`pnpm test:full`):**
-
-- Pre-release validation
-- Testing with complete environment
-- Backwards compatibility checks
-- Integration with all dependencies
-
-### Headless vs UI Testing
-
-#### Headless Testing (`HEADLESS=true`)
-
-Runs tests without launching VS Code windows:
-
-```bash
-pnpm run test:headless
-```
-
-**Advantages:**
-
-- ⚡ Faster execution (no GUI overhead)
-- 🚀 No window management
-- 💻 Works on servers without display
-- 🔄 Perfect for CI/CD
-
-**Trade-offs:**
-
-- 👁️ Cannot visually verify behavior
-- 🔧 Harder to debug failures
-- 📊 No visual feedback
-
-#### UI Testing (`HEADLESS=false`)
-
-Runs tests with actual VS Code windows:
-
-```bash
-pnpm run test:ui
-```
-
-**Advantages:**
-
-- 👁️ Visual verification of behavior
-- 🔧 Easier to debug failures
-- 📊 Real-world simulation
-- 🎯 Can observe test execution
-
-**Trade-offs:**
-
-- ⏱️ Slower execution (GUI overhead)
-- 💻 Requires display environment
-- 🖥️ Window management overhead
-
-#### CI/CD Best Practice
-
-```bash
-# CI pipelines: Use headless for speed
-pnpm run test:ci
-
-# Local development: Use UI for debugging
-pnpm run test:ui
-
-# Pre-release: Use full for validation
-pnpm run test:full
-```
-
-### Test Environment Configuration
-
-#### VS Code Test Configuration
-
-**`.vscode-test.mjs`** - Test environment setup:
-
-```javascript
-export default {
-  extensionId: 'VijayGangatharan.additional-context-menus',
-  extensionTestsPath: './dist/test/e2e/runE2ETest.js',
-  launchArgs: [
-    // Disable updates during tests
-    '--disable-extensions',
-    // Set user data directory
-    '--user-data-dir',
-    './.vscode-test/user-data-isolated',
-  ],
-};
-```
-
-#### Test TypeScript Configuration
-
-**`tsconfig.test.json`** - TypeScript compilation for tests:
-
-```json
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./dist/test",
-    "types": ["node", "mocha", "@types/vscode"]
-  },
-  "include": ["test/**/*"]
-}
-```
-
-### Test Fixtures
-
-The project includes test fixtures for realistic testing:
-
-#### Code Samples
-
-**`test/fixtures/code-samples/utility-functions.ts`** - Sample utility functions for testing
-
-#### Sample Projects
-
-**`test/fixtures/projects/express-api/`** - Sample Express API project for project detection tests
-
-#### Sample Files
-
-**`test/fixtures/sample-angular-service.ts`** - Angular service sample
-**`test/fixtures/sample-express-routes.ts`** - Express routes sample
-
-### Test Utilities
-
-#### File Helpers
-
-**`test/e2e/utils/fileHelpers.ts`**
-
-```typescript
-// Create test files
-async createTestFile(filename: string, content: string): Promise<vscode.Uri>
-
-// Delete test files
-async deleteTestFile(uri: vscode.Uri): Promise<void>
-
-// Open test files in editor
-async openTestFile(uri: vscode.Uri): Promise<void>
-
-// Get active editor
-getActiveEditor(): vscode.TextEditor | undefined
-```
-
-#### Workspace Helpers
-
-**`test/e2e/utils/workspaceHelpers.ts`**
-
-```typescript
-// Setup test workspace with project structure
-async setupTestWorkspace(projectType: string): Promise<void>
-
-// Cleanup workspace
-async cleanupWorkspace(): Promise<void>
-
-// Copy fixture to workspace
-async copyFixture(fixtureName: string, targetPath: string): Promise<void>
-```
-
-#### Command Validator
-
-**`test/e2e/utils/commandValidator.ts`**
-
-```typescript
-// Validate command execution
-async validate(commandId: string): Promise<ValidationResult>
-
-// Check command availability
-async isAvailable(commandId: string): Promise<boolean>
-
-// Execute command and capture output
-async execute(commandId: string, args?: any[]): Promise<any>
-```
-
-#### Service Test Base
-
-**`test/e2e/utils/serviceTestBase.ts`**
-
-Base class for service tests with common setup/teardown:
-
-```typescript
-abstract class ServiceTestBase {
-  // Setup test environment
-  protected async setup(): Promise<void>;
-
-  // Cleanup test environment
-  protected async teardown(): Promise<void>;
-
-  // Get service instance
-  protected abstract getService(): any;
-}
-```
-
-### Test Execution Flow
-
-When you run `pnpm test`:
-
-1. **Clean dist directory** - `rm -rf dist`
-2. **Build extension** - `pnpm run build` (TypeScript → JavaScript)
-3. **Create minimal extension** - `pnpm run create-minimal` (~1MB package)
-4. **Compile test files** - `tsc -p ./tsconfig.test.json`
-5. **Run e2e tests** - `node ./dist/test/e2e/runE2ETest.js`
-6. **Execute test suite** - Mocha runs all test files
-7. **Generate report** - Pass/fail results with detailed output
-
-### Test Best Practices
-
-1. **Use Minimal Extension** - Default to `pnpm test` for speed
-2. **Isolate Tests** - Each test should be independent
-3. **Cleanup Resources** - Always close files and delete temporary files
-4. **Mock External Dependencies** - Don't test third-party code
-5. **Test Edge Cases** - Include unusual scenarios
-6. **Cross-Platform Testing** - Test on Windows, macOS, Linux
-7. **Performance Testing** - Include stress tests
-8. **Visual Verification** - Use UI mode for manual verification
 
 ---
 
@@ -1246,30 +674,6 @@ When you run `pnpm test`:
    - Step Out (`Shift+F11`)
    - Restart (`Ctrl+Shift+F5`)
    - Stop (`Shift+F5`)
-
-### Debugging Tests
-
-#### Debug Individual Test
-
-```bash
-# Run specific test file
-pnpm test test/e2e/commands/copyFunction.test.ts
-
-# Or use VS Code debugger:
-# 1. Set breakpoints in test file
-# 2. Go to Run and Debug
-# 3. Select "Extension Tests" configuration
-# 4. Press F5
-```
-
-#### Debug Headless Tests
-
-```bash
-# Run tests with --inspect flag
-node --inspect dist/test/e2e/runE2ETest.js
-
-# Then attach VS Code debugger to the process
-```
 
 ### Console Debugging
 
@@ -1331,16 +735,7 @@ pnpm run build
 
 #### Tests Failing
 
-```bash
-# Run with verbose output
-pnpm test --reporter spec
-
-# Debug specific test
-node dist/test/e2e/runE2ETest.js --grep "test name"
-
-# Use UI mode to see what's happening
-pnpm run test:ui
-```
+If commands aren't executing as expected, check the Output panel for errors and verify command registration in `package.json`.
 
 ---
 
@@ -1394,32 +789,12 @@ tsx esbuild.config.ts --verbose
 # Ensure extension is built
 pnpm run build
 
-# Create minimal extension
-pnpm run create-minimal
-
-# Check minimal extension exists
-ls .vscode-test/minimal-extension/
-
 # Clean and rebuild
 rm -rf dist
 pnpm run build
-pnpm run create-minimal
 ```
 
-**Problem:** Tests are slow
-
-**Solutions:**
-
-```bash
-# Use minimal extension (default)
-pnpm test
-
-# Use headless mode
-pnpm run test:headless
-
-# Skip slow tests
-# Add .skip to test suites you want to skip
-```
+**Problem:** Build is slow or taking longer than expected — use watch mode (`pnpm run watch`) for active development.
 
 #### Extension Development Host Issues
 
@@ -1497,23 +872,6 @@ pnpm run watch
 # Watch mode provides this automatically
 ```
 
-#### Slow Test Execution
-
-**Problem:** Tests take too long
-
-**Solutions:**
-
-```bash
-# Use minimal extension (faster by 3x)
-pnpm test
-
-# Use headless mode (no GUI overhead)
-pnpm run test:headless
-
-# Run only specific test suites
-node dist/test/e2e/runE2ETest.js --grep "specific test"
-```
-
 ### Getting Help
 
 If you encounter issues not covered here:
@@ -1535,7 +893,6 @@ If you encounter issues not covered here:
 ### Official Documentation
 
 - **VS Code Extension API:** https://code.visualstudio.com/api
-- **Extension Testing:** https://code.visualstudio.com/api/working-with-extensions/testing-extension
 - **Publishing Extensions:** https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 - **Visual Studio Marketplace:** https://marketplace.visualstudio.com/manage
 
@@ -1544,7 +901,6 @@ If you encounter issues not covered here:
 - **esbuild:** https://esbuild.github.io/
 - **pnpm:** https://pnpm.io/
 - **TypeScript:** https://www.typescriptlang.org/docs/
-- **Mocha:** https://mochajs.org/
 - **ESLint:** https://eslint.org/docs/latest/
 - **Prettier:** https://prettier.io/docs/en/
 
@@ -1567,7 +923,6 @@ If you encounter issues not covered here:
 
 - **vsce:** VS Code Extension Manager - https://github.com/microsoft/vscode-vsce
 - **ovsx:** Open VSX Publisher - https://github.com/eclipse/openvsx
-- **@vscode/test-electron:** VS Code testing utilities
 
 ---
 
@@ -1579,16 +934,14 @@ This developer guide provides comprehensive information for setting up, developi
 
 1. **Use pnpm** for dependency management
 2. **Watch mode** (`pnpm run watch`) for active development
-3. **Minimal testing** (`pnpm test`) for fast iteration
-4. **Quality checks** before committing (lint, format, build, test)
-5. **Follow conventions** in code style and structure
-6. **Ask for help** when needed - community is here to support you
+3. **Quality checks** before committing (lint, format, build)
+4. **Follow conventions** in code style and structure
+5. **Ask for help** when needed - community is here to support you
 
 ### Next Steps:
 
 - Read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines
 - Explore [source code](src/) to understand architecture
-- Review existing [tests](test/) for patterns and best practices
 - Check [service documentation](docs/services/) for API references
 
 Happy coding! 🚀

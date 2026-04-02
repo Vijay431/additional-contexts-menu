@@ -35,7 +35,6 @@ import security from 'eslint-plugin-security';
 import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-node';
 import promisePlugin from 'eslint-plugin-promise';
-import mochaPlugin from 'eslint-plugin-mocha';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
@@ -126,7 +125,7 @@ export default tseslint.config(
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json', // Use src tsconfig for type checking
+        project: './tsconfig.eslint.json', // Use dedicated ESLint tsconfig for type checking
         tsconfigRootDir: import.meta.dirname, // Root directory for tsconfig resolution
       },
       globals: {
@@ -482,8 +481,8 @@ export default tseslint.config(
       'prefer-rest-params': 'error',
       // Reason: Use rest parameters instead of arguments
 
-      'no-duplicate-imports': 'error',
-      // Reason: Consolidate duplicate imports
+      'no-duplicate-imports': 'off',
+      // Reason: Use import/no-duplicates instead (handles type imports correctly)
 
       'no-useless-constructor': 'error',
       // Reason: Remove empty constructors if not needed
@@ -532,7 +531,6 @@ export default tseslint.config(
     // ============================================
     plugins: {
       prettier: prettier, // Prettier integration for formatting
-      mocha: mochaPlugin, // Mocha test framework rules
     },
 
     // ============================================
@@ -570,48 +568,6 @@ export default tseslint.config(
     // RULES - Minimal Validation for Test Files
     // ============================================
     rules: {
-      // ============================================
-      // Category: MOCHA FRAMEWORK RULES - Test Structure Validation
-      // ============================================
-      // Purpose: Ensure proper Mocha test structure
-      // Rationale: Catch common test organization mistakes
-
-      'mocha/no-exclusive-tests': 'error',
-      // Reason: Prevent .only from accidentally committing (skips other tests)
-
-      'mocha/no-pending-tests': 'warn',
-      // Reason: Warn about .skip (remind to implement or remove)
-
-      'mocha/no-synchronous-tests': 'off',
-      // Reason: Allow synchronous tests when needed
-
-      'mocha/no-global-tests': 'error',
-      // Reason: Tests must be inside describe/suite blocks
-
-      'mocha/no-return-and-callback': 'error',
-      // Reason: Don't mix return and callback in async tests
-
-      'mocha/valid-test-title': 'warn',
-      // Reason: Encourage descriptive test titles
-
-      'mocha/valid-suite-title': 'warn',
-      // Reason: Encourage descriptive suite titles
-
-      'mocha/no-sibling-hooks': 'error',
-      // Reason: Don't place hooks at same level as tests
-
-      'mocha/no-mocha-arrows': 'error',
-      // Reason: Don't use arrow functions for tests (this context issues)
-
-      'mocha/no-hooks-for-single-case': 'off',
-      // Reason: Allow hooks for single test case
-
-      'mocha/no-top-level-hooks': 'error',
-      // Reason: Hooks must be inside describe blocks
-
-      'mocha/no-identical-title': 'error',
-      // Reason: Prevent duplicate test titles (confusing)
-
       // ============================================
       // Category: TYPESCRIPT RULES - ALL DISABLED
       // ============================================

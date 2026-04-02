@@ -33,26 +33,21 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     <span class="stat-label">Current Version</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number">248 Tests</span>
-                    <span class="stat-label">Comprehensive Coverage</span>
+                    <span class="stat-number">60KB</span>
+                    <span class="stat-label">Core Bundle</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number">100%</span>
-                    <span class="stat-label">Test Success Rate</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">47.86KB</span>
-                    <span class="stat-label">Bundle Size</span>
+                    <span class="stat-number">26KB</span>
+                    <span class="stat-label">Lazy Services</span>
                 </div>
             </div>
             </div>
             <div class="hero-image">
                 <div class="hero-demo">
-                    <div class="demo-placeholder">
-                        <i class="fas fa-mouse-pointer"></i>
-                        <p>Context Menu Demo</p>
-                        <small>Screenshot Coming Soon</small>
-                    </div>
+                    <img src="{{ site.baseurl }}/assets/images/screenshots/context-menu.png"
+                         alt="Additional Context Menus - Context Menu Integration"
+                         class="hero-screenshot">
+                    <p class="hero-caption">Intelligent context menus for Node.js development</p>
                 </div>
             </div>
         </div>
@@ -136,7 +131,17 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Lightning Fast Performance</h3>
                 <p class="feature-description">
-                    esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (47.86KB), and instant development feedback.
+                    esbuild-powered compilation delivers 20x faster builds (~1s), optimized bundles (60KB core + 26KB lazy), and instant development feedback.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="feature-title">Optimized Bundle <span class="version-badge">v2.0</span></h3>
+                <p class="feature-description">
+                    60KB core bundle with lazy-loaded generator services. Essential features load instantly, rarely-used tools load on demand.
                 </p>
             </div>
 
@@ -146,7 +151,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Enterprise-Grade Reliability</h3>
                 <p class="feature-description">
-                    37 comprehensive tests with 100% success rate ensure production-ready reliability. Handles edge cases, stress scenarios, and extreme conditions gracefully.
+                    Production-ready reliability with robust error handling for edge cases, stress scenarios, and extreme conditions.
                 </p>
             </div>
 
@@ -156,7 +161,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Quality Assurance</h3>
                 <p class="feature-description">
-                    Rigorous testing covers error boundaries, performance stress, configuration edge cases, and complex file system scenarios for bulletproof operation.
+                    Rigorous code quality standards covering error boundaries, performance, configuration edge cases, and complex file system scenarios for bulletproof operation.
                 </p>
             </div>
         </div>
@@ -289,7 +294,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
         <div class="section-header">
             <h2 class="section-title">Services Documentation</h2>
             <p class="section-description">
-                Comprehensive documentation for all 10 services with API references, examples, and best practices.
+                Comprehensive documentation for all 11 services with API references, examples, and best practices.
             </p>
         </div>
         
@@ -351,18 +356,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     View Documentation <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
-            
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-random"></i>
-                </div>
-                <h3 class="service-name">Bulk File Renamer</h3>
-                <p class="service-desc">Bulk rename with imports</p>
-                <a href="/services/bulkFileRenamerService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-            
+
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-font"></i>
@@ -373,7 +367,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     View Documentation <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
-            
+
             <!-- Code Generation -->
             <div class="service-card">
                 <div class="service-icon">
@@ -385,7 +379,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     View Documentation <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
-            
+
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-list-ol"></i>
@@ -396,7 +390,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     View Documentation <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
-            
+
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-file-alt"></i>
@@ -407,7 +401,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     View Documentation <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
-            
+
             <!-- Project Operations -->
             <div class="service-card">
                 <div class="service-icon">
@@ -419,19 +413,8 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     View Documentation <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
-            
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-ban"></i>
-                </div>
-                <h3 class="service-name">Gitignore Service</h3>
-                <p class="service-desc">.gitignore management</p>
-                <a href="/services/gitignoreService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
         </div>
-        
+
         <div class="services-cta">
             <h3>Need More Help?</h3>
             <p>Explore detailed API documentation and examples for each service.</p>
@@ -441,6 +424,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
             </a>
         </div>
     </div>
+
 </section>
 
 <!-- CTA Section -->
@@ -449,7 +433,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
         <div class="cta-content">
             <h2 class="cta-title">Ready to Supercharge Your Code Operations?</h2>
             <p class="cta-description">
-                Join developers who trust Additional Context Menus for reliable, production-ready code operations. With 37 comprehensive tests and 100% success rate, it's built for enterprise development.
+                Join developers who trust Additional Context Menus for reliable, production-ready code operations built for enterprise development.
             </p>
             <div class="cta-buttons">
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">

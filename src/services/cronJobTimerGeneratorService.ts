@@ -1,5 +1,10 @@
 import * as vscode from 'vscode';
 
+import { AccessibilityService } from '../services/accessibilityService';
+import {
+  formatAccessibleInputPrompt,
+  getAccessibleQuickPickItem,
+} from '../utils/accessibilityHelper';
 import { Logger } from '../utils/logger';
 
 export interface CronSchedule {
@@ -47,9 +52,11 @@ export interface CronSchedule {
 export class CronJobTimerGeneratorService {
   private static instance: CronJobTimerGeneratorService | undefined;
   private logger: Logger;
+  private accessibilityService: AccessibilityService;
 
   private constructor() {
     this.logger = Logger.getInstance();
+    this.accessibilityService = AccessibilityService.getInstance();
   }
 
   public static getInstance(): CronJobTimerGeneratorService {
@@ -62,47 +69,119 @@ export class CronJobTimerGeneratorService {
 
     try {
       const schedules = [
-        { label: 'Every minute', expression: '* * * * *', description: 'Run every minute' },
-        {
-          label: 'Every hour',
-          expression: '0 * * * *',
-          description: 'Run at minute 0 of every hour',
-        },
-        {
-          label: 'Every day at midnight',
-          expression: '0 0 * * *',
-          description: 'Run at 00:00 daily',
-        },
-        { label: 'Every day at 9am', expression: '0 9 * * *', description: 'Run at 09:00 daily' },
-        {
-          label: 'Every Monday at 9am',
-          expression: '0 9 * * 1',
-          description: 'Run at 09:00 every Monday',
-        },
-        {
-          label: 'Every 1st of month at midnight',
-          expression: '0 0 1 * *',
-          description: 'Run at 00:00 on 1st of each month',
-        },
-        {
-          label: 'Every weekday at 9am',
-          expression: '0 9 * * 1-5',
-          description: 'Run at 09:00 Mon-Fri',
-        },
-        { label: 'Every 6 hours', expression: '0 */6 * * *', description: 'Run every 6 hours' },
-        { label: 'Custom schedule', expression: 'custom', description: 'Define your own schedule' },
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every minute',
+            expression: '* * * * *',
+            description: 'Run every minute',
+          },
+          {
+            ariaLabel:
+              'Every minute. Runs the cron job every minute. Expression: star space star space star space star space star',
+            ariaDescription: 'Run every minute',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every hour',
+            expression: '0 * * * *',
+            description: 'Run at minute 0 of every hour',
+          },
+          {
+            ariaLabel:
+              'Every hour. Runs at the start of each hour. Expression: 0 space star space star space star space star',
+            ariaDescription: 'Run at minute 0 of every hour',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every day at midnight',
+            expression: '0 0 * * *',
+            description: 'Run at 00:00 daily',
+          },
+          {
+            ariaLabel:
+              'Every day at midnight. Runs daily at 00:00. Expression: 0 space 0 space star space star space star',
+            ariaDescription: 'Run at 00:00 daily',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every day at 9am',
+            expression: '0 9 * * *',
+            description: 'Run at 09:00 daily',
+          },
+          {
+            ariaLabel:
+              'Every day at 9am. Runs daily at 9:00 AM. Expression: 0 space 9 space star space star space star',
+            ariaDescription: 'Run at 09:00 daily',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every Monday at 9am',
+            expression: '0 9 * * 1',
+            description: 'Run at 09:00 every Monday',
+          },
+          {
+            ariaLabel:
+              'Every Monday at 9am. Runs weekly on Monday at 9:00 AM. Expression: 0 space 9 space star space star space 1',
+            ariaDescription: 'Run at 09:00 every Monday',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every 1st of month at midnight',
+            expression: '0 0 1 * *',
+            description: 'Run at 00:00 on 1st of each month',
+          },
+          {
+            ariaLabel:
+              'Every 1st of month at midnight. Runs monthly on the first day at midnight. Expression: 0 space 0 space 1 space star space star',
+            ariaDescription: 'Run at 00:00 on 1st of each month',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every weekday at 9am',
+            expression: '0 9 * * 1-5',
+            description: 'Run at 09:00 Mon-Fri',
+          },
+          {
+            ariaLabel:
+              'Every weekday at 9am. Runs Monday through Friday at 9:00 AM. Expression: 0 space 9 space star space star space 1 dash 5',
+            ariaDescription: 'Run at 09:00 Monday through Friday',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Every 6 hours',
+            expression: '0 */6 * * *',
+            description: 'Run every 6 hours',
+          },
+          {
+            ariaLabel:
+              'Every 6 hours. Runs every 6 hours. Expression: 0 space slash 6 space star space star space star',
+            ariaDescription: 'Run every 6 hours',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'Custom schedule',
+            expression: 'custom',
+            description: 'Define your own schedule',
+          },
+          {
+            ariaLabel:
+              'Custom schedule. Create your own cron expression by specifying minute, hour, day of month, month, and day of week',
+            ariaDescription: 'Define your own schedule',
+          },
+        ),
       ];
 
-      const selected = await vscode.window.showQuickPick(
-        schedules.map((s) => ({
-          label: s.label,
-          description: s.description,
-          expression: s.expression,
-        })),
-        {
-          placeHolder: 'Select a cron schedule',
-        },
-      );
+      const selected = await vscode.window.showQuickPick(schedules, {
+        placeHolder: 'Select a cron schedule',
+      });
 
       if (!selected) {
         return;
@@ -118,6 +197,10 @@ export class CronJobTimerGeneratorService {
         cronExpression = customExpression;
       } else {
         cronExpression = selected.expression;
+        await this.accessibilityService.announce(
+          `Selected schedule: ${selected.label}. Expression: ${cronExpression}`,
+          'normal',
+        );
       }
 
       if (!cronExpression) {
@@ -130,22 +213,23 @@ export class CronJobTimerGeneratorService {
       vscode.window.showErrorMessage(
         `Failed to generate cron expression: ${(error as Error).message}`,
       );
+      await this.accessibilityService.announceError('Generate Cron', (error as Error).message);
     }
   }
 
   private async promptForCustomSchedule(): Promise<string | undefined> {
     const minute = await vscode.window.showInputBox({
-      prompt: 'Minute (0-59, * for all)',
+      prompt: formatAccessibleInputPrompt('Minute', 'Enter 0-59 or star for all minutes'),
       placeHolder: '0',
       validateInput: (value) => {
         if (value === '*') {
-          return null;
+          return undefined;
         }
         const num = Number.parseInt(value);
         if (Number.isNaN(num) || num < 0 || num > 59) {
-          return 'Invalid minute (0-59)';
+          return 'Error: Invalid minute. Must be 0-59 or star';
         }
-        return null;
+        return undefined;
       },
     });
 
@@ -154,17 +238,17 @@ export class CronJobTimerGeneratorService {
     }
 
     const hour = await vscode.window.showInputBox({
-      prompt: 'Hour (0-23, * for all)',
+      prompt: formatAccessibleInputPrompt('Hour', 'Enter 0-23 or star for all hours'),
       placeHolder: '0',
       validateInput: (value) => {
         if (value === '*') {
-          return null;
+          return undefined;
         }
         const num = Number.parseInt(value);
         if (Number.isNaN(num) || num < 0 || num > 23) {
-          return 'Invalid hour (0-23)';
+          return 'Error: Invalid hour. Must be 0-23 or star';
         }
-        return null;
+        return undefined;
       },
     });
 
@@ -173,17 +257,17 @@ export class CronJobTimerGeneratorService {
     }
 
     const dayOfMonth = await vscode.window.showInputBox({
-      prompt: 'Day of month (1-31, * for all)',
+      prompt: formatAccessibleInputPrompt('Day of month', 'Enter 1-31 or star for all days'),
       placeHolder: '*',
       validateInput: (value) => {
         if (value === '*') {
-          return null;
+          return undefined;
         }
         const num = Number.parseInt(value);
         if (Number.isNaN(num) || num < 1 || num > 31) {
-          return 'Invalid day (1-31)';
+          return 'Error: Invalid day. Must be 1-31 or star';
         }
-        return null;
+        return undefined;
       },
     });
 
@@ -192,17 +276,17 @@ export class CronJobTimerGeneratorService {
     }
 
     const month = await vscode.window.showInputBox({
-      prompt: 'Month (1-12, * for all)',
+      prompt: formatAccessibleInputPrompt('Month', 'Enter 1-12 or star for all months'),
       placeHolder: '*',
       validateInput: (value) => {
         if (value === '*') {
-          return null;
+          return undefined;
         }
         const num = Number.parseInt(value);
         if (Number.isNaN(num) || num < 1 || num > 12) {
-          return 'Invalid month (1-12)';
+          return 'Error: Invalid month. Must be 1-12 or star';
         }
-        return null;
+        return undefined;
       },
     });
 
@@ -211,17 +295,20 @@ export class CronJobTimerGeneratorService {
     }
 
     const dayOfWeek = await vscode.window.showInputBox({
-      prompt: 'Day of week (0-6, 0=Sunday, * for all)',
+      prompt: formatAccessibleInputPrompt(
+        'Day of week',
+        'Enter 0-6 where 0 is Sunday, or star for all days',
+      ),
       placeHolder: '*',
       validateInput: (value) => {
         if (value === '*') {
-          return null;
+          return undefined;
         }
         const num = Number.parseInt(value);
         if (Number.isNaN(num) || num < 0 || num > 6) {
-          return 'Invalid day (0-6)';
+          return 'Error: Invalid day. Must be 0-6 or star';
         }
-        return null;
+        return undefined;
       },
     });
 
@@ -229,13 +316,20 @@ export class CronJobTimerGeneratorService {
       return undefined;
     }
 
-    return `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+    const cronExpression = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+    await this.accessibilityService.announce(
+      `Custom cron expression created: ${cronExpression}`,
+      'normal',
+    );
+
+    return cronExpression;
   }
 
   private async insertCronExpression(expression: string): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
       vscode.window.showErrorMessage('No active editor found');
+      await this.accessibilityService.announceError('Insert Cron', 'No active editor found');
       return;
     }
 
@@ -247,7 +341,14 @@ export class CronJobTimerGeneratorService {
       editBuilder.insert(position, `${comment}\n${code}\n`);
     });
 
-    vscode.window.showInformationMessage(`Inserted cron expression: ${expression}`);
+    const description = this.getCronDescription(expression);
+    vscode.window.showInformationMessage(
+      `Inserted cron expression: ${expression} - ${description}`,
+    );
+    await this.accessibilityService.announceSuccess(
+      'Insert Cron Expression',
+      `Expression ${expression} inserted: ${description}`,
+    );
     this.logger.info(`Cron expression inserted: ${expression}`);
   }
 

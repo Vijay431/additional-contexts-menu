@@ -56,7 +56,6 @@ specs/
 # Documentation & Content
 # ============================================
 blogs/
-docs/
 CLAUDE.md
 CHANGELOG_RELEASE.md
 TODO.md

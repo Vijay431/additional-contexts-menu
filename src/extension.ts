@@ -1,11 +1,15 @@
 import * as vscode from 'vscode';
 
+import { initializeContainer } from './di';
 import { ExtensionManager } from './managers/ExtensionManager';
 
 let extensionManager: ExtensionManager | undefined;
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   try {
+    // Initialize the DI container with all services
+    await initializeContainer(context);
+
     extensionManager = new ExtensionManager();
     await extensionManager.activate(context);
   } catch (error) {

@@ -1,5 +1,53 @@
 // TypeScript interfaces for the extension
 
+/**
+ * Re-export strongly-typed configuration types
+ */
+export type {
+  CopyCodeConfig,
+  SaveAllConfig,
+  TerminalConfig,
+  KeybindingsConfig,
+  AccessibilityConfig,
+  ExtensionConfiguration,
+  DEFAULT_CONFIG,
+  CONFIG_KEYS,
+} from './config';
+
+/**
+ * Legacy ExtensionConfig type for backward compatibility
+ * @deprecated Use ExtensionConfiguration from config.ts instead
+ */
+export interface ExtensionConfig {
+  enabled: boolean;
+  autoDetectProjects: boolean;
+  supportedExtensions: string[];
+  copyCode: {
+    insertionPoint: 'smart' | 'end' | 'beginning';
+    handleImports: 'merge' | 'duplicate' | 'skip';
+    preserveComments: boolean;
+  };
+  saveAll: {
+    showNotification: boolean;
+    skipReadOnly: boolean;
+  };
+  terminal: {
+    type: 'integrated' | 'external' | 'system-default';
+    externalTerminalCommand?: string;
+    openBehavior: 'parent-directory' | 'workspace-root' | 'current-directory';
+  };
+  keybindings: {
+    enabled: boolean;
+    showInMenu: boolean;
+  };
+  /** Accessibility configuration (added for backward compatibility) */
+  accessibility: {
+    verbosity: 'minimal' | 'normal' | 'verbose';
+    screenReaderMode: boolean;
+    keyboardNavigation: boolean;
+  };
+}
+
 export interface ProjectType {
   isNodeProject: boolean;
   frameworks: string[];
@@ -65,28 +113,4 @@ export interface FunctionInfo {
   isExported: boolean;
   hasDecorators: boolean;
   fullText: string;
-}
-
-export interface ExtensionConfig {
-  enabled: boolean;
-  autoDetectProjects: boolean;
-  supportedExtensions: string[];
-  copyCode: {
-    insertionPoint: 'smart' | 'end' | 'beginning';
-    handleImports: 'merge' | 'duplicate' | 'skip';
-    preserveComments: boolean;
-  };
-  saveAll: {
-    showNotification: boolean;
-    skipReadOnly: boolean;
-  };
-  terminal: {
-    type: 'integrated' | 'external' | 'system-default';
-    externalTerminalCommand?: string;
-    openBehavior: 'parent-directory' | 'workspace-root' | 'current-directory';
-  };
-  keybindings: {
-    enabled: boolean;
-    showInMenu: boolean;
-  };
 }

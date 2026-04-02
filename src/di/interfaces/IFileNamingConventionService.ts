@@ -1,0 +1,109 @@
+/**
+ * File Naming Convention Service Interface
+ *
+ * Defines the contract for file renaming operations based on naming conventions.
+ *
+ * @description
+ * The file naming convention service interface provides:
+ * - File name conversion between conventions
+ * - Interactive rename suggestion dialogs
+ * - Support for common naming conventions (kebab-case, camelCase, PascalCase)
+ * - Preview of rename operations
+ *
+ * @category Dependency Injection
+ * @category Interfaces
+ * @module di/interfaces/IFileNamingConventionService
+ */
+
+/**
+ * Supported naming conventions
+ */
+export type NamingConvention = 'kebab-case' | 'camelCase' | 'PascalCase' | 'snake_case';
+
+/**
+ * File naming suggestion with metadata
+ */
+export interface NamingSuggestion {
+  /** The suggested file name */
+  name: string;
+  /** The convention used to generate the name */
+  convention: NamingConvention;
+  /** Current file name for comparison */
+  current: string;
+  /** Whether this is the current name */
+  isCurrent: boolean;
+}
+
+/**
+ * File Naming Convention Service Interface
+ *
+ * All file naming convention operations must implement this interface.
+ * The service is responsible for converting file names between
+ * different naming conventions and showing rename suggestions.
+ */
+export interface IFileNamingConventionService {
+  /**
+   * Show rename suggestions for the current file
+   *
+   * Displays a quick pick dialog with file name suggestions
+   * in different naming conventions.
+   *
+   * @param convention - The naming convention to use for suggestions
+   * @returns Promise that resolves when dialog is shown
+   */
+  showRenameSuggestions(convention: NamingConvention): Promise<void>;
+
+  /**
+   * Convert a file name to a specific convention
+   *
+   * Takes a file name (with or without extension) and converts
+   * it to the specified naming convention.
+   *
+   * @param fileName - The file name to convert
+   * @param convention - The target naming convention
+   * @returns The converted file name (with extension preserved)
+   */
+  convertToConvention(fileName: string, convention: NamingConvention): string;
+
+  /**
+   * Get all naming convention suggestions for a file
+   *
+   * Returns file name suggestions in all supported conventions.
+   *
+   * @param fileName - The file name to convert
+   * @returns Array of naming suggestions
+   */
+  getSuggestions(fileName: string): NamingSuggestion[];
+
+  /**
+   * Detect the naming convention of a file name
+   *
+   * Analyzes a file name to determine which convention it follows.
+   *
+   * @param fileName - The file name to analyze
+   * @returns The detected naming convention
+   */
+  detectConvention(fileName: string): NamingConvention;
+
+  /**
+   * Parse a file name into words
+   *
+   * Splits a file name into its constituent words regardless
+   * of the original naming convention.
+   *
+   * @param fileName - The file name to parse (without extension)
+   * @returns Array of words extracted from the file name
+   */
+  parseFileName(fileName: string): string[];
+
+  /**
+   * Rename the current file to a new name
+   *
+   * Performs the actual file rename operation.
+   *
+   * @param currentPath - The current file path
+   * @param newName - The new file name
+   * @returns Promise that resolves when file is renamed
+   */
+  renameFile(currentPath: string, newName: string): Promise<void>;
+}

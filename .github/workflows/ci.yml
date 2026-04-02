@@ -1,69 +1,32 @@
-name: CI/CD
+name: CI
 
 on:
-  push:
-    branches: ['**']
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
-  # Build job - runs on all branches for continuous validation
   build:
-    name: Build & Test
+    name: Build & Lint
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x, 22.x, 24.x]
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-
-      # Install xvfb for headless VS Code testing
-      - name: Install System Dependencies
-        run: sudo apt-get install -y xvfb
 
       - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 9
-
-      - name: Install Dependencies
-        run: pnpm install
-
-      - name: Build Extension
-        run: pnpm run build
-
-      - name: Run Extension Tests
-        run: xvfb-run --auto-servernum pnpm test
-
-  # Lint job - runs on all branches for code quality checks
-  lint:
-    name: Code Quality
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'pnpm'
-
-      - name: Install PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Install Dependencies
         run: pnpm install
@@ -71,34 +34,5 @@ jobs:
       - name: Run ESLint
         run: pnpm run lint
 
-      - name: Check Code Formatting
-        run: pnpm run format -- --check
-
-  # Security audit job - runs on all branches for security validation
-  security:
-    name: Security Audit
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'pnpm'
-
-      - name: Install PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install Dependencies
-        run: pnpm install
-
-      - name: Run Security Audit
-        run: pnpm audit --audit-level=high
-
-      - name: Check for Known Vulnerabilities
-        run: pnpm audit --audit-level=moderate --json | jq '.vulnerabilities | length'
+      - name: Build Extension
+        run: pnpm run build

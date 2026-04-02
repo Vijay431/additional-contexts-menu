@@ -3,6 +3,8 @@ import * as path from 'path';
 
 import * as vscode from 'vscode';
 
+import { AccessibilityService } from '../services/accessibilityService';
+import { formatAccessibleInputPrompt } from '../utils/accessibilityHelper';
 import { Logger } from '../utils/logger';
 import { isSafeFilePath } from '../utils/pathValidator';
 
@@ -78,9 +80,11 @@ import { isSafeFilePath } from '../utils/pathValidator';
 export class EnvFileGeneratorService {
   private static instance: EnvFileGeneratorService | undefined;
   private logger: Logger;
+  private accessibilityService: AccessibilityService;
 
   private constructor() {
     this.logger = Logger.getInstance();
+    this.accessibilityService = AccessibilityService.getInstance();
   }
 
   public static getInstance(): EnvFileGeneratorService {
@@ -95,6 +99,10 @@ export class EnvFileGeneratorService {
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders || workspaceFolders.length === 0) {
         vscode.window.showErrorMessage('No workspace folder found');
+        await this.accessibilityService.announceError(
+          'Generate .env File',
+          'No workspace folder found',
+        );
         return;
       }
 
@@ -104,12 +112,20 @@ export class EnvFileGeneratorService {
       if (!isSafeFilePath(envExamplePath)) {
         this.logger.warn('Rejected unsafe .env.example path', { path: envExamplePath });
         vscode.window.showErrorMessage('Path to .env.example is not allowed.');
+        await this.accessibilityService.announceError(
+          'Generate .env File',
+          'Path to .env.example is not allowed',
+        );
         return;
       }
 
       const envExampleExists = await this.fileExists(envExamplePath);
       if (!envExampleExists) {
         vscode.window.showWarningMessage('.env.example file not found in workspace root.');
+        await this.accessibilityService.announce(
+          'Dot env example file not found in workspace root',
+          'minimal',
+        );
         return;
       }
 
@@ -128,6 +144,10 @@ export class EnvFileGeneratorService {
       });
 
       vscode.window.showInformationMessage(`Created ${envFileName} file successfully`);
+      await this.accessibilityService.announceSuccess(
+        'Generate .env File',
+        `Created ${envFileName} file successfully`,
+      );
       this.logger.info(`Generated ${envFileName} from .env.example`, {
         examplePath: envExamplePath,
         targetPath: envFilePath,
@@ -135,24 +155,36 @@ export class EnvFileGeneratorService {
     } catch (error) {
       this.logger.error('Error generating .env file', error);
       vscode.window.showErrorMessage(`Failed to generate .env file: ${(error as Error).message}`);
+      await this.accessibilityService.announceError('Generate .env File', (error as Error).message);
     }
   }
 
   private async promptForEnvFileName(): Promise<string | undefined> {
-    return await vscode.window.showInputBox({
-      prompt: 'Enter .env file name',
+    const prompt = formatAccessibleInputPrompt('Enter .env file name', 'Must start with a dot');
+
+    const envFileName = await vscode.window.showInputBox({
+      prompt,
       placeHolder: '.env',
       value: '.env',
       validateInput: (value) => {
         if (!value || value.trim().length === 0) {
-          return 'File name cannot be empty';
+          return 'Error: File name cannot be empty';
         }
         if (!value.startsWith('.')) {
-          return 'File name must start with a dot (.)';
+          return 'Error: File name must start with a dot';
         }
-        return null;
+        return undefined;
       },
     });
+
+    if (envFileName) {
+      await this.accessibilityService.announce(
+        `Environment file name set to ${envFileName}`,
+        'normal',
+      );
+    }
+
+    return envFileName;
   }
 
   private async fileExists(filePath: string): Promise<boolean> {

@@ -26,6 +26,7 @@ eslint*
 tsconfig*.json
 esbuild*
 .vscode-test.mjs
+.lintstagedrc
 
 # ============================================
 # VS Code Configuration & Workspaces
@@ -37,11 +38,11 @@ esbuild*
 .auto-claude/
 .automaker/
 .claude/
+.sisyphus
 
 # ============================================
 # Build Artifacts & Logs
 # ============================================
-dist/
 *.vsix
 debug.log
 
@@ -60,3 +61,4 @@ TODO.md
 IMPLEMENTATION_SUMMARY.md
 opencode.json
 .auto-claude-security.json
+DEVELOPER.md

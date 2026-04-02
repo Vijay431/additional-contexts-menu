@@ -1,7 +1,7 @@
 {
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
-  "description": "Enhanced right-click context menus for Node.js development - React, Angular, Express, Next.js, TypeScript & JavaScript with intelligent code operations.",
+  "description": "Supercharge your Node.js development with intelligent right-click menus. Extract functions, generate enums/env/cron, and refactor React/Angular/Express/Next.js code in seconds. Features AST-based detection, smart imports, and 60KB optimized bundle.",
   "version": "2.0.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
@@ -19,11 +19,41 @@
   },
   "homepage": "https://github.com/Vijay431/additional-contexts-menu#readme",
   "packageManager": "pnpm@9.15.0",
+  "marketplace": {
+    "screenshots": [
+      {
+        "path": "images/screenshots/copy-function.png",
+        "label": "Extract functions with intelligent import handling"
+      },
+      {
+        "path": "images/screenshots/copy-to-file.png",
+        "label": "Smart file discovery with framework-aware filtering"
+      },
+      {
+        "path": "images/screenshots/context-menu.png",
+        "label": "Complete context menu integration"
+      },
+      {
+        "path": "images/screenshots/enum-generator.png",
+        "label": "Generate enums from union types"
+      },
+      {
+        "path": "images/screenshots/terminal-integration.png",
+        "label": "Cross-platform terminal integration"
+      }
+    ],
+    "banner": "images/banner.png"
+  },
   "keywords": [
     "context",
     "menu",
+    "context-menu",
+    "right-click",
     "copy",
     "function",
+    "extract-function",
+    "move-function",
+    "code-refactoring",
     "react",
     "angular",
     "express",
@@ -31,9 +61,25 @@
     "typescript",
     "javascript",
     "nodejs",
-    "productivity"
+    "nodejs-development",
+    "productivity",
+    "developer-productivity",
+    "time-saver",
+    "refactoring",
+    "code-generation",
+    "developer-tools",
+    "extract",
+    "file-operations",
+    "import-management",
+    "vscode-extension",
+    "snippets",
+    "automation",
+    "ast"
   ],
   "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Snippets",
     "Other"
   ],
   "engines": {
@@ -41,7 +87,12 @@
     "vscode": "^1.108.1"
   },
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onCommand:additionalContextMenus.enable"
   ],
   "contributes": {
     "commands": [
@@ -120,6 +171,54 @@
         "title": "Rename File to Convention",
         "category": "Additional Context Menus",
         "icon": "$(edit)"
+      },
+      {
+        "command": "additionalContextMenus.openWalkthrough",
+        "title": "Open Walkthrough",
+        "category": "Additional Context Menus",
+        "icon": "$(book)"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "additionalContextMenus.gettingStarted",
+        "title": "Get Started with Additional Context Menus",
+        "description": "Discover how to supercharge your Node.js development workflow with intelligent right-click menus.",
+        "steps": [
+          {
+            "id": "additionalContextMenus.step.copyFunction",
+            "title": "Copy a Function",
+            "description": "Place your cursor inside any TypeScript or JavaScript function, then right-click and choose **Copy Function** to copy the entire function — including its imports — to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
+            "media": {
+              "markdown": "docs/walkthrough/copy-function.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.copyFunction"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.copyContentToFile",
+            "title": "Copy Content to Another File",
+            "description": "Select any code block, right-click, and choose **Copy Content to File** to copy the selection directly into another file in your project — with smart import merging.\n\n[Try it now](command:additionalContextMenus.copyContentToFile)",
+            "media": {
+              "markdown": "docs/walkthrough/copy-content-to-file.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.copyContentToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.openInTerminal",
+            "title": "Open in Terminal",
+            "description": "Right-click any file or folder and choose **Open in Terminal** to instantly open a terminal at that location — integrated or external, your choice.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
+            "media": {
+              "markdown": "docs/walkthrough/open-in-terminal.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.openInTerminal"
+            ]
+          }
+        ]
       }
     ],
     "configuration": {
@@ -128,12 +227,14 @@
         "additionalContextMenus.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable or disable Additional Context Menus extension"
+          "description": "Enable or disable Additional Context Menus extension",
+          "markdownDescription": "Enable or disable the **Additional Context Menus** extension.\n\n**Example:** Set to `false` to temporarily hide all context menu items without uninstalling the extension."
         },
         "additionalContextMenus.autoDetectProjects": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically detect Node.js projects for context menu visibility"
+          "description": "Automatically detect frameworks for informational purposes",
+          "markdownDescription": "Automatically detect Node.js frameworks (React, Angular, Express, Next.js) in the workspace for informational purposes.\n\n**Example:** When `true`, the extension identifies your framework and tailors context menu labels accordingly."
         },
         "additionalContextMenus.supportedExtensions": {
           "type": "array",
@@ -143,7 +244,8 @@
             ".js",
             ".jsx"
           ],
-          "description": "File extensions where context menus will be shown"
+          "description": "File extensions where context menus will be shown",
+          "markdownDescription": "List of file extensions for which context menu items are displayed.\n\n**Default:** `[\".ts\", \".tsx\", \".js\", \".jsx\"]`\n\n**Example:** Add `\".mts\"` or `\".cts\"` to support additional TypeScript module formats."
         },
         "additionalContextMenus.copyCode.insertionPoint": {
           "type": "string",
@@ -153,7 +255,8 @@
             "beginning"
           ],
           "default": "smart",
-          "description": "Where to insert copied code in target file"
+          "description": "Where to insert copied code in target file",
+          "markdownDescription": "Controls where copied code is inserted in the target file.\n\n- `smart` *(default)* — inserts after the last import statement, before the first export, or at the end\n- `end` — always appends to the bottom of the file\n- `beginning` — always inserts at the top of the file\n\n**Example:** Use `\"end\"` if you prefer all pasted code to appear at the bottom of the target file."
         },
         "additionalContextMenus.copyCode.handleImports": {
           "type": "string",
@@ -163,22 +266,26 @@
             "skip"
           ],
           "default": "merge",
-          "description": "How to handle import statements when copying code"
+          "description": "How to handle import statements when copying code",
+          "markdownDescription": "Determines how import statements are handled when copying code to a target file.\n\n- `merge` *(default)* — combines new imports with existing ones, avoiding duplicates\n- `duplicate` — copies imports as-is, even if they already exist in the target\n- `skip` — omits import statements entirely from the copied code\n\n**Example:** Use `\"skip\"` when copying utility functions that share imports already present in the target file."
         },
         "additionalContextMenus.copyCode.preserveComments": {
           "type": "boolean",
           "default": true,
-          "description": "Preserve comments when copying code"
+          "description": "Preserve comments when copying code",
+          "markdownDescription": "When `true`, JSDoc and inline comments are included when copying or moving code.\n\n**Example:** Set to `false` to strip all comments from copied code for a cleaner paste."
         },
         "additionalContextMenus.saveAll.showNotification": {
           "type": "boolean",
           "default": true,
-          "description": "Show notification after saving all files"
+          "description": "Show notification after saving all files",
+          "markdownDescription": "When `true`, a notification is shown in the bottom-right corner after the **Save All** command completes.\n\n**Example:** Set to `false` for a silent save-all experience."
         },
         "additionalContextMenus.saveAll.skipReadOnly": {
           "type": "boolean",
           "default": true,
-          "description": "Skip read-only files when saving all"
+          "description": "Skip read-only files when saving all",
+          "markdownDescription": "When `true`, read-only files are silently skipped during **Save All** instead of triggering an error.\n\n**Example:** Set to `false` if you want to be notified when a read-only file cannot be saved."
         },
         "additionalContextMenus.terminal.type": {
           "type": "string",
@@ -188,12 +295,14 @@
             "system-default"
           ],
           "default": "integrated",
-          "description": "Type of terminal to open when using 'Open in Terminal' command"
+          "description": "Type of terminal to open when using 'Open in Terminal' command",
+          "markdownDescription": "Selects which terminal is opened by the **Open in Terminal** command.\n\n- `integrated` *(default)* — opens VS Code's built-in terminal panel\n- `external` — launches the terminal defined in `#additionalContextMenus.terminal.externalTerminalCommand#`\n- `system-default` — uses the OS default terminal application\n\n**Example:** Use `\"external\"` with `externalTerminalCommand` set to `\"wt -d {{directory}}\"` to open Windows Terminal."
         },
         "additionalContextMenus.terminal.externalTerminalCommand": {
           "type": "string",
           "default": "",
-          "description": "Custom command for external terminal. Use {{directory}} as placeholder for directory path"
+          "description": "Custom command for external terminal. Use {{directory}} as placeholder for directory path",
+          "markdownDescription": "Custom shell command used when `#additionalContextMenus.terminal.type#` is set to `external`.\n\nUse `{{directory}}` as a placeholder for the target directory path.\n\n**Examples:**\n- macOS iTerm2: `open -a iTerm {{directory}}`\n- Windows Terminal: `wt -d {{directory}}`\n- GNOME Terminal: `gnome-terminal --working-directory={{directory}}`"
         },
         "additionalContextMenus.terminal.openBehavior": {
           "type": "string",
@@ -203,34 +312,93 @@
             "current-directory"
           ],
           "default": "parent-directory",
-          "description": "Which directory to open in terminal"
+          "description": "Which directory to open in terminal",
+          "markdownDescription": "Determines the working directory used when opening a terminal.\n\n- `parent-directory` *(default)* — opens the folder containing the right-clicked file\n- `workspace-root` — always opens the workspace root folder\n- `current-directory` — opens the directory of the currently active editor\n\n**Example:** Use `\"workspace-root\"` to always start terminals at the project root regardless of which file you right-clicked."
+        },
+        "additionalContextMenus.accessibility.verbosity": {
+          "type": "string",
+          "enum": [
+            "minimal",
+            "normal",
+            "verbose"
+          ],
+          "default": "normal",
+          "description": "Control verbosity of accessibility announcements for screen readers. Minimal: Only errors and critical operations. Normal: All operations (default). Verbose: Detailed progress and contextual information.",
+          "markdownDescription": "Controls how much information is announced to screen readers during extension operations.\n\n- `minimal` — only errors and critical operations are announced\n- `normal` *(default)* — all operations are announced\n- `verbose` — detailed progress and contextual information is announced\n\n**Example:** Use `\"minimal\"` to reduce screen reader noise during rapid copy/paste workflows.",
+          "enumDescriptions": [
+            "Only announce errors and critical operations",
+            "Announce all operations (recommended)",
+            "Announce detailed progress and contextual information"
+          ]
+        },
+        "additionalContextMenus.accessibility.screenReaderMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable enhanced screen reader support with additional announcements and ARIA labels",
+          "markdownDescription": "When `true`, enables enhanced screen reader support including additional ARIA labels and more descriptive announcements in Quick Pick dialogs.\n\n**Example:** Enable this setting when using NVDA, JAWS, or VoiceOver for a more accessible experience."
+        },
+        "additionalContextMenus.accessibility.keyboardNavigation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable enhanced keyboard navigation hints in Quick Pick dialogs",
+          "markdownDescription": "When `true`, Quick Pick dialogs display keyboard shortcut hints to help navigate options without a mouse.\n\n**Example:** Set to `false` if you prefer a cleaner Quick Pick UI without navigation hints."
         }
       }
     },
     "menus": {
+      "commandPalette": [
+        {
+          "command": "additionalContextMenus.copyFunction",
+          "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.copyFunctionToFile",
+          "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.moveFunctionToFile",
+          "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.copyContentToFile",
+          "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.moveContentToFile",
+          "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.generateEnum",
+          "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.generateCronTimer",
+          "when": "false"
+        }
+      ],
       "editor/context": [
         {
-          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyFunction",
           "group": "1_modification@1"
         },
         {
-          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyFunctionToFile",
           "group": "1_modification@1.1"
         },
         {
-          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isNodeProject && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.moveFunctionToFile",
           "group": "1_modification@1.2"
         },
         {
-          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyContentToFile",
           "group": "1_modification@2"
         },
         {
-          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && additionalContextMenus.isNodeProject",
+          "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.moveContentToFile",
           "group": "1_modification@3"
         },
@@ -240,9 +408,14 @@
           "group": "2_workspace@1"
         },
         {
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "command": "additionalContextMenus.generateEnum",
+          "group": "3_generation@1"
+        },
+        {
           "when": "editorTextFocus && additionalContextMenus.enabled",
-          "command": "additionalContextMenus.openInTerminal",
-          "group": "2_workspace@2"
+          "command": "additionalContextMenus.generateCronTimer",
+          "group": "3_generation@2"
         }
       ]
     },
@@ -291,7 +464,16 @@
       }
     ]
   },
+  "galleryBanner": {
+    "color": "#1e1e2e",
+    "theme": "dark"
+  },
   "vsce": {
+    "baseImageUrl": "./logo.png",
+    "dependencies": false,
+    "yarn": false
+  },
+  "ovsx": {
     "baseImageUrl": "./logo.png",
     "dependencies": false,
     "yarn": false
@@ -308,44 +490,25 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "lint-staged": "lint-staged",
-    "format": "prettier --write .",
-    "test": "rm -rf dist && pnpm run build && pnpm run create-minimal && tsc -p ./tsconfig.test.json && HEADLESS=true node ./dist/test/e2e/runE2ETest.js",
-    "test:all": "pnpm run lint && pnpm run build && pnpm run vscode:prepublish",
-    "test:full": "rm -rf dist && pnpm run build && tsc -p ./tsconfig.test.json && SKIP_OPTIMIZATION=true node ./dist/test/e2e/runE2ETest.js",
-    "test:minimal": "pnpm test",
-    "test:clean": "rm -rf .vscode-test/minimal-extension .vscode-test/user-data-isolated .vscode-test/user-data-dev",
-    "test:headless": "pnpm test",
-    "test:headless:full": "SKIP_OPTIMIZATION=true pnpm run test:full",
-    "test:ui": "HEADLESS=false pnpm test",
-    "test:ci": "HEADLESS=true SKIP_OPTIMIZATION=false pnpm test",
-    "create-minimal": "tsx scripts/create-minimal-extension.ts"
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
-    "@stylistic/eslint-plugin": "^5.7.1",
-    "@types/fs-extra": "^11.0.4",
-    "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.30",
     "@types/vscode": "^1.108.1",
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
-    "@typescript-eslint/parser": "^8.54.0",
-    "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
     "@vscode/vsce": "^3.7.1",
     "esbuild": "^0.25.12",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-mocha": "11.2.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-security": "^3.0.1",
-    "fast-glob": "^3.3.3",
-    "fs-extra": "^11.3.3",
-    "lint-staged": "^15.2.11",
-    "mocha": "^11.7.5",
-    "ovsx": "^0.10.8",
+    "lint-staged": "^16.4.0",
+    "ovsx": "^0.10.10",
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",

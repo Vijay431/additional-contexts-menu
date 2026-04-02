@@ -1,43 +1,68 @@
+import * as path from 'path';
+
 import * as vscode from 'vscode';
 
-import { CodeAnalysisService } from '../services/codeAnalysisService';
-import { ConfigurationService } from '../services/configurationService';
-import { CronJobTimerGeneratorService } from '../services/cronJobTimerGeneratorService';
-import { EnumGeneratorService } from '../services/enumGeneratorService';
-import { EnvFileGeneratorService } from '../services/envFileGeneratorService';
-import { FileDiscoveryService } from '../services/fileDiscoveryService';
-import { FileNamingConventionService } from '../services/fileNamingConventionService';
-import { FileSaveService } from '../services/fileSaveService';
-import { ProjectDetectionService } from '../services/projectDetectionService';
-import { TerminalService } from '../services/terminalService';
-import { Logger } from '../utils/logger';
+import { getService } from '../di/container';
+import type {
+  IAccessibilityService,
+  ICodeAnalysisService,
+  IConfigurationService,
+  IFileDiscoveryService,
+  IFileNamingConventionService,
+  IFileSaveService,
+  ILogger,
+  IProjectDetectionService,
+  ITerminalService,
+} from '../di/interfaces';
+import { TYPES } from '../di/types';
+import { getAccessibleQuickPickItem } from '../utils/accessibilityHelper';
 
+/**
+ * Context Menu Manager
+ *
+ * Manages context menu commands and their visibility based on project type
+ * and cursor position. Uses lazy loading via DI container for optimal bundle size.
+ *
+ * @category Managers
+ */
 export class ContextMenuManager {
-  private logger: Logger;
-  private configService: ConfigurationService;
-  private projectDetectionService: ProjectDetectionService;
-  private fileDiscoveryService: FileDiscoveryService;
-  private fileSaveService: FileSaveService;
-  private codeAnalysisService: CodeAnalysisService;
-  private terminalService: TerminalService;
-  private enumGeneratorService: EnumGeneratorService;
-  private envFileGeneratorService: EnvFileGeneratorService;
-  private cronJobTimerGeneratorService: CronJobTimerGeneratorService;
-  private fileNamingConventionService: FileNamingConventionService;
   private disposables: vscode.Disposable[] = [];
 
-  constructor() {
-    this.logger = Logger.getInstance();
-    this.configService = ConfigurationService.getInstance();
-    this.projectDetectionService = ProjectDetectionService.getInstance();
-    this.fileDiscoveryService = FileDiscoveryService.getInstance();
-    this.fileSaveService = FileSaveService.getInstance();
-    this.codeAnalysisService = CodeAnalysisService.getInstance();
-    this.terminalService = TerminalService.getInstance();
-    this.enumGeneratorService = EnumGeneratorService.getInstance();
-    this.envFileGeneratorService = EnvFileGeneratorService.getInstance();
-    this.cronJobTimerGeneratorService = CronJobTimerGeneratorService.getInstance();
-    this.fileNamingConventionService = FileNamingConventionService.getInstance();
+  // Lazy-loaded services via DI container
+  private get logger(): ILogger {
+    return getService<ILogger>(TYPES.Logger);
+  }
+
+  private get configService(): IConfigurationService {
+    return getService<IConfigurationService>(TYPES.ConfigurationService);
+  }
+
+  private get accessibilityService(): IAccessibilityService {
+    return getService<IAccessibilityService>(TYPES.AccessibilityService);
+  }
+
+  private get projectDetectionService(): IProjectDetectionService {
+    return getService<IProjectDetectionService>(TYPES.ProjectDetectionService);
+  }
+
+  private get fileDiscoveryService(): IFileDiscoveryService {
+    return getService<IFileDiscoveryService>(TYPES.FileDiscoveryService);
+  }
+
+  private get fileSaveService(): IFileSaveService {
+    return getService<IFileSaveService>(TYPES.FileSaveService);
+  }
+
+  private get codeAnalysisService(): ICodeAnalysisService {
+    return getService<ICodeAnalysisService>(TYPES.CodeAnalysisService);
+  }
+
+  private get terminalService(): ITerminalService {
+    return getService<ITerminalService>(TYPES.TerminalService);
+  }
+
+  private get fileNamingConventionService(): IFileNamingConventionService {
+    return getService<IFileNamingConventionService>(TYPES.FileNamingConventionService);
   }
 
   public async initialize(): Promise<void> {
@@ -136,6 +161,15 @@ export class ContextMenuManager {
         'additionalContextMenus.disableKeybindings',
         async () => await this.handleDisableKeybindings(),
       ),
+      vscode.commands.registerCommand('additionalContextMenus.generateEnum', () =>
+        this.handleGenerateEnum(),
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.generateEnvFile', () =>
+        this.handleGenerateEnvFile(),
+      ),
+      vscode.commands.registerCommand('additionalContextMenus.generateCronTimer', () =>
+        this.handleGenerateCronTimer(),
+      ),
     );
 
     this.logger.debug('Commands registered');
@@ -148,6 +182,7 @@ export class ContextMenuManager {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
         vscode.window.showErrorMessage('No active editor found');
+        await this.announceError('Copy Function', 'No active editor found');
         return;
       }
 
@@ -161,20 +196,27 @@ export class ContextMenuManager {
       );
 
       if (!functionInfo) {
-        vscode.window.showWarningMessage('No function found at cursor position');
+        const msg =
+          'No function found at cursor position. Place the cursor inside a function, arrow function, method, or class declaration and try again.';
+        vscode.window.showWarningMessage(msg);
+        await this.announce(msg, 'minimal');
         return;
       }
 
       // Copy function to clipboard
       await vscode.env.clipboard.writeText(functionInfo.fullText);
 
-      vscode.window.showInformationMessage(
-        `Copied ${functionInfo.type} '${functionInfo.name}' to clipboard`,
+      const message = `Copied ${functionInfo.type} '${functionInfo.name}' to clipboard`;
+      vscode.window.showInformationMessage(message);
+      await this.announceSuccess(
+        'Copy Function',
+        `Function '${functionInfo.name}' copied to clipboard`,
       );
       this.logger.info(`Function copied: ${functionInfo.name}`);
     } catch (error) {
       this.logger.error('Error in Copy Function command', error);
       vscode.window.showErrorMessage('Failed to copy function');
+      await this.announceError('Copy Function', 'Failed to copy function');
     }
   }
 
@@ -228,7 +270,11 @@ export class ContextMenuManager {
       this.logger.info(`Lines copied to: ${targetFilePath}`);
     } catch (error) {
       this.logger.error('Error in Copy Lines to File command', error);
-      vscode.window.showErrorMessage('Failed to copy lines to file');
+      const msg =
+        error instanceof Error
+          ? error.message
+          : `Failed to copy lines to file. Check file permissions and try again.`;
+      vscode.window.showErrorMessage(msg);
     }
   }
 
@@ -287,7 +333,11 @@ export class ContextMenuManager {
       this.logger.info(`Lines moved to: ${targetFilePath}`);
     } catch (error) {
       this.logger.error('Error in Move Lines to File command', error);
-      vscode.window.showErrorMessage('Failed to move lines to file');
+      const msg =
+        error instanceof Error
+          ? error.message
+          : `Failed to move lines to file. Check file permissions and try again.`;
+      vscode.window.showErrorMessage(msg);
     }
   }
 
@@ -333,6 +383,16 @@ export class ContextMenuManager {
       }
     } catch (error) {
       this.logger.error('Error copying code to target file', error);
+      const isPermissionError =
+        error instanceof Error &&
+        (error.message.includes('EACCES') ||
+          error.message.includes('EPERM') ||
+          error.message.includes('permission'));
+      if (isPermissionError) {
+        throw new Error(
+          `Permission denied writing to '${targetFilePath}'. Check that the file is not read-only and you have write access.`,
+        );
+      }
       throw error;
     }
   }
@@ -420,7 +480,9 @@ export class ContextMenuManager {
 
   private async handleDisable(): Promise<void> {
     await this.configService.updateConfiguration('enabled', false);
-    vscode.window.showInformationMessage('Additional Context Menus disabled');
+    vscode.window.showInformationMessage(
+      'Additional Context Menus disabled. To re-enable, run "Additional Context Menus: Enable" from the Command Palette.',
+    );
   }
 
   private async handleOpenInTerminal(): Promise<void> {
@@ -460,7 +522,9 @@ export class ContextMenuManager {
       );
 
       if (!functionInfo) {
-        vscode.window.showWarningMessage('No function found at cursor position');
+        vscode.window.showWarningMessage(
+          'No function found at cursor position. Place the cursor inside a function, arrow function, method, or class declaration and try again.',
+        );
         return;
       }
 
@@ -492,7 +556,11 @@ export class ContextMenuManager {
       this.logger.info(`Function copied: ${functionInfo.name} to ${targetFilePath}`);
     } catch (error) {
       this.logger.error('Error in Copy Function to File command', error);
-      vscode.window.showErrorMessage('Failed to copy function to file');
+      const msg =
+        error instanceof Error
+          ? error.message
+          : `Failed to copy function to file. Check file permissions and try again.`;
+      vscode.window.showErrorMessage(msg);
     }
   }
 
@@ -515,7 +583,9 @@ export class ContextMenuManager {
       );
 
       if (!functionInfo) {
-        vscode.window.showWarningMessage('No function found at cursor position');
+        vscode.window.showWarningMessage(
+          'No function found at cursor position. Place the cursor inside a function, arrow function, method, or class declaration and try again.',
+        );
         return;
       }
 
@@ -556,7 +626,11 @@ export class ContextMenuManager {
       this.logger.info(`Function moved: ${functionInfo.name} to ${targetFilePath}`);
     } catch (error) {
       this.logger.error('Error in Move Function to File command', error);
-      vscode.window.showErrorMessage('Failed to move function to file');
+      const msg =
+        error instanceof Error
+          ? error.message
+          : `Failed to move function to file. Check file permissions and try again.`;
+      vscode.window.showErrorMessage(msg);
     }
   }
 
@@ -604,12 +678,43 @@ export class ContextMenuManager {
     this.logger.info('Rename File Convention command triggered');
 
     try {
-      const conventions: (vscode.QuickPickItem & {
-        value: 'kebab-case' | 'camelCase' | 'PascalCase';
-      })[] = [
-        { label: 'kebab-case', description: 'my-component-name.ts', value: 'kebab-case' },
-        { label: 'camelCase', description: 'myComponentName.ts', value: 'camelCase' },
-        { label: 'PascalCase', description: 'MyComponentName.ts', value: 'PascalCase' },
+      const conventions = [
+        getAccessibleQuickPickItem(
+          {
+            label: 'kebab-case',
+            description: 'my-component-name.ts',
+            value: 'kebab-case' as const,
+          },
+          {
+            ariaLabel:
+              'Kebab case naming convention. Converts file names to lowercase with hyphens, like my-component-name.ts',
+            ariaDescription: 'Example: my-component-name.ts',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'camelCase',
+            description: 'myComponentName.ts',
+            value: 'camelCase' as const,
+          },
+          {
+            ariaLabel:
+              'Camel case naming convention. First word lowercase, subsequent words capitalized, like myComponentName.ts',
+            ariaDescription: 'Example: myComponentName.ts',
+          },
+        ),
+        getAccessibleQuickPickItem(
+          {
+            label: 'PascalCase',
+            description: 'MyComponentName.ts',
+            value: 'PascalCase' as const,
+          },
+          {
+            ariaLabel:
+              'Pascal case naming convention. All words capitalized, like MyComponentName.ts',
+            ariaDescription: 'Example: MyComponentName.ts',
+          },
+        ),
       ];
 
       const selected = await vscode.window.showQuickPick(conventions, {
@@ -620,12 +725,17 @@ export class ContextMenuManager {
         return;
       }
 
-      await this.fileNamingConventionService.showRenameSuggestions(selected.value);
+      await this.announce(`Selected ${selected.label} naming convention`, 'normal');
+      await this.fileNamingConventionService.showRenameSuggestions(
+        (selected as vscode.QuickPickItem & { value: 'kebab-case' | 'camelCase' | 'PascalCase' })
+          .value,
+      );
     } catch (error) {
       this.logger.error('Error in rename file convention', error);
       vscode.window.showErrorMessage(
         `Failed to show rename suggestions: ${(error as Error).message}`,
       );
+      await this.announceError('Rename File Convention', (error as Error).message);
     }
   }
 
@@ -741,6 +851,95 @@ export class ContextMenuManager {
     } catch (error) {
       this.logger.error('Error disabling keybindings', error);
       vscode.window.showErrorMessage('Failed to disable keybindings');
+    }
+  }
+
+  // Generator commands with lazy loading from separate bundle files
+  private async handleGenerateEnum(): Promise<void> {
+    this.logger.info('Generate Enum command triggered');
+    try {
+      // Load from lazy bundle at runtime
+      const extensionPath = vscode.extensions.getExtension('additionalContextMenus')?.extensionPath;
+      if (!extensionPath) {
+        throw new Error('Extension path not found');
+      }
+      const lazyPath = path.join(extensionPath, 'dist', 'lazy', 'enumGeneratorService.js');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, import/no-dynamic-require, security/detect-non-literal-require
+      const { EnumGeneratorService } = require(lazyPath);
+      const service = EnumGeneratorService.getInstance();
+      await service.generateEnumFromSelection();
+    } catch (error) {
+      this.logger.error('Error generating enum', error);
+      vscode.window.showErrorMessage(`Failed to generate enum: ${(error as Error).message}`);
+    }
+  }
+
+  private async handleGenerateEnvFile(): Promise<void> {
+    this.logger.info('Generate Env File command triggered');
+    try {
+      // Load from lazy bundle at runtime
+      const extensionPath = vscode.extensions.getExtension('additionalContextMenus')?.extensionPath;
+      if (!extensionPath) {
+        throw new Error('Extension path not found');
+      }
+      const lazyPath = path.join(extensionPath, 'dist', 'lazy', 'envFileGeneratorService.js');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, import/no-dynamic-require, security/detect-non-literal-require
+      const { EnvFileGeneratorService } = require(lazyPath);
+      const service = EnvFileGeneratorService.getInstance();
+      await service.generateEnvFile();
+    } catch (error) {
+      this.logger.error('Error generating env file', error);
+      vscode.window.showErrorMessage(`Failed to generate env file: ${(error as Error).message}`);
+    }
+  }
+
+  private async handleGenerateCronTimer(): Promise<void> {
+    this.logger.info('Generate Cron Timer command triggered');
+    try {
+      // Load from lazy bundle at runtime
+      const extensionPath = vscode.extensions.getExtension('additionalContextMenus')?.extensionPath;
+      if (!extensionPath) {
+        throw new Error('Extension path not found');
+      }
+      const lazyPath = path.join(extensionPath, 'dist', 'lazy', 'cronJobTimerGeneratorService.js');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, import/no-dynamic-require, security/detect-non-literal-require
+      const { CronJobTimerGeneratorService } = require(lazyPath);
+      const service = CronJobTimerGeneratorService.getInstance();
+      await service.generateCronExpression();
+    } catch (error) {
+      this.logger.error('Error generating cron timer', error);
+      vscode.window.showErrorMessage(`Failed to generate cron timer: ${(error as Error).message}`);
+    }
+  }
+
+  // Accessibility helper methods
+  private async announce(
+    message: string,
+    verbosity: 'minimal' | 'normal' | 'verbose' = 'normal',
+  ): Promise<void> {
+    if (this.isAccessibilityEnabled()) {
+      await this.accessibilityService.announce(message, verbosity);
+    }
+  }
+
+  private async announceSuccess(operation: string, detail: string): Promise<void> {
+    if (this.isAccessibilityEnabled()) {
+      await this.accessibilityService.announceSuccess(operation, detail);
+    }
+  }
+
+  private async announceError(operation: string, error: string): Promise<void> {
+    if (this.isAccessibilityEnabled()) {
+      await this.accessibilityService.announceError(operation, error);
+    }
+  }
+
+  private isAccessibilityEnabled(): boolean {
+    try {
+      const config = this.configService.getAccessibilityConfig();
+      return config.screenReaderMode === true;
+    } catch {
+      return false;
     }
   }
 

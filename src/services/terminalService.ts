@@ -2,6 +2,13 @@ import * as path from 'path';
 
 import * as vscode from 'vscode';
 
+import type { IConfigurationService } from '../di/interfaces/IConfigurationService';
+import type { ILogger } from '../di/interfaces/ILogger';
+import type {
+  ITerminalService,
+  TerminalType,
+  TerminalOpenBehavior,
+} from '../di/interfaces/ITerminalService';
 import { Logger } from '../utils/logger';
 
 import { ConfigurationService } from './configurationService';
@@ -25,37 +32,14 @@ import { ConfigurationService } from './configurationService';
  * - Custom terminal command support with templates
  * - Parent directory detection
  *
- * Terminal Types:
- * - integrated: VS Code's integrated terminal
- * - external: Custom external terminal command
- * - system-default: OS default terminal
- *
- * Open Behavior:
- * - parent-directory: Opens folder containing the file
- * - workspace-root: Opens project root directory
- * - current-directory: Opens exact file location
- *
- * Use Cases:
- * - Opening terminal in project directory
- * - Quick terminal access from editor
- * - Cross-platform terminal management
- * - Running build/test commands from terminal
- *
  * @example
- * // Get service instance
+ * ```typescript
+ * // Using DI (recommended)
+ * constructor(@inject(TYPES.TerminalService) private terminal: ITerminalService) {}
+ *
+ * // Using singleton (legacy)
  * const terminalService = TerminalService.getInstance();
- * await terminalService.initialize();
- *
- * // Open terminal for current file
- * await terminalService.openInTerminal('/path/to/file.ts');
- *
- * // Get configured terminal type
- * const type = terminalService.getTerminalType();
- * console.log(`Terminal type: ${type}`);
- *
- * // Get target directory
- * const targetDir = terminalService.getTargetDirectory('/project/src/file.ts');
- * console.log(`Will open: ${targetDir}`);
+ * ```
  *
  * @see ConfigurationService - Provides terminal configuration
  * @see ContextMenuManager - Uses this service for Open in Terminal
@@ -66,19 +50,39 @@ import { ConfigurationService } from './configurationService';
  * @author Vijay Gangatharan <vijayanand431@gmail.com>
  * @since 1.2.0
  */
-export class TerminalService {
+export class TerminalService implements ITerminalService {
   private static instance: TerminalService | undefined;
-  private logger: Logger;
-  private configService: ConfigurationService;
+  private logger: ILogger;
+  private configService: IConfigurationService;
 
-  private constructor() {
-    this.logger = Logger.getInstance();
-    this.configService = ConfigurationService.getInstance();
+  private constructor(logger: ILogger, configService: IConfigurationService) {
+    this.logger = logger;
+    this.configService = configService;
   }
 
+  /**
+   * Get the singleton instance (legacy pattern)
+   *
+   * @deprecated Use DI injection instead
+   */
   public static getInstance(): TerminalService {
-    TerminalService.instance ??= new TerminalService();
-    return TerminalService.instance;
+    return (
+      TerminalService.instance ??
+      new TerminalService(Logger.getInstance(), ConfigurationService.getInstance())
+    );
+  }
+
+  /**
+   * Create a new TerminalService instance (DI pattern)
+   *
+   * This method is used by the DI container.
+   *
+   * @param logger - The logger instance to use
+   * @param configService - The configuration service instance
+   * @returns A new TerminalService instance
+   */
+  public static create(logger: ILogger, configService: IConfigurationService): TerminalService {
+    return new TerminalService(logger, configService);
   }
 
   public async initialize(): Promise<void> {
@@ -309,9 +313,23 @@ export class TerminalService {
     return process.cwd();
   }
 
-  public getTerminalType(): 'integrated' | 'external' | 'system-default' {
+  public getTerminalType(): TerminalType {
     const config = this.configService.getConfiguration();
     return config.terminal.type;
+  }
+
+  public getOpenBehavior(): TerminalOpenBehavior {
+    const config = this.configService.getConfiguration();
+    return config.terminal.openBehavior;
+  }
+
+  public async executeCommand(command: string, directoryPath?: string): Promise<void> {
+    const terminal = vscode.window.createTerminal({
+      name: 'Command Execution',
+      cwd: directoryPath,
+    });
+    terminal.sendText(command);
+    terminal.show();
   }
 
   private async getExternalTerminalCommand(): Promise<string | undefined> {

@@ -4,10 +4,8 @@
 title: 'Additional Context Menus - VS Code Extension'
 email: vijayanand431@gmail.com
 description: >-
-  Enhanced right-click context menus for Node.js development with intelligent
-  code operations for React, Angular, Express, Next.js, TypeScript, and
-  JavaScript projects. Features AST-based function detection, smart import handling,
-  and enterprise-grade reliability with 331 comprehensive tests and 100% success rate.
+  Extract functions, generate enums/env/cron, refactor React components, and automate Node.js development
+  with intelligent right-click context menus. Supports React, Angular, Express, Next.js, TypeScript, and JavaScript.
 
 baseurl: '/additional-contexts-menu' # the subpath of your site, e.g. /blog
 url: 'https://vijay431.github.io' # the base hostname & protocol for your site
@@ -77,9 +75,10 @@ extension:
   marketplace_url: 'https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus'
   github_url: 'https://github.com/Vijay431/additional-contexts-menu'
   publisher: 'VijayGangatharan'
-  test_coverage: '331 tests'
+  test_coverage: '53 e2e tests'
   success_rate: '100%'
-  bundle_size: '47.86KB'
+  bundle_size: '60KB'
+  lazy_services: '26KB'
   build_time: '~1 second'
 
 # SEO and social
@@ -91,6 +90,12 @@ social:
   name: 'Vijay Gangatharan'
   links:
     - 'https://github.com/Vijay431'
+
+# SEO keywords
+seo:
+  keywords: 'vscode extension, refactoring tool, code generation, react tools, typescript tools, nodejs development, extract function, context menu, developer productivity'
+  og_title: 'Additional Context Menus - Smart Code Operations for VS Code'
+  og_description: 'Automate Node.js development with intelligent context menus. Extract functions, generate code, and refactor React components in one click.'
 
 # Analytics (uncomment and add your tracking ID)
 # google_analytics: UA-XXXXXXXXX-X

@@ -10,7 +10,6 @@ Thank you for your interest in contributing to Additional Context Menus! We welc
 - [Making Changes](#making-changes)
 - [Submitting Changes](#submitting-changes)
 - [Style Guidelines](#style-guidelines)
-- [Testing](#testing)
 - [Documentation](#documentation)
 - [Community](#community)
 
@@ -35,7 +34,6 @@ We welcome several types of contributions:
 - 🚀 **Feature Requests** - Suggest new functionality
 - 📝 **Documentation** - Improve or add documentation
 - 🔧 **Code Contributions** - Fix bugs or implement features
-- 🧪 **Testing** - Add or improve tests
 - 🎨 **Design** - Improve UI/UX or visual assets
 
 ## Development Setup
@@ -56,27 +54,17 @@ We welcome several types of contributions:
 pnpm install
 ```
 
-### 3. Development Commands
+### 3. Build and Verify
 
 ```bash
-# Compile TypeScript using esbuild
+# Build the extension (requires Node.js 20+)
 pnpm run build
 
-# Watch mode for development (esbuild --watch)
-pnpm run watch
-
-# Production build with optimizations
-pnpm run package
-
-# Run extension tests
-pnpm test
-
-# Run ESLint on src directory
+# Run ESLint — uses tsconfig.eslint.json for type-aware rules
 pnpm run lint
-
-# Format code using Prettier
-pnpm run format
 ```
+
+> **Note on `tsconfig.eslint.json`**: The project uses a dedicated `tsconfig.eslint.json` (extending `tsconfig.json`) for ESLint's type-aware rules. It includes `src/`, `scripts/`, and `esbuild.config.ts` with `noEmit: true` so linting never affects the production build output.
 
 ### 4. Launch Development Environment
 
@@ -84,17 +72,24 @@ pnpm run format
 2. Press `F5` to launch the Extension Development Host
 3. Test your changes in the new VS Code window
 
+### 5. Other Useful Commands
+
+```bash
+pnpm run watch      # Watch mode for active development
+pnpm run package    # Production build + VSIX packaging
+pnpm run format     # Format code with Prettier
+```
+
 ## Making Changes
 
-### Branch Naming
+### Branching Strategy
 
-Use descriptive branch names with prefixes:
+All contributions use feature branches off `main`. Branch names follow this convention:
 
 - `feature/` - New features
 - `fix/` - Bug fixes
 - `docs/` - Documentation changes
 - `refactor/` - Code refactoring
-- `test/` - Testing improvements
 
 Examples:
 
@@ -104,7 +99,7 @@ Examples:
 
 ### Commit Messages
 
-Follow conventional commit format:
+We use [Conventional Commits](https://www.conventionalcommits.org/) format:
 
 ```
 type(scope): description
@@ -121,7 +116,6 @@ Types:
 - `docs`: Documentation changes
 - `style`: Code style changes
 - `refactor`: Code refactoring
-- `test`: Testing changes
 - `chore`: Maintenance tasks
 
 Examples:
@@ -129,6 +123,39 @@ Examples:
 - `feat(context-menu): add copy function with AST parsing`
 - `fix(code-analysis): handle edge case for arrow functions`
 - `docs(readme): update installation instructions`
+
+### Pull Request Process
+
+1. Create a branch from `main` using the naming convention above
+2. Make your changes with conventional commits
+3. Run `pnpm run lint && pnpm run build` to verify everything passes
+4. Open a PR against `main` with a clear title and description
+5. The CI workflow will automatically run lint and build checks
+6. At least one maintainer review is required before merging
+7. PRs are squash-merged to keep the history clean
+
+### CI Workflows
+
+The repository includes three GitHub Actions workflows:
+
+**`.github/workflows/ci.yml`** — runs on every PR targeting `main`:
+
+- Installs dependencies with `pnpm install`
+- Runs `pnpm run lint` and `pnpm run build`
+- PRs must pass this workflow before merging
+
+**`.github/workflows/release.yml`** — runs on `v*` tag pushes:
+
+- Builds the VSIX and verifies its contents
+- Publishes to VS Code Marketplace (uses `VSCE_PAT` secret)
+- Publishes to Open VSX Registry (uses `OVSX_PAT` secret)
+- Deploys the documentation site to GitHub Pages
+
+**`.github/workflows/security.yml`** — runs on every push and weekly:
+
+- `pnpm audit --audit-level=high` for dependency vulnerabilities
+- GitHub CodeQL static analysis on TypeScript source
+- Dependency review on PRs via `actions/dependency-review-action`
 
 ### Code Architecture
 
@@ -161,41 +188,13 @@ When making changes:
 
 ## Submitting Changes
 
-### Pull Request Process
+See the [Pull Request Process](#pull-request-process) section above for the full workflow. Before opening a PR, run:
 
-1. **Update Documentation** - Update README.md, CHANGELOG.md, and code comments
-2. **Add Tests** - Include tests for new functionality
-3. **Run Quality Checks**:
-
-   ```bash
-   pnpm run lint
-   pnpm run format
-   pnpm test
-   pnpm run build
-   ```
-
-4. **Create Pull Request** with:
-   - Clear title and description
-   - Link to related issues
-   - Screenshots (if UI changes)
-   - Testing instructions
-
-### Pull Request Template
-
-When creating a PR, please fill out the template with:
-
-- **Description** - What changes were made and why
-- **Type of Change** - Feature, bug fix, documentation, etc.
-- **Testing** - How was this tested
-- **Checklist** - Ensure all requirements are met
-
-### Review Process
-
-1. **Automated Checks** - CI/CD pipeline must pass
-2. **Code Review** - At least one maintainer review
-3. **Testing** - Functional testing on multiple platforms
-4. **Documentation** - Ensure docs are updated
-5. **Merge** - Squash and merge after approval
+```bash
+pnpm run lint
+pnpm run format
+pnpm run build
+```
 
 ## Style Guidelines
 
@@ -210,7 +209,7 @@ When creating a PR, please fill out the template with:
 ### Code Formatting
 
 - Use **Prettier** for consistent formatting
-- Run `npm run format` before committing
+- Run `pnpm run format` before committing
 - Use **2 spaces** for indentation
 - Use **semicolons** at line endings
 - Use **single quotes** for strings
@@ -221,52 +220,6 @@ When creating a PR, please fill out the template with:
 - Use **descriptive file names**
 - Group related functionality
 - Follow the existing **directory structure**
-
-## Testing
-
-### Test Types
-
-1. **Unit Tests** - Test individual functions and components
-2. **Integration Tests** - Test component interactions
-3. **E2E Tests** - Test complete user workflows
-
-### Running Tests
-
-```bash
-# Run all tests
-pnpm test
-
-# Compile and run tests
-pnpm run test:watch
-
-# Compile test files
-pnpm run build-tests
-```
-
-### Writing Tests
-
-- Use **descriptive test names**
-- Follow **AAA pattern** (Arrange, Act, Assert)
-- Test **both success and error cases**
-- Mock external dependencies
-- Update tests when changing functionality
-
-### Test Structure
-
-```typescript
-suite('Component Name', () => {
-  test('should do something when condition is met', () => {
-    // Arrange
-    const input = 'test input';
-
-    // Act
-    const result = functionUnderTest(input);
-
-    // Assert
-    assert.strictEqual(result, expectedOutput);
-  });
-});
-```
 
 ## Documentation
 

@@ -1,25 +1,48 @@
 import * as ts from 'typescript';
 import * as vscode from 'vscode';
 
-import { FunctionInfo } from '../types/extension';
+import type {
+  ICodeAnalysisService,
+  FunctionInfo,
+  ImportInfo,
+} from '../di/interfaces/ICodeAnalysisService';
+import type { ILogger } from '../di/interfaces/ILogger';
+import { FunctionInfo as OldFunctionInfo } from '../types/extension';
 import { Logger } from '../utils/logger';
 
-export class CodeAnalysisService {
+export class CodeAnalysisService implements ICodeAnalysisService {
   private static instance: CodeAnalysisService | undefined = undefined;
-  private logger: Logger;
+  private logger: ILogger;
 
-  private constructor() {
-    this.logger = Logger.getInstance();
+  private constructor(logger: ILogger) {
+    this.logger = logger;
   }
 
+  /**
+   * Get the singleton instance (legacy pattern)
+   *
+   * @deprecated Use DI injection instead
+   */
   public static getInstance(): CodeAnalysisService {
-    return CodeAnalysisService.instance ?? new CodeAnalysisService();
+    return CodeAnalysisService.instance ?? new CodeAnalysisService(Logger.getInstance());
+  }
+
+  /**
+   * Create a new CodeAnalysisService instance (DI pattern)
+   *
+   * This method is used by the DI container.
+   *
+   * @param logger - The logger instance to use
+   * @returns A new CodeAnalysisService instance
+   */
+  public static create(logger: ILogger): CodeAnalysisService {
+    return new CodeAnalysisService(logger);
   }
 
   public async findFunctionAtPosition(
     document: vscode.TextDocument,
     position: vscode.Position,
-  ): Promise<FunctionInfo | null> {
+  ): Promise<FunctionInfo | undefined> {
     try {
       const text = document.getText();
       const sourceFile = this.parseSourceFile(text, document.fileName);
@@ -39,11 +62,34 @@ export class CodeAnalysisService {
         return functionInfo;
       }
 
-      return null;
+      return undefined;
     } catch (error) {
       this.logger.error('Error finding function at position', error);
-      return null;
+      return undefined;
     }
+  }
+
+  /**
+   * @deprecated For backward compatibility, use findFunctionAtPosition instead
+   */
+  public async findFunctionAtPositionOld(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+  ): Promise<OldFunctionInfo | null> {
+    const result = await this.findFunctionAtPosition(document, position);
+    if (!result) return null;
+
+    return {
+      name: result.name,
+      startLine: result.startLine,
+      endLine: result.endLine,
+      startColumn: 0,
+      endColumn: 0,
+      type: result.type === 'arrow' ? 'arrow' : result.type === 'method' ? 'method' : 'function',
+      isExported: false,
+      hasDecorators: false,
+      fullText: result.fullText,
+    };
   }
 
   private parseSourceFile(code: string, fileName: string): ts.SourceFile {
@@ -104,11 +150,13 @@ export class CodeAnalysisService {
       type,
       startLine: startPos.line + 1,
       endLine: endPos.line + 1,
-      startColumn: startPos.character,
-      endColumn: endPos.character,
-      isExported: this.isExported(node),
-      hasDecorators: this.hasDecorators(node),
       fullText: sourceFile.text.substring(node.pos, node.end),
+      isAsync:
+        ts.canHaveModifiers(node) &&
+        ((node.modifiers as ts.ModifiersArray | undefined)?.some(
+          (m) => m.kind === ts.SyntaxKind.AsyncKeyword,
+        ) ??
+          false),
     };
   }
 
@@ -191,19 +239,44 @@ export class CodeAnalysisService {
     return false;
   }
 
-  public extractImports(code: string, _languageId: string): string[] {
-    const imports: string[] = [];
+  public extractImports(code: string, _languageId: string): ImportInfo[] {
+    const imports: ImportInfo[] = [];
 
     try {
       const sourceFile = this.parseSourceFile(code, 'temp.ts');
 
       sourceFile.statements.forEach((statement) => {
         if (ts.isImportDeclaration(statement)) {
-          const importText = sourceFile.text.substring(
-            statement.getStart(sourceFile),
-            statement.end,
-          );
-          imports.push(importText.trim());
+          const fullText = sourceFile.text.substring(statement.getStart(sourceFile), statement.end);
+
+          // Determine import type
+          let type: ImportInfo['type'] = 'side-effect';
+          const moduleLiteral = statement.moduleSpecifier.getText();
+
+          if (statement.importClause) {
+            if (ts.isNamespaceImport(statement.importClause)) {
+              type = 'namespace';
+            } else if (statement.importClause.name) {
+              type = 'default';
+            } else if (
+              statement.importClause.bindings &&
+              ts.isNamedImports(statement.importClause.bindings)
+            ) {
+              type = 'named';
+            }
+          }
+
+          imports.push({
+            fullText: fullText.trim(),
+            type,
+            module: moduleLiteral.replace(/['"]/g, ''),
+            names:
+              type === 'named' || type === 'namespace'
+                ? (statement.importClause?.bindings
+                    ?.filter(ts.isImportSpecifier)
+                    .map((s) => s.name.getText()) ?? [])
+                : undefined,
+          });
         }
       });
     } catch (error) {
@@ -211,5 +284,38 @@ export class CodeAnalysisService {
     }
 
     return imports;
+  }
+
+  public containsPattern(code: string, pattern: RegExp): boolean {
+    return pattern.test(code);
+  }
+
+  public extractAllFunctions(document: vscode.TextDocument): FunctionInfo[] {
+    const functions: FunctionInfo[] = [];
+    const text = document.getText();
+    const sourceFile = this.parseSourceFile(text, document.fileName);
+
+    const visit = (node: ts.Node) => {
+      if (this.isFunctionNode(node)) {
+        const func = node as ts.FunctionLike;
+        functions.push(this.extractFunctionInfo(func, sourceFile));
+      }
+      ts.forEachChild(node, visit);
+    };
+
+    visit(sourceFile);
+    return functions;
+  }
+
+  public getLanguagePatterns(_languageId: string): {
+    functionPattern: RegExp;
+    importPattern: RegExp;
+    exportPattern: RegExp;
+  } {
+    return {
+      functionPattern: /function\s+\w+|=>\s*{|class\s+\w+/g,
+      importPattern: /import\s+.*from\s+['"](.+)['"]/g,
+      exportPattern: /\bexport\b\s*/,
+    };
   }
 }

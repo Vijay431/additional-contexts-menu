@@ -5,7 +5,36 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-01-31
+## [2.0.0] - 2026-04-02
+
+### Added
+
+- **🎓 First-Run Walkthrough**: New `WalkthroughManager` displays a VS Code built-in Walkthrough on first install, introducing Copy Function, Copy Content to File, and Open in Terminal features
+- **🔄 Open Walkthrough Command**: `Additional Context Menus: Open Walkthrough` command allows users to reopen the walkthrough at any time via the Command Palette
+- **📦 No package.json Detection**: Informational message shown when no `package.json` is found in the workspace, explaining that Node.js project detection is required
+- **🛡️ ConfigValidator**: New utility validates all string-enum configuration values on activation and logs warnings with the invalid key, received value, and fallback for any unrecognized setting
+- **🔌 ICommandHandler Interface**: New `src/commands/ICommandHandler.ts` exports a formal `ICommandHandler` interface that all command handler classes now explicitly implement
+- **📂 Barrel Index Files**: Added `index.ts` barrel files to `src/commands/`, `src/managers/`, `src/utils/`, and `src/types/` for clean module imports
+- **⚙️ tsconfig.eslint.json**: Dedicated TypeScript config for ESLint type-aware rules, decoupling lint configuration from the production build
+- **🤖 CI Workflow** (`.github/workflows/ci.yml`): Runs `pnpm run lint` and `pnpm run build` on every PR targeting `main`
+- **🚀 Release Workflow** (`.github/workflows/release.yml`): Automated publishing to VS Code Marketplace and Open VSX Registry on `v*` tag pushes, with VSIX verification and GitHub Pages deployment
+- **🔒 Security Workflow** (`.github/workflows/security.yml`): Runs `pnpm audit`, GitHub CodeQL analysis, and dependency review on every push and weekly schedule
+- **🏷️ Open VSX Badge**: README now includes an Open VSX Registry badge linking to the extension listing
+- **📝 markdownDescription**: All settings in `package.json` now include `markdownDescription` fields with usage examples for the VS Code Settings UI
+- **🎨 galleryBanner**: Added `galleryBanner` field to `package.json` for VS Code Marketplace branding
+- **📦 ovsx Config**: Added `ovsx` configuration section to `package.json` mirroring the `vsce` section
+
+### Changed
+
+- **💬 Improved Error Messages**: Function-not-found warning now lists supported function types and suggests checking cursor placement; file operation errors now include the target file path; disable confirmation now includes the re-enable command name
+- **🔧 ESLint Config**: Updated `eslint.config.mjs` to use `tsconfig.eslint.json` instead of `tsconfig.json` for the `src/` configuration block
+- **📚 CONTRIBUTING.md**: Restructured with a dedicated Branching Strategy section covering feature branches, Conventional Commits format, PR process, and CI workflow documentation; setup process consolidated to 5 steps with `tsconfig.eslint.json` reference
+- **📖 DEVELOPER.md**: Commands table updated to note `tsconfig.eslint.json` usage in lint; project structure updated to include `tsconfig.eslint.json`; new ESLint Type-Aware Rules section added
+- **📋 docs/developer-guides/adding-commands.md**: Updated to reference `ICommandHandler` interface and demonstrate barrel `index.ts` imports
+
+### Fixed
+
+- **🔐 Dependency Vulnerabilities**: Upgraded `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`, `@stylistic/eslint-plugin`, `@vscode/vsce`, `ovsx`, `lint-staged`, `mocha`, and `@vscode/test-cli` to resolve 33 high/moderate vulnerabilities in dev tooling (none affected the shipped VSIX)
 
 ### Changed
 
@@ -31,6 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **📏 Rename File Convention**: Automatic file renaming to common naming conventions
   - Support for kebab-case, camelCase, and PascalCase
   - Quick action to suggest and apply file name transformations
+- **💰 FUNDING.yml**: Added GitHub Sponsors configuration for community support
+- **📋 NOTICE.md**: Added third-party software attribution document for transparency
 - **⌨️ Keyboard Shortcuts**: Complete keybinding system with 7 shortcuts for core commands
   - `Ctrl+Alt+Shift+F` - Copy Function
   - `Ctrl+Alt+Shift+E` - Copy Function to File
@@ -122,13 +153,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced security audit workflows with latest tooling versions
   - Verified TypeScript and esbuild configurations for broad Node.js compatibility
 - **🔧 Build Process Modernization**: Upgraded entire build workflow
-  - **Primary build command**: `npm run build` now uses tsx with TypeScript config execution
+  - **Primary build command**: `pnpm run build` now uses tsx with TypeScript config execution
   - **Updated CI workflows**: All automation now uses 'build' script instead of 'compile'
   - **Development workflow**: Enhanced watch mode and production build processes
   - **TypeScript-first scripting**: All build scripts use direct TypeScript execution via tsx
 - **📊 Performance Improvements**: Build system optimization
   - Enhanced build performance reporting with detailed metrics and target verification
-  - Bundle size monitoring with automatic target compliance checking (50KB target)
+  - Bundle size monitoring with lazy-loaded services (60KB core + 26KB lazy)
   - Improved development experience with faster builds and better error reporting
 
 ### Technical Improvements
@@ -148,8 +179,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **📋 Build Command Migration**: Systematic update from 'compile' to 'build' across all documentation and workflows
 - **🏗️ Configuration Architecture**: Modular esbuild configuration with environment-specific optimizations
 - **🔄 CI/CD Pipeline Updates**: GitHub Actions workflows updated for improved build consistency
-
-## [Unreleased]
 
 ## [1.1.0] - 2025-07-24
 

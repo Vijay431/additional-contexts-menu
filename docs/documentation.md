@@ -224,8 +224,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
 
 cd additional-contexts-menu
 pnpm install
-pnpm run build
-pnpm test</code></pre>
+pnpm run build</code></pre>
 
 </div>
 </div>
@@ -237,7 +236,6 @@ pnpm test</code></pre>
                     <li><code>pnpm run watch</code> - Development watch mode</li>
                     <li><code>pnpm run package</code> - Production build</li>
                     <li><code>pnpm run lint</code> - ESLint code quality check</li>
-                    <li><code>pnpm test</code> - Run comprehensive test suite</li>
                 </ul>
             </div>
 
@@ -287,9 +285,8 @@ pnpm test</code></pre>
             <div class="perf-stat">
                 <h3>Quality Metrics</h3>
                 <ul>
-                    <li><strong>Test Coverage:</strong> 37+ comprehensive tests</li>
-                    <li><strong>Success Rate:</strong> 100% (37/37 passing)</li>
                     <li><strong>Code Quality:</strong> ESLint compliant with TypeScript strict mode</li>
+                    <li><strong>Cross-Platform:</strong> Windows, macOS, and Linux support</li>
                 </ul>
             </div>
         </div>

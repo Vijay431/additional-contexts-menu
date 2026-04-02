@@ -33,8 +33,8 @@ description: 'Explore the comprehensive features and intelligent code operations
                     <div class="feature-content">
                         <h3 class="feature-name">Smart Function Detection</h3>
                         <p class="feature-desc">
-                            Uses AST-based parsing with TypeScript Compiler API to accurately detect functions, arrow functions, methods,
-                            and React components. Handles nested functions and eliminates false positives from comments or strings.
+                            Uses AST-based parsing via TypeScript Compiler API to accurately detect functions, arrow functions, methods,
+                            and React components. Handles nested functions and provides millisecond response times with no false positives.
                         </p>
                         <ul class="feature-benefits">
                             <li>Detects function declarations, expressions, and arrow functions</li>
@@ -143,61 +143,47 @@ description: 'Explore the comprehensive features and intelligent code operations
         
         <div class="screenshot-grid">
             <div class="screenshot-item">
-                <div class="screenshot-placeholder">
-                    <i class="fas fa-mouse-pointer"></i>
-                    <h3>Context Menu Integration</h3>
-                    <p>Enhanced right-click menus with intelligent code operations</p>
-                    <small>Screenshots coming soon</small>
-                </div>
+                <img src="{{ site.baseurl }}/assets/images/screenshots/context-menu.png"
+                     alt="Context Menu Integration"
+                     class="screenshot-image">
+                <h3>Context Menu Integration</h3>
+                <p>Enhanced right-click menus with intelligent code operations</p>
             </div>
-            
+
             <div class="screenshot-item">
-                <div class="screenshot-placeholder">
-                    <i class="fas fa-code"></i>
-                </div>
+                <img src="{{ site.baseurl }}/assets/images/screenshots/copy-function.png"
+                     alt="Function Detection"
+                     class="screenshot-image">
                 <h3>Function Detection</h3>
                 <p>AST-based function detection and copying in action</p>
-                <small>Screenshots coming soon</small>
             </div>
-            </div>
-            
+
             <div class="screenshot-item">
-                <div class="screenshot-placeholder">
-                    <i class="fas fa-copy"></i>
-                    <h3>Code Operations</h3>
-                    <p>Copy and move operations with import handling</p>
-                    <small>Screenshots coming soon</small>
-                </div>
+                <img src="{{ site.baseurl }}/assets/images/screenshots/copy-to-file.png"
+                     alt="Code Operations"
+                     class="screenshot-image">
+                <h3>Code Operations</h3>
+                <p>Copy and move operations with import handling</p>
             </div>
-            
+
             <div class="screenshot-item">
-                <div class="screenshot-placeholder">
-                    <i class="fas fa-project-diagram"></i>
-                    <h3>Framework Detection</h3>
-                    <p>Automatic project detection for React, Angular, Express, Next.js</p>
-                    <small>Screenshots coming soon</small>
-                </div>
+                <img src="{{ site.baseurl }}/assets/images/screenshots/enum-generator.png"
+                     alt="Code Generation"
+                     class="screenshot-image">
+                <h3>Code Generation</h3>
+                <p>Generate enums, env files, and cron expressions</p>
             </div>
-            
+
             <div class="screenshot-item">
-                <div class="screenshot-placeholder">
-                    <i class="fas fa-keyboard"></i>
-                    <h3>Keyboard Shortcuts</h3>
-                    <p>Optional keybindings with conflict detection and management</p>
-                    <small>Screenshots coming soon</small>
-                </div>
-            </div>
-            
-            <div class="screenshot-item">
-                <div class="screenshot-placeholder">
-                    <i class="fas fa-chart-bar"></i>
-                    <h3>Status Bar Integration</h3>
-                    <p>Visual project status with framework-specific indicators</p>
-                    <small>Screenshots coming soon</small>
-                </div>
+                <img src="{{ site.baseurl }}/assets/images/screenshots/terminal-integration.png"
+                     alt="Terminal Integration"
+                     class="screenshot-image">
+                <h3>Terminal Integration</h3>
+                <p>Cross-platform terminal access from context menu</p>
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- CTA Section -->

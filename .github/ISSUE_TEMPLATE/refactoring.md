@@ -93,20 +93,6 @@ Which features might be affected by this refactoring?
 
 ## Testing
 
-**Existing Tests:**
-Are there existing tests for this code?
-
-- [ ] Yes, tests exist
-- [ ] No, tests need to be added
-- [ ] Partial test coverage
-
-**Test Changes:**
-What test changes are needed?
-
-- [ ] Update existing tests
-- [ ] Add new tests
-- [ ] No test changes needed
-
 ## Technical Considerations
 
 **Dependencies:**
