@@ -1,7 +1,7 @@
 ---
-layout: page
-title: Adding Commands
-nav_order: 1
+layout: default
+title: 'Adding Commands'
+description: 'Developer guide for adding new commands to Additional Context Menus using the command handler pattern.'
 ---
 
 # Adding Commands

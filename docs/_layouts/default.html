@@ -53,6 +53,9 @@
     {% seo %}
   </head>
   <body>
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Navigation Header -->
     <header class="site-header">
       <nav class="navbar">
@@ -74,7 +77,7 @@
               <li class="nav-item">
                 <a
                   href="{{ site.baseurl }}{{ nav.url }}"
-                  class="nav-link {% if page.url == nav.url %}active{% endif %}"
+                  class="nav-link {% if page.url == nav.url or page.url contains nav.url and nav.url != '/' %}active{% endif %}"
                 >
                   {{ nav.title }}
                 </a>
@@ -93,7 +96,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">{{ content }}</main>
+    <main class="main-content" id="main-content">{{ content }}</main>
 
     <!-- Footer -->
     <footer class="site-footer">
@@ -120,6 +123,9 @@
               </li>
               <li>
                 <a href="{{ site.extension.github_url }}/releases" target="_blank">Releases</a>
+              </li>
+              <li>
+                <a href="{{ site.baseurl }}/developer">Developer Guide</a>
               </li>
             </ul>
           </div>

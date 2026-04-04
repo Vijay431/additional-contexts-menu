@@ -1,7 +1,7 @@
 ---
-layout: page
-title: Command Handlers
-nav_order: 3
+layout: default
+title: 'Command Handlers'
+description: 'Architecture guide for command handlers in Additional Context Menus - focused, testable command pattern.'
 ---
 
 # Command Handlers

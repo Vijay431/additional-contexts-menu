@@ -1,7 +1,7 @@
 ---
-layout: page
-title: Dependency Injection
-nav_order: 1
+layout: default
+title: 'Dependency Injection'
+description: 'Dependency injection architecture and service lifecycle management for Additional Context Menus.'
 ---
 
 # Dependency Injection

@@ -1,3 +1,9 @@
+---
+layout: default
+title: 'Developer Guide'
+description: 'Complete guide for setting up, developing, and contributing to the Additional Context Menus VS Code extension.'
+---
+
 # Developer Guide
 
 Complete guide for setting up, developing, and contributing to the Additional Context Menus VS Code extension.
@@ -512,18 +518,6 @@ git push origin v2.1.0
 | `v2.1.0-rc.1`   | `--pre-release` | ❌ skipped   | pre-release    |
 | `v2.1.0-beta.1` | `--pre-release` | ❌ skipped   | pre-release    |
 
-### Creating Release Notes
-
-When publishing, provide release notes:
-
-```bash
-# Publish with notes
-vsce publish minor --message "Release notes go here"
-
-# Or use CHANGELOG.md content
-vsce publish minor --message "$(cat CHANGELOG.md | head -50)"
-```
-
 ---
 
 ## Project Structure
@@ -541,11 +535,12 @@ additional-contexts-menu/
 │   ├── launch.json             # Debug configurations
 │   ├── settings.json           # Workspace settings
 │   └── extensions.json          # Recommended extensions
-├── docs/                       # Documentation (Jekyll)
+├── docs/                       # Documentation (Jekyll / GitHub Pages)
 │   ├── _config.yml             # Jekyll configuration
 │   ├── _layouts/               # Jekyll layouts
 │   ├── assets/                 # Documentation assets
 │   ├── features.md             # Feature documentation
+│   ├── developer.md            # This file
 │   ├── services/               # Service API docs
 │   ├── installation.md         # Installation guide
 │   └── documentation.md        # Technical documentation
@@ -578,7 +573,6 @@ additional-contexts-menu/
 ├── CHANGELOG.md                # Version history
 ├── CODE_OF_CONDUCT.md          # Code of conduct
 ├── CONTRIBUTING.md             # Contribution guidelines
-├── DEVELOPER.md                # This file
 ├── esbuild.config.ts           # esbuild configuration
 ├── eslint.config.mjs           # ESLint flat config
 ├── LICENSE                     # MIT License
@@ -595,7 +589,7 @@ additional-contexts-menu/
 
 #### Entry Point
 
-**`src/extension.ts`** - Extension activation and deactivation
+**[`src/extension.ts`](https://github.com/Vijay431/additional-contexts-menu/blob/main/src/extension.ts)** - Extension activation and deactivation
 
 ```typescript
 // Extension entry point
@@ -614,35 +608,29 @@ export function deactivate() {
 
 #### Managers
 
-**`src/managers/extensionManager.ts`** - Coordinates lifecycle and initialization
+**[`src/managers/extensionManager.ts`](https://github.com/Vijay431/additional-contexts-menu/blob/main/src/managers/extensionManager.ts)** - Coordinates lifecycle and initialization
 
-**`src/managers/contextMenuManager.ts`** - Handles command registration and menu visibility
+**[`src/managers/contextMenuManager.ts`](https://github.com/Vijay431/additional-contexts-menu/blob/main/src/managers/contextMenuManager.ts)** - Handles command registration and menu visibility
 
 #### Services (Singleton Pattern)
 
 The extension uses 11 specialized services, all following singleton pattern:
 
-| Service                        | Purpose                                                    | Key Methods                                    |
-| ------------------------------ | ---------------------------------------------------------- | ---------------------------------------------- |
-| `ProjectDetectionService`      | Detects Node.js projects and frameworks                    | `detectProject()`, `getFramework()`            |
-| `ConfigurationService`         | Manages extension settings                                 | `getSetting()`, `updateSetting()`              |
-| `FileDiscoveryService`         | Discovers compatible files                                 | `findFiles()`, `filterFiles()`                 |
-| `CodeAnalysisService`          | AST-based function detection using TypeScript Compiler API | `findFunctionAtPosition()`, `extractImports()` |
-| `FileSaveService`              | Enhanced save operations                                   | `saveAll()`, `saveWithProgress()`              |
-| `TerminalService`              | Cross-platform terminal integration                        | `openTerminal()`, `executeCommand()`           |
-| `EnumGeneratorService`         | Generates enums from union types                           | `generateEnum()`                               |
-| `EnvFileGeneratorService`      | Creates .env files                                         | `generateEnvFile()`                            |
-| `CronJobTimerGeneratorService` | Generates cron expressions                                 | `generateCronExpression()`                     |
-| `FileNamingConventionService`  | Enforces naming conventions                                | `checkConvention()`, `renameFile()`            |
-| `AccessibilityService`         | Screen reader support and announcements                    | `announce()`, `announceSuccess()`              |
+| Service                        | Purpose                                 | Key Methods                                    |
+| ------------------------------ | --------------------------------------- | ---------------------------------------------- |
+| `ProjectDetectionService`      | Detects Node.js projects and frameworks | `detectProject()`, `getFramework()`            |
+| `ConfigurationService`         | Manages extension settings              | `getSetting()`, `updateSetting()`              |
+| `FileDiscoveryService`         | Discovers compatible files              | `findFiles()`, `filterFiles()`                 |
+| `CodeAnalysisService`          | Regex-based function detection          | `findFunctionAtPosition()`, `extractImports()` |
+| `FileSaveService`              | Enhanced save operations                | `saveAll()`, `saveWithProgress()`              |
+| `TerminalService`              | Cross-platform terminal integration     | `openTerminal()`, `executeCommand()`           |
+| `EnumGeneratorService`         | Generates enums from union types        | `generateEnum()`                               |
+| `EnvFileGeneratorService`      | Creates .env files                      | `generateEnvFile()`                            |
+| `CronJobTimerGeneratorService` | Generates cron expressions              | `generateCronExpression()`                     |
+| `FileNamingConventionService`  | Enforces naming conventions             | `checkConvention()`, `renameFile()`            |
+| `AccessibilityService`         | Screen reader support and announcements | `announce()`, `announceSuccess()`              |
 
-#### Types
-
-**`src/types/extension.ts`** - Shared TypeScript type definitions
-
-#### Utilities
-
-**`src/utils/logger.ts`** - Logging utility for debugging
+See [Services Documentation]({{ site.baseurl }}/services/) for full API references.
 
 ---
 
@@ -739,10 +727,6 @@ pnpm run build
 # Run: Additional Context Menus: Debug Context Variables
 ```
 
-#### Tests Failing
-
-If commands aren't executing as expected, check the Output panel for errors and verify command registration in `package.json`.
-
 ---
 
 ## Troubleshooting
@@ -785,23 +769,6 @@ tsx esbuild.config.ts --verbose
 # Check for syntax errors in source files
 ```
 
-#### Test Issues
-
-**Problem:** Tests fail with "Extension not found"
-
-**Solutions:**
-
-```bash
-# Ensure extension is built
-pnpm run build
-
-# Clean and rebuild
-rm -rf dist
-pnpm run build
-```
-
-**Problem:** Build is slow or taking longer than expected — use watch mode (`pnpm run watch`) for active development.
-
 #### Extension Development Host Issues
 
 **Problem:** Extension doesn't load in Development Host
@@ -826,10 +793,6 @@ pnpm run build
 
 #### Node.js Version Mismatch
 
-**Problem:** "Node version not supported"
-
-**Solutions:**
-
 ```bash
 # Check Node version
 node --version
@@ -837,45 +800,16 @@ node --version
 # Install correct version using nvm
 nvm install 20
 nvm use 20
-
-# Or using n
-sudo n 20
 ```
 
 #### pnpm Version Issues
 
-**Problem:** "pnpm version not matching package manager field"
-
-**Solutions:**
-
 ```bash
-# Check pnpm version
-pnpm --version
-
 # Install required version
 npm install -g pnpm@9.15.0
 
 # Verify installation
 pnpm --version
-```
-
-### Performance Issues
-
-#### Slow Build Times
-
-**Problem:** Build takes longer than expected
-
-**Solutions:**
-
-```bash
-# Use watch mode for development
-pnpm run watch
-
-# Check for large files that slow compilation
-# Optimize imports and remove unused code
-
-# Use esbuild's incremental builds
-# Watch mode provides this automatically
 ```
 
 ### Getting Help
@@ -884,12 +818,7 @@ If you encounter issues not covered here:
 
 1. **Check existing issues:** https://github.com/Vijay431/additional-contexts-menu/issues
 2. **Search discussions:** https://github.com/Vijay431/additional-contexts-menu/discussions
-3. **Create a new issue** with:
-   - OS and Node.js version
-   - Steps to reproduce
-   - Expected vs actual behavior
-   - Output from relevant commands
-   - Screenshots if applicable
+3. **Create a new issue** with OS, Node.js version, steps to reproduce, and command output
 4. **Contact maintainer:** vijayanand431@gmail.com
 
 ---
@@ -916,14 +845,8 @@ If you encounter issues not covered here:
 - **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus
 - **Issues:** https://github.com/Vijay431/additional-contexts-menu/issues
 - **Discussions:** https://github.com/Vijay431/additional-contexts-menu/discussions
-- **Wiki:** https://github.com/Vijay431/additional-contexts-menu/wiki
-- **Documentation Site:** https://vijaygangatharan.github.io/additional-contexts-menu/
-
-### Community Resources
-
-- **VS Code Extensions Slack:** #vscode-extensions channel
-- **Stack Overflow:** Tag with `vscode-extension`
-- **Reddit:** r/vscode
+- **Services Documentation:** [{{ site.baseurl }}/services/]({{ site.baseurl }}/services/)
+- **Contributing Guide:** https://github.com/Vijay431/additional-contexts-menu/blob/main/CONTRIBUTING.md
 
 ### Related Tools
 
@@ -932,22 +855,11 @@ If you encounter issues not covered here:
 
 ---
 
-## Conclusion
+## Next Steps
 
-This developer guide provides comprehensive information for setting up, developing, testing, and contributing to the Additional Context Menus extension.
-
-### Key Takeaways:
-
-1. **Use pnpm** for dependency management
-2. **Watch mode** (`pnpm run watch`) for active development
-3. **Quality checks** before committing (lint, format, build)
-4. **Follow conventions** in code style and structure
-5. **Ask for help** when needed - community is here to support you
-
-### Next Steps:
-
-- Read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines
-- Explore [source code](src/) to understand architecture
-- Check [service documentation](docs/services/) for API references
+- Read [CONTRIBUTING.md](https://github.com/Vijay431/additional-contexts-menu/blob/main/CONTRIBUTING.md) for contribution guidelines
+- Explore [source code](https://github.com/Vijay431/additional-contexts-menu/tree/main/src) to understand architecture
+- Check [Services Documentation]({{ site.baseurl }}/services/) for API references
+- See [Adding Commands]({{ site.baseurl }}/developer-guides/adding-commands) for extending the extension
 
 Happy coding! 🚀

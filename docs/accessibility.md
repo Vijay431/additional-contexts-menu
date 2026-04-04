@@ -1,4 +1,8 @@
-# Accessibility Guide
+---
+layout: default
+title: 'Accessibility Guide'
+description: 'Accessibility features, screen reader support, and keyboard navigation guide for Additional Context Menus VS Code extension.'
+---
 
 ## Overview
 

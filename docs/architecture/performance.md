@@ -1,7 +1,7 @@
 ---
-layout: page
-title: Performance
-nav_order: 5
+layout: default
+title: 'Performance Optimization'
+description: 'Performance optimizations, caching strategy, and metrics for Additional Context Menus VS Code extension.'
 ---
 
 # Performance Optimization

@@ -1,7 +1,7 @@
 ---
-layout: page
-title: Type Safety
-nav_order: 4
+layout: default
+title: 'Type Safety & Configuration'
+description: 'Strongly-typed configuration and runtime validation architecture for Additional Context Menus.'
 ---
 
 # Type Safety & Configuration
