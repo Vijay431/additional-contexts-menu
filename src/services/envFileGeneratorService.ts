@@ -106,7 +106,10 @@ export class EnvFileGeneratorService {
         return;
       }
 
-      const workspaceRoot = workspaceFolders[0].uri.fsPath;
+      const activeEditor = vscode.window.activeTextEditor;
+      const activeFolder =
+        activeEditor && vscode.workspace.getWorkspaceFolder(activeEditor.document.uri);
+      const workspaceRoot = (activeFolder ?? workspaceFolders[0]).uri.fsPath;
       const envExamplePath = path.join(workspaceRoot, '.env.example');
 
       if (!isSafeFilePath(envExamplePath)) {
@@ -135,7 +138,10 @@ export class EnvFileGeneratorService {
       }
 
       const envFilePath = path.join(workspaceRoot, envFileName);
-      await this.generateEnvFileFromExample(envExamplePath, envFilePath);
+      const generated = await this.generateEnvFileFromExample(envExamplePath, envFilePath);
+      if (!generated) {
+        return;
+      }
 
       const envUri = vscode.Uri.file(envFilePath);
       await vscode.window.showTextDocument(envUri, {
@@ -196,7 +202,10 @@ export class EnvFileGeneratorService {
     }
   }
 
-  private async generateEnvFileFromExample(examplePath: string, targetPath: string): Promise<void> {
+  private async generateEnvFileFromExample(
+    examplePath: string,
+    targetPath: string,
+  ): Promise<boolean> {
     const resolvedExamplePath = path.resolve(examplePath);
     const resolvedTargetPath = path.resolve(targetPath);
     if (!isSafeFilePath(resolvedExamplePath) || !isSafeFilePath(resolvedTargetPath)) {
@@ -210,7 +219,7 @@ export class EnvFileGeneratorService {
         'Cancel',
       );
       if (choice !== 'Overwrite') {
-        return;
+        return false;
       }
     }
 
@@ -221,6 +230,7 @@ export class EnvFileGeneratorService {
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- path validated by isSafeFilePath()
     await fs.writeFile(resolvedTargetPath, envContent, 'utf-8');
+    return true;
   }
 
   private parseEnvVariables(content: string): { name: string }[] {

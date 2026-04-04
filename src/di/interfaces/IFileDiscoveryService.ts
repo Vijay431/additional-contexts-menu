@@ -101,6 +101,16 @@ export interface IFileDiscoveryService {
   clearCache(): void;
 
   /**
+   * Get cache hit/miss statistics
+   */
+  getCacheStats(): { size: number; hits: number; misses: number; hitRate: number };
+
+  /**
+   * Release resources held by the service
+   */
+  dispose(): void;
+
+  /**
    * Listen for file system changes
    *
    * Sets up watchers for file system changes that affect

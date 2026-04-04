@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  pull_request:
     branches:
       - '**'
   schedule:
@@ -186,7 +187,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.setup.outputs.tag }}
 
       - name: Install PNPM
         uses: pnpm/action-setup@v4
@@ -333,9 +334,9 @@ jobs:
       - name: Publish to VS Code Marketplace
         run: |
           if [ "${{ needs.setup.outputs.is_prerelease }}" = "true" ]; then
-            pnpm vsce publish --packagePath *.vsix --pre-release
+            pnpm dlx vsce publish --packagePath *.vsix --pre-release
           else
-            pnpm vsce publish --packagePath *.vsix
+            pnpm dlx vsce publish --packagePath *.vsix
           fi
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
@@ -354,9 +355,9 @@ jobs:
       - name: Publish to Open VSX Registry
         run: |
           if [ "${{ needs.setup.outputs.is_prerelease }}" = "true" ]; then
-            pnpm ovsx publish *.vsix --pre-release
+            pnpm dlx ovsx publish *.vsix --pre-release
           else
-            pnpm ovsx publish *.vsix
+            pnpm dlx ovsx publish *.vsix
           fi
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}

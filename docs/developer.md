@@ -52,16 +52,16 @@ pnpm run watch
 
 | Tool        | Version                     | Purpose             | Installation                                            |
 | ----------- | --------------------------- | ------------------- | ------------------------------------------------------- |
-| **Node.js** | >= 20.0.0 (16-24 supported) | JavaScript runtime  | [nodejs.org](https://nodejs.org/)                       |
-| **pnpm**    | 9.15.0                      | Package manager     | `npm install -g pnpm`                                   |
+| **Node.js** | >= 20.0.0 (20-24 supported) | JavaScript runtime  | [nodejs.org](https://nodejs.org/)                       |
+| **pnpm**    | 10.x.x                      | Package manager     | `npm install -g pnpm`                                   |
 | **Git**     | Latest                      | Version control     | [git-scm.com](https://git-scm.com/)                     |
-| **VS Code** | >= 1.102.0                  | IDE for development | [code.visualstudio.com](https://code.visualstudio.com/) |
+| **VS Code** | >= 1.108.0                  | IDE for development | [code.visualstudio.com](https://code.visualstudio.com/) |
 
 ### Verify Installation
 
 ```bash
 node --version    # Should show v20.x.x or higher
-pnpm --version    # Should show 9.15.0
+pnpm --version    # Should show 10.x.x or higher
 git --version     # Should show git version 2.x.x or higher
 code --version    # Should show VS Code version
 ```

@@ -66,10 +66,11 @@ export class TerminalService implements ITerminalService {
    * @deprecated Use DI injection instead
    */
   public static getInstance(): TerminalService {
-    return (
-      TerminalService.instance ??
-      new TerminalService(Logger.getInstance(), ConfigurationService.getInstance())
+    TerminalService.instance ??= new TerminalService(
+      Logger.getInstance(),
+      ConfigurationService.getInstance(),
     );
+    return TerminalService.instance;
   }
 
   /**
@@ -240,15 +241,12 @@ export class TerminalService implements ITerminalService {
   }
 
   private async findAvailableTerminal(terminals: string[]): Promise<string | null> {
+    const { execFile } = await import('child_process');
     for (const terminal of terminals) {
       try {
-        const testTerminal = vscode.window.createTerminal({
-          name: 'Terminal Test',
+        await new Promise<void>((resolve, reject) => {
+          execFile('which', [terminal], (error) => (error ? reject(error) : resolve()));
         });
-
-        testTerminal.sendText(`which ${terminal}`);
-        testTerminal.dispose();
-
         return terminal;
       } catch {
         continue;

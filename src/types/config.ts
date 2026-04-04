@@ -50,7 +50,7 @@ export interface TerminalConfig {
   /** Type of terminal to open */
   type: 'integrated' | 'external' | 'system-default';
   /** Custom command for external terminal */
-  externalTerminalCommand: string;
+  externalTerminalCommand?: string;
   /** Which directory to open in terminal */
   openBehavior: 'parent-directory' | 'workspace-root' | 'current-directory';
 }

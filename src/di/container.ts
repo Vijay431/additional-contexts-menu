@@ -242,9 +242,15 @@ export async function initializeContainer(context: {
   // Services that depend on Logger, Configuration, and ProjectDetection
   container.registerSingleton<IFileDiscoveryService>(TYPES.FileDiscoveryService, () => {
     const logger = container.get<ILogger>(TYPES.Logger);
+    const accessibilityService = container.get<IAccessibilityService>(TYPES.AccessibilityService);
     const configService = container.get<IConfigurationService>(TYPES.ConfigurationService);
     const projectDetection = container.get<IProjectDetectionService>(TYPES.ProjectDetectionService);
-    return FileDiscoveryService.create(logger, configService, projectDetection);
+    return FileDiscoveryService.create(
+      logger,
+      accessibilityService,
+      configService,
+      projectDetection,
+    );
   });
 
   // Services with other dependencies
