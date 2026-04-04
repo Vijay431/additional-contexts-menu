@@ -2,6 +2,7 @@ language: en-US
 
 reviews:
   profile: chill
+  show_prompt: true
   request_changes_workflow: false
   collapse_walkthrough: false
   auto_review:
