@@ -424,38 +424,15 @@ pnpm run package
 
 1. Create a [Visual Studio Marketplace](https://marketplace.visualstudio.com/) account
 2. Create a [Personal Access Token](https://dev.azure.com/_usersSettings/tokens) with Marketplace scope
-3. Add to token to `.vsce/publish` file or use `vsce login`
-
-#### Publish Command
-
-```bash
-# Login to VS Code Marketplace
-vsce login VijayGangatharan
-
-# Publish the extension
-pnpm run publish
-
-# Or use vsce directly
-vsce publish
-
-# Publish specific version
-vsce publish patch    # Increments patch version (x.x.1)
-vsce publish minor     # Increments minor version (x.1.0)
-vsce publish major     # Increments major version (1.0.0)
-```
+3. Store the token as `VSCE_PAT` in the repository's GitHub Actions secrets
 
 #### Publishing to Open VSX Registry
 
-```bash
-# Package for Open VSX
-pnpm run package:openvsx
+1. Create an account on [open-vsx.org](https://open-vsx.org/)
+2. Generate an access token
+3. Store the token as `OVSX_PAT` in the repository's GitHub Actions secrets
 
-# Publish to Open VSX registry
-pnpm run publish:openvsx
-
-# Open VSX is the open-source extension registry
-# Compatible with VSCodium and other VS Code forks
-```
+Both marketplaces are published automatically by the CI pipeline when a `v*` tag is pushed. Manual publishing is not required.
 
 ### Version Management
 
@@ -491,20 +468,49 @@ Edit `CHANGELOG.md` with release notes:
 
 #### Tag Release
 
+The CI pipeline handles publishing automatically when a tag is pushed. You do not need to run `pnpm run publish` manually.
+
 ```bash
-# Commit changes
+# Commit version bump and changelog
 git add package.json CHANGELOG.md
 git commit -m "chore(release): bump version to 2.0.1"
 
-# Create tag
+# Push the commit to main first
+git push origin main
+
+# Create and push the tag — this triggers the full release pipeline
 git tag v2.0.1
-
-# Push tag
 git push origin v2.0.1
-
-# Publish extension
-pnpm run publish
 ```
+
+**What happens after pushing a tag:**
+
+1. `setup` — extracts version and detects if it's a pre-release
+2. `release-build` — checks out `main` branch and builds the VSIX
+3. `verifier` — validates the VSIX contents
+4. `publish-vscode` + `publish-openvsx` — publish to both marketplaces (with `--pre-release` flag for pre-release tags)
+5. `deploy-pages` — deploys documentation (stable releases only)
+6. `create-release` — creates a GitHub Release with the VSIX attached
+
+#### Pre-release Versions
+
+Tags containing `-rc`, `-next`, `-beta`, or `-alpha` are treated as pre-releases:
+
+```bash
+# Pre-release tag — publishes with --pre-release flag, skips pages deployment
+git tag v2.1.0-rc.1
+git push origin v2.1.0-rc.1
+
+# Stable release tag — full publish + pages deployment
+git tag v2.1.0
+git push origin v2.1.0
+```
+
+| Tag             | Marketplace     | GitHub Pages | GitHub Release |
+| --------------- | --------------- | ------------ | -------------- |
+| `v2.0.0`        | stable          | ✅ deployed  | stable         |
+| `v2.1.0-rc.1`   | `--pre-release` | ❌ skipped   | pre-release    |
+| `v2.1.0-beta.1` | `--pre-release` | ❌ skipped   | pre-release    |
 
 ### Creating Release Notes
 

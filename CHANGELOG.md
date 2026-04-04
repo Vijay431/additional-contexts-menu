@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **🖥️ Open in Terminal in right-click menu**: `Open in Terminal` command now appears in the editor context menu (group `2_workspace@2`) in addition to its existing keyboard shortcut
+- **⚙️ 6 utility commands in Command Palette**: `Show Output Channel`, `Debug Context Variables`, `Refresh Context Variables`, `Check Keybinding Conflicts`, `Enable Keybindings`, and `Disable Keybindings` are now declared in `package.json` and visible in the Command Palette
 - **🎓 First-Run Walkthrough**: New `WalkthroughManager` displays a VS Code built-in Walkthrough on first install, introducing Copy Function, Copy Content to File, and Open in Terminal features
 - **🔄 Open Walkthrough Command**: `Additional Context Menus: Open Walkthrough` command allows users to reopen the walkthrough at any time via the Command Palette
 - **📦 No package.json Detection**: Informational message shown when no `package.json` is found in the workspace, explaining that Node.js project detection is required
@@ -26,6 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **🚀 CI release pipeline**: All publish/release jobs now trigger on `v*` tag pushes (previously incorrectly conditioned on `refs/heads/main`)
+- **🌿 Release builds from `main`**: `release-build` job now checks out the `main` branch (`ref: main`) to ensure releases always use the latest stable code
+- **📦 Pre-release support**: Tags containing `-rc`, `-next`, `-beta`, or `-alpha` automatically publish with `--pre-release` flag to both VS Code Marketplace and Open VSX Registry
+- **📄 GitHub Pages deployment**: Now depends on both `publish-vscode` and `publish-openvsx` succeeding, and is skipped entirely for pre-release tags
+- **🏷️ GitHub Releases**: Pre-release tags create GitHub Releases marked as pre-release; stable tags create standard releases
 - **💬 Improved Error Messages**: Function-not-found warning now lists supported function types and suggests checking cursor placement; file operation errors now include the target file path; disable confirmation now includes the re-enable command name
 - **🔧 ESLint Config**: Updated `eslint.config.mjs` to use `tsconfig.eslint.json` instead of `tsconfig.json` for the `src/` configuration block
 - **📚 CONTRIBUTING.md**: Restructured with a dedicated Branching Strategy section covering feature branches, Conventional Commits format, PR process, and CI workflow documentation; setup process consolidated to 5 steps with `tsconfig.eslint.json` reference
@@ -35,9 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **🔐 Dependency Vulnerabilities**: Upgraded `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`, `@stylistic/eslint-plugin`, `@vscode/vsce`, `ovsx`, `lint-staged`, `mocha`, and `@vscode/test-cli` to resolve 33 high/moderate vulnerabilities in dev tooling (none affected the shipped VSIX)
-
-### Changed
-
 - **🔄 CodeAnalysisService**: Migrated from regex-based to AST-based function detection using TypeScript Compiler API
   - Improved accuracy for nested functions (returns inner-most function)
   - Eliminated false positives in comments and strings
@@ -115,15 +119,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed visual project status indicators
   - Removed real-time project detection status display
   - Removed clickable status bar with debug functionality
-- **❌ Debug and Management Commands**: Removed all debug/management commands (was in v1.1.0)
-  - `additionalContextMenus.debugContextVariables` - Inspect extension state
-  - `additionalContextMenus.refreshContextVariables` - Reload project detection
-  - `additionalContextMenus.checkKeybindingConflicts` - Detect potential conflicts
-  - `additionalContextMenus.enableKeybindings` - Enable keyboard shortcuts
-  - `additionalContextMenus.disableKeybindings` - Disable keyboard shortcuts
-  - `additionalContextMenus.showOutputChannel` - Show extension output
-
-**Reason for removal**: Streamlined extension by removing debug infrastructure and status bar to focus on core developer productivity features
 
 ### Enhanced
 

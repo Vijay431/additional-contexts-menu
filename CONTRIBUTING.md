@@ -124,6 +124,56 @@ Examples:
 - `fix(code-analysis): handle edge case for arrow functions`
 - `docs(readme): update installation instructions`
 
+### Commit Standards
+
+Commit messages and size are enforced automatically via git hooks (commitlint + husky) and CI.
+
+#### Message Format (enforced by `commit-msg` hook)
+
+```
+type(scope): short description
+```
+
+| Type       | When to use                                             |
+| ---------- | ------------------------------------------------------- |
+| `feat`     | New feature or capability                               |
+| `fix`      | Bug fix                                                 |
+| `docs`     | Documentation only                                      |
+| `refactor` | Code change that neither fixes a bug nor adds a feature |
+| `chore`    | Maintenance, dependency updates, tooling                |
+| `ci`       | CI/CD workflow changes                                  |
+| `test`     | Adding or updating tests                                |
+| `perf`     | Performance improvement                                 |
+| `style`    | Formatting, whitespace (no logic change)                |
+| `build`    | Build system changes                                    |
+| `revert`   | Reverts a previous commit                               |
+
+Breaking changes: append `!` after the type — `feat!: remove deprecated API`
+
+#### Commit Size Limits (enforced by `pre-commit` hook + CI)
+
+| Limit                        | Value   | Rationale                            |
+| ---------------------------- | ------- | ------------------------------------ |
+| Max files per commit         | **10**  | Keeps commits focused and reviewable |
+| Max lines changed per commit | **300** | Prevents large, hard-to-review diffs |
+
+If your change exceeds these limits, split it into multiple focused commits:
+
+```bash
+# Stage and commit one logical group at a time
+git add src/services/terminalService.ts
+git commit -m "feat(terminal): add integrated terminal support"
+
+git add src/commands/openInTerminal.ts
+git commit -m "feat(terminal): add openInTerminal command handler"
+```
+
+> **Note:** `--no-verify` bypasses local hooks but the CI `commit-size` job will still block oversized PRs.
+
+#### Grandfathered History
+
+Commits before `v2.0.0` predate this enforcement and are not subject to these rules. Enforcement applies to all commits from the next release onwards.
+
 ### Pull Request Process
 
 1. Create a branch from `main` using the naming convention above
@@ -136,26 +186,24 @@ Examples:
 
 ### CI Workflows
 
-The repository includes three GitHub Actions workflows:
+The repository uses a single consolidated GitHub Actions workflow at `.github/workflows/ci.yml`.
 
-**`.github/workflows/ci.yml`** — runs on every PR targeting `main`:
+**On every push and PR:**
 
-- Installs dependencies with `pnpm install`
-- Runs `pnpm run lint` and `pnpm run build`
-- PRs must pass this workflow before merging
+- `lint` — runs `pnpm run lint`
+- `build` — builds on Ubuntu, Windows, macOS × Node 20/22/24 × VS Code stable/insiders
+- `audit` — runs `pnpm audit --audit-level=high`
+- `dependency-review` — reviews dependency changes on PRs
 
-**`.github/workflows/release.yml`** — runs on `v*` tag pushes:
+**On `v*` tag push (release pipeline):**
 
-- Builds the VSIX and verifies its contents
-- Publishes to VS Code Marketplace (uses `VSCE_PAT` secret)
-- Publishes to Open VSX Registry (uses `OVSX_PAT` secret)
-- Deploys the documentation site to GitHub Pages
-
-**`.github/workflows/security.yml`** — runs on every push and weekly:
-
-- `pnpm audit --audit-level=high` for dependency vulnerabilities
-- GitHub CodeQL static analysis on TypeScript source
-- Dependency review on PRs via `actions/dependency-review-action`
+- `setup` — extracts version, detects pre-release (`-rc`, `-next`, `-beta`, `-alpha`)
+- `release-build` — checks out `main` branch and builds the production VSIX
+- `verifier` — validates VSIX contents (no source files, no node_modules, correct bundle)
+- `publish-vscode` — publishes to VS Code Marketplace (stable or `--pre-release`)
+- `publish-openvsx` — publishes to Open VSX Registry (stable or `--pre-release`)
+- `deploy-pages` — deploys docs to GitHub Pages (stable releases only, runs after both publishes succeed)
+- `create-release` — creates a GitHub Release with the VSIX attached
 
 ### Code Architecture
 

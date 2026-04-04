@@ -118,6 +118,11 @@ Detailed documentation for all 11 services with API references, examples, and be
 #### Extension Management (Command Palette Only)
 
 - ⚙️ **Enable/Disable Extension** - Global extension control via command palette
+- 🔍 **Show Output Channel** - View extension logs
+- 🐛 **Debug Context Variables** - Inspect extension state
+- 🔄 **Refresh Context Variables** - Force re-detection of project context
+- ⌨️ **Check Keybinding Conflicts** - View keybinding configuration
+- 🔛 **Enable/Disable Keybindings** - Toggle custom keybindings
 
 ### Project Intelligence
 
