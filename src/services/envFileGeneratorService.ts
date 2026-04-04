@@ -202,6 +202,18 @@ export class EnvFileGeneratorService {
     if (!isSafeFilePath(resolvedExamplePath) || !isSafeFilePath(resolvedTargetPath)) {
       throw new Error('Invalid file path');
     }
+
+    if (await this.fileExists(resolvedTargetPath)) {
+      const choice = await vscode.window.showWarningMessage(
+        `${path.basename(resolvedTargetPath)} already exists. Overwrite?`,
+        'Overwrite',
+        'Cancel',
+      );
+      if (choice !== 'Overwrite') {
+        return;
+      }
+    }
+
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- paths validated by isSafeFilePath()
     const exampleContent = await fs.readFile(resolvedExamplePath, 'utf-8');
     const variables = this.parseEnvVariables(exampleContent);

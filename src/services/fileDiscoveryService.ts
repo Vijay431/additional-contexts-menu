@@ -90,10 +90,11 @@ export class FileDiscoveryService implements IFileDiscoveryService {
    * @deprecated Use DI injection instead
    */
   public static getInstance(): FileDiscoveryService {
-    return (
-      FileDiscoveryService.instance ??
-      new FileDiscoveryService(Logger.getInstance(), AccessibilityService.getInstance())
+    FileDiscoveryService.instance ??= new FileDiscoveryService(
+      Logger.getInstance(),
+      AccessibilityService.getInstance(),
     );
+    return FileDiscoveryService.instance;
   }
 
   /**

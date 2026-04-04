@@ -24,7 +24,8 @@ export class CodeAnalysisService implements ICodeAnalysisService {
    * @deprecated Use DI injection instead
    */
   public static getInstance(): CodeAnalysisService {
-    return CodeAnalysisService.instance ?? new CodeAnalysisService(Logger.getInstance());
+    CodeAnalysisService.instance ??= new CodeAnalysisService(Logger.getInstance());
+    return CodeAnalysisService.instance;
   }
 
   /**
@@ -242,6 +243,14 @@ export class CodeAnalysisService implements ICodeAnalysisService {
   public extractImports(code: string, _languageId: string): ImportInfo[] {
     const imports: ImportInfo[] = [];
 
+    function extractImportNames(namedBindings: ts.NamedImportBindings | undefined): string[] {
+      if (!namedBindings) return [];
+      if (ts.isNamedImports(namedBindings)) {
+        return namedBindings.elements.map((s) => s.name.getText());
+      }
+      return [];
+    }
+
     try {
       const sourceFile = this.parseSourceFile(code, 'temp.ts');
 
@@ -254,13 +263,13 @@ export class CodeAnalysisService implements ICodeAnalysisService {
           const moduleLiteral = statement.moduleSpecifier.getText();
 
           if (statement.importClause) {
-            if (ts.isNamespaceImport(statement.importClause)) {
+            if (ts.isNamespaceImport(statement.importClause.namedBindings)) {
               type = 'namespace';
             } else if (statement.importClause.name) {
               type = 'default';
             } else if (
-              statement.importClause.bindings &&
-              ts.isNamedImports(statement.importClause.bindings)
+              statement.importClause.namedBindings &&
+              ts.isNamedImports(statement.importClause.namedBindings)
             ) {
               type = 'named';
             }
@@ -272,9 +281,7 @@ export class CodeAnalysisService implements ICodeAnalysisService {
             module: moduleLiteral.replace(/['"]/g, ''),
             names:
               type === 'named' || type === 'namespace'
-                ? (statement.importClause?.bindings
-                    ?.filter(ts.isImportSpecifier)
-                    .map((s) => s.name.getText()) ?? [])
+                ? extractImportNames(statement.importClause?.namedBindings)
                 : undefined,
           });
         }

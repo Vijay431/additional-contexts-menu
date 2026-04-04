@@ -614,7 +614,7 @@ export class ContextMenuManager {
 
       const range = new vscode.Range(
         new vscode.Position(functionInfo.startLine - 1, 0),
-        new vscode.Position(functionInfo.endLine, 0),
+        new vscode.Position(functionInfo.endLine - 1, Number.MAX_SAFE_INTEGER),
       );
 
       await editor.edit((editBuilder) => {
@@ -859,7 +859,9 @@ export class ContextMenuManager {
     this.logger.info('Generate Enum command triggered');
     try {
       // Load from lazy bundle at runtime
-      const extensionPath = vscode.extensions.getExtension('additionalContextMenus')?.extensionPath;
+      const extensionPath = vscode.extensions.getExtension(
+        'VijayGangatharan.additional-context-menus',
+      )?.extensionPath;
       if (!extensionPath) {
         throw new Error('Extension path not found');
       }
@@ -878,7 +880,9 @@ export class ContextMenuManager {
     this.logger.info('Generate Env File command triggered');
     try {
       // Load from lazy bundle at runtime
-      const extensionPath = vscode.extensions.getExtension('additionalContextMenus')?.extensionPath;
+      const extensionPath = vscode.extensions.getExtension(
+        'VijayGangatharan.additional-context-menus',
+      )?.extensionPath;
       if (!extensionPath) {
         throw new Error('Extension path not found');
       }
@@ -897,7 +901,9 @@ export class ContextMenuManager {
     this.logger.info('Generate Cron Timer command triggered');
     try {
       // Load from lazy bundle at runtime
-      const extensionPath = vscode.extensions.getExtension('additionalContextMenus')?.extensionPath;
+      const extensionPath = vscode.extensions.getExtension(
+        'VijayGangatharan.additional-context-menus',
+      )?.extensionPath;
       if (!extensionPath) {
         throw new Error('Extension path not found');
       }

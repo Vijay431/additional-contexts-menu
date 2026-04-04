@@ -71,14 +71,12 @@ export class FileSaveService implements IFileSaveService {
    * @deprecated Use DI injection instead
    */
   public static getInstance(): FileSaveService {
-    return (
-      FileSaveService.instance ??
-      new FileSaveService(
-        Logger.getInstance(),
-        ConfigurationService.getInstance(),
-        AccessibilityService.getInstance(),
-      )
+    FileSaveService.instance ??= new FileSaveService(
+      Logger.getInstance(),
+      ConfigurationService.getInstance(),
+      AccessibilityService.getInstance(),
     );
+    return FileSaveService.instance;
   }
 
   /**

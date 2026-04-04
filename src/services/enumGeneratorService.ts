@@ -56,10 +56,11 @@ export class EnumGeneratorService implements IEnumGeneratorService {
    * @deprecated Use DI injection instead
    */
   public static getInstance(): EnumGeneratorService {
-    return (
-      EnumGeneratorService.instance ??
-      new EnumGeneratorService(Logger.getInstance(), AccessibilityService.getInstance())
+    EnumGeneratorService.instance ??= new EnumGeneratorService(
+      Logger.getInstance(),
+      AccessibilityService.getInstance(),
     );
+    return EnumGeneratorService.instance;
   }
 
   /**

@@ -10,9 +10,9 @@ export type {
   KeybindingsConfig,
   AccessibilityConfig,
   ExtensionConfiguration,
-  DEFAULT_CONFIG,
-  CONFIG_KEYS,
 } from './config';
+
+export { DEFAULT_CONFIG, CONFIG_KEYS } from './config';
 
 /**
  * Legacy ExtensionConfig type for backward compatibility

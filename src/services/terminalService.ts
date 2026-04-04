@@ -188,15 +188,29 @@ export class TerminalService implements ITerminalService {
   private async openSystemDefaultTerminal(directoryPath: string): Promise<void> {
     try {
       const platform = process.platform;
-      let command: string;
 
       switch (platform) {
-        case 'win32':
-          command = `start cmd /k "cd /d ${this.escapePathForShell(directoryPath)}"`;
+        case 'win32': {
+          // Use execFile with args array to avoid shell injection
+          const { execFile } = await import('child_process');
+          await new Promise<void>((resolve, reject) => {
+            execFile(
+              'cmd',
+              ['/c', 'start', 'cmd', '/k', `cd /d "${directoryPath.replace(/"/g, '\\"')}"`],
+              (err) => (err ? reject(err) : resolve()),
+            );
+          });
           break;
-        case 'darwin':
-          command = `open -a Terminal "${this.escapePathForShell(directoryPath)}"`;
+        }
+        case 'darwin': {
+          const { execFile } = await import('child_process');
+          await new Promise<void>((resolve, reject) => {
+            execFile('open', ['-a', 'Terminal', directoryPath], (err) =>
+              err ? reject(err) : resolve(),
+            );
+          });
           break;
+        }
         case 'linux': {
           const linuxTerminals = ['gnome-terminal', 'konsole', 'xfce4-terminal', 'xterm'];
           const availableTerminal = await this.findAvailableTerminal(linuxTerminals);
@@ -205,21 +219,20 @@ export class TerminalService implements ITerminalService {
             throw new Error('No suitable terminal found on this Linux system');
           }
 
-          command = this.buildLinuxTerminalCommand(availableTerminal, directoryPath);
+          const command = this.buildLinuxTerminalCommand(availableTerminal, directoryPath);
+          const terminal = vscode.window.createTerminal({ name: 'System Terminal Launcher' });
+          terminal.sendText(command);
+          terminal.dispose();
           break;
         }
         default:
           throw new Error(`Unsupported platform: ${platform}`);
       }
 
-      const terminal = vscode.window.createTerminal({
-        name: 'System Terminal Launcher',
+      this.logger.debug('System default terminal opened', {
+        platform: process.platform,
+        directoryPath,
       });
-
-      terminal.sendText(command);
-      terminal.dispose();
-
-      this.logger.debug('System default terminal command executed', { platform, command });
     } catch (error) {
       this.logger.error('Failed to open system default terminal', error);
       throw new Error('Failed to open system default terminal');
@@ -249,15 +262,15 @@ export class TerminalService implements ITerminalService {
 
     switch (terminal) {
       case 'gnome-terminal':
-        return `gnome-terminal --working-directory="${escapedPath}"`;
+        return `gnome-terminal --working-directory='${escapedPath}'`;
       case 'konsole':
-        return `konsole --workdir "${escapedPath}"`;
+        return `konsole --workdir '${escapedPath}'`;
       case 'xfce4-terminal':
-        return `xfce4-terminal --working-directory="${escapedPath}"`;
+        return `xfce4-terminal --working-directory='${escapedPath}'`;
       case 'xterm':
-        return `cd "${escapedPath}" && xterm`;
+        return `cd '${escapedPath}' && xterm`;
       default:
-        return `${terminal} --working-directory="${escapedPath}"`;
+        return `${terminal} --working-directory='${escapedPath}'`;
     }
   }
 
@@ -272,7 +285,12 @@ export class TerminalService implements ITerminalService {
   }
 
   private escapePathForShell(filePath: string): string {
-    return filePath.replace(/['"]/g, '\\$&');
+    if (process.platform === 'win32') {
+      // Wrap in double quotes, escape internal double quotes
+      return filePath.replace(/"/g, '\\"');
+    }
+    // Unix: wrap in single quotes, escape internal single quotes
+    return filePath.replace(/'/g, "'\\''");
   }
 
   public getParentDirectory(filePath: string): string {
