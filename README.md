@@ -105,19 +105,19 @@ _Extract functions in one click with intelligent import handling_
 
 Detailed documentation for all 11 features with usage guides and examples.
 
-| Feature                | Documentation                                                                                                    | Purpose                          |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| Copy Function          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunction.html)                      | Copy function at cursor          |
-| Copy Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunctionToFile.html)                | Copy function to target file     |
-| Move Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveFunctionToFile.html)                | Move function to target file     |
-| Copy Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copySelectionToFile.html)               | Copy selected code to file       |
-| Move Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveSelectionToFile.html)               | Move selected code to file       |
-| Save All               | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileSaveService.html)                   | Enhanced save operations         |
-| Open in Terminal       | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/terminalService.html)                   | Terminal integration             |
-| Rename File Convention | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileNamingConventionService.html)       | Naming convention enforcement    |
-| Generate Enum          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/enumGeneratorService.html)              | Union type to enum               |
-| Generate Cron          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html)      | Cron expression generation       |
-| Generate .env File     | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/envFileGeneratorService.html)           | .env file creation               |
+| Feature                | Documentation                                                                                               | Purpose                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Copy Function          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunction.html)                 | Copy function at cursor                                                               |
+| Copy Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunctionToFile.html)           | Copy function to target file                                                          |
+| Move Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveFunctionToFile.html)           | Move function to target file                                                          |
+| Copy Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copySelectionToFile.html)          | Copy selected code to file                                                            |
+| Move Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveSelectionToFile.html)          | Move selected code to file                                                            |
+| Save All               | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileSaveService.html)              | Enhanced save operations                                                              |
+| Open in Terminal       | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/terminalService.html)              | Terminal integration                                                                  |
+| Rename File Convention | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileNamingConventionService.html)  | Rename files/folders to kebab-case, camelCase, or PascalCase via Explorer right-click |
+| Generate Enum          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/enumGeneratorService.html)         | Union type to enum                                                                    |
+| Generate Cron          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html) | Cron expression generation                                                            |
+| Generate .env File     | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/envFileGeneratorService.html)      | .env file creation                                                                    |
 
 [**View All Features** →](https://vijay431.github.io/additional-contexts-menu/services/)
 
@@ -147,9 +147,12 @@ Detailed documentation for all 11 features with usage guides and examples.
 - 🔄 **Refresh Context Variables** - Force re-detection of project context
 - ⌨️ **Check Keybinding Conflicts** - View keybinding configuration
 - 🔛 **Enable/Disable Keybindings** - Toggle custom keybindings
-- 🗂️ **Rename File to Convention** - Rename files to kebab-case, camelCase, or PascalCase
 - 🌿 **Generate .env File** - Generate environment file from usage patterns
 - 🚶 **Open Walkthrough** - Open the getting started walkthrough
+
+#### Explorer Right-Click Menu
+
+- 🗂️ **Rename File to Convention** - Right-click any file or folder in the Explorer to rename to kebab-case, camelCase, or PascalCase. Processes a single file or recursively renames all files in a folder. Reports renamed, skipped (already compliant), and failed counts.
 
 ### Project Intelligence
 
@@ -382,9 +385,12 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 - `Additional Context Menus: Check Keybinding Conflicts` - View keybinding config
 - `Additional Context Menus: Enable Keybindings` - Enable custom keybindings
 - `Additional Context Menus: Disable Keybindings` - Disable custom keybindings
-- `Additional Context Menus: Rename File to Convention` - Rename file naming
 - `Additional Context Menus: Generate .env File` - Generate env file
 - `Additional Context Menus: Open Walkthrough` - Open getting started guide
+
+**Explorer Right-Click**:
+
+- `Additional Context Menus: Rename File to Convention` - Right-click a file or folder in the Explorer to rename to a naming convention
 
 **Keyboard Shortcuts** (active when extension is enabled):
 
