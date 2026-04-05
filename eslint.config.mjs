@@ -33,7 +33,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import security from 'eslint-plugin-security';
 import importPlugin from 'eslint-plugin-import';
-import nodePlugin from 'eslint-plugin-node';
+import nodePlugin from 'eslint-plugin-n';
 import promisePlugin from 'eslint-plugin-promise';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
