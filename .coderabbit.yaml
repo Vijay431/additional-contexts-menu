@@ -16,10 +16,8 @@ reviews:
 
   path_filters:
     - '!dist/**'
-    - '!docs/**'
     - '!images/**'
     - '!.husky/**'
-    - '!scripts/**'
     - '!*.vsix'
     - '!pnpm-lock.yaml'
 
