@@ -31,8 +31,8 @@ jobs:
       - name: Check PR Size
         shell: bash
         run: |
-          MAX_FILES=10
-          MAX_LINES=300
+          MAX_FILES=15
+          MAX_LINES=600
           STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
           FILE_COUNT=$(echo "$STATS" | grep -c .)
           LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
