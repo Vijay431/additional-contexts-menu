@@ -28,30 +28,28 @@ jobs:
           STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
           FILE_COUNT=$(echo "$STATS" | grep -c .)
           LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
-          MESSAGES=""
           FAILED=0
-          if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
-            MESSAGES="${MESSAGES}- Too many files changed: **${FILE_COUNT}** (max ${MAX_FILES})\n"
-            FAILED=1
-          fi
-          if [ "$LINE_COUNT" -gt "$MAX_LINES" ]; then
-            MESSAGES="${MESSAGES}- Too many lines changed: **${LINE_COUNT}** (max ${MAX_LINES})\n"
-            FAILED=1
-          fi
+          [ "$FILE_COUNT" -gt "$MAX_FILES" ] && FAILED=1
+          [ "$LINE_COUNT" -gt "$MAX_LINES" ] && FAILED=1
           echo "failed=${FAILED}" >> "$GITHUB_OUTPUT"
-          echo "messages=${MESSAGES}" >> "$GITHUB_OUTPUT"
+          echo "file_count=${FILE_COUNT}" >> "$GITHUB_OUTPUT"
+          echo "line_count=${LINE_COUNT}" >> "$GITHUB_OUTPUT"
 
       - name: Post PR Comment
         if: steps.check.outputs.failed == '1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr comment ${{ github.event.pull_request.number }} \
-            --body "## ⚠️ PR Too Large
+          BODY="## ⚠️ PR Too Large
 
           This PR exceeds the recommended size limits. Consider splitting it into smaller PRs.
+          "
+          [ "${{ steps.check.outputs.file_count }}" -gt 15 ] && BODY="${BODY}
+          - Too many files changed: **${{ steps.check.outputs.file_count }}** (max 15)"
+          [ "${{ steps.check.outputs.line_count }}" -gt 600 ] && BODY="${BODY}
+          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 600)"
 
-          ${{ steps.check.outputs.messages }}"
+          gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
 
       - name: Fail if PR Too Large
         if: steps.check.outputs.failed == '1'
