@@ -242,7 +242,7 @@ pnpm run lint
 pnpm run format
 ```
 
-#### 4. Build and Verify
+#### 3. Build and Verify
 
 ```bash
 # Production build
@@ -252,7 +252,7 @@ pnpm run build
 # Press F5 to launch and test
 ```
 
-#### 5. Commit Changes
+#### 4. Commit Changes
 
 ```bash
 # Stage your changes
@@ -265,7 +265,7 @@ git commit -m "feat(feature-name): add description of your feature"
 # Types: feat, fix, docs, style, refactor, chore
 ```
 
-#### 6. Push and Create PR
+#### 5. Push and Create PR
 
 ```bash
 # Push to your fork
@@ -621,7 +621,7 @@ The extension uses 11 specialized services, all following singleton pattern:
 | `ProjectDetectionService`      | Detects Node.js projects and frameworks | `detectProject()`, `getFramework()`            |
 | `ConfigurationService`         | Manages extension settings              | `getSetting()`, `updateSetting()`              |
 | `FileDiscoveryService`         | Discovers compatible files              | `findFiles()`, `filterFiles()`                 |
-| `CodeAnalysisService`          | Regex-based function detection          | `findFunctionAtPosition()`, `extractImports()` |
+| `CodeAnalysisService`          | AST-based code analysis                 | `findFunctionAtPosition()`, `extractImports()` |
 | `FileSaveService`              | Enhanced save operations                | `saveAll()`, `saveWithProgress()`              |
 | `TerminalService`              | Cross-platform terminal integration     | `openTerminal()`, `executeCommand()`           |
 | `EnumGeneratorService`         | Generates enums from union types        | `generateEnum()`                               |
