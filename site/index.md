@@ -15,7 +15,8 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </h1>
                 <p class="hero-description">
                     Enhanced right-click context menus with intelligent code operations for React, Angular, Express, and Next.js.
-                    Features smart function detection, intelligent import handling, cross-platform terminal integration (v1.2.0+), and ultra-fast esbuild compilation.
+                    All commands are grouped under a single <strong>Additional Context Menus ▶</strong> submenu for quick access.
+                    Features smart function detection, intelligent import handling, cross-platform terminal integration, and ultra-fast esbuild compilation.
                 </p>
                 <div class="hero-buttons">
                     <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary" target="_blank">

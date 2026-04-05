@@ -1,70 +1,48 @@
 ---
 layout: default
-title: 'Services Documentation'
-description: 'Comprehensive documentation for all Additional Context Menus services.'
+title: 'Features Documentation'
+description: 'Documentation for all 11 user-facing features of Additional Context Menus.'
 ---
 
-# Services Documentation
+# Features Documentation
 
-Complete documentation for all 11 services in Additional Context Menus extension.
+Complete documentation for all 11 user-facing features in Additional Context Menus.
 
-## Service Categories
+## Code Operations
 
-### Code Analysis Services
+- [Copy Function](copyFunction.html) - Copy function at cursor to clipboard
+- [Copy Function to File](copyFunctionToFile.html) - Copy function at cursor to a target file
+- [Move Function to File](moveFunctionToFile.html) - Move function at cursor to a target file
+- [Copy Selection to File](copySelectionToFile.html) - Copy selected code to a target file
+- [Move Selection to File](moveSelectionToFile.html) - Move selected code to a target file
 
-- [Code Analysis Service](/services/codeAnalysisService.html) - Function detection and code parsing
-- [File Discovery Service](/services/fileDiscoveryService.html) - File scanning and filtering
+## Workspace
 
-### Configuration & State
+- [Save All](fileSaveService.html) - Save all open files with progress feedback
+- [Open in Terminal](terminalService.html) - Open terminal at file location
+- [Rename File to Convention](fileNamingConventionService.html) - Rename files to kebab-case, camelCase, or PascalCase
 
-- [Configuration Service](/services/configurationService.html) - Extension settings management
-- [Project Detection Service](/services/projectDetectionService.html) - Framework detection
+## Code Generation
 
-### File Operations
-
-- [File Save Service](/services/fileSaveService.html) - Enhanced save operations
-- [File Naming Convention Service](/services/fileNamingConventionService.html) - Naming convention enforcement
-
-### Code Generation
-
-- [Cron Job Timer Generator Service](/services/cronJobTimerGeneratorService.html) - Cron expression generation
-- [Enum Generator Service](/services/enumGeneratorService.html) - Union type to enum conversion
-- [Env File Generator Service](/services/envFileGeneratorService.html) - .env file generation
-
-### Project Operations
-
-- [Terminal Service](/services/terminalService.html) - Cross-platform terminal
-
-### Accessibility
-
-- [Accessibility Service](/services/accessibilityService.html) - Screen reader support and announcements
+- [Generate Enum from Union Type](enumGeneratorService.html) - Convert TypeScript union types to enums
+- [Generate Cron Expression](cronJobTimerGeneratorService.html) - Interactive cron expression builder
+- [Generate .env File](envFileGeneratorService.html) - Generate .env file from .env.example template
 
 ## Quick Reference
 
-| Service           | Purpose               | Icon                |
-| ----------------- | --------------------- | ------------------- |
-| Code Analysis     | Function detection    | fa-code             |
-| Configuration     | Settings management   | fa-cog              |
-| File Discovery    | File scanning         | fa-search           |
-| File Save         | Save operations       | fa-save             |
-| Terminal          | Terminal integration  | fa-terminal         |
-| Cron Generator    | Cron expressions      | fa-clock            |
-| Enum Generator    | Enum generation       | fa-list-ol          |
-| Env Generator     | .env generation       | fa-file-alt         |
-| Naming Convention | File naming           | fa-font             |
-| Project Detection | Framework detection   | fa-project-diagram  |
-| Accessibility     | Screen reader support | fa-universal-access |
-
-## Architecture
-
-All services are managed through the Dependency Injection (DI) container:
-
-- **DI Container**: Services resolved via `getService<T>(TYPES.ServiceName)`
-- **Factory Methods**: Services use static `create()` methods for DI instantiation
-- **Logger Integration**: All services use injected Logger instance
-- **Error Handling**: Try-catch with proper logging
-- **Type Safety**: Strong TypeScript typing with interfaces
-- **Disposal**: Proper resource cleanup via Disposable interface
+| Feature | Command ID | Keybinding |
+| ------- | ---------- | ---------- |
+| Copy Function | `additionalContextMenus.copyFunction` | `Ctrl+Alt+Shift+F` |
+| Copy Function to File | `additionalContextMenus.copyFunctionToFile` | `Ctrl+Alt+Shift+E` |
+| Move Function to File | `additionalContextMenus.moveFunctionToFile` | `Ctrl+Alt+Shift+R` |
+| Copy Selection to File | `additionalContextMenus.copySelectionToFile` | `Ctrl+Alt+Shift+C` |
+| Move Selection to File | `additionalContextMenus.moveSelectionToFile` | `Ctrl+Alt+Shift+M` |
+| Save All | `additionalContextMenus.saveAll` | `Ctrl+Alt+Shift+A` |
+| Open in Terminal | `additionalContextMenus.openInTerminal` | `Ctrl+Alt+Shift+T` |
+| Rename File to Convention | `additionalContextMenus.renameFileConvention` | — |
+| Generate Enum | `additionalContextMenus.generateEnum` | — |
+| Generate Cron Expression | `additionalContextMenus.generateCronTimer` | — |
+| Generate .env File | `additionalContextMenus.generateEnvFile` | — |
 
 ## Navigation
 

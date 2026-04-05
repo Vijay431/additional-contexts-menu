@@ -465,6 +465,12 @@
         }
       }
     },
+    "submenus": [
+      {
+        "id": "additionalContextMenus.submenu",
+        "label": "Additional Context Menus"
+      }
+    ],
     "menus": {
       "commandPalette": [
         {
@@ -498,49 +504,66 @@
       ],
       "editor/context": [
         {
+          "submenu": "additionalContextMenus.submenu",
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "group": "navigation"
+        }
+      ],
+      "additionalContextMenus.submenu": [
+        {
           "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyFunction",
-          "group": "1_modification@1"
+          "group": "1_function@1"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyFunctionToFile",
-          "group": "1_modification@1.1"
+          "group": "1_function@2"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.moveFunctionToFile",
-          "group": "1_modification@1.2"
+          "group": "1_function@3"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copySelectionToFile",
-          "group": "1_modification@2"
+          "group": "2_selection@1"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.moveSelectionToFile",
-          "group": "1_modification@3"
+          "group": "2_selection@2"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.saveAll",
-          "group": "2_workspace@1"
+          "group": "3_workspace@1"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.openInTerminal",
-          "group": "2_workspace@2"
+          "group": "3_workspace@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.renameFileConvention",
+          "group": "3_workspace@3"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx)$/",
           "command": "additionalContextMenus.generateEnum",
-          "group": "3_generation@1"
+          "group": "4_generation@1"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.generateCronTimer",
-          "group": "3_generation@2"
+          "group": "4_generation@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateEnvFile",
+          "group": "4_generation@3"
         }
       ]
     },

@@ -26,8 +26,8 @@ _Extract functions in one click with intelligent import handling_
 
 1. **Install** the extension from VS Code Marketplace
 2. **Open** any Node.js project with `package.json`
-3. **Right-click** in a TypeScript/JavaScript file to see new context menu options
-4. **Try it out:** Select some code → Right-click → "Copy Selection to File"
+3. **Right-click** in any file → look for **Additional Context Menus ▶** in the context menu
+4. **Try it out:** Select some code → Right-click → Additional Context Menus → "Copy Selection to File"
 
 ### 💡 Common Workflows
 
@@ -47,10 +47,6 @@ _Extract functions in one click with intelligent import handling_
 ### Copy Function
 
 ![Copy Function Demo](images/screenshots/copy-function.png)
-
-### Move Function
-
-![Move Function Demo](images/screenshots/move-function.png)
 
 ### Copy Function to File
 
@@ -105,25 +101,25 @@ _Extract functions in one click with intelligent import handling_
 
 ---
 
-## 📚 Services Documentation
+## 📚 Features Documentation
 
-Detailed documentation for all 11 services with API references, examples, and best practices.
+Detailed documentation for all 11 features with usage guides and examples.
 
-| Service                | Documentation                                                                                               | Purpose                        |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| Code Analysis          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/codeAnalysisService.html)          | Function detection and parsing |
-| Configuration          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/configurationService.html)         | Settings management            |
-| File Discovery         | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileDiscoveryService.html)         | File scanning and filtering    |
-| File Save              | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileSaveService.html)              | Enhanced save operations       |
-| Terminal               | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/terminalService.html)              | Terminal integration           |
-| Cron Timer Generator   | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html) | Cron expression generation     |
-| Enum Generator         | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/enumGenerator.html)                | Union type to enum             |
-| Env File Generator     | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/envFileGeneratorService.html)      | .env file creation             |
-| File Naming Convention | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileNamingConventionService.html)  | Naming enforcement             |
-| Project Detection      | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/projectDetectionService.html)      | Framework detection            |
-| Accessibility          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/accessibilityService.html)         | Screen reader support          |
+| Feature                | Documentation                                                                                                    | Purpose                          |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| Copy Function          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunction.html)                      | Copy function at cursor          |
+| Copy Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunctionToFile.html)                | Copy function to target file     |
+| Move Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveFunctionToFile.html)                | Move function to target file     |
+| Copy Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copySelectionToFile.html)               | Copy selected code to file       |
+| Move Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveSelectionToFile.html)               | Move selected code to file       |
+| Save All               | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileSaveService.html)                   | Enhanced save operations         |
+| Open in Terminal       | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/terminalService.html)                   | Terminal integration             |
+| Rename File Convention | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileNamingConventionService.html)       | Naming convention enforcement    |
+| Generate Enum          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/enumGeneratorService.html)              | Union type to enum               |
+| Generate Cron          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html)      | Cron expression generation       |
+| Generate .env File     | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/envFileGeneratorService.html)           | .env file creation               |
 
-[**View All Services** →](https://vijay431.github.io/additional-contexts-menu/services/)
+[**View All Features** →](https://vijay431.github.io/additional-contexts-menu/services/)
 
 ---
 

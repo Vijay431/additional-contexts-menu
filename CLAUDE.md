@@ -85,6 +85,40 @@ site/                           # Jekyll GitHub Pages site (vijay431.github.io/a
 
 ---
 
+## Services
+
+### User-Facing Features (11)
+
+These are the commands users interact with. Each has a walkthrough doc in `docs/` and a site service doc in `site/services/`.
+
+| Feature                   | Command ID                                    | `docs/` file                | `site/services/` doc              |
+| ------------------------- | --------------------------------------------- | --------------------------- | --------------------------------- |
+| Copy Function             | `additionalContextMenus.copyFunction`         | `copy-function.md`          | `copyFunction.md`                 |
+| Copy Function to File     | `additionalContextMenus.copyFunctionToFile`   | `copy-function-to-file.md`  | `copyFunctionToFile.md`           |
+| Move Function to File     | `additionalContextMenus.moveFunctionToFile`   | `move-function-to-file.md`  | `moveFunctionToFile.md`           |
+| Copy Selection to File    | `additionalContextMenus.copySelectionToFile`  | `copy-selection-to-file.md` | `copySelectionToFile.md`          |
+| Move Selection to File    | `additionalContextMenus.moveSelectionToFile`  | `move-selection-to-file.md` | `moveSelectionToFile.md`          |
+| Save All                  | `additionalContextMenus.saveAll`              | `save-all.md`               | `fileSaveService.md`              |
+| Open in Terminal          | `additionalContextMenus.openInTerminal`       | `open-in-terminal.md`       | `terminalService.md`              |
+| Rename File to Convention | `additionalContextMenus.renameFileConvention` | `rename-file-convention.md` | `fileNamingConventionService.md`  |
+| Generate Enum             | `additionalContextMenus.generateEnum`         | `generate-enum.md`          | `enumGeneratorService.md`         |
+| Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | `generate-cron.md`          | `cronJobTimerGeneratorService.md` |
+| Generate .env File        | `additionalContextMenus.generateEnvFile`      | `generate-env-file.md`      | `envFileGeneratorService.md`      |
+
+### Infrastructure Services (5)
+
+These power the features internally. They have **no standalone user-facing docs** — do not create `site/services/` pages for them.
+
+| Service                 | Source File                               | Purpose                                                  |
+| ----------------------- | ----------------------------------------- | -------------------------------------------------------- |
+| CodeAnalysisService     | `src/services/codeAnalysisService.ts`     | AST-based function detection via TypeScript Compiler API |
+| FileDiscoveryService    | `src/services/fileDiscoveryService.ts`    | Workspace file scanning and compatible-file filtering    |
+| ConfigurationService    | `src/services/configurationService.ts`    | VS Code settings access and change events                |
+| ProjectDetectionService | `src/services/projectDetectionService.ts` | Framework detection and context variable updates         |
+| AccessibilityService    | `src/services/accessibilityService.ts`    | Screen reader announcements and ARIA helpers             |
+
+---
+
 ## Commands
 
 ### Right-Click Menu Only (hidden from Command Palette)
@@ -188,3 +222,9 @@ Markdown files live in `docs/` (root-level, not the Jekyll site).
 | `additionalContextMenus.accessibility.verbosity`          | enum    | `"normal"`                    | `minimal` / `normal` / `verbose`                            |
 | `additionalContextMenus.accessibility.screenReaderMode`   | boolean | `false`                       | Enhanced screen reader support                              |
 | `additionalContextMenus.accessibility.keyboardNavigation` | boolean | `true`                        | Show keyboard hints in Quick Pick                           |
+
+## Steps to follow:
+
+- All new changes should be added to the `CLAUDE.md` file
+- All new changes that user viewable should be added to the `docs`, `site` and `README.md` files
+- All new changes should be logged in the `CHANGELOG.md` file under unreleased section

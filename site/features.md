@@ -22,7 +22,7 @@ description: 'Explore the comprehensive features and intelligent code operations
         <div class="feature-section">
             <div class="feature-header">
                 <h2 class="feature-category">Smart Context Menu Operations</h2>
-                <p class="feature-category-desc">Intelligent code operations that understand your project structure and framework.</p>
+                <p class="feature-category-desc">All 11 commands are grouped under a single <strong>Additional Context Menus ▶</strong> submenu in the right-click menu — available in any file when the extension is enabled. Commands are organised into four groups: Function Operations, Selection Operations, Workspace, and Generation. Context-sensitive commands (e.g. Copy Function) only appear when their conditions are met.</p>
             </div>
             
             <div class="feature-list">
