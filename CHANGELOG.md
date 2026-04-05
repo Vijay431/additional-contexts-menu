@@ -5,13 +5,6 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.1] - 2026-04-05
-
-### Changed
-
-- **⏱️ Generate Cron Expression**: Now inserts the bare cron expression at cursor position (e.g. `0 9 * * *`) — no comment line, no quotes
-- **📁 Repository structure**: Jekyll GitHub Pages site moved from `docs/` to `site/`; VS Code walkthrough markdown files moved from `walkthrough/` to `docs/`
-
 ## [2.0.0] - 2026-04-05 (unreleased)
 
 ### Added
@@ -36,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **⏱️ Generate Cron Expression**: Now inserts the bare cron expression at cursor position (e.g. `0 9 * * *`) — no comment line, no quotes
+- **📁 Repository structure**: Jekyll GitHub Pages site moved from `docs/` to `site/`; VS Code walkthrough markdown files moved from `walkthrough/` to `docs/`
 - **📚 Features documentation realigned**: `site/services/` now documents the 11 user-facing features (Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File Convention, Generate Enum, Generate Cron, Generate .env File) instead of internal infrastructure services. Infrastructure services (CodeAnalysis, FileDiscovery, Configuration, ProjectDetection, Accessibility) no longer have standalone site docs.
 - **🚀 CI release pipeline**: All publish/release jobs now trigger on `v*` tag pushes (previously incorrectly conditioned on `refs/heads/main`)
 - **🌿 Release builds from `main`**: `release-build` job now checks out the `main` branch (`ref: main`) to ensure releases always use the latest stable code
