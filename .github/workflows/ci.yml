@@ -17,44 +17,10 @@ permissions:
   pull-requests: read
 
 jobs:
-  # ─── Step 1: Commit Size (PR only) ────────────────────────────────────────
-  commit-size:
-    name: Commit Size Check
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Check PR Size
-        shell: bash
-        run: |
-          MAX_FILES=15
-          MAX_LINES=600
-          STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
-          FILE_COUNT=$(echo "$STATS" | grep -c .)
-          LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
-          FAILED=0
-          if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
-            echo "✗ PR changes too many files ($FILE_COUNT > $MAX_FILES max). Consider splitting."
-            FAILED=1
-          fi
-          if [ "$LINE_COUNT" -gt "$MAX_LINES" ]; then
-            echo "✗ PR changes too many lines ($LINE_COUNT > $MAX_LINES max). Consider splitting."
-            FAILED=1
-          fi
-          exit $FAILED
-
-  # ─── Step 2: Quality Gates ────────────────────────────────────────────────
+  # ─── Step 1: Quality Gates ────────────────────────────────────────────────
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    needs: [commit-size]
-    if: |
-      always() &&
-      (needs.commit-size.result == 'success' || needs.commit-size.result == 'skipped')
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -79,10 +45,6 @@ jobs:
   build:
     name: Build
     runs-on: ${{ matrix.os }}
-    needs: [commit-size]
-    if: |
-      always() &&
-      (needs.commit-size.result == 'success' || needs.commit-size.result == 'skipped')
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -115,10 +77,6 @@ jobs:
   audit:
     name: Dependency Audit
     runs-on: ubuntu-latest
-    needs: [commit-size]
-    if: |
-      always() &&
-      (needs.commit-size.result == 'success' || needs.commit-size.result == 'skipped')
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

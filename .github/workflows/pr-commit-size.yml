@@ -1,0 +1,58 @@
+name: PR Commit Size
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  commit-size:
+    name: Commit Size Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR Size
+        id: check
+        shell: bash
+        run: |
+          MAX_FILES=15
+          MAX_LINES=600
+          STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
+          FILE_COUNT=$(echo "$STATS" | grep -c .)
+          LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
+          MESSAGES=""
+          FAILED=0
+          if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
+            MESSAGES="${MESSAGES}- Too many files changed: **${FILE_COUNT}** (max ${MAX_FILES})\n"
+            FAILED=1
+          fi
+          if [ "$LINE_COUNT" -gt "$MAX_LINES" ]; then
+            MESSAGES="${MESSAGES}- Too many lines changed: **${LINE_COUNT}** (max ${MAX_LINES})\n"
+            FAILED=1
+          fi
+          echo "failed=${FAILED}" >> "$GITHUB_OUTPUT"
+          echo "messages=${MESSAGES}" >> "$GITHUB_OUTPUT"
+
+      - name: Post PR Comment
+        if: steps.check.outputs.failed == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "## ⚠️ PR Too Large
+
+          This PR exceeds the recommended size limits. Consider splitting it into smaller PRs.
+
+          ${{ steps.check.outputs.messages }}"
+
+      - name: Fail if PR Too Large
+        if: steps.check.outputs.failed == '1'
+        run: exit 1
