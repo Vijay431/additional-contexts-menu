@@ -35,7 +35,7 @@ jobs:
           echo "file_count=${FILE_COUNT}" >> "$GITHUB_OUTPUT"
           echo "line_count=${LINE_COUNT}" >> "$GITHUB_OUTPUT"
 
-      - name: Post PR Comment
+      - name: Post or Update PR Comment
         if: steps.check.outputs.failed == '1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,6 +49,7 @@ jobs:
           [ "${{ steps.check.outputs.line_count }}" -gt 600 ] && BODY="${BODY}
           - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 600)"
 
+          gh pr comment ${{ github.event.pull_request.number }} --edit-last --body "$BODY" 2>/dev/null || \
           gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
 
       - name: Fail if PR Too Large
