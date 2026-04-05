@@ -38,10 +38,10 @@ description: 'Explore the comprehensive features and intelligent code operations
                         </p>
                         <ul class="feature-benefits">
                             <li>Detects function declarations, expressions, and arrow functions</li>
-                            <li>Supports async/await and generator functions</li>
-                            <li>Recognizes React functional and class components</li>
+                            <li>Supports async/await functions</li>
+                            <li>Recognizes React functional components and custom hooks</li>
                             <li>Handles TypeScript type annotations and generics</li>
-                            <li>Preserves JSDoc comments and decorators</li>
+                            <li>Preserves JSDoc comments</li>
                             <li>Nested function support (returns inner-most function)</li>
                             <li>No false positives in comments or strings</li>
                         </ul>
@@ -79,7 +79,6 @@ description: 'Explore the comprehensive features and intelligent code operations
                         </p>
                         <ul class="feature-benefits">
                             <li>Removes code from source file after successful move</li>
-                            <li>Cleans up unused imports automatically</li>
                             <li>Handles interdependent code relationships</li>
                             <li>Maintains proper file structure and formatting</li>
                         </ul>

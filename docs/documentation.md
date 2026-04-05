@@ -46,11 +46,15 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                         <h4>ContextMenuManager</h4>
                         <p>Command registration and menu interactions</p>
                     </div>
+                    <div class="component">
+                        <h4>WalkthroughManager</h4>
+                        <p>First-run onboarding walkthrough experience</p>
+                    </div>
                 </div>
             </div>
 
             <div class="arch-layer">
-                <h3 class="layer-title">Service Layer (Singleton Pattern)</h3>
+                <h3 class="layer-title">Service Layer (DI Container)</h3>
                 <div class="layer-components">
                     <div class="component">
                         <h4>ProjectDetectionService</h4>
@@ -66,7 +70,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     </div>
                     <div class="component">
                         <h4>TerminalService</h4>
-                        <p>Cross-platform terminal integration (v1.2.0+)</p>
+                        <p>Cross-platform terminal integration</p>
                     </div>
                     <div class="component">
                         <h4>FileDiscoveryService</h4>
@@ -75,6 +79,26 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     <div class="component">
                         <h4>FileSaveService</h4>
                         <p>Handles "Save All" with progress feedback</p>
+                    </div>
+                    <div class="component">
+                        <h4>AccessibilityService</h4>
+                        <p>Screen reader support and announcements</p>
+                    </div>
+                    <div class="component">
+                        <h4>FileNamingConventionService</h4>
+                        <p>File renaming based on naming conventions</p>
+                    </div>
+                    <div class="component">
+                        <h4>EnumGeneratorService</h4>
+                        <p>Generates enums from union types (lazy-loaded)</p>
+                    </div>
+                    <div class="component">
+                        <h4>EnvFileGeneratorService</h4>
+                        <p>Creates .env files from usage patterns (lazy-loaded)</p>
+                    </div>
+                    <div class="component">
+                        <h4>CronJobTimerGeneratorService</h4>
+                        <p>Generates cron expressions (lazy-loaded)</p>
                     </div>
                 </div>
             </div>
@@ -99,7 +123,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                 <p>Ultra-fast TypeScript compilation with comprehensive optimization:</p>
                 <ul>
                     <li><strong>Build Speed:</strong> ~1 second builds (20x faster than webpack)</li>
-                    <li><strong>Bundle Size:</strong> 47.86KB production bundle (95.9% reduction)</li>
+                    <li><strong>Bundle Size:</strong> 60KB core + 26KB lazy-loaded services</li>
                     <li><strong>Configuration:</strong> TypeScript-based esbuild.config.ts</li>
                     <li><strong>Development:</strong> Instant rebuilds with watch mode</li>
                 </ul>
@@ -109,9 +133,9 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                 <h3>TypeScript-First Scripting</h3>
                 <p>All build scripts use direct TypeScript execution via tsx:</p>
                 <ul>
-                    <li><strong>Primary Command:</strong> <code>npm run build</code></li>
-                    <li><strong>Watch Mode:</strong> <code>npm run watch</code></li>
-                    <li><strong>Production Build:</strong> <code>npm run package</code></li>
+                    <li><strong>Primary Command:</strong> <code>pnpm run build</code></li>
+                    <li><strong>Watch Mode:</strong> <code>pnpm run watch</code></li>
+                    <li><strong>Production Build:</strong> <code>pnpm run package</code></li>
                     <li><strong>Script Execution:</strong> tsx for direct TypeScript running</li>
                 </ul>
             </div>
@@ -132,50 +156,103 @@ description: 'Comprehensive technical documentation for Additional Context Menus
 
         <div class="commands-grid">
             <div class="command-category">
-                <h3>Main Features</h3>
+                <h3>Right-Click Menu Only</h3>
                 <div class="command-list">
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copyFunction</h4>
-                        <p class="command-desc">Copy function at cursor position with smart detection</p>
+                        <p class="command-desc">Copy function at cursor position using AST detection</p>
                         <div class="command-details">
-                            <p><strong>Accessibility:</strong> Right-click menu + Command Palette</p>
-                            <p><strong>Condition:</strong> TypeScript/JavaScript files in Node.js projects</p>
+                            <p><strong>Access:</strong> Right-click menu only</p>
+                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+F</p>
                         </div>
                     </div>
-
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.copyFunctionToFile</h4>
+                        <p class="command-desc">Copy function at cursor to a target file</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Right-click menu only</p>
+                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+E</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.moveFunctionToFile</h4>
+                        <p class="command-desc">Move function at cursor to a target file (removes from source)</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Right-click menu only</p>
+                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+R</p>
+                        </div>
+                    </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copyContentToFile</h4>
                         <p class="command-desc">Copy selected code to another file with import handling</p>
                         <div class="command-details">
-                            <p><strong>Accessibility:</strong> Right-click menu + Command Palette</p>
-                            <p><strong>Condition:</strong> Text selection required</p>
+                            <p><strong>Access:</strong> Right-click menu only</p>
+                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+C</p>
                         </div>
                     </div>
-
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.moveContentToFile</h4>
                         <p class="command-desc">Move selected code to another file (copy + delete)</p>
                         <div class="command-details">
-                            <p><strong>Accessibility:</strong> Right-click menu + Command Palette</p>
-                            <p><strong>Condition:</strong> Text selection required</p>
+                            <p><strong>Access:</strong> Right-click menu only</p>
+                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+M</p>
                         </div>
                     </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.generateEnum</h4>
+                        <p class="command-desc">Generate enum from selected TypeScript union type</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Right-click menu only</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.generateCronTimer</h4>
+                        <p class="command-desc">Interactive cron expression builder</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Right-click menu only</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="command-category">
+                <h3>Command Palette Accessible</h3>
+                <div class="command-list">
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.saveAll</h4>
                         <p class="command-desc">Save all dirty documents with progress feedback</p>
                         <div class="command-details">
-                            <p><strong>Accessibility:</strong> Right-click menu + Command Palette</p>
-                            <p><strong>Condition:</strong> Always available when extension enabled</p>
+                            <p><strong>Access:</strong> Right-click menu + Command Palette</p>
+                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+A</p>
                         </div>
                     </div>
-
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.openInTerminal</h4>
-                        <p class="command-desc">Cross-platform terminal integration (v1.2.0+)</p>
+                        <p class="command-desc">Open terminal at file location</p>
                         <div class="command-details">
-                            <p><strong>Accessibility:</strong> Right-click menu + Command Palette</p>
-                            <p><strong>Condition:</strong> Always available when extension enabled</p>
+                            <p><strong>Access:</strong> Right-click menu + Command Palette</p>
+                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+T</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.generateEnvFile</h4>
+                        <p class="command-desc">Generate .env file from usage patterns</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.renameFileConvention</h4>
+                        <p class="command-desc">Rename file to kebab-case, camelCase, or PascalCase</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.openWalkthrough</h4>
+                        <p class="command-desc">Open the getting started walkthrough</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette</p>
                         </div>
                     </div>
                 </div>
@@ -188,16 +265,58 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                         <h4 class="command-name">additionalContextMenus.enable</h4>
                         <p class="command-desc">Enable the extension</p>
                         <div class="command-details">
-                            <p><strong>Accessibility:</strong> Command Palette only</p>
+                            <p><strong>Access:</strong> Command Palette only</p>
                         </div>
                     </div>
-
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.disable</h4>
                         <p class="command-desc">Disable the extension</p>
                         <div class="command-details">
-                            <p><strong>Accessibility:</strong> Command Palette only</p>
+                            <p><strong>Access:</strong> Command Palette only</p>
                         </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.showOutputChannel</h4>
+                        <p class="command-desc">View extension logs</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette only</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.debugContextVariables</h4>
+                        <p class="command-desc">Inspect extension state and context variables</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette only</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.refreshContextVariables</h4>
+                        <p class="command-desc">Force re-detection of project context</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette only</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.checkKeybindingConflicts</h4>
+                        <p class="command-desc">View keybinding configuration</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette only</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.enableKeybindings</h4>
+                        <p class="command-desc">Enable custom keybindings</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette only</p>
+                        </div>
+                    </div>
+                    <div class="command-item">
+                        <h4 class="command-name">additionalContextMenus.disableKeybindings</h4>
+                        <p class="command-desc">Disable custom keybindings</p>
+                        <div class="command-details">
+                            <p><strong>Access:</strong> Command Palette only</p>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -268,7 +387,7 @@ pnpm run build</code></pre>
                 <h3>Build Performance</h3>
                 <ul>
                     <li><strong>Build Time:</strong> ~1 second (20x faster than webpack)</li>
-                    <li><strong>Bundle Size:</strong> 47.86KB (95.9% reduction)</li>
+                    <li><strong>Bundle Size:</strong> 60KB core + 26KB lazy services</li>
                     <li><strong>Development:</strong> Instant rebuilds</li>
                 </ul>
             </div>

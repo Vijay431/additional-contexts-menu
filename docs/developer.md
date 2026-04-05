@@ -55,7 +55,7 @@ pnpm run watch
 | **Node.js** | >= 20.0.0 (20-24 supported) | JavaScript runtime  | [nodejs.org](https://nodejs.org/)                       |
 | **pnpm**    | 10.x.x                      | Package manager     | `npm install -g pnpm`                                   |
 | **Git**     | Latest                      | Version control     | [git-scm.com](https://git-scm.com/)                     |
-| **VS Code** | >= 1.108.0                  | IDE for development | [code.visualstudio.com](https://code.visualstudio.com/) |
+| **VS Code** | >= 1.110.0                  | IDE for development | [code.visualstudio.com](https://code.visualstudio.com/) |
 
 ### Verify Installation
 
@@ -548,9 +548,24 @@ additional-contexts-menu/
 │ └── generate-changelog.js # Changelog generator
 ├── src/ # Source code
 │ ├── extension.ts # Extension entry point
+│ ├── commands/ # Command handler classes
+│ │ ├── BaseCommandHandler.ts
+│ │ ├── ICommandHandler.ts
+│ │ ├── CopyFunctionCommand.ts
+│ │ ├── SaveAllCommand.ts
+│ │ ├── OpenInTerminalCommand.ts
+│ │ └── index.ts
+│ ├── di/ # Dependency injection
+│ │ ├── container.ts
+│ │ ├── types.ts
+│ │ ├── index.ts
+│ │ └── interfaces/ # Service interfaces
 │ ├── managers/ # Core managers
-│ │ ├── extensionManager.ts
-│ │ └── contextMenuManager.ts
+│ │ ├── ExtensionManager.ts
+│ │ ├── ContextMenuManager.ts
+│ │ ├── CommandRegistry.ts
+│ │ ├── WalkthroughManager.ts
+│ │ └── index.ts
 │ ├── services/ # Extension services
 │ │ ├── codeAnalysisService.ts
 │ │ ├── configurationService.ts
@@ -561,14 +576,22 @@ additional-contexts-menu/
 │ │ ├── fileNamingConventionService.ts
 │ │ ├── fileSaveService.ts
 │ │ ├── projectDetectionService.ts
+│ │ ├── accessibilityService.ts
 │ │ └── terminalService.ts
 │ ├── types/ # TypeScript types
-│ │ └── extension.ts
+│ │ ├── config.ts
+│ │ ├── extension.ts
+│ │ └── index.ts
 │ └── utils/ # Utility functions
-│ └── logger.ts
+│ ├── logger.ts
+│ ├── cache.ts
+│ ├── metrics.ts
+│ ├── configValidator.ts
+│ ├── accessibilityHelper.ts
+│ ├── pathValidator.ts
+│ └── index.ts
 ├── .editorconfig # Editor configuration
 ├── .gitignore # Git ignore rules
-├── .prettierrc # Prettier configuration
 ├── .vscodeignore # Files to exclude from VSIX
 ├── CHANGELOG.md # Version history
 ├── CODE_OF_CONDUCT.md # Code of conduct
@@ -594,10 +617,13 @@ additional-contexts-menu/
 ```typescript
 // Extension entry point
 // Called when VS Code activates the extension
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+  // Initialize the DI container with all services
+  await initializeContainer(context);
+
   // Initialize extension manager
-  const extensionManager = new ExtensionManager(context);
-  extensionManager.initialize();
+  const extensionManager = new ExtensionManager();
+  await extensionManager.activate(context);
 }
 
 // Called when extension is deactivated

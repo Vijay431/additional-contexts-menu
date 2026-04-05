@@ -17,24 +17,22 @@ Create a new file `src/commands/MyNewCommand.ts`. Import from the barrel `index.
 ```typescript
 import * as vscode from 'vscode';
 
-// Use barrel imports from the di/interfaces index
 import type { ICodeAnalysisService } from '../di/interfaces/ICodeAnalysisService';
 import type { IAccessibilityService } from '../di/interfaces/IAccessibilityService';
+import type { ILogger } from '../di/interfaces/ILogger';
 
-// Import ICommandHandler and BaseCommandHandler from the commands barrel
 import { BaseCommandHandler, type CommandResult } from './BaseCommandHandler';
 import type { ICommandHandler } from './ICommandHandler';
 
 export class MyNewCommand extends BaseCommandHandler implements ICommandHandler {
+  private readonly codeAnalysisService: ICodeAnalysisService;
+
   constructor(
-    codeAnalysisService: ICodeAnalysisService,
+    logger: ILogger,
     accessibilityService: IAccessibilityService,
+    codeAnalysisService: ICodeAnalysisService,
   ) {
-    super(
-      'MyNewCommand',
-      codeAnalysisService as unknown as { debug: (msg: string, data?: unknown) => void },
-      accessibilityService,
-    );
+    super('MyNewCommand', logger, accessibilityService);
     this.codeAnalysisService = codeAnalysisService;
   }
 
@@ -42,14 +40,15 @@ export class MyNewCommand extends BaseCommandHandler implements ICommandHandler 
     this.logInfo('My New Command triggered');
 
     try {
-      const editor = this.getRequiredActiveEditor();
-      const document = editor.document;
-      const position = editor.selection.active;
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        this.showWarning('No active editor found');
+        return this.error('No active editor found');
+      }
 
-      // Use injected services
       const functionInfo = await this.codeAnalysisService.findFunctionAtPosition(
-        document,
-        position,
+        editor.document,
+        editor.selection.active,
       );
 
       if (!functionInfo) {
@@ -57,10 +56,8 @@ export class MyNewCommand extends BaseCommandHandler implements ICommandHandler 
         return this.error('No function found');
       }
 
-      // Command logic here
       const message = `Function '${functionInfo.name}' detected`;
       this.showInfo(message);
-      this.logDebug(`Function: ${functionInfo.name} detected`);
       await this.announceSuccess('My New Command', message);
 
       return this.success(message);
@@ -89,26 +86,24 @@ import { MyNewCommand } from '../commands';
 
 ## Step 3: Register the Command
 
-1. Open `src/managers/CommandRegistry.ts`
-2. Import your new command using the barrel import
-3. Add the command to the registry
+Open `src/managers/ContextMenuManager.ts` and add your command to the `registerCommands()` method:
 
 ```typescript
-// Use the barrel import from src/commands/index.ts
-import { MyNewCommand } from '../commands';
+vscode.commands.registerCommand('additionalContextMenus.myNewCommand', () =>
+  this.handleMyNewCommand(),
+),
+```
 
-commandRegistry.registerCommands([
-  {
-    id: 'additionalContextMenus.myNewCommand',
-    title: 'My New Command',
-    category: 'Additional Context Menus',
-    handlerFactory: () =>
-      new MyNewCommand(
-        getService(TYPES.CodeAnalysisService),
-        getService(TYPES.AccessibilityService),
-      ),
-  },
-]);
+Then add the handler method:
+
+```typescript
+private async handleMyNewCommand(): Promise<void> {
+  const logger = this.logger;
+  const accessibilityService = this.accessibilityService;
+  const codeAnalysisService = this.codeAnalysisService;
+  const command = new MyNewCommand(logger, accessibilityService, codeAnalysisService);
+  await command.execute();
+}
 ```
 
 ## Step 4: Add Context Menu Entry (Optional)

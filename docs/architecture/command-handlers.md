@@ -8,104 +8,67 @@ description: 'Architecture guide for command handlers in Additional Context Menu
 
 ## Overview
 
-Commands have been extracted from the monolithic ContextMenuManager (843 lines) into separate, focused handler classes.
+The extension uses a `BaseCommandHandler` abstract class and `ICommandHandler` interface as the foundation for command handlers. A `CommandRegistry` class exists for centralized command lifecycle management. Currently, commands are registered inline in `ContextMenuManager.registerCommands()` — migration to use `CommandRegistry` as the sole registration point is in progress.
 
-## Before: Monolithic Manager
+## Current State: Commands in ContextMenuManager
+
+All commands are registered directly in `ContextMenuManager`:
 
 ```typescript
-// ContextMenuManager - 843 lines with mixed concerns
-export class ContextMenuManager {
-  // 17 services injected via getInstance()
-  private async handleCopyFunction() {
-    /* 30 lines */
-  }
-  private async handleSaveAll() {
-    /* 20 lines */
-  }
-  private async handleOpenInTerminal() {
-    /* 15 lines */
-  }
-  // ... 14 more command handlers
+// src/managers/ContextMenuManager.ts
+private registerCommands(): void {
+  this.disposables.push(
+    vscode.commands.registerCommand('additionalContextMenus.copyFunction', () =>
+      this.handleCopyFunction(),
+    ),
+    vscode.commands.registerCommand('additionalContextMenus.copyFunctionToFile', () =>
+      this.handleCopyFunctionToFile(),
+    ),
+    // ... all other commands registered here
+  );
 }
 ```
 
-**Problems:**
+## Command Infrastructure
 
-1. **Mixed Responsibilities**: Command logic mixed with registration
-2. **Hard to Test**: Can't mock individual services
-3. **Code Duplication**: Command patterns repeated for each handler
-4. **No Separation**: Business logic mixed with command handling
+### BaseCommandHandler
 
-## After: Focused Command Handlers
+An abstract base class providing common functionality for command handlers:
 
 ```typescript
-// Each command has a single, well-defined purpose
-export class CopyFunctionCommand extends BaseCommandHandler {
-  constructor(codeAnalysisService: ICodeAnalysisService, ...) {
-    super('CopyFunction', codeAnalysisService as unknown, ...);
-    this.codeAnalysisService = codeAnalysisService;
-  }
+export abstract class BaseCommandHandler implements ICommandHandler {
+  constructor(
+    protected readonly name: string,
+    protected readonly logger: ILogger,
+    protected readonly accessibilityService: IAccessibilityService,
+  ) {}
 
-  public async execute(): Promise<CommandResult> {
-    const functionInfo = await this.codeAnalysisService.findFunctionAtPosition(...);
-    // ... focused logic for copying function
-  }
+  public abstract execute(): Promise<CommandResult>;
+
+  // Helpers: showInfo(), showWarning(), showError()
+  // Logging: logInfo(), logDebug(), logWarn(), logError()
+  // Accessibility: announce(), announceSuccess(), announceError()
+  // Results: success(), error()
 }
 ```
 
-**Benefits:**
+Currently used by: `CopyFunctionCommand`, `SaveAllCommand`, `OpenInTerminalCommand`.
 
-1. **Single Responsibility**: Each command has one clear purpose
-2. **Easy Testing**: Commands can be tested in isolation
-3. **Consistent Patterns**: All commands follow same structure
-4. **Better Error Handling**: Centralized error handling in BaseCommandHandler
+### CommandRegistry
 
-## Command Registry
-
-The **CommandRegistry** manages all command lifecycle:
+A `CommandRegistry` class exists in `src/managers/CommandRegistry.ts` for centralized command registration and lifecycle management. It is not yet wired into the main activation path — commands are still registered directly in `ContextMenuManager`.
 
 ```typescript
 export class CommandRegistry {
-  private readonly commands = new Map<string, CommandMetadata>();
-
-  registerCommand(metadata: CommandMetadata): CommandRegistry {
+  registerCommand(metadata: CommandMetadata): this {
     const handler = metadata.handlerFactory();
     const disposable = vscode.commands.registerCommand(metadata.id, async () => {
       await handler.execute();
     });
     this.commands.set(metadata.id, { metadata, disposable });
+    return this;
   }
 }
-```
-
-**Features:**
-
-- Centralized command registration
-- Command metadata management
-- Lifecycle management (dispose all at once)
-- Type-safe command execution
-
-## Usage Example
-
-```typescript
-// Register a command in extension.ts
-import { getService } from './di';
-import { CopyFunctionCommand } from './commands';
-
-const commandRegistry = getService('CommandRegistry');
-
-commandRegistry.registerCommands([
-  {
-    id: 'additionalContextMenus.copyFunction',
-    title: 'Copy Function',
-    category: 'Additional Context Menus',
-    handlerFactory: () =>
-      new CopyFunctionCommand(
-        getService(TYPES.CodeAnalysisService),
-        getService(TYPES.AccessibilityService),
-      ),
-  },
-]);
 ```
 
 ## See Also
