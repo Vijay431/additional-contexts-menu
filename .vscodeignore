@@ -20,6 +20,8 @@ pnpm-lock.yaml
 .husky/
 .gitignore
 .editorconfig
+.coderabbit.yaml
+.nvmrc
 .mcp.json
 .prettier*
 eslint*
