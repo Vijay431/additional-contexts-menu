@@ -155,22 +155,19 @@ const files = await vscode.workspace.findFiles(pattern, excludePattern, maxResul
 // Instead of manual fs.readdir() recursion
 ```
 
-### 2. Debouncing
+### 2. Event-Driven Configuration Updates
 
-Configuration changes are debounced to avoid excessive re-computation:
-
-```typescript
-private configChangeDisposable = new DebounceEmitter();
-```
-
-### 3. Incremental Analysis
-
-Code analysis only processes the visible portion of the file:
+Configuration changes are handled reactively via VS Code's `onDidChangeConfiguration` event:
 
 ```typescript
-// Only analyze around cursor position
-const range = new vscode.Position(Math.max(0, position.line - 50), 0);
+this.configService.onConfigurationChanged(() => {
+  void this.handleConfigurationChanged();
+});
 ```
+
+### 3. Full-File AST Parsing
+
+Code analysis parses the entire file using `ts.createSourceFile()` and traverses the AST to find the innermost function node containing the cursor position. This ensures accurate detection with no false positives from comments or strings.
 
 ## Best Practices
 

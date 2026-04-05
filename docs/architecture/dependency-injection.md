@@ -95,18 +95,18 @@ export class ConfigurationService implements IConfigurationService {
 ```typescript
 // src/di/types.ts - Type-safe service tokens
 export const TYPES = {
-  Logger: Symbol('Logger'),
-  ConfigurationService: Symbol('ConfigurationService'),
-  ProjectDetectionService: Symbol('ProjectDetectionService'),
-  FileDiscoveryService: Symbol('FileDiscoveryService'),
-  CodeAnalysisService: Symbol('CodeAnalysisService'),
-  FileSaveService: Symbol('FileSaveService'),
-  TerminalService: Symbol('TerminalService'),
-  AccessibilityService: Symbol('AccessibilityService'),
-  EnumGeneratorService: Symbol('EnumGeneratorService'),
-  EnvFileGeneratorService: Symbol('EnvFileGeneratorService'),
-  CronJobTimerGeneratorService: Symbol('CronJobTimerGeneratorService'),
-  FileNamingConventionService: Symbol('FileNamingConventionService'),
+  Logger: Symbol.for('Logger'),
+  ConfigurationService: Symbol.for('ConfigurationService'),
+  ProjectDetectionService: Symbol.for('ProjectDetectionService'),
+  FileDiscoveryService: Symbol.for('FileDiscoveryService'),
+  CodeAnalysisService: Symbol.for('CodeAnalysisService'),
+  FileSaveService: Symbol.for('FileSaveService'),
+  TerminalService: Symbol.for('TerminalService'),
+  AccessibilityService: Symbol.for('AccessibilityService'),
+  EnumGeneratorService: Symbol.for('EnumGeneratorService'),
+  EnvFileGeneratorService: Symbol.for('EnvFileGeneratorService'),
+  CronJobTimerGeneratorService: Symbol.for('CronJobTimerGeneratorService'),
+  FileNamingConventionService: Symbol.for('FileNamingConventionService'),
 };
 ```
 
@@ -114,19 +114,24 @@ export const TYPES = {
 
 ```typescript
 // src/di/container.ts
-export async function initializeContainer(context: vscode.ExtensionContext): Promise<void> {
-  const outputChannel = vscode.window.createOutputChannel('Additional Context Menus');
-
+export async function initializeContainer(context: {
+  subscriptions: { dispose(): void }[];
+}): Promise<void> {
   // Register Logger first (other services depend on it)
-  container.registerSingleton<ILogger>(TYPES.Logger, () => Logger.create(undefined, outputChannel));
+  container.registerSingleton<ILogger>(TYPES.Logger, () => {
+    const logger = new Logger();
+    context.subscriptions.push({ dispose: () => logger.dispose() });
+    return logger;
+  });
 
-  // Register ConfigurationService
-  container.registerSingleton<IConfigurationService>(TYPES.ConfigurationService, () =>
-    ConfigurationService.create(outputChannel),
-  );
+  // Register ConfigurationService (depends on Logger)
+  container.registerSingleton<IConfigurationService>(TYPES.ConfigurationService, () => {
+    const logger = container.get<ILogger>(TYPES.Logger);
+    return ConfigurationService.create(logger);
+  });
 
   // Register other services...
-  // Each service receives its dependencies via constructor
+  // Each service receives its dependencies via the create() factory method
 }
 ```
 
@@ -173,15 +178,15 @@ export class CopyFunctionCommand extends BaseCommandHandler {
 
 ## Migration Notes
 
-### Backward Compatibility
+### Migration Status
 
-The old singleton pattern is preserved for gradual migration:
+The old `getInstance()` static method is preserved on some services for backward compatibility but is marked `@deprecated`. New code should always use the DI container:
 
 ```typescript
-// Old code still works
+// Deprecated — avoid in new code
 const config = ConfigurationService.getInstance();
 
-// New code uses DI
+// Preferred — use DI container
 const config = getService<IConfigurationService>(TYPES.ConfigurationService);
 ```
 
@@ -189,7 +194,7 @@ const config = getService<IConfigurationService>(TYPES.ConfigurationService);
 
 1. **Phase 1**: Add interfaces and DI container (DONE)
 2. **Phase 2**: Update services to support both patterns (DONE)
-3. **Phase 3**: Gradually migrate consumers to use DI
+3. **Phase 3**: Gradually migrate consumers to use DI (IN PROGRESS)
 4. **Phase 4**: Remove legacy `getInstance()` methods (future)
 
 ## Architecture Diagram

@@ -342,7 +342,7 @@ If you encounter accessibility problems, please report them:
 
 **Screen Reader**: NVDA 2023.3 / JAWS 2024 / VoiceOver / Orca
 **OS**: Windows 11 / macOS 14 / Ubuntu 22.04
-**VS Code**: 1.108.1
+**VS Code**: 1.110.0
 **Extension Version**: 2.1.0
 
 **Steps to Reproduce**:

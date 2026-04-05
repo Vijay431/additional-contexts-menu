@@ -84,7 +84,7 @@ description: 'Comprehensive documentation for Code Analysis Service - AST-based 
                 <ul>
                     <li><strong>Bundle size increase</strong> - TypeScript Compiler API contributes to bundle size (included in core)</li>
                     <li><strong>Slightly slower</strong> - Still < 10ms per file, acceptable for most use cases</li>
-                    <li><strong>More complex</strong> - Implementation is more complex than regex-based approach</li>
+                    <li><strong>More complex</strong> - Implementation is more complex than a simple pattern-matching approach</li>
                 </ul>
             </div>
         </div>
@@ -105,7 +105,7 @@ description: 'Comprehensive documentation for Code Analysis Service - AST-based 
                 <div class="method-signature">
                     <code>public static getInstance(): CodeAnalysisService</code>
                 </div>
-                <p>Returns singleton instance of Code Analysis Service.</p>
+                <p>Returns singleton instance of Code Analysis Service. <strong>Deprecated</strong> — prefer DI injection via <code>getService&lt;ICodeAnalysisService&gt;(TYPES.CodeAnalysisService)</code>.</p>
                 <div class="method-params">
                     <h4>Returns</h4>
                     <p><code>CodeAnalysisService</code> - The singleton instance</p>
@@ -116,7 +116,7 @@ description: 'Comprehensive documentation for Code Analysis Service - AST-based 
             <div class="api-method">
                 <h3>findFunctionAtPosition()</h3>
                 <div class="method-signature">
-                    <code>public async findFunctionAtPosition(document: vscode.TextDocument, position: vscode.Position): Promise<FunctionInfo | null></code>
+                    <code>public async findFunctionAtPosition(document: vscode.TextDocument, position: vscode.Position): Promise&lt;FunctionInfo | undefined&gt;</code>
                 </div>
                 <p>Finds function that contains the given cursor position in document using AST analysis.</p>
                 <div class="method-params">
@@ -126,7 +126,7 @@ description: 'Comprehensive documentation for Code Analysis Service - AST-based 
                         <li><code>position</code> - The cursor position in the document</li>
                     </ul>
                     <h4>Returns</h4>
-                    <p><code>Promise<FunctionInfo | null></code> - The function info if found, null otherwise</p>
+                    <p><code>Promise&lt;FunctionInfo | undefined&gt;</code> - The function info if found, undefined otherwise</p>
                 </div>
             </div>
 
@@ -134,7 +134,7 @@ description: 'Comprehensive documentation for Code Analysis Service - AST-based 
             <div class="api-method">
                 <h3>extractImports()</h3>
                 <div class="method-signature">
-                    <code>public extractImports(code: string, languageId: string): string[]</code>
+                    <code>public extractImports(code: string, languageId: string): ImportInfo[]</code>
                 </div>
                 <p>Extracts import statements from the given code block using AST parsing.</p>
                 <div class="method-params">
@@ -144,7 +144,7 @@ description: 'Comprehensive documentation for Code Analysis Service - AST-based 
                         <li><code>languageId</code> - The language ID (e.g., 'typescript', 'javascript')</li>
                     </ul>
                     <h4>Returns</h4>
-                    <p><code>string[]</code> - Array of import statements found</p>
+                    <p><code>ImportInfo[]</code> - Array of import info objects, each with <code>fullText</code>, <code>type</code> ('named' | 'default' | 'namespace' | 'side-effect'), <code>module</code>, and optional <code>names</code></p>
                 </div>
             </div>
         </div>
@@ -286,8 +286,8 @@ return innerFunction();
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="practice-content">
-                    <h3>Use Singleton Pattern</h3>
-                    <p>Always get service instance via <code>getInstance()</code> for consistent behavior.</p>
+                    <h3>Use DI Injection (Preferred)</h3>
+                    <p>Get the service via the DI container: <code>getService&lt;ICodeAnalysisService&gt;(TYPES.CodeAnalysisService)</code>. The static <code>getInstance()</code> method is deprecated.</p>
                 </div>
             </div>
 

@@ -238,7 +238,7 @@ throw error;
                         <i class="fas fa-broom"></i>
                     </div>
                     <h3>Automatic Cleanup</h3>
-                    <p>Removes moved code from source file and cleans up unused imports automatically.</p>
+                    <p>Removes moved code from the source file after a successful move operation.</p>
                 </div>
                 
                 <div class="move-feature">
