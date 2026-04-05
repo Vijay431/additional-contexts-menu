@@ -27,7 +27,7 @@ _Extract functions in one click with intelligent import handling_
 1. **Install** the extension from VS Code Marketplace
 2. **Open** any Node.js project with `package.json`
 3. **Right-click** in a TypeScript/JavaScript file to see new context menu options
-4. **Try it out:** Select some code → Right-click → "Copy Content to File"
+4. **Try it out:** Select some code → Right-click → "Copy Selection to File"
 
 ### 💡 Common Workflows
 
@@ -112,8 +112,8 @@ Detailed documentation for all 11 services with API references, examples, and be
 - 🎯 **Copy Function** - AST-based function detection and copying with intelligent import handling
 - 📋 **Copy Function to File** - Copy function at cursor to a target file
 - ✂️ **Move Function to File** - Move function at cursor to a target file (removes from source)
-- 📋 **Copy Content to File** - Smart code copying with import conflict resolution
-- ✂️ **Move Content to File** - Intelligent code moving with automatic cleanup
+- 📋 **Copy Selection to File** - Smart code copying with import conflict resolution
+- ✂️ **Move Selection to File** - Intelligent code moving with automatic cleanup
 - 💾 **Save All** - Enhanced save functionality with progress feedback and read-only handling
 - 🖥️ **Open in Terminal** - Cross-platform terminal integration
 - 🔢 **Generate Enum from Union Type** - Convert TypeScript union types to enums
@@ -172,15 +172,15 @@ The extension provides comprehensive accessibility configuration options:
 
 All commands are keyboard accessible:
 
-| Command               | Windows/Linux      | macOS             |
-| --------------------- | ------------------ | ----------------- |
-| Copy Function         | `Ctrl+Alt+Shift+F` | `Cmd+Alt+Shift+F` |
-| Copy Function to File | `Ctrl+Alt+Shift+E` | `Cmd+Alt+Shift+E` |
-| Copy Content to File  | `Ctrl+Alt+Shift+C` | `Cmd+Alt+Shift+C` |
-| Move Function to File | `Ctrl+Alt+Shift+R` | `Cmd+Alt+Shift+R` |
-| Move Content to File  | `Ctrl+Alt+Shift+M` | `Cmd+Alt+Shift+M` |
-| Save All              | `Ctrl+Alt+Shift+A` | `Cmd+Alt+Shift+A` |
-| Open in Terminal      | `Ctrl+Alt+Shift+T` | `Cmd+Alt+Shift+T` |
+| Command                | Windows/Linux      | macOS             |
+| ---------------------- | ------------------ | ----------------- |
+| Copy Function          | `Ctrl+Alt+Shift+F` | `Cmd+Alt+Shift+F` |
+| Copy Function to File  | `Ctrl+Alt+Shift+E` | `Cmd+Alt+Shift+E` |
+| Copy Selection to File | `Ctrl+Alt+Shift+C` | `Cmd+Alt+Shift+C` |
+| Move Function to File  | `Ctrl+Alt+Shift+R` | `Cmd+Alt+Shift+R` |
+| Move Selection to File | `Ctrl+Alt+Shift+M` | `Cmd+Alt+Shift+M` |
+| Save All               | `Ctrl+Alt+Shift+A` | `Cmd+Alt+Shift+A` |
+| Open in Terminal       | `Ctrl+Alt+Shift+T` | `Cmd+Alt+Shift+T` |
 
 #### Screen Reader Support
 
@@ -345,8 +345,8 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 - `additionalContextMenus.copyFunction` - Copy Function
 - `additionalContextMenus.copyFunctionToFile` - Copy Function to File
 - `additionalContextMenus.moveFunctionToFile` - Move Function to File
-- `additionalContextMenus.copyContentToFile` - Copy Content to File
-- `additionalContextMenus.moveContentToFile` - Move Content to File
+- `additionalContextMenus.copySelectionToFile` - Copy Selection to File
+- `additionalContextMenus.moveSelectionToFile` - Move Selection to File
 - `additionalContextMenus.generateEnum` - Generate Enum from Union Type
 - `additionalContextMenus.generateCronTimer` - Generate Cron Expression
 
@@ -370,9 +370,9 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 
 - `Ctrl+Alt+Shift+F` (`Cmd+Alt+Shift+F` on Mac) - Copy Function
 - `Ctrl+Alt+Shift+E` (`Cmd+Alt+Shift+E` on Mac) - Copy Function to File
-- `Ctrl+Alt+Shift+C` (`Cmd+Alt+Shift+C` on Mac) - Copy Content to File
+- `Ctrl+Alt+Shift+C` (`Cmd+Alt+Shift+C` on Mac) - Copy Selection to File
 - `Ctrl+Alt+Shift+R` (`Cmd+Alt+Shift+R` on Mac) - Move Function to File
-- `Ctrl+Alt+Shift+M` (`Cmd+Alt+Shift+M` on Mac) - Move Content to File
+- `Ctrl+Alt+Shift+M` (`Cmd+Alt+Shift+M` on Mac) - Move Selection to File
 - `Ctrl+Alt+Shift+A` (`Cmd+Alt+Shift+A` on Mac) - Save All
 - `Ctrl+Alt+Shift+T` (`Cmd+Alt+Shift+T` on Mac) - Open in Terminal
 
@@ -645,7 +645,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 - **🔧 Enhanced Context Menu Visibility**: All commands properly available in command palette and context menus
 - **📦 Complete Command Palette Coverage**: All 20 commands registered in package.json
 - **🎯 Function Detection Context**: Smart context variable for function-aware menu visibility
-- **🔄 Command Renaming**: More accurate naming (Copy/Move Content to File)
+- **🔄 Command Renaming**: More accurate naming (Copy/Move Selection to File)
 - **🏗️ Service Cleanup**: Removed unused services (BulkFileRenamer, Gitignore)
 - **📚 Documentation Corrections**: Accurate service count (11)
 
@@ -683,15 +683,13 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 **Build Performance:**
 
 - ⚡ **Lightning Fast Builds**: esbuild compilation in ~1 second (20x faster than webpack)
-- 📦 **Minimal Bundle Size**: 60KB core bundle + 26KB lazy-loaded services
 - 🔄 **Instant Rebuilds**: Near-instant watch mode for development
 - 🎯 **Smart Bundling**: Tree-shaking eliminates unused dependencies
 
 ### 🚀 Performance Optimizations
 
 - **Lazy-Loaded Services**: Generator services (Enum, Env, Cron) load only when needed
-- **60 KB Core Bundle**: Essential features load instantly
-- **On-Demand Features**: Rarely-used generators load in ~10KB chunks when invoked
+- **On-Demand Features**: Rarely-used generators load in small chunks when invoked
 
 **Runtime Performance:**
 
@@ -777,14 +775,14 @@ pnpm run build
 
 ### 📋 Available Development Commands
 
-| Command             | Description                                     | Performance              |
-| ------------------- | ----------------------------------------------- | ------------------------ |
-| `pnpm run build`    | Build extension using TypeScript esbuild config | ⚡ ~1 second             |
-| `pnpm run watch`    | Watch mode for development                      | 🔄 Instant rebuilds      |
-| `pnpm run package`  | Production build with optimizations             | 📦 60KB core + 26KB lazy |
-| `pnpm run lint`     | Run ESLint on src directory                     | 🎨 Code quality          |
-| `pnpm run lint:fix` | Auto-fix ESLint issues                          | 🔧 Auto-fix              |
-| `pnpm run format`   | Format code using Prettier                      | ✨ Consistent style      |
+| Command             | Description                                     | Performance         |
+| ------------------- | ----------------------------------------------- | ------------------- |
+| `pnpm run build`    | Build extension using TypeScript esbuild config | ⚡ ~1 second        |
+| `pnpm run watch`    | Watch mode for development                      | 🔄 Instant rebuilds |
+| `pnpm run package`  | Production build with optimizations             | 📦 Optimized        |
+| `pnpm run lint`     | Run ESLint on src directory                     | 🎨 Code quality     |
+| `pnpm run lint:fix` | Auto-fix ESLint issues                          | 🔧 Auto-fix         |
+| `pnpm run format`   | Format code using Prettier                      | ✨ Consistent style |
 
 ---
 
@@ -829,7 +827,6 @@ Special thanks to:
 
 ## 📈 Extension Stats
 
-- 📦 **60 KB Core Bundle** - Lightning fast startup
 - 🔄 **Lazy-Loaded Services** - Generators load on demand
 - ⚡ **~1 Second Builds** - esbuild powered
 
