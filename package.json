@@ -83,7 +83,7 @@
   ],
   "engines": {
     "node": ">=20",
-    "vscode": ">=1.108.0"
+    "vscode": ">=1.110.0"
   },
   "activationEvents": [
     "onStartupFinished",
@@ -547,16 +547,6 @@
     "embeddedLanguageFormatting": "auto"
   },
   "lint-staged": {
-    "test/fixtures/**/*.{ts,tsx}": [
-      "prettier --write"
-    ],
-    "test/e2e/extension-e2e.test.ts": [
-      "echo 'Skipping eslint for extension-e2e.test.ts (use IDE for validation)'"
-    ],
-    "test/**/*.{ts,tsx}": [
-      "eslint --no-cache --fix --quiet",
-      "prettier --write"
-    ],
     "src/**/*.{ts,tsx}": [
       "eslint --no-cache --fix --quiet",
       "prettier --write"
@@ -590,7 +580,7 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.39.4",
-    "@types/node": "^24.12.0",
+    "@types/node": "^20.0.0",
     "@types/vscode": "^1.110.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
@@ -599,7 +589,7 @@
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-n": "^17.0.0",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-security": "^3.0.1",
@@ -608,7 +598,7 @@
     "ovsx": "^0.10.10",
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.58.0"
   }
 }
