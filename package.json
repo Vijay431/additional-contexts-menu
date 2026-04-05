@@ -560,6 +560,13 @@
           "command": "additionalContextMenus.generateEnvFile",
           "group": "4_generation@3"
         }
+      ],
+      "explorer/context": [
+        {
+          "when": "additionalContextMenus.enabled",
+          "command": "additionalContextMenus.renameFileConvention",
+          "group": "7_modification@1"
+        }
       ]
     },
     "keybindings": [

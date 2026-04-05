@@ -266,12 +266,8 @@ export async function initializeContainer(context: {
     return FileSaveService.create(logger, configService, accessibilityService);
   });
 
-  container.registerSingleton<IFileNamingConventionService>(
-    TYPES.FileNamingConventionService,
-    () => {
-      const logger = container.get<ILogger>(TYPES.Logger);
-      return FileNamingConventionService.create(logger);
-    },
+  container.registerSingleton<IFileNamingConventionService>(TYPES.FileNamingConventionService, () =>
+    FileNamingConventionService.getInstance(),
   );
 
   // Generator services are NOT registered here - they are loaded lazily via dynamic imports

@@ -27,6 +27,7 @@ export interface RenameResult {
   success: boolean;
   renamedFiles: { oldPath: string; newPath: string }[];
   failedFiles: { path: string; error: string }[];
+  skippedFiles: number;
   totalFiles: number;
 }
 

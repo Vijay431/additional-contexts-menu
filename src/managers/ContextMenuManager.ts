@@ -775,20 +775,25 @@ export class ContextMenuManager {
         return;
       }
 
-      if (result.failedFiles.length === 0) {
-        vscode.window.showInformationMessage(
-          `Renamed ${result.renamedFiles.length} of ${result.totalFiles} files to ${convention}.`,
-        );
-      } else {
+      const parts: string[] = [];
+      if (result.renamedFiles.length > 0) parts.push(`${result.renamedFiles.length} renamed`);
+      if (result.skippedFiles > 0)
+        parts.push(`${result.skippedFiles} already follow ${convention}`);
+      if (result.failedFiles.length > 0) parts.push(`${result.failedFiles.length} failed`);
+      const summary = parts.join(', ');
+
+      if (result.failedFiles.length > 0) {
         vscode.window.showWarningMessage(
-          `Renamed ${result.renamedFiles.length} files. ${result.failedFiles.length} failed — check Output Channel for details.`,
+          `Rename complete: ${summary}. Check Output Channel for details.`,
         );
         result.failedFiles.forEach((f) =>
           this.logger.error(`Failed to rename: ${f.path} — ${f.error}`),
         );
+      } else {
+        vscode.window.showInformationMessage(`Rename complete: ${summary}.`);
       }
 
-      await this.announce(`Renamed ${result.renamedFiles.length} files to ${convention}`, 'normal');
+      await this.announce(`Rename complete: ${summary}`, 'normal');
     } catch (error) {
       this.logger.error('Error in rename file convention', error);
       vscode.window.showErrorMessage(`Failed to rename files: ${(error as Error).message}`);
