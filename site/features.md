@@ -142,43 +142,67 @@ description: 'Explore the comprehensive features and intelligent code operations
         
         <div class="screenshot-grid">
             <div class="screenshot-item">
-                <img src="{{ site.baseurl }}/assets/images/screenshots/context-menu.png"
-                     alt="Context Menu Integration"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-function.gif"
+                     alt="Copy Function"
                      class="screenshot-image">
-                <h3>Context Menu Integration</h3>
-                <p>Enhanced right-click menus with intelligent code operations</p>
-            </div>
-
-            <div class="screenshot-item">
-                <img src="{{ site.baseurl }}/assets/images/screenshots/copy-function.png"
-                     alt="Function Detection"
-                     class="screenshot-image">
-                <h3>Function Detection</h3>
+                <h3>Copy Function</h3>
                 <p>AST-based function detection and copying in action</p>
             </div>
 
             <div class="screenshot-item">
-                <img src="{{ site.baseurl }}/assets/images/screenshots/copy-to-file.png"
-                     alt="Code Operations"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-function-to-file.gif"
+                     alt="Copy Function to File"
                      class="screenshot-image">
-                <h3>Code Operations</h3>
-                <p>Copy and move operations with import handling</p>
+                <h3>Copy Function to File</h3>
+                <p>Copy function at cursor to a target file with smart insertion</p>
             </div>
 
             <div class="screenshot-item">
-                <img src="{{ site.baseurl }}/assets/images/screenshots/enum-generator.png"
-                     alt="Code Generation"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/move-function-to-file.gif"
+                     alt="Move Function to File"
                      class="screenshot-image">
-                <h3>Code Generation</h3>
-                <p>Generate enums, env files, and cron expressions</p>
+                <h3>Move Function to File</h3>
+                <p>Move function to a target file and remove from source</p>
             </div>
 
             <div class="screenshot-item">
-                <img src="{{ site.baseurl }}/assets/images/screenshots/terminal-integration.png"
-                     alt="Terminal Integration"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-selection-to-file.gif"
+                     alt="Copy Selection to File"
                      class="screenshot-image">
-                <h3>Terminal Integration</h3>
+                <h3>Copy Selection to File</h3>
+                <p>Copy any selected code block with import handling</p>
+            </div>
+
+            <div class="screenshot-item">
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/move-selection-to-file.gif"
+                     alt="Move Selection to File"
+                     class="screenshot-image">
+                <h3>Move Selection to File</h3>
+                <p>Move selected code to another file with automatic cleanup</p>
+            </div>
+
+            <div class="screenshot-item">
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/save-all.gif"
+                     alt="Save All"
+                     class="screenshot-image">
+                <h3>Save All</h3>
+                <p>Enhanced bulk save with progress feedback and error handling</p>
+            </div>
+
+            <div class="screenshot-item">
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/open-in-terminal.gif"
+                     alt="Open in Terminal"
+                     class="screenshot-image">
+                <h3>Open in Terminal</h3>
                 <p>Cross-platform terminal access from context menu</p>
+            </div>
+
+            <div class="screenshot-item">
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/rename-file-convention.gif"
+                     alt="Rename File to Convention"
+                     class="screenshot-image">
+                <h3>Rename File to Convention</h3>
+                <p>Rename files and folders to kebab-case, camelCase, or PascalCase</p>
             </div>
         </div>
     </div>

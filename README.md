@@ -13,7 +13,7 @@ author: Vijay Gangatharan
 
 <div align="center">
 
-![Copy Function Demo](images/screenshots/copy-function.png)
+![Copy Function Demo](docs/images/screenshots/copy-function.gif)
 _Extract functions in one click with intelligent import handling_
 
 </div>
@@ -46,43 +46,35 @@ _Extract functions in one click with intelligent import handling_
 
 ### Copy Function
 
-![Copy Function Demo](images/screenshots/copy-function.png)
+![Copy Function Demo](docs/images/screenshots/copy-function.gif)
 
 ### Copy Function to File
 
-![Copy Function to File Demo](images/screenshots/copy-function-to-file.png)
+![Copy Function to File Demo](docs/images/screenshots/copy-function-to-file.gif)
 
 ### Move Function to File
 
-![Move Function to File Demo](images/screenshots/move-function-to-file.png)
+![Move Function to File Demo](docs/images/screenshots/move-function-to-file.gif)
 
 ### Copy Selection to File
 
-![Copy Selection to File Demo](images/screenshots/copy-selection-to-file.png)
+![Copy Selection to File Demo](docs/images/screenshots/copy-selection-to-file.gif)
 
 ### Move Selection to File
 
-![Move Selection to File Demo](images/screenshots/move-selection-to-file.png)
+![Move Selection to File Demo](docs/images/screenshots/move-selection-to-file.gif)
 
 ### Save All
 
-![Save All Demo](images/screenshots/save-all.png)
+![Save All Demo](docs/images/screenshots/save-all.gif)
 
 ### Open in Terminal
 
-![Open in Terminal Demo](images/screenshots/open-in-terminal.png)
-
-### Generate Enum from Union Type
-
-![Generate Enum from Union Type Demo](images/screenshots/generate-enum.png)
-
-### Generate Cron Expression
-
-![Generate Cron Expression Demo](images/screenshots/generate-cron.png)
+![Open in Terminal Demo](docs/images/screenshots/open-in-terminal.gif)
 
 ### Rename File to Convention
 
-![Rename File to Convention Demo](images/screenshots/rename-file-convention.png)
+![Rename File to Convention Demo](docs/images/screenshots/rename-file-convention.gif)
 
 ---
 

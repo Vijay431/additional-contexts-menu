@@ -41,7 +41,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
             </div>
             <div class="hero-image">
                 <div class="hero-demo">
-                    <img src="{{ site.baseurl }}/assets/images/screenshots/context-menu.png"
+                    <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-function.gif"
                          alt="Additional Context Menus - Context Menu Integration"
                          class="hero-screenshot">
                     <p class="hero-caption">Intelligent context menus for Node.js development</p>
