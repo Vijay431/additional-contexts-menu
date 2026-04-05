@@ -276,10 +276,14 @@ export class TerminalService implements ITerminalService {
     const escapedPath = this.escapePathForShell(directoryPath);
 
     if (terminalCommand.includes('{{directory}}')) {
-      return terminalCommand.replace('{{directory}}', escapedPath);
+      // When using template, wrap with appropriate quotes for the platform
+      const quoted = process.platform === 'win32' ? `"${escapedPath}"` : `'${escapedPath}'`;
+      return terminalCommand.replace('{{directory}}', quoted);
     }
 
-    return `${terminalCommand} "${escapedPath}"`;
+    // Use single quotes on Unix for consistency with escapePathForShell
+    const quote = process.platform === 'win32' ? '"' : "'";
+    return `${terminalCommand} ${quote}${escapedPath}${quote}`;
   }
 
   private escapePathForShell(filePath: string): string {

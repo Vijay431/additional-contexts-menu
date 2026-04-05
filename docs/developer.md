@@ -41,7 +41,7 @@ pnpm run build
 # 4. Start development
 pnpm run watch
 
-# 6. Open in VS Code and press F5 to launch Extension Development Host
+# 5. Open in VS Code and press F5 to launch Extension Development Host
 ```
 
 ---
@@ -422,7 +422,7 @@ pnpm run package
 - Package manifest (`package.json`)
 - Extension icon (`logo.png`)
 - Documentation (`README.md`)
-- License (`LICENSE.md`)
+- License (`LICENSE`)
 
 ### Publishing to VS Code Marketplace
 
@@ -524,65 +524,65 @@ git push origin v2.1.0
 
 ### Directory Overview
 
-```
+```markdown
 additional-contexts-menu/
-├── .github/                    # GitHub configuration
-│   ├── ISSUE_TEMPLATE/         # Issue templates
-│   ├── pull_request_template.md # PR template
-│   └── wiki/                   # GitHub Wiki pages
-├── .husky/                     # Git hooks
-├── .vscode/                    # VS Code configuration
-│   ├── launch.json             # Debug configurations
-│   ├── settings.json           # Workspace settings
-│   └── extensions.json          # Recommended extensions
-├── docs/                       # Documentation (Jekyll / GitHub Pages)
-│   ├── _config.yml             # Jekyll configuration
-│   ├── _layouts/               # Jekyll layouts
-│   ├── assets/                 # Documentation assets
-│   ├── features.md             # Feature documentation
-│   ├── developer.md            # This file
-│   ├── services/               # Service API docs
-│   ├── installation.md         # Installation guide
-│   └── documentation.md        # Technical documentation
-├── scripts/                    # Build and utility scripts
-│   └── generate-changelog.js   # Changelog generator
-├── src/                        # Source code
-│   ├── extension.ts            # Extension entry point
-│   ├── managers/               # Core managers
-│   │   ├── extensionManager.ts
-│   │   └── contextMenuManager.ts
-│   ├── services/               # Extension services
-│   │   ├── codeAnalysisService.ts
-│   │   ├── configurationService.ts
-│   │   ├── cronJobTimerGeneratorService.ts
-│   │   ├── enumGeneratorService.ts
-│   │   ├── envFileGeneratorService.ts
-│   │   ├── fileDiscoveryService.ts
-│   │   ├── fileNamingConventionService.ts
-│   │   ├── fileSaveService.ts
-│   │   ├── projectDetectionService.ts
-│   │   └── terminalService.ts
-│   ├── types/                  # TypeScript types
-│   │   └── extension.ts
-│   └── utils/                  # Utility functions
-│       └── logger.ts
-├── .editorconfig               # Editor configuration
-├── .gitignore                  # Git ignore rules
-├── .prettierrc                 # Prettier configuration
-├── .vscodeignore               # Files to exclude from VSIX
-├── CHANGELOG.md                # Version history
-├── CODE_OF_CONDUCT.md          # Code of conduct
-├── CONTRIBUTING.md             # Contribution guidelines
-├── esbuild.config.ts           # esbuild configuration
-├── eslint.config.mjs           # ESLint flat config
-├── LICENSE                     # MIT License
-├── logo.png                    # Extension icon
-├── package.json                # NPM manifest
-├── pnpm-lock.yaml              # pnpm lock file
-├── README.md                   # Project documentation
-├── SECURITY.md                 # Security policy
-├── tsconfig.json               # TypeScript configuration
-└── tsconfig.eslint.json        # TypeScript config for ESLint (extends tsconfig.json, noEmit, includes scripts/)
+├── .github/ # GitHub configuration
+│ ├── ISSUE_TEMPLATE/ # Issue templates
+│ ├── pull_request_template.md # PR template
+│ └── wiki/ # GitHub Wiki pages
+├── .husky/ # Git hooks
+├── .vscode/ # VS Code configuration
+│ ├── launch.json # Debug configurations
+│ ├── settings.json # Workspace settings
+│ └── extensions.json # Recommended extensions
+├── docs/ # Documentation (Jekyll / GitHub Pages)
+│ ├── \_config.yml # Jekyll configuration
+│ ├── \_layouts/ # Jekyll layouts
+│ ├── assets/ # Documentation assets
+│ ├── features.md # Feature documentation
+│ ├── developer.md # This file
+│ ├── services/ # Service API docs
+│ ├── installation.md # Installation guide
+│ └── documentation.md # Technical documentation
+├── scripts/ # Build and utility scripts
+│ └── generate-changelog.js # Changelog generator
+├── src/ # Source code
+│ ├── extension.ts # Extension entry point
+│ ├── managers/ # Core managers
+│ │ ├── extensionManager.ts
+│ │ └── contextMenuManager.ts
+│ ├── services/ # Extension services
+│ │ ├── codeAnalysisService.ts
+│ │ ├── configurationService.ts
+│ │ ├── cronJobTimerGeneratorService.ts
+│ │ ├── enumGeneratorService.ts
+│ │ ├── envFileGeneratorService.ts
+│ │ ├── fileDiscoveryService.ts
+│ │ ├── fileNamingConventionService.ts
+│ │ ├── fileSaveService.ts
+│ │ ├── projectDetectionService.ts
+│ │ └── terminalService.ts
+│ ├── types/ # TypeScript types
+│ │ └── extension.ts
+│ └── utils/ # Utility functions
+│ └── logger.ts
+├── .editorconfig # Editor configuration
+├── .gitignore # Git ignore rules
+├── .prettierrc # Prettier configuration
+├── .vscodeignore # Files to exclude from VSIX
+├── CHANGELOG.md # Version history
+├── CODE_OF_CONDUCT.md # Code of conduct
+├── CONTRIBUTING.md # Contribution guidelines
+├── esbuild.config.ts # esbuild configuration
+├── eslint.config.mjs # ESLint flat config
+├── LICENSE # MIT License
+├── logo.png # Extension icon
+├── package.json # NPM manifest
+├── pnpm-lock.yaml # pnpm lock file
+├── README.md # Project documentation
+├── SECURITY.md # Security policy
+├── tsconfig.json # TypeScript configuration
+└── tsconfig.eslint.json # TypeScript config for ESLint (extends tsconfig.json, noEmit, includes scripts/)
 ```
 
 ### Source Code Architecture
@@ -806,7 +806,7 @@ nvm use 20
 
 ```bash
 # Install required version
-npm install -g pnpm@9.15.0
+npm install -g pnpm@10.x.x
 
 # Verify installation
 pnpm --version
