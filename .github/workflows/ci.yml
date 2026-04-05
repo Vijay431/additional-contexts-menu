@@ -402,19 +402,19 @@ jobs:
         with:
           ruby-version: '3.1'
           bundler-cache: true
-          working-directory: docs
+          working-directory: site
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Build Jekyll Site
         run: bundle exec jekyll build
-        working-directory: docs
+        working-directory: site
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/_site
+          path: site/_site
 
       - name: Deploy to GitHub Pages
         id: deployment

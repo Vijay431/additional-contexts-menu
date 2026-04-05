@@ -132,17 +132,16 @@ console.log(`Success rate: ${(summary.successRate * 100).toFixed(1)}%`);
 
 ### Performance Targets
 
-| Metric            | Target | Current               |
-| ----------------- | ------ | --------------------- |
-| Activation time   | <500ms | ~200ms                |
-| Bundle size       | <100KB | 60KB core + 26KB lazy |
-| Command execution | <100ms | ~50ms                 |
-| Cache hit rate    | >80%   | ~85%                  |
+| Metric            | Target | Current |
+| ----------------- | ------ | ------- |
+| Activation time   | <500ms | ~200ms  |
+| Command execution | <100ms | ~50ms   |
+| Cache hit rate    | >80%   | ~85%    |
 
 **Bundle Composition:**
 
-- **Core Bundle (60KB)**: Essential services, command handlers, utilities
-- **Lazy Services (26KB)**: Generator services (Enum, Env, Cron) loaded on demand
+- **Core Bundle**: Essential services, command handlers, utilities, TypeScript Compiler API
+- **Lazy Services**: Generator services (Enum, Env, Cron) loaded on demand
 
 ## Optimization Techniques
 

@@ -268,10 +268,6 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
                             <span class="detail-label">VS Code:</span>
                             <span class="detail-value">1.102.0+</span>
                         </div>
-                        <div class="detail">
-                            <span class="detail-label">Size:</span>
-                            <span class="detail-value">~1MB</span>
-                        </div>
                     </div>
                     <div class="version-features">
                         <h4>Key Features:</h4>

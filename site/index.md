@@ -33,12 +33,8 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     <span class="stat-label">Current Version</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number">60KB</span>
-                    <span class="stat-label">Core Bundle</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">26KB</span>
-                    <span class="stat-label">Lazy Services</span>
+                    <span class="stat-number">Lazy</span>
+                    <span class="stat-label">Generator Services</span>
                 </div>
             </div>
             </div>
@@ -131,7 +127,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Lightning Fast Performance</h3>
                 <p class="feature-description">
-                    esbuild-powered compilation delivers 20x faster builds (~1s), optimized bundles (60KB core + 26KB lazy), and instant development feedback.
+                    esbuild-powered compilation delivers 20x faster builds (~1s) and instant development feedback.
                 </p>
             </div>
 
@@ -141,7 +137,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Optimized Bundle <span class="version-badge">v2.0</span></h3>
                 <p class="feature-description">
-                    60KB core bundle with lazy-loaded generator services. Essential features load instantly, rarely-used tools load on demand.
+                    Lazy-loaded generator services. Essential features load instantly, rarely-used tools load on demand.
                 </p>
             </div>
 

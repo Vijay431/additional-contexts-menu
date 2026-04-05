@@ -5,6 +5,13 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2026-04-05
+
+### Changed
+
+- **⏱️ Generate Cron Expression**: Now inserts the bare cron expression at cursor position (e.g. `0 9 * * *`) — no comment line, no quotes
+- **📁 Repository structure**: Jekyll GitHub Pages site moved from `docs/` to `site/`; VS Code walkthrough markdown files moved from `walkthrough/` to `docs/`
+
 ## [2.0.0] - 2026-04-05
 
 ### Added

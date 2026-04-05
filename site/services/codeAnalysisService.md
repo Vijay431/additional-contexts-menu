@@ -82,7 +82,6 @@ description: 'Comprehensive documentation for Code Analysis Service - AST-based 
             <div class="trade-off-item negative">
                 <h3><i class="fas fa-exclamation-triangle"></i> Considerations</h3>
                 <ul>
-                    <li><strong>Bundle size increase</strong> - TypeScript Compiler API contributes to bundle size (included in core)</li>
                     <li><strong>Slightly slower</strong> - Still < 10ms per file, acceptable for most use cases</li>
                     <li><strong>More complex</strong> - Implementation is more complex than a simple pattern-matching approach</li>
                 </ul>

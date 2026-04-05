@@ -158,7 +158,7 @@ pnpm run build
 pnpm run watch
 ```
 
-**Build output:** `dist/extension.js` (~60KB core + 26KB lazy-loaded services)
+**Build output:** `dist/extension.js`
 
 ---
 
@@ -401,7 +401,7 @@ pnpm run build          # Type check and build
 # Build extension with esbuild
 pnpm run build
 
-# Creates: dist/extension.js (~60KB core + 26KB lazy services)
+# Creates: dist/extension.js
 # Optimizations enabled: minification, tree-shaking, lazy loading
 ```
 

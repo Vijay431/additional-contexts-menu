@@ -44,25 +44,49 @@ _Extract functions in one click with intelligent import handling_
 
 ## 🎬 Feature Showcase
 
-### Copy Function to File
+### Copy Function
 
 ![Copy Function Demo](images/screenshots/copy-function.png)
 
-### Smart File Discovery
+### Move Function
 
-![File Discovery](images/screenshots/copy-to-file.png)
+![Move Function Demo](images/screenshots/move-function.png)
 
-### Context Menu Integration
+### Copy Function to File
 
-![Full Context Menu](images/screenshots/context-menu.png)
+![Copy Function to File Demo](images/screenshots/copy-function-to-file.png)
 
-### Code Generation
+### Move Function to File
 
-![Enum Generator](images/screenshots/enum-generator.png)
+![Move Function to File Demo](images/screenshots/move-function-to-file.png)
 
-### Terminal Integration
+### Copy Selection to File
 
-![Terminal Integration](images/screenshots/terminal-integration.png)
+![Copy Selection to File Demo](images/screenshots/copy-selection-to-file.png)
+
+### Move Selection to File
+
+![Move Selection to File Demo](images/screenshots/move-selection-to-file.png)
+
+### Save All
+
+![Save All Demo](images/screenshots/save-all.png)
+
+### Open in Terminal
+
+![Open in Terminal Demo](images/screenshots/open-in-terminal.png)
+
+### Generate Enum from Union Type
+
+![Generate Enum from Union Type Demo](images/screenshots/generate-enum.png)
+
+### Generate Cron Expression
+
+![Generate Cron Expression Demo](images/screenshots/generate-cron.png)
+
+### Rename File to Convention
+
+![Rename File to Convention Demo](images/screenshots/rename-file-convention.png)
 
 ---
 

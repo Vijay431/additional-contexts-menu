@@ -222,7 +222,7 @@
             "title": "Copy a Function",
             "description": "Place your cursor inside any function, then right-click and choose **Copy Function** to copy it to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
             "media": {
-              "markdown": "walkthrough/copy-function.md"
+              "markdown": "docs/copy-function.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.copyFunction"
@@ -233,7 +233,7 @@
             "title": "Copy Function to File",
             "description": "Place your cursor inside a function, right-click and choose **Copy Function to File** to copy it directly into another file.\n\n[Try it now](command:additionalContextMenus.copyFunctionToFile)",
             "media": {
-              "markdown": "walkthrough/copy-function-to-file.md"
+              "markdown": "docs/copy-function-to-file.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.copyFunctionToFile"
@@ -244,7 +244,7 @@
             "title": "Move Function to File",
             "description": "Place your cursor inside a function, right-click and choose **Move Function to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveFunctionToFile)",
             "media": {
-              "markdown": "walkthrough/move-function-to-file.md"
+              "markdown": "docs/move-function-to-file.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.moveFunctionToFile"
@@ -255,7 +255,7 @@
             "title": "Copy Selection to File",
             "description": "Select any code block, right-click, and choose **Copy Selection to File** to copy it into another file in your project.\n\n[Try it now](command:additionalContextMenus.copySelectionToFile)",
             "media": {
-              "markdown": "walkthrough/copy-selection-to-file.md"
+              "markdown": "docs/copy-selection-to-file.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.copySelectionToFile"
@@ -266,7 +266,7 @@
             "title": "Move Selection to File",
             "description": "Select any code block, right-click, and choose **Move Selection to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveSelectionToFile)",
             "media": {
-              "markdown": "walkthrough/move-selection-to-file.md"
+              "markdown": "docs/move-selection-to-file.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.moveSelectionToFile"
@@ -277,7 +277,7 @@
             "title": "Save All Files",
             "description": "Right-click anywhere in the editor and choose **Save All** to save every open file at once.\n\n[Try it now](command:additionalContextMenus.saveAll)",
             "media": {
-              "markdown": "walkthrough/save-all.md"
+              "markdown": "docs/save-all.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.saveAll"
@@ -288,7 +288,7 @@
             "title": "Open in Terminal",
             "description": "Right-click any file and choose **Open in Terminal** to instantly open a terminal at that location.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
             "media": {
-              "markdown": "walkthrough/open-in-terminal.md"
+              "markdown": "docs/open-in-terminal.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.openInTerminal"
@@ -299,7 +299,7 @@
             "title": "Generate Enum from Union Type",
             "description": "Select a TypeScript union type, right-click and choose **Generate Enum from Union Type** to convert it to an enum.\n\n[Try it now](command:additionalContextMenus.generateEnum)",
             "media": {
-              "markdown": "walkthrough/generate-enum.md"
+              "markdown": "docs/generate-enum.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.generateEnum"
@@ -310,7 +310,7 @@
             "title": "Generate Cron Expression",
             "description": "Right-click and choose **Generate Cron Expression** to build a cron schedule interactively.\n\n[Try it now](command:additionalContextMenus.generateCronTimer)",
             "media": {
-              "markdown": "walkthrough/generate-cron.md"
+              "markdown": "docs/generate-cron.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.generateCronTimer"
@@ -321,7 +321,7 @@
             "title": "Rename File to Convention",
             "description": "Open the Command Palette and run **Rename File to Convention** to rename the current file to kebab-case, camelCase, or PascalCase.\n\n[Try it now](command:additionalContextMenus.renameFileConvention)",
             "media": {
-              "markdown": "walkthrough/rename-file-convention.md"
+              "markdown": "docs/rename-file-convention.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.renameFileConvention"
@@ -332,7 +332,7 @@
             "title": "Generate .env File",
             "description": "Open the Command Palette and run **Generate .env File** to scan your project for environment variable usage and create a `.env` template.\n\n[Try it now](command:additionalContextMenus.generateEnvFile)",
             "media": {
-              "markdown": "walkthrough/generate-env-file.md"
+              "markdown": "docs/generate-env-file.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.generateEnvFile"

@@ -79,6 +79,8 @@ src/
     configValidator.ts
     metrics.ts
     pathValidator.ts
+docs/                           # VS Code walkthrough markdown files
+site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-contexts-menu)
 ```
 
 ---
@@ -150,7 +152,7 @@ src/
 ## Walkthrough Steps
 
 Walkthrough ID: `additionalContextMenus.gettingStarted`
-Markdown files live in `walkthrough/`.
+Markdown files live in `docs/` (root-level, not the Jekyll site).
 
 | Step ID                     | Title                         | Markdown file               |
 | --------------------------- | ----------------------------- | --------------------------- |

@@ -46,10 +46,6 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                         <h4>ContextMenuManager</h4>
                         <p>Command registration and menu interactions</p>
                     </div>
-                    <div class="component">
-                        <h4>WalkthroughManager</h4>
-                        <p>First-run onboarding walkthrough experience</p>
-                    </div>
                 </div>
             </div>
 
@@ -123,7 +119,6 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                 <p>Ultra-fast TypeScript compilation with comprehensive optimization:</p>
                 <ul>
                     <li><strong>Build Speed:</strong> ~1 second builds (20x faster than webpack)</li>
-                    <li><strong>Bundle Size:</strong> 60KB core + 26KB lazy-loaded services</li>
                     <li><strong>Configuration:</strong> TypeScript-based esbuild.config.ts</li>
                     <li><strong>Development:</strong> Instant rebuilds with watch mode</li>
                 </ul>
@@ -183,7 +178,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                         </div>
                     </div>
                     <div class="command-item">
-                        <h4 class="command-name">additionalContextMenus.copyContentToFile</h4>
+                        <h4 class="command-name">additionalContextMenus.copySelectionToFile</h4>
                         <p class="command-desc">Copy selected code to another file with import handling</p>
                         <div class="command-details">
                             <p><strong>Access:</strong> Right-click menu only</p>
@@ -191,7 +186,7 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                         </div>
                     </div>
                     <div class="command-item">
-                        <h4 class="command-name">additionalContextMenus.moveContentToFile</h4>
+                        <h4 class="command-name">additionalContextMenus.moveSelectionToFile</h4>
                         <p class="command-desc">Move selected code to another file (copy + delete)</p>
                         <div class="command-details">
                             <p><strong>Access:</strong> Right-click menu only</p>
@@ -244,13 +239,6 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.renameFileConvention</h4>
                         <p class="command-desc">Rename file to kebab-case, camelCase, or PascalCase</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette</p>
-                        </div>
-                    </div>
-                    <div class="command-item">
-                        <h4 class="command-name">additionalContextMenus.openWalkthrough</h4>
-                        <p class="command-desc">Open the getting started walkthrough</p>
                         <div class="command-details">
                             <p><strong>Access:</strong> Command Palette</p>
                         </div>
@@ -387,7 +375,6 @@ pnpm run build</code></pre>
                 <h3>Build Performance</h3>
                 <ul>
                     <li><strong>Build Time:</strong> ~1 second (20x faster than webpack)</li>
-                    <li><strong>Bundle Size:</strong> 60KB core + 26KB lazy services</li>
                     <li><strong>Development:</strong> Instant rebuilds</li>
                 </ul>
             </div>

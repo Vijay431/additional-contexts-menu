@@ -14,7 +14,6 @@ description: 'Documentation for Cron Job Timer Generator Service - cron expressi
 <li>Preset schedule templates (every minute, hour, day, week, month)</li>
 <li>Custom schedule builder with field-by-field input</li>
 <li>Input validation for each cron field</li>
-<li>Comment generation for schedule documentation</li>
 <li>Quick insertion at cursor position</li>
 </ul>
 
@@ -52,7 +51,7 @@ description: 'Documentation for Cron Job Timer Generator Service - cron expressi
 <p>Builds custom cron expression field by field with validation.</p>
 
 <h3>insertCronExpression()</h3>
-<p>Inserts cron expression at cursor position with comment.</p>
+<p>Inserts bare cron expression at cursor position.</p>
 
 <h2>Use Cases</h2>
 
