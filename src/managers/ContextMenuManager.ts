@@ -135,7 +135,7 @@ export class ContextMenuManager {
       ),
       vscode.commands.registerCommand(
         'additionalContextMenus.renameFileConvention',
-        async () => await this.handleRenameFileConvention(),
+        async (uri?: vscode.Uri) => await this.handleRenameFileConvention(uri),
       ),
       vscode.commands.registerCommand(
         'additionalContextMenus.showOutputChannel',
@@ -724,10 +724,19 @@ export class ContextMenuManager {
     return lastSlash >= 0 ? filePath.substring(lastSlash + 1) : filePath;
   }
 
-  private async handleRenameFileConvention(): Promise<void> {
+  private async handleRenameFileConvention(uri?: vscode.Uri): Promise<void> {
     this.logger.info('Rename File Convention command triggered');
 
     try {
+      const targetPath = uri?.fsPath ?? vscode.window.activeTextEditor?.document.uri.fsPath;
+
+      if (!targetPath) {
+        vscode.window.showErrorMessage(
+          'No file or folder selected. Select a file or folder in the Explorer and try again.',
+        );
+        return;
+      }
+
       const conventions = [
         getAccessibleQuickPickItem(
           {
@@ -735,35 +744,15 @@ export class ContextMenuManager {
             description: 'my-component-name.ts',
             value: 'kebab-case' as const,
           },
-          {
-            ariaLabel:
-              'Kebab case naming convention. Converts file names to lowercase with hyphens, like my-component-name.ts',
-            ariaDescription: 'Example: my-component-name.ts',
-          },
+          { ariaLabel: 'Kebab case: my-component-name.ts' },
         ),
         getAccessibleQuickPickItem(
-          {
-            label: 'camelCase',
-            description: 'myComponentName.ts',
-            value: 'camelCase' as const,
-          },
-          {
-            ariaLabel:
-              'Camel case naming convention. First word lowercase, subsequent words capitalized, like myComponentName.ts',
-            ariaDescription: 'Example: myComponentName.ts',
-          },
+          { label: 'camelCase', description: 'myComponentName.ts', value: 'camelCase' as const },
+          { ariaLabel: 'Camel case: myComponentName.ts' },
         ),
         getAccessibleQuickPickItem(
-          {
-            label: 'PascalCase',
-            description: 'MyComponentName.ts',
-            value: 'PascalCase' as const,
-          },
-          {
-            ariaLabel:
-              'Pascal case naming convention. All words capitalized, like MyComponentName.ts',
-            ariaDescription: 'Example: MyComponentName.ts',
-          },
+          { label: 'PascalCase', description: 'MyComponentName.ts', value: 'PascalCase' as const },
+          { ariaLabel: 'Pascal case: MyComponentName.ts' },
         ),
       ];
 
@@ -775,16 +764,34 @@ export class ContextMenuManager {
         return;
       }
 
-      await this.announce(`Selected ${selected.label} naming convention`, 'normal');
-      await this.fileNamingConventionService.showRenameSuggestions(
-        (selected as vscode.QuickPickItem & { value: 'kebab-case' | 'camelCase' | 'PascalCase' })
-          .value,
-      );
+      const convention = (
+        selected as vscode.QuickPickItem & { value: 'kebab-case' | 'camelCase' | 'PascalCase' }
+      ).value;
+
+      const result = await this.fileNamingConventionService.renameByPath(targetPath, convention);
+
+      if (result.totalFiles === 0) {
+        vscode.window.showInformationMessage('No files found to rename.');
+        return;
+      }
+
+      if (result.failedFiles.length === 0) {
+        vscode.window.showInformationMessage(
+          `Renamed ${result.renamedFiles.length} of ${result.totalFiles} files to ${convention}.`,
+        );
+      } else {
+        vscode.window.showWarningMessage(
+          `Renamed ${result.renamedFiles.length} files. ${result.failedFiles.length} failed — check Output Channel for details.`,
+        );
+        result.failedFiles.forEach((f) =>
+          this.logger.error(`Failed to rename: ${f.path} — ${f.error}`),
+        );
+      }
+
+      await this.announce(`Renamed ${result.renamedFiles.length} files to ${convention}`, 'normal');
     } catch (error) {
       this.logger.error('Error in rename file convention', error);
-      vscode.window.showErrorMessage(
-        `Failed to show rename suggestions: ${(error as Error).message}`,
-      );
+      vscode.window.showErrorMessage(`Failed to rename files: ${(error as Error).message}`);
       await this.announceError('Rename File Convention', (error as Error).message);
     }
   }

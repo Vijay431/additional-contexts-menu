@@ -21,6 +21,16 @@
 export type NamingConvention = 'kebab-case' | 'camelCase' | 'PascalCase' | 'snake_case';
 
 /**
+ * Result of a rename operation
+ */
+export interface RenameResult {
+  success: boolean;
+  renamedFiles: { oldPath: string; newPath: string }[];
+  failedFiles: { path: string; error: string }[];
+  totalFiles: number;
+}
+
+/**
  * File naming suggestion with metadata
  */
 export interface NamingSuggestion {
@@ -106,4 +116,13 @@ export interface IFileNamingConventionService {
    * @returns Promise that resolves when file is renamed
    */
   renameFile(currentPath: string, newName: string): Promise<void>;
+
+  /**
+   * Rename a file or all files in a folder to the given convention.
+   *
+   * @param targetPath - Absolute path to a file or directory
+   * @param convention - The target naming convention
+   * @returns Rename result with counts of renamed and failed files
+   */
+  renameByPath(targetPath: string, convention: NamingConvention): Promise<RenameResult>;
 }

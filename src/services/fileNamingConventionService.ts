@@ -471,6 +471,48 @@ export class FileNamingConventionService {
   }
 
   /**
+   * Rename a file or all files in a folder to the given convention.
+   */
+  public async renameByPath(
+    targetPath: string,
+    convention: NamingConvention,
+  ): Promise<RenameResult> {
+    try {
+      const resolvedPath = path.resolve(targetPath);
+      const stat = await fs.stat(resolvedPath);
+
+      if (stat.isDirectory()) {
+        return await this.bulkRenameFiles(resolvedPath, convention);
+      }
+
+      const result = await this.renameFile(resolvedPath, convention);
+      if (result.success && result.newPath) {
+        return {
+          success: true,
+          renamedFiles: [{ oldPath: resolvedPath, newPath: result.newPath }],
+          failedFiles: [],
+          totalFiles: 1,
+        };
+      }
+      return {
+        success: false,
+        renamedFiles: [],
+        failedFiles: [{ path: resolvedPath, error: result.error ?? 'Unknown error' }],
+        totalFiles: 1,
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('Error in renameByPath', error);
+      return {
+        success: false,
+        renamedFiles: [],
+        failedFiles: [{ path: targetPath, error: errorMessage }],
+        totalFiles: 0,
+      };
+    }
+  }
+
+  /**
    * Dispose the diagnostic collection
    */
   public dispose(): void {

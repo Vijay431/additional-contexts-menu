@@ -546,11 +546,6 @@
           "group": "3_workspace@2"
         },
         {
-          "when": "editorTextFocus && additionalContextMenus.enabled",
-          "command": "additionalContextMenus.renameFileConvention",
-          "group": "3_workspace@3"
-        },
-        {
           "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx)$/",
           "command": "additionalContextMenus.generateEnum",
           "group": "4_generation@1"
