@@ -2,25 +2,88 @@ import * as path from 'path';
 
 import * as vscode from 'vscode';
 
+import type { IConfigurationService } from '../di/interfaces/IConfigurationService';
+import type { ILogger } from '../di/interfaces/ILogger';
+import type {
+  ITerminalService,
+  TerminalType,
+  TerminalOpenBehavior,
+} from '../di/interfaces/ITerminalService';
 import { Logger } from '../utils/logger';
 
 import { ConfigurationService } from './configurationService';
 
-export class TerminalService {
-  private static instance: TerminalService;
-  private logger: Logger;
-  private configService: ConfigurationService;
+/**
+ * Terminal Service
+ *
+ * Cross-platform terminal integration for VS Code with intelligent
+ * directory selection and platform-specific terminal support.
+ *
+ * @description
+ * This service provides terminal opening functionality that works across
+ * Windows, macOS, and Linux. Supports multiple terminal types and
+ * configurable directory opening behavior.
+ *
+ * Key Features:
+ * - Cross-platform terminal integration (Windows, macOS, Linux)
+ * - Multiple terminal type support (integrated, external, system-default)
+ * - Configurable directory opening behavior
+ * - Path validation and resolution
+ * - Custom terminal command support with templates
+ * - Parent directory detection
+ *
+ * @example
+ * ```typescript
+ * // Using DI (recommended)
+ * constructor(@inject(TYPES.TerminalService) private terminal: ITerminalService) {}
+ *
+ * // Using singleton (legacy)
+ * const terminalService = TerminalService.getInstance();
+ * ```
+ *
+ * @see ConfigurationService - Provides terminal configuration
+ * @see ContextMenuManager - Uses this service for Open in Terminal
+ *
+ * @category Project Operations
+ * @subcategory Terminal Integration
+ *
+ * @author Vijay Gangatharan <vijayanand431@gmail.com>
+ * @since 1.2.0
+ */
+export class TerminalService implements ITerminalService {
+  private static instance: TerminalService | undefined;
+  private logger: ILogger;
+  private configService: IConfigurationService;
 
-  private constructor() {
-    this.logger = Logger.getInstance();
-    this.configService = ConfigurationService.getInstance();
+  private constructor(logger: ILogger, configService: IConfigurationService) {
+    this.logger = logger;
+    this.configService = configService;
   }
 
+  /**
+   * Get the singleton instance (legacy pattern)
+   *
+   * @deprecated Use DI injection instead
+   */
   public static getInstance(): TerminalService {
-    if (!TerminalService.instance) {
-      TerminalService.instance = new TerminalService();
-    }
+    TerminalService.instance ??= new TerminalService(
+      Logger.getInstance(),
+      ConfigurationService.getInstance(),
+    );
     return TerminalService.instance;
+  }
+
+  /**
+   * Create a new TerminalService instance (DI pattern)
+   *
+   * This method is used by the DI container.
+   *
+   * @param logger - The logger instance to use
+   * @param configService - The configuration service instance
+   * @returns A new TerminalService instance
+   */
+  public static create(logger: ILogger, configService: IConfigurationService): TerminalService {
+    return new TerminalService(logger, configService);
   }
 
   public async initialize(): Promise<void> {
@@ -37,7 +100,7 @@ export class TerminalService {
 
       const directoryPath = this.getTargetDirectory(filePath);
 
-      if (!await this.validatePath(directoryPath)) {
+      if (!(await this.validatePath(directoryPath))) {
         throw new Error(`Invalid or inaccessible directory: ${directoryPath}`);
       }
 
@@ -45,7 +108,6 @@ export class TerminalService {
 
       vscode.window.showInformationMessage(`Terminal opened in ${path.basename(directoryPath)}`);
       this.logger.info('Terminal opened successfully', { directory: directoryPath });
-
     } catch (error) {
       this.handleTerminalError(error as Error);
       throw error;
@@ -71,7 +133,6 @@ export class TerminalService {
         default:
           throw new Error(`Unsupported terminal type: ${terminalType}`);
       }
-
     } catch (error) {
       this.logger.error('Failed to open directory in terminal', error);
 
@@ -95,7 +156,6 @@ export class TerminalService {
 
       terminal.show();
       this.logger.debug('Integrated terminal created', { name: terminalName, cwd: directoryPath });
-
     } catch (error) {
       this.logger.error('Failed to create integrated terminal', error);
       throw new Error('Failed to open integrated terminal');
@@ -120,7 +180,6 @@ export class TerminalService {
       terminal.dispose();
 
       this.logger.debug('External terminal command executed', { command });
-
     } catch (error) {
       this.logger.error('Failed to open external terminal', error);
       throw new Error('Failed to open external terminal');
@@ -130,15 +189,29 @@ export class TerminalService {
   private async openSystemDefaultTerminal(directoryPath: string): Promise<void> {
     try {
       const platform = process.platform;
-      let command: string;
 
       switch (platform) {
-        case 'win32':
-          command = `start cmd /k "cd /d ${this.escapePathForShell(directoryPath)}"`;
+        case 'win32': {
+          // Use execFile with args array to avoid shell injection
+          const { execFile } = await import('child_process');
+          await new Promise<void>((resolve, reject) => {
+            execFile(
+              'cmd',
+              ['/c', 'start', 'cmd', '/k', `cd /d "${directoryPath.replace(/"/g, '\\"')}"`],
+              (err) => (err ? reject(err) : resolve()),
+            );
+          });
           break;
-        case 'darwin':
-          command = `open -a Terminal "${this.escapePathForShell(directoryPath)}"`;
+        }
+        case 'darwin': {
+          const { execFile } = await import('child_process');
+          await new Promise<void>((resolve, reject) => {
+            execFile('open', ['-a', 'Terminal', directoryPath], (err) =>
+              err ? reject(err) : resolve(),
+            );
+          });
           break;
+        }
         case 'linux': {
           const linuxTerminals = ['gnome-terminal', 'konsole', 'xfce4-terminal', 'xterm'];
           const availableTerminal = await this.findAvailableTerminal(linuxTerminals);
@@ -147,22 +220,20 @@ export class TerminalService {
             throw new Error('No suitable terminal found on this Linux system');
           }
 
-          command = this.buildLinuxTerminalCommand(availableTerminal, directoryPath);
+          const command = this.buildLinuxTerminalCommand(availableTerminal, directoryPath);
+          const terminal = vscode.window.createTerminal({ name: 'System Terminal Launcher' });
+          terminal.sendText(command);
+          terminal.dispose();
           break;
         }
         default:
           throw new Error(`Unsupported platform: ${platform}`);
       }
 
-      const terminal = vscode.window.createTerminal({
-        name: 'System Terminal Launcher',
+      this.logger.debug('System default terminal opened', {
+        platform: process.platform,
+        directoryPath,
       });
-
-      terminal.sendText(command);
-      terminal.dispose();
-
-      this.logger.debug('System default terminal command executed', { platform, command });
-
     } catch (error) {
       this.logger.error('Failed to open system default terminal', error);
       throw new Error('Failed to open system default terminal');
@@ -170,15 +241,12 @@ export class TerminalService {
   }
 
   private async findAvailableTerminal(terminals: string[]): Promise<string | null> {
+    const { execFile } = await import('child_process');
     for (const terminal of terminals) {
       try {
-        const testTerminal = vscode.window.createTerminal({
-          name: 'Terminal Test',
+        await new Promise<void>((resolve, reject) => {
+          execFile('which', [terminal], (error) => (error ? reject(error) : resolve()));
         });
-
-        testTerminal.sendText(`which ${terminal}`);
-        testTerminal.dispose();
-
         return terminal;
       } catch {
         continue;
@@ -192,15 +260,15 @@ export class TerminalService {
 
     switch (terminal) {
       case 'gnome-terminal':
-        return `gnome-terminal --working-directory="${escapedPath}"`;
+        return `gnome-terminal --working-directory='${escapedPath}'`;
       case 'konsole':
-        return `konsole --workdir "${escapedPath}"`;
+        return `konsole --workdir '${escapedPath}'`;
       case 'xfce4-terminal':
-        return `xfce4-terminal --working-directory="${escapedPath}"`;
+        return `xfce4-terminal --working-directory='${escapedPath}'`;
       case 'xterm':
-        return `cd "${escapedPath}" && xterm`;
+        return `cd '${escapedPath}' && xterm`;
       default:
-        return `${terminal} --working-directory="${escapedPath}"`;
+        return `${terminal} --working-directory='${escapedPath}'`;
     }
   }
 
@@ -208,14 +276,23 @@ export class TerminalService {
     const escapedPath = this.escapePathForShell(directoryPath);
 
     if (terminalCommand.includes('{{directory}}')) {
-      return terminalCommand.replace('{{directory}}', escapedPath);
+      // When using template, wrap with appropriate quotes for the platform
+      const quoted = process.platform === 'win32' ? `"${escapedPath}"` : `'${escapedPath}'`;
+      return terminalCommand.replace('{{directory}}', quoted);
     }
 
-    return `${terminalCommand} "${escapedPath}"`;
+    // Use single quotes on Unix for consistency with escapePathForShell
+    const quote = process.platform === 'win32' ? '"' : "'";
+    return `${terminalCommand} ${quote}${escapedPath}${quote}`;
   }
 
   private escapePathForShell(filePath: string): string {
-    return filePath.replace(/['"]/g, '\\$&');
+    if (process.platform === 'win32') {
+      // Wrap in double quotes, escape internal double quotes
+      return filePath.replace(/"/g, '\\"');
+    }
+    // Unix: wrap in single quotes, escape internal single quotes
+    return filePath.replace(/'/g, "'\\''");
   }
 
   public getParentDirectory(filePath: string): string {
@@ -256,9 +333,23 @@ export class TerminalService {
     return process.cwd();
   }
 
-  public getTerminalType(): 'integrated' | 'external' | 'system-default' {
+  public getTerminalType(): TerminalType {
     const config = this.configService.getConfiguration();
     return config.terminal.type;
+  }
+
+  public getOpenBehavior(): TerminalOpenBehavior {
+    const config = this.configService.getConfiguration();
+    return config.terminal.openBehavior;
+  }
+
+  public async executeCommand(command: string, directoryPath?: string): Promise<void> {
+    const terminal = vscode.window.createTerminal({
+      name: 'Command Execution',
+      cwd: directoryPath,
+    });
+    terminal.sendText(command);
+    terminal.show();
   }
 
   private async getExternalTerminalCommand(): Promise<string | undefined> {

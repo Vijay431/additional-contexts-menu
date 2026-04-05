@@ -27,32 +27,27 @@ description: 'Enhanced right-click context menus for Node.js development with in
                         View on GitHub
                     </a>
                 </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">{{ site.extension.version }}</span>
-                        <span class="stat-label">Current Version</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">37 Tests</span>
-                        <span class="stat-label">Comprehensive Coverage</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">Test Success Rate</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">47.86KB</span>
-                        <span class="stat-label">Bundle Size</span>
-                    </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">{{ site.extension.version }}</span>
+                    <span class="stat-label">Current Version</span>
                 </div>
+                <div class="stat">
+                    <span class="stat-number">60KB</span>
+                    <span class="stat-label">Core Bundle</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">26KB</span>
+                    <span class="stat-label">Lazy Services</span>
+                </div>
+            </div>
             </div>
             <div class="hero-image">
                 <div class="hero-demo">
-                    <div class="demo-placeholder">
-                        <i class="fas fa-mouse-pointer"></i>
-                        <p>Context Menu Demo</p>
-                        <small>Screenshot Coming Soon</small>
-                    </div>
+                    <img src="{{ site.baseurl }}/assets/images/screenshots/context-menu.png"
+                         alt="Additional Context Menus - Context Menu Integration"
+                         class="hero-screenshot">
+                    <p class="hero-caption">Intelligent context menus for Node.js development</p>
                 </div>
             </div>
         </div>
@@ -76,7 +71,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">AST-Based Function Detection</h3>
                 <p class="feature-description">
-                    Intelligent function detection using Abstract Syntax Tree parsing for accurate code copying across TypeScript and JavaScript files.
+                    Accurately detects functions, arrow functions, methods, React components, and hooks using TypeScript's Compiler API. Handles nested functions and complex patterns without false positives from comments or strings.
                 </p>
             </div>
             
@@ -136,7 +131,17 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Lightning Fast Performance</h3>
                 <p class="feature-description">
-                    esbuild-powered compilation delivers 20x faster builds (~1s), 95.9% smaller bundles (47.86KB), and instant development feedback.
+                    esbuild-powered compilation delivers 20x faster builds (~1s), optimized bundles (60KB core + 26KB lazy), and instant development feedback.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="feature-title">Optimized Bundle <span class="version-badge">v2.0</span></h3>
+                <p class="feature-description">
+                    60KB core bundle with lazy-loaded generator services. Essential features load instantly, rarely-used tools load on demand.
                 </p>
             </div>
 
@@ -146,7 +151,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Enterprise-Grade Reliability</h3>
                 <p class="feature-description">
-                    37 comprehensive tests with 100% success rate ensure production-ready reliability. Handles edge cases, stress scenarios, and extreme conditions gracefully.
+                    Production-ready reliability with robust error handling for edge cases, stress scenarios, and extreme conditions.
                 </p>
             </div>
 
@@ -156,11 +161,12 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 </div>
                 <h3 class="feature-title">Quality Assurance</h3>
                 <p class="feature-description">
-                    Rigorous testing covers error boundaries, performance stress, configuration edge cases, and complex file system scenarios for bulletproof operation.
+                    Rigorous code quality standards covering error boundaries, performance, configuration edge cases, and complex file system scenarios for bulletproof operation.
                 </p>
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Framework Support Section -->
@@ -276,10 +282,149 @@ description: 'Enhanced right-click context menus for Node.js development with in
                             <span class="code-punctuation">}</span>
                         </div>
                     </div>
-                </div>
-            </div>
+                 </div>
+             </div>
         </div>
     </div>
+</section>
+
+<!-- Services Documentation Section -->
+<section class="services-docs">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Services Documentation</h2>
+            <p class="section-description">
+                Comprehensive documentation for all 11 services with API references, examples, and best practices.
+            </p>
+        </div>
+        
+        <div class="services-grid">
+            <!-- Code Analysis -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3 class="service-name">Code Analysis Service</h3>
+                <p class="service-desc">Function detection and code parsing</p>
+                <a href="/services/codeAnalysisService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="service-name">File Discovery Service</h3>
+                <p class="service-desc">Workspace file scanning</p>
+                <a href="/services/fileDiscoveryService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Configuration -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3 class="service-name">Configuration Service</h3>
+                <p class="service-desc">Extension settings management</p>
+                <a href="/services/configurationService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3 class="service-name">Project Detection Service</h3>
+                <p class="service-desc">Framework detection</p>
+                <a href="/services/projectDetectionService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- File Operations -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-save"></i>
+                </div>
+                <h3 class="service-name">File Save Service</h3>
+                <p class="service-desc">Enhanced save operations</p>
+                <a href="/services/fileSaveService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-font"></i>
+                </div>
+                <h3 class="service-name">File Naming Convention</h3>
+                <p class="service-desc">File naming enforcement</p>
+                <a href="/services/fileNamingConventionService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Code Generation -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="service-name">Cron Timer Generator</h3>
+                <p class="service-desc">Cron expression generation</p>
+                <a href="/services/cronJobTimerGeneratorService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-list-ol"></i>
+                </div>
+                <h3 class="service-name">Enum Generator</h3>
+                <p class="service-desc">Union type to enum</p>
+                <a href="/services/enumGeneratorService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3 class="service-name">Env File Generator</h3>
+                <p class="service-desc">.env file creation</p>
+                <a href="/services/envFileGeneratorService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Project Operations -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <h3 class="service-name">Terminal Service</h3>
+                <p class="service-desc">Cross-platform terminal</p>
+                <a href="/services/terminalService.html" class="service-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="services-cta">
+            <h3>Need More Help?</h3>
+            <p>Explore detailed API documentation and examples for each service.</p>
+            <a href="/services/" class="btn btn-primary">
+                <i class="fas fa-book"></i>
+                View All Services
+            </a>
+        </div>
+    </div>
+
 </section>
 
 <!-- CTA Section -->
@@ -288,7 +433,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
         <div class="cta-content">
             <h2 class="cta-title">Ready to Supercharge Your Code Operations?</h2>
             <p class="cta-description">
-                Join developers who trust Additional Context Menus for reliable, production-ready code operations. With 37 comprehensive tests and 100% success rate, it's built for enterprise development.
+                Join developers who trust Additional Context Menus for reliable, production-ready code operations built for enterprise development.
             </p>
             <div class="cta-buttons">
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">

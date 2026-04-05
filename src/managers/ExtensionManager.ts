@@ -1,29 +1,50 @@
 import * as vscode from 'vscode';
 
 import { ConfigurationService } from '../services/configurationService';
+import { ConfigValidator } from '../utils/configValidator';
 import { Logger } from '../utils/logger';
 
 import { ContextMenuManager } from './ContextMenuManager';
+import { WalkthroughManager } from './WalkthroughManager';
 
 export class ExtensionManager {
   private logger: Logger;
   private configService: ConfigurationService;
   private contextMenuManager: ContextMenuManager;
+  private walkthroughManager: WalkthroughManager;
   private disposables: vscode.Disposable[] = [];
 
   constructor() {
     this.logger = Logger.getInstance();
     this.configService = ConfigurationService.getInstance();
     this.contextMenuManager = new ContextMenuManager();
+    this.walkthroughManager = new WalkthroughManager();
   }
 
   public async activate(context: vscode.ExtensionContext): Promise<void> {
     this.logger.info('Activating Additional Context Menus extension');
 
     try {
+      // Validate configuration values and substitute defaults for any invalid settings
+      const rawConfig = this.configService.getConfiguration();
+      ConfigValidator.validate(rawConfig, this.logger);
+
       // Always initialize components - commands should always be registered
       // VS Code's when clauses will handle visibility based on configuration
       await this.initializeComponents();
+
+      // Initialize walkthrough manager (errors here must not block activation)
+      await this.walkthroughManager.initialize(context);
+
+      // Register the "Open Walkthrough" command
+      context.subscriptions.push(
+        vscode.commands.registerCommand('additionalContextMenus.openWalkthrough', () => {
+          void this.walkthroughManager.openWalkthrough();
+        }),
+      );
+
+      // Warn if no Node.js project is detected in the workspace
+      await this.checkForNodeProject();
 
       // Register disposables with VS Code context
       this.disposables.forEach((disposable) => {
@@ -49,11 +70,31 @@ export class ExtensionManager {
     }
   }
 
+  private async checkForNodeProject(): Promise<void> {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders || workspaceFolders.length === 0) {
+      return;
+    }
+
+    const packageJsonFiles = await vscode.workspace.findFiles(
+      '**/package.json',
+      '**/node_modules/**',
+      1,
+    );
+
+    if (packageJsonFiles.length === 0) {
+      vscode.window.showInformationMessage(
+        'Additional Context Menus: No package.json detected in this workspace. ' +
+          'Node.js project detection is required for context menus to appear in TypeScript and JavaScript files.',
+      );
+      this.logger.info('No package.json found in workspace — context menus may not appear');
+    }
+  }
+
   private async initializeComponents(): Promise<void> {
     try {
       // Initialize context menu manager
       await this.contextMenuManager.initialize();
-
 
       // Listen for configuration changes to enable/disable extension
       this.disposables.push(
@@ -102,10 +143,7 @@ export class ExtensionManager {
     this.logger.debug('Disposing ExtensionManager');
 
     // Dispose context menu manager
-    if (this.contextMenuManager) {
-      this.contextMenuManager.dispose();
-    }
-
+    this.contextMenuManager.dispose();
 
     // Dispose all registered disposables
     this.disposables.forEach((disposable) => {

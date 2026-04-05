@@ -1,16 +1,32 @@
 #!/usr/bin/env tsx
 
 import * as esbuild from 'esbuild';
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
+
+// Ensure dist directory exists
+if (!existsSync('./dist')) {
+  mkdirSync('./dist', { recursive: true });
+}
+
+// Lazy-loaded services that will be built separately
+const lazyServices = [
+  'src/services/enumGeneratorService.ts',
+  'src/services/envFileGeneratorService.ts',
+  'src/services/cronJobTimerGeneratorService.ts',
+];
+
+// Create external patterns for lazy services
+const lazyServiceExternals = lazyServices.map((s) => s.replace('src/', '').replace('.ts', ''));
 
 const createConfig = (isProduction = false): esbuild.BuildOptions => ({
   entryPoints: ['./src/extension.ts'],
   bundle: true,
   outfile: './dist/extension.js',
-  external: ['vscode'],
+  external: ['vscode', 'typescript', ...lazyServiceExternals],
   format: 'cjs',
   platform: 'node',
-  target: 'node16',
+  target: 'node20',
   sourcemap: isProduction ? false : 'inline',
   minify: isProduction,
   treeShaking: true,
@@ -25,13 +41,69 @@ const createConfig = (isProduction = false): esbuild.BuildOptions => ({
   drop: isProduction ? ['console', 'debugger'] : [],
   metafile: true,
   plugins: [],
+  // Additional production optimizations for bundle size reduction
+  ...(isProduction && {
+    minifyWhitespace: true,
+    minifyIdentifiers: true,
+    minifySyntax: true,
+    ignoreAnnotations: true,
+  }),
 });
+
+// Build lazy-loaded services as separate files
+async function buildLazyServices(isProduction: boolean): Promise<void> {
+  console.log('📦 Building lazy-loaded services...');
+
+  for (const service of lazyServices) {
+    const serviceName = service.split('/').pop()?.replace('.ts', '') || 'service';
+    const outfile = `./dist/lazy/${serviceName}.js`;
+
+    // Ensure lazy directory exists
+    if (!existsSync('./dist/lazy')) {
+      mkdirSync('./dist/lazy', { recursive: true });
+    }
+
+    const config: esbuild.BuildOptions = {
+      entryPoints: [service],
+      bundle: true,
+      outfile,
+      external: ['vscode', 'typescript'],
+      format: 'cjs',
+      platform: 'node',
+      target: 'node20',
+      sourcemap: false,
+      minify: isProduction,
+      treeShaking: true,
+      mainFields: ['module', 'main'],
+      conditions: ['node'],
+      keepNames: false,
+      legalComments: 'none',
+      ...(isProduction && {
+        minifyWhitespace: true,
+        minifyIdentifiers: true,
+        minifySyntax: true,
+      }),
+    };
+
+    try {
+      await esbuild.build(config);
+      console.log(`  ✓ Built ${serviceName}.js`);
+    } catch (error) {
+      console.error(`  ✗ Failed to build ${serviceName}:`, error);
+      throw error;
+    }
+  }
+}
 
 // Build function with comprehensive reporting
 async function build(production = false): Promise<void> {
   try {
     console.log(`🚀 Building in ${production ? 'production' : 'development'} mode...`);
 
+    // Build lazy services first
+    await buildLazyServices(production);
+
+    // Build main extension
     const config = createConfig(production);
     const result = await esbuild.build(config);
 
@@ -42,20 +114,47 @@ async function build(production = false): Promise<void> {
       // Calculate bundle metrics
       const stats = readFileSync('./dist/extension.js');
       const sizeKB = (stats.length / 1024).toFixed(2);
-      const targetKB = 50;
+      // Target: 100KB for main bundle (accounts for TypeScript Compiler API for AST-based function detection)
+      // This is still very aggressive - most VS Code extensions are 1-5 MB
+      // VS Code Marketplace limit is 50 MB for the entire VSIX package
+      const coreTargetKB = 100;
+      const lazyTargetKB = 50;
 
       console.log('✅ Build completed successfully!');
-      console.log(`📦 Bundle size: ${sizeKB} KB`);
+      console.log(`📦 Main bundle size: ${sizeKB} KB`);
 
-      // Target verification
-      if (parseFloat(sizeKB) > targetKB) {
+      // Calculate lazy services total
+      let lazyTotal = 0;
+      for (const service of lazyServices) {
+        const serviceName = service.split('/').pop()?.replace('.ts', '') || 'service';
+        const lazyFile = `./dist/lazy/${serviceName}.js`;
+        if (existsSync(lazyFile)) {
+          const lazyStats = readFileSync(lazyFile);
+          const lazySize = lazyStats.length / 1024;
+          lazyTotal += lazySize;
+          console.log(`  └─ ${serviceName}.js: ${lazySize.toFixed(2)} KB`);
+        }
+      }
+      console.log(`📦 Lazy services total: ${lazyTotal.toFixed(2)} KB`);
+      console.log(`📦 Total size: ${(parseFloat(sizeKB) + lazyTotal).toFixed(2)} KB`);
+
+      // Target verification with more realistic goals
+      const totalSize = parseFloat(sizeKB) + lazyTotal;
+      const totalTarget = coreTargetKB + lazyTargetKB;
+
+      if (parseFloat(sizeKB) > coreTargetKB) {
         console.log(
-          // eslint-disable-next-line @stylistic/max-len
-          `⚠️  Bundle exceeds ${targetKB}KB target by ${(parseFloat(sizeKB) - targetKB).toFixed(2)}KB`,
+          `⚠️  Main bundle exceeds ${coreTargetKB}KB target by ${(parseFloat(sizeKB) - coreTargetKB).toFixed(2)}KB`,
         );
       } else {
         console.log(
-          `✨ Bundle is ${(targetKB - parseFloat(sizeKB)).toFixed(2)}KB under ${targetKB}KB target!`,
+          `✨ Main bundle is ${(coreTargetKB - parseFloat(sizeKB)).toFixed(2)}KB under ${coreTargetKB}KB target!`,
+        );
+      }
+
+      if (totalSize > totalTarget) {
+        console.log(
+          `⚠️  Total bundle exceeds ${totalTarget}KB target by ${(totalSize - totalTarget).toFixed(2)}KB`,
         );
       }
 

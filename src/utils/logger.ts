@@ -1,5 +1,8 @@
 import * as vscode from 'vscode';
 
+import type { ILogger } from '../di/interfaces/ILogger';
+import type { IMetricCollector } from '../utils/metrics';
+
 export enum LogLevel {
   DEBUG = 0,
   INFO = 1,
@@ -7,20 +10,106 @@ export enum LogLevel {
   ERROR = 3,
 }
 
-export class Logger {
-  private static instance: Logger;
+export enum LogFormat {
+  /** Simple text format (default) */
+  TEXT = 'text',
+  /** JSON format for structured logging */
+  JSON = 'json',
+}
+
+export enum LogCategory {
+  /** General logging category */
+  GENERAL = 'general',
+  /** Performance related logs */
+  PERFORMANCE = 'performance',
+  /** Operation related logs */
+  OPERATION = 'operation',
+  /** Security related logs */
+  SECURITY = 'security',
+}
+
+/**
+ * Logger Service
+ *
+ * Centralized logging with output channel support.
+ * Implements ILogger interface for DI compatibility.
+ *
+ * @description
+ * This service provides logging functionality with multiple levels:
+ * - DEBUG: Detailed diagnostic information
+ * - INFO: General informational messages
+ * - WARN: Potentially harmful situations
+ * - ERROR: Error events that might still allow application to continue
+ *
+ * The logger now supports structured logging with JSON format
+ * and performance metrics collection.
+ *
+ * @example
+ * ```typescript
+ * // Using DI (recommended)
+ * constructor(@inject(TYPES.Logger) private logger: ILogger) {}
+ *
+ * // Using singleton (legacy)
+ * const logger = Logger.getInstance();
+ * ```
+ *
+ * @category Logging
+ * @category Utilities
+ */
+export class Logger implements ILogger {
+  private static instance: Logger | undefined;
   private outputChannel: vscode.OutputChannel;
   private logLevel: LogLevel = LogLevel.INFO;
+  private logFormat: LogFormat = LogFormat.TEXT;
+  private metricsCollector?: IMetricCollector;
 
-  private constructor() {
-    this.outputChannel = vscode.window.createOutputChannel('Additional Context Menus');
+  private constructor(outputChannel?: vscode.OutputChannel) {
+    this.outputChannel =
+      outputChannel ?? vscode.window.createOutputChannel('Additional Context Menus');
   }
 
+  /**
+   * Get the singleton instance (legacy pattern)
+   *
+   * @deprecated Use DI injection instead
+   */
   public static getInstance(): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
-    }
+    Logger.instance ??= new Logger();
     return Logger.instance;
+  }
+
+  /**
+   * Create a new Logger instance (DI pattern)
+   *
+   * This method is used by the DI container.
+   *
+   * @param metricsCollector Optional metrics collector for performance tracking
+   * @param outputChannel Optional VS Code output channel
+   * @returns A new Logger instance
+   */
+  public static create(
+    metricsCollector?: IMetricCollector,
+    outputChannel?: vscode.OutputChannel,
+  ): Logger {
+    const logger = new Logger(outputChannel);
+    if (metricsCollector) {
+      logger.setMetricsCollector(metricsCollector);
+    }
+    return logger;
+  }
+
+  /**
+   * Set the metrics collector for performance tracking
+   */
+  public setMetricsCollector(metricsCollector: IMetricCollector): void {
+    this.metricsCollector = metricsCollector;
+  }
+
+  /**
+   * Set the log format (text or JSON)
+   */
+  public setLogFormat(format: LogFormat): void {
+    this.logFormat = format;
   }
 
   public setLogLevel(level: LogLevel): void {
@@ -28,19 +117,19 @@ export class Logger {
   }
 
   public debug(message: string, data?: unknown): void {
-    this.log(LogLevel.DEBUG, message, data);
+    this.log(LogLevel.DEBUG, message, data, LogCategory.GENERAL);
   }
 
   public info(message: string, data?: unknown): void {
-    this.log(LogLevel.INFO, message, data);
+    this.log(LogLevel.INFO, message, data, LogCategory.GENERAL);
   }
 
   public warn(message: string, data?: unknown): void {
-    this.log(LogLevel.WARN, message, data);
+    this.log(LogLevel.WARN, message, data, LogCategory.GENERAL);
   }
 
   public error(message: string, error?: unknown): void {
-    this.log(LogLevel.ERROR, message, error);
+    this.log(LogLevel.ERROR, message, error, LogCategory.GENERAL);
   }
 
   public show(): void {
@@ -51,35 +140,74 @@ export class Logger {
     this.outputChannel.dispose();
   }
 
-  private log(level: LogLevel, message: string, data?: unknown): void {
+  private log(
+    level: LogLevel,
+    message: string,
+    data?: unknown,
+    category: LogCategory = LogCategory.GENERAL,
+  ): void {
     if (level < this.logLevel) {
       return;
     }
 
     const timestamp = new Date().toISOString();
-    const levelName = LogLevel[level];
-    const logMessage = `[${timestamp}] [${levelName}] ${message}`;
+    let levelName: string;
+    switch (level) {
+      case LogLevel.DEBUG:
+        levelName = 'DEBUG';
+        break;
+      case LogLevel.INFO:
+        levelName = 'INFO';
+        break;
+      case LogLevel.WARN:
+        levelName = 'WARN';
+        break;
+      case LogLevel.ERROR:
+        levelName = 'ERROR';
+        break;
+      default:
+        levelName = 'UNKNOWN';
+        break;
+    }
 
-    this.outputChannel.appendLine(logMessage);
+    if (this.logFormat === LogFormat.JSON) {
+      // Structured JSON logging
+      const logEntry: Record<string, unknown> = {
+        timestamp,
+        level: levelName,
+        category,
+        message,
+      };
+      if (data) {
+        logEntry.data = data;
+      }
+      this.outputChannel.appendLine(JSON.stringify(logEntry));
+    } else {
+      // Simple text format (default)
+      const categoryPrefix = category !== LogCategory.GENERAL ? `[${category.toUpperCase()}] ` : '';
+      const logMessage = `[${timestamp}] [${levelName}] ${categoryPrefix}${message}`;
+      this.outputChannel.appendLine(logMessage);
 
-    if (data) {
-      this.outputChannel.appendLine(`Data: ${JSON.stringify(data, null, 2)}`);
+      if (data) {
+        this.outputChannel.appendLine(`Data: ${JSON.stringify(data, null, 2)}`);
+      }
     }
 
     // Also log to console in development
     if (process.env['NODE_ENV'] === 'development') {
+      const consoleMessage = `[${timestamp}] [${levelName}] ${message}`;
       switch (level) {
         case LogLevel.DEBUG:
-          console.debug(logMessage, data);
+          console.debug(consoleMessage, data);
           break;
         case LogLevel.INFO:
-          console.info(logMessage, data);
+          console.info(consoleMessage, data);
           break;
         case LogLevel.WARN:
-          console.warn(logMessage, data);
+          console.warn(consoleMessage, data);
           break;
         case LogLevel.ERROR:
-          console.error(logMessage, data);
+          console.error(consoleMessage, data);
           break;
       }
     }

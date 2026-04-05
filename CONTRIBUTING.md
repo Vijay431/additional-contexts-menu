@@ -10,7 +10,6 @@ Thank you for your interest in contributing to Additional Context Menus! We welc
 - [Making Changes](#making-changes)
 - [Submitting Changes](#submitting-changes)
 - [Style Guidelines](#style-guidelines)
-- [Testing](#testing)
 - [Documentation](#documentation)
 - [Community](#community)
 
@@ -23,7 +22,7 @@ By participating in this project, you are expected to uphold our [Code of Conduc
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (versions 16-24 supported, 18+ recommended for development)
-- [npm](https://www.npmjs.com/) (comes with Node.js)
+- [PNPM](https://pnpm.io/) (install with `npm install -g pnpm`)
 - [Visual Studio Code](https://code.visualstudio.com/) (for development and testing)
 - [Git](https://git-scm.com/)
 
@@ -35,7 +34,6 @@ We welcome several types of contributions:
 - 🚀 **Feature Requests** - Suggest new functionality
 - 📝 **Documentation** - Improve or add documentation
 - 🔧 **Code Contributions** - Fix bugs or implement features
-- 🧪 **Testing** - Add or improve tests
 - 🎨 **Design** - Improve UI/UX or visual assets
 
 ## Development Setup
@@ -53,30 +51,20 @@ We welcome several types of contributions:
 ### 2. Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
-### 3. Development Commands
+### 3. Build and Verify
 
 ```bash
-# Compile TypeScript using webpack
-npm run compile
+# Build the extension (requires Node.js 20+)
+pnpm run build
 
-# Watch mode for development (webpack --watch)
-npm run watch
-
-# Production build with optimizations
-npm run package
-
-# Run extension tests
-npm test
-
-# Run ESLint on src directory
-npm run lint
-
-# Format code using Prettier
-npm run format
+# Run ESLint — uses tsconfig.eslint.json for type-aware rules
+pnpm run lint
 ```
+
+> **Note on `tsconfig.eslint.json`**: The project uses a dedicated `tsconfig.eslint.json` (extending `tsconfig.json`) for ESLint's type-aware rules. It includes `src/`, `scripts/`, and `esbuild.config.ts` with `noEmit: true` so linting never affects the production build output.
 
 ### 4. Launch Development Environment
 
@@ -84,17 +72,24 @@ npm run format
 2. Press `F5` to launch the Extension Development Host
 3. Test your changes in the new VS Code window
 
+### 5. Other Useful Commands
+
+```bash
+pnpm run watch      # Watch mode for active development
+pnpm run package    # Production build + VSIX packaging
+pnpm run format     # Format code with Prettier
+```
+
 ## Making Changes
 
-### Branch Naming
+### Branching Strategy
 
-Use descriptive branch names with prefixes:
+All contributions use feature branches off `main`. Branch names follow this convention:
 
 - `feature/` - New features
 - `fix/` - Bug fixes
 - `docs/` - Documentation changes
 - `refactor/` - Code refactoring
-- `test/` - Testing improvements
 
 Examples:
 
@@ -104,7 +99,7 @@ Examples:
 
 ### Commit Messages
 
-Follow conventional commit format:
+We use [Conventional Commits](https://www.conventionalcommits.org/) format:
 
 ```
 type(scope): description
@@ -121,7 +116,6 @@ Types:
 - `docs`: Documentation changes
 - `style`: Code style changes
 - `refactor`: Code refactoring
-- `test`: Testing changes
 - `chore`: Maintenance tasks
 
 Examples:
@@ -129,6 +123,87 @@ Examples:
 - `feat(context-menu): add copy function with AST parsing`
 - `fix(code-analysis): handle edge case for arrow functions`
 - `docs(readme): update installation instructions`
+
+### Commit Standards
+
+Commit messages and size are enforced automatically via git hooks (commitlint + husky) and CI.
+
+#### Message Format (enforced by `commit-msg` hook)
+
+```
+type(scope): short description
+```
+
+| Type       | When to use                                             |
+| ---------- | ------------------------------------------------------- |
+| `feat`     | New feature or capability                               |
+| `fix`      | Bug fix                                                 |
+| `docs`     | Documentation only                                      |
+| `refactor` | Code change that neither fixes a bug nor adds a feature |
+| `chore`    | Maintenance, dependency updates, tooling                |
+| `ci`       | CI/CD workflow changes                                  |
+| `test`     | Adding or updating tests                                |
+| `perf`     | Performance improvement                                 |
+| `style`    | Formatting, whitespace (no logic change)                |
+| `build`    | Build system changes                                    |
+| `revert`   | Reverts a previous commit                               |
+
+Breaking changes: append `!` after the type — `feat!: remove deprecated API`
+
+#### Commit Size Limits (enforced by `pre-commit` hook + CI)
+
+| Limit                        | Value   | Rationale                            |
+| ---------------------------- | ------- | ------------------------------------ |
+| Max files per commit         | **10**  | Keeps commits focused and reviewable |
+| Max lines changed per commit | **300** | Prevents large, hard-to-review diffs |
+
+If your change exceeds these limits, split it into multiple focused commits:
+
+```bash
+# Stage and commit one logical group at a time
+git add src/services/terminalService.ts
+git commit -m "feat(terminal): add integrated terminal support"
+
+git add src/commands/openInTerminal.ts
+git commit -m "feat(terminal): add openInTerminal command handler"
+```
+
+> **Note:** `--no-verify` bypasses local hooks but the CI `commit-size` job will still block oversized PRs.
+
+#### Grandfathered History
+
+Commits before `v2.0.0` predate this enforcement and are not subject to these rules. Enforcement applies to all commits from the next release onwards.
+
+### Pull Request Process
+
+1. Create a branch from `main` using the naming convention above
+2. Make your changes with conventional commits
+3. Run `pnpm run lint && pnpm run build` to verify everything passes
+4. Open a PR against `main` with a clear title and description
+5. The CI workflow will automatically run lint and build checks
+6. At least one maintainer review is required before merging
+7. PRs are squash-merged to keep the history clean
+
+### CI Workflows
+
+The repository uses a single consolidated GitHub Actions workflow at `.github/workflows/ci.yml`.
+
+**On every push and PR:**
+
+- `lint` — runs `pnpm run lint`
+- `build` — builds on Ubuntu, Windows, macOS × Node 20/22/24 × VS Code stable/insiders
+- `audit` — runs `pnpm audit --audit-level=high`
+- `dependency-review` — reviews dependency changes on PRs
+
+**On `v*` tag push (release pipeline):**
+
+- `setup` — extracts version, detects pre-release (`-rc`, `-next`, `-beta`, `-alpha`)
+- `release-build` — checks out `main` branch and builds the production VSIX
+- `verifier` — validates VSIX contents (no source files, no node_modules, correct bundle)
+- `publish-vscode` — publishes to VS Code Marketplace (stable or `--pre-release`)
+- `publish-openvsx` — publishes to Open VSX Registry (stable or `--pre-release`)
+- `deploy-pages` — deploys docs to GitHub Pages (stable releases only, runs after both publishes succeed)
+- `create-release` — creates a GitHub Release with the VSIX attached
 
 ### Code Architecture
 
@@ -161,41 +236,13 @@ When making changes:
 
 ## Submitting Changes
 
-### Pull Request Process
+See the [Pull Request Process](#pull-request-process) section above for the full workflow. Before opening a PR, run:
 
-1. **Update Documentation** - Update README.md, CHANGELOG.md, and code comments
-2. **Add Tests** - Include tests for new functionality
-3. **Run Quality Checks**:
-
-   ```bash
-   npm run lint
-   npm run format
-   npm test
-   npm run compile
-   ```
-
-4. **Create Pull Request** with:
-   - Clear title and description
-   - Link to related issues
-   - Screenshots (if UI changes)
-   - Testing instructions
-
-### Pull Request Template
-
-When creating a PR, please fill out the template with:
-
-- **Description** - What changes were made and why
-- **Type of Change** - Feature, bug fix, documentation, etc.
-- **Testing** - How was this tested
-- **Checklist** - Ensure all requirements are met
-
-### Review Process
-
-1. **Automated Checks** - CI/CD pipeline must pass
-2. **Code Review** - At least one maintainer review
-3. **Testing** - Functional testing on multiple platforms
-4. **Documentation** - Ensure docs are updated
-5. **Merge** - Squash and merge after approval
+```bash
+pnpm run lint
+pnpm run format
+pnpm run build
+```
 
 ## Style Guidelines
 
@@ -210,7 +257,7 @@ When creating a PR, please fill out the template with:
 ### Code Formatting
 
 - Use **Prettier** for consistent formatting
-- Run `npm run format` before committing
+- Run `pnpm run format` before committing
 - Use **2 spaces** for indentation
 - Use **semicolons** at line endings
 - Use **single quotes** for strings
@@ -221,52 +268,6 @@ When creating a PR, please fill out the template with:
 - Use **descriptive file names**
 - Group related functionality
 - Follow the existing **directory structure**
-
-## Testing
-
-### Test Types
-
-1. **Unit Tests** - Test individual functions and components
-2. **Integration Tests** - Test component interactions
-3. **E2E Tests** - Test complete user workflows
-
-### Running Tests
-
-```bash
-# Run all tests
-npm test
-
-# Compile and run tests
-npm run test:watch
-
-# Compile test files
-npm run compile-tests
-```
-
-### Writing Tests
-
-- Use **descriptive test names**
-- Follow **AAA pattern** (Arrange, Act, Assert)
-- Test **both success and error cases**
-- Mock external dependencies
-- Update tests when changing functionality
-
-### Test Structure
-
-```typescript
-suite('Component Name', () => {
-  test('should do something when condition is met', () => {
-    // Arrange
-    const input = 'test input';
-
-    // Act
-    const result = functionUnderTest(input);
-
-    // Assert
-    assert.strictEqual(result, expectedOutput);
-  });
-});
-```
 
 ## Documentation
 

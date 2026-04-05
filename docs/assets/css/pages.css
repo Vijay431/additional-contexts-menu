@@ -276,44 +276,71 @@
 
 .screenshot-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: var(--spacing-xl);
-  margin: var(--spacing-lg) 0;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 .screenshot-item {
-  background-color: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-normal);
+  text-align: center;
 }
 
-.screenshot-item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
-}
-
-.screenshot-img {
+.screenshot-image {
   width: 100%;
   height: auto;
-  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.screenshot-caption {
-  padding: var(--spacing-lg);
+.screenshot-image:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-.screenshot-caption h3 {
+.screenshot-item h3 {
+  margin-top: 1rem;
   font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
-  color: var(--text-primary);
 }
 
-.screenshot-caption p {
-  color: var(--text-secondary);
-  margin-bottom: 0;
+.screenshot-item p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Hero Screenshot */
+.hero-screenshot {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.hero-caption {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Documentation Screenshot */
+.doc-screenshot {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.doc-screenshot img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.doc-screenshot .caption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
 }
 
 /* ===== Installation Page ===== */

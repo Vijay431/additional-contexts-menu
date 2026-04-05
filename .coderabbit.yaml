@@ -1,0 +1,45 @@
+language: en-US
+
+reviews:
+  profile: chill
+  show_prompt: true
+  request_changes_workflow: false
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+
+  path_filters:
+    - '!dist/**'
+    - '!docs/**'
+    - '!images/**'
+    - '!.husky/**'
+    - '!scripts/**'
+    - '!*.vsix'
+    - '!pnpm-lock.yaml'
+
+  path_instructions:
+    - path: 'src/**/*.ts'
+      instructions: |
+        This is a VS Code extension written in TypeScript with strict mode enabled.
+        - All code runs in the VS Code extension host — no browser globals (window, document, fetch, localStorage) are available.
+        - Use the `vscode` API for all editor interactions; never use Node.js `fs` directly where a VS Code API exists.
+        - Services follow the singleton pattern via a DI container (src/di/container.ts). Flag any service instantiated with `new` outside the container.
+        - Flag any `any` type usage — the project enforces `noImplicitAny` and strict TypeScript.
+        - All async operations must handle errors; unhandled promise rejections will silently fail in the extension host.
+        - Prefer `unknown` over `any` in catch blocks (`useUnknownInCatchVariables` is enabled).
+        - Unused locals and parameters are compile errors — flag any that would break the build.
+        - Do not suggest adding test files; the project has no test suite currently.
+        - Do not suggest npm or yarn commands — this project uses pnpm exclusively.
+
+    - path: 'package.json'
+      instructions: |
+        This is a VS Code extension manifest. Validate that:
+        - Any new `contributes.commands` entries have a matching registration in src/managers/CommandRegistry.ts.
+        - `engines.vscode` version is not lowered without justification.
+        - No new runtime `dependencies` are added — this extension has zero runtime dependencies by design (devDependencies only).
+
+chat:
+  auto_reply: true

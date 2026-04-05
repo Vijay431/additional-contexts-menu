@@ -1,33 +1,69 @@
+# ============================================
+# Build & Distribution Artifacts
+# ============================================
 *.vsix
-.vscode-test
-.vscode-test-web
+dist/
+out/
 
-coverage
-dist
-node_modules
-out
+# ============================================
+# Dependencies
+# ============================================
+node_modules/
+.pnpm-debug.log*
 
-blogs
-.specify
-specs
-.mcp.json
+# ============================================
+# Testing & Coverage
+# ============================================
+.vscode-test/
+.vscode-test-web/
+coverage/
 
-# Compiled files - prevent TypeScript output in source directories
+# ============================================
+# Compiled Files
+# ============================================
 src/**/*.js
 src/**/*.js.map
 test/**/*.js
 test/**/*.js.map
-
-# Debug files
 *.map
+
+# ============================================
+# Debug & Logs
+# ============================================
 debug.log
 meta.json
 
-# OS generated files
+# ============================================
+# OS Generated Files
+# ============================================
 .DS_Store
 Thumbs.db
 
+# ============================================
+# AI & Tool Configuration
+# ============================================
+.claude/
+.auto-claude/
+.sisyphus/
+.opencode/
+.auto-claude-security.json
+.claude_settings.json
+.specify/
+specs/
+.mcp.json
+
+# ============================================
+# Documentation & Content
+# ============================================
+blogs/
 CLAUDE.md
-.claude
+CHANGELOG_RELEASE.md
 TODO.md
 
+# ============================================
+# Development Tools
+# ============================================
+opencode.json
+.automaker/
+.worktrees/
+logs/security/

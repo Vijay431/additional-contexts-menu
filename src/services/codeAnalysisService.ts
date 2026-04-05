@@ -1,325 +1,328 @@
+import * as ts from 'typescript';
 import * as vscode from 'vscode';
 
-import { FunctionInfo } from '../types/extension';
+import type {
+  ICodeAnalysisService,
+  FunctionInfo,
+  ImportInfo,
+} from '../di/interfaces/ICodeAnalysisService';
+import type { ILogger } from '../di/interfaces/ILogger';
+import { FunctionInfo as OldFunctionInfo } from '../types/extension';
 import { Logger } from '../utils/logger';
 
-/**
- * Lightweight code analysis service that replaces Babel AST parsing
- * with regex-based function detection for significant bundle size reduction.
- *
- * Trade-offs:
- * - Much smaller bundle size (eliminates 500+ KB of Babel dependencies)
- * - Faster parsing for simple use cases
- * - Less accurate for complex nested functions and edge cases
- * - No full AST analysis capabilities
- */
-export class CodeAnalysisService {
-  private static instance: CodeAnalysisService;
-  private logger: Logger;
+export class CodeAnalysisService implements ICodeAnalysisService {
+  private static instance: CodeAnalysisService | undefined = undefined;
+  private logger: ILogger;
 
-  // Very simple, safe regex patterns for different function types
-  private readonly patterns = {
-    // Function declarations: function name() { ... }
-    functionDeclaration: /function\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
-
-    // Arrow functions: const name = () => ... | const name = async () => ...
-    arrowFunction: /const\s+([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g,
-
-    // Method definitions in classes/objects: methodName() { ... }
-    methodDefinition: /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g,
-
-    // Class methods: async methodName() { ... } or methodName() { ... }
-    classMethod: /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g,
-
-    // React components (functions that return JSX or have JSX in body)
-    reactComponent: /(?:const|function)\s+([A-Z][a-zA-Z0-9_$]*)/g,
-
-    // React hooks (functions starting with 'use')
-    reactHook: /const\s+(use[A-Z][a-zA-Z0-9_$]*)\s*=/g,
-  };
-
-  private constructor() {
-    this.logger = Logger.getInstance();
+  private constructor(logger: ILogger) {
+    this.logger = logger;
   }
 
+  /**
+   * Get the singleton instance (legacy pattern)
+   *
+   * @deprecated Use DI injection instead
+   */
   public static getInstance(): CodeAnalysisService {
-    if (!CodeAnalysisService.instance) {
-      CodeAnalysisService.instance = new CodeAnalysisService();
-    }
+    CodeAnalysisService.instance ??= new CodeAnalysisService(Logger.getInstance());
     return CodeAnalysisService.instance;
+  }
+
+  /**
+   * Create a new CodeAnalysisService instance (DI pattern)
+   *
+   * This method is used by the DI container.
+   *
+   * @param logger - The logger instance to use
+   * @returns A new CodeAnalysisService instance
+   */
+  public static create(logger: ILogger): CodeAnalysisService {
+    return new CodeAnalysisService(logger);
   }
 
   public async findFunctionAtPosition(
     document: vscode.TextDocument,
     position: vscode.Position,
-  ): Promise<FunctionInfo | null> {
+  ): Promise<FunctionInfo | undefined> {
     try {
       const text = document.getText();
+      const sourceFile = this.parseSourceFile(text, document.fileName);
+      const offset = document.offsetAt(position);
 
-      // Find all functions in the document
-      const functions = this.findAllFunctions(text, document.languageId);
+      const containingNode = this.findFunctionNodeContainingPosition(sourceFile, offset);
 
-      // Find the function that contains the cursor position
-      const containingFunction = functions.find((func) =>
-        this.isPositionInFunction(position, func, document),
-      );
+      if (containingNode) {
+        const functionInfo = this.extractFunctionInfo(containingNode, sourceFile);
 
-      if (containingFunction) {
         this.logger.debug('Function found at position', {
-          name: containingFunction.name,
-          type: containingFunction.type,
-          line: containingFunction.startLine,
+          name: functionInfo.name,
+          type: functionInfo.type,
+          line: functionInfo.startLine,
         });
+
+        return functionInfo;
       }
 
-      return containingFunction ?? null;
+      return undefined;
     } catch (error) {
       this.logger.error('Error finding function at position', error);
-      return null;
+      return undefined;
     }
   }
 
-  private findAllFunctions(
-    text: string,
-    _languageId: string,
-  ): FunctionInfo[] {
-    const functions: FunctionInfo[] = [];
-    const lines = text.split('\n');
+  /**
+   * @deprecated For backward compatibility, use findFunctionAtPosition instead
+   */
+  public async findFunctionAtPositionOld(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+  ): Promise<OldFunctionInfo | null> {
+    const result = await this.findFunctionAtPosition(document, position);
+    if (!result) return null;
 
-    // Check each line for function patterns
-    lines.forEach((line, lineIndex) => {
-      const lineNumber = lineIndex + 1;
+    return {
+      name: result.name,
+      startLine: result.startLine,
+      endLine: result.endLine,
+      startColumn: 0,
+      endColumn: 0,
+      type: result.type === 'arrow' ? 'arrow' : result.type === 'method' ? 'method' : 'function',
+      isExported: false,
+      hasDecorators: false,
+      fullText: result.fullText,
+    };
+  }
 
-      // Try each pattern type
-      this.tryPatternMatch(
-        this.patterns.functionDeclaration,
-        line,
-        lineNumber,
-        'function',
-        functions,
-        lines,
-      );
-      this.tryPatternMatch(
-        this.patterns.arrowFunction,
-        line,
-        lineNumber,
-        'arrow',
-        functions,
-        lines,
-      );
-      this.tryPatternMatch(
-        this.patterns.methodDefinition,
-        line,
-        lineNumber,
-        'method',
-        functions,
-        lines,
-      );
-      this.tryPatternMatch(this.patterns.classMethod, line, lineNumber, 'method', functions, lines);
+  private parseSourceFile(code: string, fileName: string): ts.SourceFile {
+    return ts.createSourceFile(fileName, code, ts.ScriptTarget.Latest, true);
+  }
 
-      // Check for React components (start with capital letter)
-      if (this.isReactComponent(line, lines, lineIndex)) {
-        const match = this.patterns.reactComponent.exec(line);
-        if (match?.[2]) {
-          functions.push(
-            this.createFunctionInfo(
-              match[2],
-              'component',
-              lineNumber,
-              match[1] ?? '',
-              lines,
-              lineIndex,
-            ),
-          );
+  private findFunctionNodeContainingPosition(
+    sourceFile: ts.SourceFile,
+    position: number,
+  ): ts.FunctionLike | null {
+    let result: ts.FunctionLike | null = null;
+
+    const visit = (node: ts.Node) => {
+      if (position >= node.pos && position <= node.end) {
+        if (this.isFunctionNode(node) && !result) {
+          result = node as ts.FunctionLike;
         }
+        ts.forEachChild(node, visit);
       }
+    };
 
-      // Check for React hooks (start with 'use')
-      const hookMatch = this.patterns.reactHook.exec(line);
-      if (hookMatch?.[2]) {
-        functions.push(
-          this.createFunctionInfo(
-            hookMatch[2],
-            'hook',
-            lineNumber,
-            hookMatch[1] ?? '',
-            lines,
-            lineIndex,
-          ),
-        );
-      }
-
-      // Reset regex state
-      Object.values(this.patterns).forEach((pattern) => (pattern.lastIndex = 0));
-    });
-
-    return functions;
+    visit(sourceFile);
+    return result;
   }
 
-  private tryPatternMatch(
-    pattern: RegExp,
-    line: string,
-    lineNumber: number,
-    type: FunctionInfo['type'],
-    functions: FunctionInfo[],
-    allLines: string[],
-  ): void {
-    pattern.lastIndex = 0; // Reset regex state
-    const match = pattern.exec(line);
+  private isFunctionNode(node: ts.Node): boolean {
+    return (
+      ts.isFunctionDeclaration(node) ||
+      ts.isArrowFunction(node) ||
+      ts.isMethodDeclaration(node) ||
+      ts.isFunctionExpression(node) ||
+      this.isVariableFunctionDeclaration(node)
+    );
+  }
 
-    if (match) {
-      const indent = match[1] ?? '';
-      const isAsync = match[2] === 'async' || match[3] === 'async';
-      const functionName = match[3] ?? match[2];
-
-      if (functionName) {
-        const actualType = isAsync ? 'async' : type;
-        functions.push(
-          this.createFunctionInfo(
-            functionName,
-            actualType,
-            lineNumber,
-            indent,
-            allLines,
-            lineNumber - 1,
-          ),
+  private isVariableFunctionDeclaration(node: ts.Node): boolean {
+    if (ts.isVariableStatement(node)) {
+      const declaration = node.declarationList.declarations[0];
+      if (declaration?.initializer) {
+        return (
+          ts.isArrowFunction(declaration.initializer) ||
+          ts.isFunctionExpression(declaration.initializer)
         );
       }
+      return false;
     }
+    return false;
   }
 
-  private createFunctionInfo(
-    name: string,
-    type: FunctionInfo['type'],
-    startLine: number,
-    indent: string,
-    allLines: string[],
-    startIndex: number,
-  ): FunctionInfo {
-    // Find the end of the function by tracking braces
-    const endInfo = this.findFunctionEnd(allLines, startIndex, indent.length);
+  private extractFunctionInfo(node: ts.FunctionLike, sourceFile: ts.SourceFile): FunctionInfo {
+    const name = this.getFunctionName(node, sourceFile);
+    const type = this.getFunctionType(node, sourceFile);
+    const startPos = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+    const endPos = sourceFile.getLineAndCharacterOfPosition(node.end);
 
     return {
       name,
       type,
-      startLine,
-      startColumn: indent.length,
-      endLine: endInfo.endLine,
-      endColumn: endInfo.endColumn,
-      isExported: this.isExported(allLines[startIndex] ?? ''),
-      hasDecorators: this.hasDecorators(allLines[startIndex] ?? ''),
-      fullText: this.extractFunctionText(allLines, startIndex, endInfo.endLine),
+      startLine: startPos.line + 1,
+      endLine: endPos.line + 1,
+      fullText: sourceFile.text.substring(node.pos, node.end),
+      isAsync:
+        ts.canHaveModifiers(node) &&
+        ((node.modifiers as ts.ModifiersArray | undefined)?.some(
+          (m) => m.kind === ts.SyntaxKind.AsyncKeyword,
+        ) ??
+          false),
     };
   }
 
-  private findFunctionEnd(
-    lines: string[],
-    startIndex: number,
-    _indentLevel: number,
-  ): { endLine: number; endColumn: number } {
-    let braceCount = 0;
-    let foundFirstBrace = false;
-    let endLine = startIndex + 1;
-    let endColumn = 0;
-
-    // For arrow functions, look for the opening brace or single expression
-    const startLine = lines[startIndex];
-    const isArrowFunction = startLine?.includes('=>');
-
-    if (isArrowFunction && !startLine?.includes('{')) {
-      // Single expression arrow function
-      return { endLine: startIndex + 1, endColumn: lines[startIndex]?.length ?? 0 };
+  private getFunctionName(node: ts.Node, sourceFile: ts.SourceFile): string {
+    if (ts.isFunctionDeclaration(node) && node.name) {
+      return node.name.text;
     }
 
-    // Track braces to find function end
-    for (let i = startIndex; i < lines.length; i++) {
-      const line = lines[i];
-
-      if (line) {
-        for (let j = 0; j < line.length; j++) {
-          if (line[j] === '{') {
-            braceCount++;
-            foundFirstBrace = true;
-          } else if (line[j] === '}') {
-            braceCount--;
-            if (foundFirstBrace && braceCount === 0) {
-              return { endLine: i + 1, endColumn: j + 1 };
-            }
-          }
-        }
+    if (ts.isVariableStatement(node)) {
+      const declaration = node.declarationList.declarations[0];
+      if (declaration?.name) {
+        return declaration.name.getText(sourceFile);
       }
-
-      endLine = i + 1;
-      endColumn = line?.length ?? 0;
+      return 'anonymous';
     }
 
-    return { endLine, endColumn };
+    if (ts.isMethodDeclaration(node)) {
+      return node.name.getText(sourceFile);
+    }
+
+    if (ts.isFunctionExpression(node) && node.name) {
+      return node.name.text;
+    }
+
+    return 'anonymous';
   }
 
-  private isPositionInFunction(
-    position: vscode.Position,
-    func: FunctionInfo,
-    _document: vscode.TextDocument,
-  ): boolean {
-    const startPos = new vscode.Position(func.startLine - 1, func.startColumn ?? 0);
-    const endPos = new vscode.Position((func.endLine ?? func.startLine) - 1, func.endColumn ?? 0);
+  private getFunctionType(node: ts.Node, sourceFile: ts.SourceFile): FunctionInfo['type'] {
+    const name = this.getFunctionName(node, sourceFile);
 
-    return position.isAfterOrEqual(startPos) && position.isBeforeOrEqual(endPos);
+    if (name.length === 0) {
+      return 'function';
+    }
+
+    const firstChar = name[0]!;
+
+    // React hook detection
+    if (name.startsWith('use')) {
+      return 'hook';
+    }
+
+    // React component detection (capital letter start)
+    if (firstChar === firstChar.toUpperCase() && firstChar >= 'A' && firstChar <= 'Z') {
+      return 'component';
+    }
+
+    // Async function detection
+    if (
+      ts.canHaveModifiers(node) &&
+      node.modifiers?.some((m) => m.kind === ts.SyntaxKind.AsyncKeyword)
+    ) {
+      return 'async';
+    }
+
+    // Arrow function
+    if (ts.isArrowFunction(node)) {
+      return 'arrow';
+    }
+
+    // Method
+    if (ts.isMethodDeclaration(node)) {
+      return 'method';
+    }
+
+    return 'function';
   }
 
-  private isReactComponent(line: string, allLines: string[], lineIndex: number): boolean {
-    // Check if function name starts with capital letter (React convention)
-    const hasCapitalName = /(?:function|const)\s+[A-Z]\w+/.test(line);
-    if (!hasCapitalName) {
-      return false;
+  private isExported(node: ts.Node): boolean {
+    if (ts.canHaveModifiers(node)) {
+      return node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword) ?? false;
     }
-
-    // Look for JSX return in the next few lines (simple heuristic)
-    const searchLines = Math.min(allLines.length, lineIndex + 10);
-    for (let i = lineIndex; i < searchLines; i++) {
-      const currentLine = allLines[i];
-      const nextLine = allLines[i + 1];
-      if (
-        currentLine?.includes('return') &&
-        (currentLine.includes('<') || nextLine?.includes('<'))
-      ) {
-        return true;
-      }
-    }
-
     return false;
   }
 
-  private isExported(line: string): boolean {
-    return line.trim().startsWith('export');
+  private hasDecorators(node: ts.Node): boolean {
+    if ('decorators' in node) {
+      const decorators = (node as { decorators?: ts.NodeArray<ts.Decorator> }).decorators;
+      return decorators !== undefined && decorators.length > 0;
+    }
+    return false;
   }
 
-  private hasDecorators(line: string): boolean {
-    // Look for decorators in the line or previous lines (simple check)
-    return line.includes('@');
-  }
+  public extractImports(code: string, _languageId: string): ImportInfo[] {
+    const imports: ImportInfo[] = [];
 
-  private extractFunctionText(lines: string[], startIndex: number, endLine: number): string {
-    const functionLines = lines.slice(startIndex, endLine);
-    return functionLines.join('\n');
-  }
-
-  public extractImports(
-    code: string,
-    _languageId: string,
-  ): string[] {
-    const imports: string[] = [];
-
-    // Simple regex-based import extraction
-    const importPattern = /^(\s*import\s+.+?;?\s*)$/gm;
-    let match;
-
-    while ((match = importPattern.exec(code)) !== null) {
-      if (match[1]) {
-        imports.push(match[1].trim());
+    function extractImportNames(namedBindings: ts.NamedImportBindings | undefined): string[] {
+      if (!namedBindings) return [];
+      if (ts.isNamedImports(namedBindings)) {
+        return namedBindings.elements.map((s) => s.name.getText());
       }
+      return [];
+    }
+
+    try {
+      const sourceFile = this.parseSourceFile(code, 'temp.ts');
+
+      sourceFile.statements.forEach((statement) => {
+        if (ts.isImportDeclaration(statement)) {
+          const fullText = sourceFile.text.substring(statement.getStart(sourceFile), statement.end);
+
+          // Determine import type
+          let type: ImportInfo['type'] = 'side-effect';
+          const moduleLiteral = statement.moduleSpecifier.getText();
+
+          if (statement.importClause) {
+            if (ts.isNamespaceImport(statement.importClause.namedBindings)) {
+              type = 'namespace';
+            } else if (statement.importClause.name) {
+              type = 'default';
+            } else if (
+              statement.importClause.namedBindings &&
+              ts.isNamedImports(statement.importClause.namedBindings)
+            ) {
+              type = 'named';
+            }
+          }
+
+          imports.push({
+            fullText: fullText.trim(),
+            type,
+            module: moduleLiteral.replace(/['"]/g, ''),
+            names:
+              type === 'named' || type === 'namespace'
+                ? extractImportNames(statement.importClause?.namedBindings)
+                : undefined,
+          });
+        }
+      });
+    } catch (error) {
+      this.logger.warn('Error extracting imports', error);
     }
 
     return imports;
+  }
+
+  public containsPattern(code: string, pattern: RegExp): boolean {
+    return pattern.test(code);
+  }
+
+  public extractAllFunctions(document: vscode.TextDocument): FunctionInfo[] {
+    const functions: FunctionInfo[] = [];
+    const text = document.getText();
+    const sourceFile = this.parseSourceFile(text, document.fileName);
+
+    const visit = (node: ts.Node) => {
+      if (this.isFunctionNode(node)) {
+        const func = node as ts.FunctionLike;
+        functions.push(this.extractFunctionInfo(func, sourceFile));
+      }
+      ts.forEachChild(node, visit);
+    };
+
+    visit(sourceFile);
+    return functions;
+  }
+
+  public getLanguagePatterns(_languageId: string): {
+    functionPattern: RegExp;
+    importPattern: RegExp;
+    exportPattern: RegExp;
+  } {
+    return {
+      functionPattern: /function\s+\w+|=>\s*{|class\s+\w+/g,
+      importPattern: /import\s+.*from\s+['"](.+)['"]/g,
+      exportPattern: /\bexport\b\s*/,
+    };
   }
 }

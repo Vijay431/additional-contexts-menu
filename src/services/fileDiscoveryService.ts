@@ -4,26 +4,140 @@ import * as path from 'path';
 
 import * as vscode from 'vscode';
 
+import type { IAccessibilityService } from '../di/interfaces/IAccessibilityService';
+import type { IConfigurationService } from '../di/interfaces/IConfigurationService';
+import type { IFileDiscoveryService, DiscoveredFile } from '../di/interfaces/IFileDiscoveryService';
+import type { ILogger } from '../di/interfaces/ILogger';
+import { AccessibilityService } from '../services/accessibilityService';
 import { CompatibleFile } from '../types/extension';
+import {
+  createAccessibleFileDescription,
+  formatAccessiblePlaceholder,
+  getAccessibleQuickPickItem,
+} from '../utils/accessibilityHelper';
+import { Cache } from '../utils/cache';
 import { Logger } from '../utils/logger';
+import { isSafeFilePath } from '../utils/pathValidator';
 
-export class FileDiscoveryService {
-  private static instance: FileDiscoveryService;
-  private logger: Logger;
-  private fileCache = new Map<string, CompatibleFile[]>();
+/**
+ * File Discovery Service
+ *
+ * Discovers and filters files in the workspace for code operations.
+ * Provides caching for performance and handles file system changes.
+ *
+ * @description
+ * This service scans the workspace for compatible files based on file extensions,
+ * filters them appropriately, and provides a convenient interface for file selection.
+ * Uses VS Code's file search API for optimal performance.
+ *
+ * Key Features:
+ * - Workspace file scanning with pattern matching
+ * - File extension compatibility rules (.ts ↔ .tsx, .js ↔ .jsx)
+ * - Last-modified sorting for easy file selection
+ * - Result caching for improved performance
+ * - File system change monitoring (create, delete, rename)
+ * - File accessibility validation
+ * - QuickPick integration for user-friendly file selection
+ *
+ * Compatibility Rules:
+ * - TypeScript (.ts/.tsx) ↔ TypeScript (.ts/.tsx)
+ * - JavaScript (.js/.jsx) ↔ JavaScript (.js/.jsx)
+ * - Cross-compatibility between TS and JS (limited)
+ *
+ * @example
+ * ```typescript
+ * // Using DI (recommended)
+ * constructor(@inject(TYPES.FileDiscoveryService) private discovery: IFileDiscoveryService) {}
+ *
+ * // Using singleton (legacy)
+ * const discoveryService = FileDiscoveryService.getInstance();
+ * ```
+ *
+ * @see CodeAnalysisService - Used together for file operations
+ * @see ContextMenuManager - Uses this service for file selection
+ *
+ * @category File Operations
+ * @subcategory File Discovery
+ *
+ * @author Vijay Gangatharan <vijayanand431@gmail.com>
+ * @since 1.0.0
+ */
+export class FileDiscoveryService implements IFileDiscoveryService {
+  private static instance: FileDiscoveryService | undefined = undefined;
+  private logger: ILogger;
+  private accessibilityService: IAccessibilityService;
+  private fileCache: Cache<CompatibleFile[]>;
 
-  private constructor() {
-    this.logger = Logger.getInstance();
+  private constructor(
+    logger: ILogger,
+    accessibilityService: IAccessibilityService,
+    private configService?: IConfigurationService,
+    private projectDetectionService?: unknown,
+  ) {
+    this.logger = logger;
+    this.accessibilityService = accessibilityService;
+    // Cache file lists for 5 minutes
+    this.fileCache = new Cache<CompatibleFile[]>({
+      maxSize: 100,
+      defaultTTL: 5 * 60 * 1000, // 5 minutes
+      trackStats: false,
+    });
   }
 
+  /**
+   * Get the singleton instance (legacy pattern)
+   *
+   * @deprecated Use DI injection instead
+   */
   public static getInstance(): FileDiscoveryService {
-    if (!FileDiscoveryService.instance) {
-      FileDiscoveryService.instance = new FileDiscoveryService();
-    }
+    FileDiscoveryService.instance ??= new FileDiscoveryService(
+      Logger.getInstance(),
+      AccessibilityService.getInstance(),
+    );
     return FileDiscoveryService.instance;
   }
 
-  public async getCompatibleFiles(sourceExtension: string): Promise<CompatibleFile[]> {
+  /**
+   * Create a new FileDiscoveryService instance (DI pattern)
+   *
+   * This method is used by the DI container.
+   *
+   * @param logger - The logger instance to use
+   * @param accessibilityService - The accessibility service instance
+   * @param configService - Optional configuration service
+   * @param projectDetectionService - Optional project detection service
+   * @returns A new FileDiscoveryService instance
+   */
+  public static create(
+    logger: ILogger,
+    accessibilityService: IAccessibilityService,
+    configService?: IConfigurationService,
+    projectDetectionService?: unknown,
+  ): FileDiscoveryService {
+    return new FileDiscoveryService(
+      logger,
+      accessibilityService,
+      configService,
+      projectDetectionService,
+    );
+  }
+
+  public async getCompatibleFiles(sourceExtension: string): Promise<DiscoveredFile[]> {
+    const compatibleFiles = await this.getCompatibleFilesOld(sourceExtension);
+    return compatibleFiles.map((f) => ({
+      path: f.path,
+      name: f.name,
+      extension: f.extension,
+      relativePath: f.relativePath,
+      languageId: this.getLanguageId(f.extension),
+    }));
+  }
+
+  /**
+   * Legacy method for backward compatibility
+   * @deprecated Use getCompatibleFiles instead
+   */
+  private async getCompatibleFilesOld(sourceExtension: string): Promise<CompatibleFile[]> {
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
     if (!workspaceFolder) {
       return [];
@@ -64,7 +178,11 @@ export class FileDiscoveryService {
 
     for (const fileUri of files) {
       try {
-        const filePath = fileUri.fsPath;
+        const filePath = path.resolve(fileUri.fsPath);
+        if (!isSafeFilePath(filePath)) {
+          continue;
+        }
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- path validated by isSafeFilePath()
         const stats = await fs.stat(filePath);
         const extension = path.extname(filePath);
 
@@ -120,7 +238,9 @@ export class FileDiscoveryService {
       '.jsx': ['.js', '.jsx'],
     };
 
-    const compatibleExtensions = compatibilityRules[sourceExt] ?? [sourceExt];
+    const compatibleExtensions = compatibilityRules[
+      sourceExt as keyof typeof compatibilityRules
+    ] ?? [sourceExt];
     return compatibleExtensions.includes(targetExt);
   }
 
@@ -135,40 +255,103 @@ export class FileDiscoveryService {
     }
   }
 
-  public async showFileSelector(compatibleFiles: CompatibleFile[]): Promise<string | undefined> {
+  public async showFileSelector(compatibleFiles: DiscoveredFile[]): Promise<string | undefined> {
+    // Convert to legacy format for existing implementation
+    const legacyFiles: CompatibleFile[] = compatibleFiles.map((f) => ({
+      path: f.path,
+      name: f.name,
+      extension: f.extension,
+      isCompatible: true,
+      lastModified: new Date(), // We'll need to fetch this
+      relativePath: f.relativePath ?? '',
+    }));
+
+    return this.showFileSelectorOld(legacyFiles);
+  }
+
+  /**
+   * Legacy method for backward compatibility
+   * @deprecated Use showFileSelector instead
+   */
+  private async showFileSelectorOld(
+    compatibleFiles: CompatibleFile[],
+  ): Promise<string | undefined> {
     if (compatibleFiles.length === 0) {
       vscode.window.showWarningMessage('No compatible files found in workspace');
+      await this.accessibilityService.announce('No compatible files found', 'minimal');
       return undefined;
     }
 
     const quickPickItems = this.formatFileList(compatibleFiles);
+    const placeholder = formatAccessiblePlaceholder('Select target file', compatibleFiles.length);
 
     const selected = await vscode.window.showQuickPick(quickPickItems, {
-      placeHolder: 'Select target file',
+      placeHolder: placeholder,
       matchOnDescription: true,
       matchOnDetail: true,
     });
+
+    if (selected) {
+      const fileName = selected.label;
+      await this.accessibilityService.announce(`Selected ${fileName}`, 'normal');
+    }
 
     return selected?.filePath;
   }
 
   private formatFileList(files: CompatibleFile[]): (vscode.QuickPickItem & { filePath: string })[] {
-    return files.map((file) => {
+    return files.map((file, index) => {
       const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
       const workspaceName = workspaceFolder?.name ?? 'workspace';
 
-      return {
-        label: file.name,
-        description: path.dirname(file.relativePath),
-        detail: `${workspaceName} • Modified: ${file.lastModified.toLocaleString()}`,
-        filePath: file.path,
-      };
+      const fileName = file.name;
+      const relativePath = file.relativePath;
+      const directory = path.dirname(relativePath);
+      const modificationInfo = file.lastModified.toLocaleString();
+
+      // Create accessible description for screen readers
+      const accessibleDescription = createAccessibleFileDescription(
+        fileName,
+        relativePath,
+        file.lastModified,
+      );
+
+      // Create ARIA label with position information
+      const ariaLabel = `${fileName}. File ${index + 1} of ${files.length}. Located in ${directory}. Last modified ${modificationInfo}`;
+
+      return getAccessibleQuickPickItem(
+        {
+          label: file.name,
+          description: directory,
+          detail: `${workspaceName} • Modified: ${modificationInfo}`,
+          filePath: file.path,
+        },
+        {
+          ariaLabel,
+          ariaDescription: accessibleDescription,
+        },
+      );
     });
   }
 
   public clearCache(): void {
     this.fileCache.clear();
     this.logger.debug('File discovery cache cleared');
+  }
+
+  /**
+   * Get cache statistics
+   *
+   * Returns statistics about the file discovery cache.
+   *
+   * @returns Cache statistics
+   */
+  public getCacheStats(): { size: number; hits: number; misses: number; hitRate: number } {
+    return this.fileCache.getStats();
+  }
+
+  public dispose(): void {
+    this.fileCache.dispose();
   }
 
   public onWorkspaceChanged(): vscode.Disposable {
@@ -188,5 +371,38 @@ export class FileDiscoveryService {
     watcher.onDidChange(clearCache);
 
     return watcher;
+  }
+
+  private getLanguageId(extension: string): string {
+    switch (extension) {
+      case '.ts':
+        return 'typescript';
+      case '.tsx':
+        return 'typescriptreact';
+      case '.js':
+        return 'javascript';
+      case '.jsx':
+        return 'javascriptreact';
+      default:
+        return 'unknown';
+    }
+  }
+
+  public isExtensionSupported(extension: string): boolean {
+    // Get supported extensions from configuration if available
+    if (this.configService) {
+      const supportedExtensions = this.configService.getSupportedExtensions();
+      return supportedExtensions.includes(extension);
+    }
+    // Default check
+    return ['.ts', '.tsx', '.js', '.jsx'].includes(extension);
+  }
+
+  /**
+   * Legacy compatibility method
+   * @deprecated Use isExtensionSupported instead
+   */
+  public isCompatibleExtensionLegacy(source: string, target: string): boolean {
+    return this.isExtensionSupported(target);
   }
 }

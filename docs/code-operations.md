@@ -23,7 +23,7 @@ description: 'Detailed examples and workflows for Additional Context Menus code 
                 Copy Function
             </h2>
             <p class="operation-desc">
-                Use AST-based function detection to copy functions, methods, and React components with intelligent analysis.
+                Use AST-based function detection with TypeScript Compiler API to copy functions, methods, and React components with accurate analysis.
             </p>
         </div>
         
