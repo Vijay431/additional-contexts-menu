@@ -109,10 +109,10 @@ export class ContextMenuManager {
       vscode.commands.registerCommand('additionalContextMenus.copyFunction', () =>
         this.handleCopyFunction(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.copyContentToFile', () =>
+      vscode.commands.registerCommand('additionalContextMenus.copySelectionToFile', () =>
         this.handleCopyLinesToFile(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.moveContentToFile', () =>
+      vscode.commands.registerCommand('additionalContextMenus.moveSelectionToFile', () =>
         this.handleMoveLinesToFile(),
       ),
       vscode.commands.registerCommand('additionalContextMenus.saveAll', () => this.handleSaveAll()),
@@ -186,6 +186,11 @@ export class ContextMenuManager {
         return;
       }
 
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage('Copy Function only supports .ts, .tsx, .js, .jsx files.');
+        return;
+      }
+
       const document = editor.document;
       const position = editor.selection.active;
 
@@ -227,6 +232,13 @@ export class ContextMenuManager {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
         vscode.window.showErrorMessage('No active editor found');
+        return;
+      }
+
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Copy Selection to File only supports .ts, .tsx, .js, .jsx files.',
+        );
         return;
       }
 
@@ -285,6 +297,13 @@ export class ContextMenuManager {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
         vscode.window.showErrorMessage('No active editor found');
+        return;
+      }
+
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Move Selection to File only supports .ts, .tsx, .js, .jsx files.',
+        );
         return;
       }
 
@@ -513,6 +532,13 @@ export class ContextMenuManager {
         return;
       }
 
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Copy Function to File only supports .ts, .tsx, .js, .jsx files.',
+        );
+        return;
+      }
+
       const document = editor.document;
       const position = editor.selection.active;
 
@@ -549,7 +575,7 @@ export class ContextMenuManager {
         return;
       }
 
-      await this.copyCodeToTargetFile(functionInfo.fullText, targetFilePath, document);
+      await this.insertFunctionIntoFile(functionInfo.fullText, targetFilePath);
 
       const fileName = this.getFileName(targetFilePath);
       vscode.window.showInformationMessage(`Function '${functionInfo.name}' copied to ${fileName}`);
@@ -574,6 +600,13 @@ export class ContextMenuManager {
         return;
       }
 
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Move Function to File only supports .ts, .tsx, .js, .jsx files.',
+        );
+        return;
+      }
+
       const document = editor.document;
       const position = editor.selection.active;
 
@@ -610,7 +643,7 @@ export class ContextMenuManager {
         return;
       }
 
-      await this.copyCodeToTargetFile(functionInfo.fullText, targetFilePath, document);
+      await this.insertFunctionIntoFile(functionInfo.fullText, targetFilePath);
 
       const range = new vscode.Range(
         new vscode.Position(functionInfo.startLine - 1, 0),
@@ -667,6 +700,23 @@ export class ContextMenuManager {
   private getFileExtension(fileName: string): string {
     const lastDot = fileName.lastIndexOf('.');
     return lastDot >= 0 ? fileName.substring(lastDot) : '';
+  }
+
+  private isSupportedFileType(fileName: string): boolean {
+    return ['.ts', '.tsx', '.js', '.jsx'].includes(this.getFileExtension(fileName));
+  }
+
+  private async insertFunctionIntoFile(code: string, targetFilePath: string): Promise<void> {
+    const targetUri = vscode.Uri.file(targetFilePath);
+    const targetDocument = await vscode.workspace.openTextDocument(targetUri);
+    const insertionPoint = this.getInsertionPoint(targetDocument, code);
+    const targetEditor = await vscode.window.showTextDocument(
+      targetDocument,
+      vscode.ViewColumn.Beside,
+    );
+    await targetEditor.edit((editBuilder) => {
+      editBuilder.insert(insertionPoint, `\n${code}\n`);
+    });
   }
 
   private getFileName(filePath: string): string {
@@ -942,8 +992,7 @@ export class ContextMenuManager {
 
   private isAccessibilityEnabled(): boolean {
     try {
-      const config = this.configService.getAccessibilityConfig();
-      return config.screenReaderMode === true;
+      return this.configService.getConfiguration().accessibility.screenReaderMode === true;
     } catch {
       return false;
     }

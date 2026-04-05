@@ -262,7 +262,8 @@ export async function initializeContainer(context: {
   container.registerSingleton<IFileSaveService>(TYPES.FileSaveService, () => {
     const logger = container.get<ILogger>(TYPES.Logger);
     const configService = container.get<IConfigurationService>(TYPES.ConfigurationService);
-    return FileSaveService.create(logger, configService);
+    const accessibilityService = container.get<IAccessibilityService>(TYPES.AccessibilityService);
+    return FileSaveService.create(logger, configService, accessibilityService);
   });
 
   container.registerSingleton<IFileNamingConventionService>(

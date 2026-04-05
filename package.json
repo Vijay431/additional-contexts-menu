@@ -101,14 +101,14 @@
         "icon": "$(symbol-function)"
       },
       {
-        "command": "additionalContextMenus.copyContentToFile",
-        "title": "Copy Content to File",
+        "command": "additionalContextMenus.copySelectionToFile",
+        "title": "Copy Selection to File",
         "category": "Additional Context Menus",
         "icon": "$(copy)"
       },
       {
-        "command": "additionalContextMenus.moveContentToFile",
-        "title": "Move Content to File",
+        "command": "additionalContextMenus.moveSelectionToFile",
+        "title": "Move Selection to File",
         "category": "Additional Context Menus",
         "icon": "$(arrow-right)"
       },
@@ -120,12 +120,12 @@
       },
       {
         "command": "additionalContextMenus.enable",
-        "title": "Additional Context Menus: Enable",
+        "title": "Enable",
         "category": "Additional Context Menus"
       },
       {
         "command": "additionalContextMenus.disable",
-        "title": "Additional Context Menus: Disable",
+        "title": "Disable",
         "category": "Additional Context Menus"
       },
       {
@@ -220,34 +220,122 @@
           {
             "id": "additionalContextMenus.step.copyFunction",
             "title": "Copy a Function",
-            "description": "Place your cursor inside any TypeScript or JavaScript function, then right-click and choose **Copy Function** to copy the entire function — including its imports — to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
+            "description": "Place your cursor inside any function, then right-click and choose **Copy Function** to copy it to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
             "media": {
-              "markdown": "docs/walkthrough/copy-function.md"
+              "markdown": "walkthrough/copy-function.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.copyFunction"
             ]
           },
           {
-            "id": "additionalContextMenus.step.copyContentToFile",
-            "title": "Copy Content to Another File",
-            "description": "Select any code block, right-click, and choose **Copy Content to File** to copy the selection directly into another file in your project — with smart import merging.\n\n[Try it now](command:additionalContextMenus.copyContentToFile)",
+            "id": "additionalContextMenus.step.copyFunctionToFile",
+            "title": "Copy Function to File",
+            "description": "Place your cursor inside a function, right-click and choose **Copy Function to File** to copy it directly into another file.\n\n[Try it now](command:additionalContextMenus.copyFunctionToFile)",
             "media": {
-              "markdown": "docs/walkthrough/copy-content-to-file.md"
+              "markdown": "walkthrough/copy-function-to-file.md"
             },
             "completionEvents": [
-              "onCommand:additionalContextMenus.copyContentToFile"
+              "onCommand:additionalContextMenus.copyFunctionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.moveFunctionToFile",
+            "title": "Move Function to File",
+            "description": "Place your cursor inside a function, right-click and choose **Move Function to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveFunctionToFile)",
+            "media": {
+              "markdown": "walkthrough/move-function-to-file.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.moveFunctionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.copySelectionToFile",
+            "title": "Copy Selection to File",
+            "description": "Select any code block, right-click, and choose **Copy Selection to File** to copy it into another file in your project.\n\n[Try it now](command:additionalContextMenus.copySelectionToFile)",
+            "media": {
+              "markdown": "walkthrough/copy-selection-to-file.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.copySelectionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.moveSelectionToFile",
+            "title": "Move Selection to File",
+            "description": "Select any code block, right-click, and choose **Move Selection to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveSelectionToFile)",
+            "media": {
+              "markdown": "walkthrough/move-selection-to-file.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.moveSelectionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.saveAll",
+            "title": "Save All Files",
+            "description": "Right-click anywhere in the editor and choose **Save All** to save every open file at once.\n\n[Try it now](command:additionalContextMenus.saveAll)",
+            "media": {
+              "markdown": "walkthrough/save-all.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.saveAll"
             ]
           },
           {
             "id": "additionalContextMenus.step.openInTerminal",
             "title": "Open in Terminal",
-            "description": "Right-click any file or folder and choose **Open in Terminal** to instantly open a terminal at that location — integrated or external, your choice.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
+            "description": "Right-click any file and choose **Open in Terminal** to instantly open a terminal at that location.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
             "media": {
-              "markdown": "docs/walkthrough/open-in-terminal.md"
+              "markdown": "walkthrough/open-in-terminal.md"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.openInTerminal"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.generateEnum",
+            "title": "Generate Enum from Union Type",
+            "description": "Select a TypeScript union type, right-click and choose **Generate Enum from Union Type** to convert it to an enum.\n\n[Try it now](command:additionalContextMenus.generateEnum)",
+            "media": {
+              "markdown": "walkthrough/generate-enum.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.generateEnum"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.generateCronTimer",
+            "title": "Generate Cron Expression",
+            "description": "Right-click and choose **Generate Cron Expression** to build a cron schedule interactively.\n\n[Try it now](command:additionalContextMenus.generateCronTimer)",
+            "media": {
+              "markdown": "walkthrough/generate-cron.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.generateCronTimer"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.renameFileConvention",
+            "title": "Rename File to Convention",
+            "description": "Open the Command Palette and run **Rename File to Convention** to rename the current file to kebab-case, camelCase, or PascalCase.\n\n[Try it now](command:additionalContextMenus.renameFileConvention)",
+            "media": {
+              "markdown": "walkthrough/rename-file-convention.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.renameFileConvention"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.generateEnvFile",
+            "title": "Generate .env File",
+            "description": "Open the Command Palette and run **Generate .env File** to scan your project for environment variable usage and create a `.env` template.\n\n[Try it now](command:additionalContextMenus.generateEnvFile)",
+            "media": {
+              "markdown": "walkthrough/generate-env-file.md"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.generateEnvFile"
             ]
           }
         ]
@@ -392,11 +480,11 @@
           "when": "false"
         },
         {
-          "command": "additionalContextMenus.copyContentToFile",
+          "command": "additionalContextMenus.copySelectionToFile",
           "when": "false"
         },
         {
-          "command": "additionalContextMenus.moveContentToFile",
+          "command": "additionalContextMenus.moveSelectionToFile",
           "when": "false"
         },
         {
@@ -426,12 +514,12 @@
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
-          "command": "additionalContextMenus.copyContentToFile",
+          "command": "additionalContextMenus.copySelectionToFile",
           "group": "1_modification@2"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
-          "command": "additionalContextMenus.moveContentToFile",
+          "command": "additionalContextMenus.moveSelectionToFile",
           "group": "1_modification@3"
         },
         {
@@ -445,7 +533,7 @@
           "group": "2_workspace@2"
         },
         {
-          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx)$/",
           "command": "additionalContextMenus.generateEnum",
           "group": "3_generation@1"
         },
@@ -461,31 +549,31 @@
         "command": "additionalContextMenus.copyFunction",
         "key": "ctrl+alt+shift+f",
         "mac": "cmd+alt+shift+f",
-        "when": "editorTextFocus && additionalContextMenus.enabled"
+        "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
         "command": "additionalContextMenus.copyFunctionToFile",
         "key": "ctrl+alt+shift+e",
         "mac": "cmd+alt+shift+e",
-        "when": "editorTextFocus && additionalContextMenus.enabled"
+        "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
-        "command": "additionalContextMenus.copyContentToFile",
+        "command": "additionalContextMenus.copySelectionToFile",
         "key": "ctrl+alt+shift+c",
         "mac": "cmd+alt+shift+c",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled"
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
         "command": "additionalContextMenus.moveFunctionToFile",
         "key": "ctrl+alt+shift+r",
         "mac": "cmd+alt+shift+r",
-        "when": "editorTextFocus && additionalContextMenus.enabled"
+        "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
-        "command": "additionalContextMenus.moveContentToFile",
+        "command": "additionalContextMenus.moveSelectionToFile",
         "key": "ctrl+alt+shift+m",
         "mac": "cmd+alt+shift+m",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled"
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
         "command": "additionalContextMenus.saveAll",
@@ -520,6 +608,9 @@
     "vscode:prepublish": "tsx esbuild.config.ts --production",
     "build": "tsx esbuild.config.ts",
     "watch": "tsx esbuild.config.ts --watch",
+    "clean": "rm -rf dist *.vsix",
+    "rebuild": "pnpm run clean && pnpm run build && vsce package",
+    "test:activation": "node scripts/test-activation.mjs",
     "package": "vsce package",
     "package:openvsx": "ovsx package",
     "publish": "vsce publish",
