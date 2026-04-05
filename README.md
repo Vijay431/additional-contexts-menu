@@ -85,21 +85,21 @@ _Extract functions in one click with intelligent import handling_
 
 Detailed documentation for all 11 services with API references, examples, and best practices.
 
-| Service                | Documentation                                                                                                       | Purpose                        |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| Code Analysis          | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/codeAnalysisService.html)          | Function detection and parsing |
-| Configuration          | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/configurationService.html)         | Settings management            |
-| File Discovery         | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/fileDiscoveryService.html)         | File scanning and filtering    |
-| File Save              | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/fileSaveService.html)              | Enhanced save operations       |
-| Terminal               | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/terminalService.html)              | Terminal integration           |
-| Cron Timer Generator   | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html) | Cron expression generation     |
-| Enum Generator         | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/enumGenerator.html)                | Union type to enum             |
-| Env File Generator     | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/envFileGeneratorService.html)      | .env file creation             |
-| File Naming Convention | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/fileNamingConventionService.html)  | Naming enforcement             |
-| Project Detection      | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/projectDetectionService.html)      | Framework detection            |
-| Accessibility          | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/accessibilityService.html)         | Screen reader support          |
+| Service                | Documentation                                                                                               | Purpose                        |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| Code Analysis          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/codeAnalysisService.html)          | Function detection and parsing |
+| Configuration          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/configurationService.html)         | Settings management            |
+| File Discovery         | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileDiscoveryService.html)         | File scanning and filtering    |
+| File Save              | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileSaveService.html)              | Enhanced save operations       |
+| Terminal               | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/terminalService.html)              | Terminal integration           |
+| Cron Timer Generator   | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html) | Cron expression generation     |
+| Enum Generator         | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/enumGenerator.html)                | Union type to enum             |
+| Env File Generator     | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/envFileGeneratorService.html)      | .env file creation             |
+| File Naming Convention | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileNamingConventionService.html)  | Naming enforcement             |
+| Project Detection      | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/projectDetectionService.html)      | Framework detection            |
+| Accessibility          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/accessibilityService.html)         | Screen reader support          |
 
-[**View All Services** →](https://vijaygangatharan.github.io/additional-contexts-menu/services/)
+[**View All Services** →](https://vijay431.github.io/additional-contexts-menu/services/)
 
 ---
 
@@ -107,22 +107,29 @@ Detailed documentation for all 11 services with API references, examples, and be
 
 ### 🎯 Core Functionality
 
-#### Main Features (Command Palette + Right-Click Menu)
+#### Main Features (Right-Click Menu Only)
 
-- 🎯 **Copy Function** - Regex-based function detection and copying with intelligent import handling
+- 🎯 **Copy Function** - AST-based function detection and copying with intelligent import handling
+- 📋 **Copy Function to File** - Copy function at cursor to a target file
+- ✂️ **Move Function to File** - Move function at cursor to a target file (removes from source)
 - 📋 **Copy Content to File** - Smart code copying with import conflict resolution
 - ✂️ **Move Content to File** - Intelligent code moving with automatic cleanup
 - 💾 **Save All** - Enhanced save functionality with progress feedback and read-only handling
 - 🖥️ **Open in Terminal** - Cross-platform terminal integration
+- 🔢 **Generate Enum from Union Type** - Convert TypeScript union types to enums
+- ⏱️ **Generate Cron Expression** - Interactive cron expression builder
 
 #### Extension Management (Command Palette Only)
 
-- ⚙️ **Enable/Disable Extension** - Global extension control via command palette
+- ⚙️ **Enable/Disable Extension** - Global extension control
 - 🔍 **Show Output Channel** - View extension logs
 - 🐛 **Debug Context Variables** - Inspect extension state
 - 🔄 **Refresh Context Variables** - Force re-detection of project context
 - ⌨️ **Check Keybinding Conflicts** - View keybinding configuration
 - 🔛 **Enable/Disable Keybindings** - Toggle custom keybindings
+- 🗂️ **Rename File to Convention** - Rename files to kebab-case, camelCase, or PascalCase
+- 🌿 **Generate .env File** - Generate environment file from usage patterns
+- 🚶 **Open Walkthrough** - Open the getting started walkthrough
 
 ### Project Intelligence
 
@@ -133,7 +140,7 @@ Detailed documentation for all 11 services with API references, examples, and be
 
 ### Code Operations
 
-- 🧠 **Lightweight Code Analysis** - Uses optimized regex-based parsing for fast function detection
+- 🧠 **AST-Based Code Analysis** - Uses TypeScript Compiler API for accurate function detection
 - 🔀 **Import Management** - Merge, duplicate, or skip import statements
 - 📍 **Smart Insertion** - Intelligent code placement (smart, end, beginning)
 - 💬 **Comment Preservation** - Maintains code comments during operations
@@ -157,7 +164,7 @@ The extension provides comprehensive accessibility configuration options:
   - `normal` - All operations (default, recommended)
   - `verbose` - Detailed progress and contextual information
 
-- `additionalContextMenus.accessibility.screenReaderMode` - Enable enhanced screen reader support with additional ARIA labels
+- `additionalContextMenus.accessibility.screenReaderMode` - Enable enhanced screen reader support with additional ARIA labels (default: `false` — announcements are opt-in)
 
 - `additionalContextMenus.accessibility.keyboardNavigation` - Show keyboard navigation hints in Quick Pick dialogs
 
@@ -185,7 +192,7 @@ The extension supports NVDA (Windows), VoiceOver (macOS), and Orca (Linux):
 - **Progress Announcements**: Long-running operations announce progress percentage
 - **Operation Feedback**: Success/failure announcements for all operations
 
-For detailed accessibility documentation, see [Accessibility Guide](https://vijaygangatharan.github.io/additional-contexts-menu/accessibility.html).
+For detailed accessibility documentation, see [Accessibility Guide](https://vijay431.github.io/additional-contexts-menu/accessibility.html).
 
 ---
 
@@ -274,7 +281,7 @@ const UserProfile = () => {
 
 1. **Position cursor** inside any function (arrow, regular, method, React component)
 2. **Right-click** → Select "Copy Function"
-3. **Automatic detection** of function boundaries using regex-based pattern matching
+3. **Automatic detection** of function boundaries using AST-based parsing via TypeScript Compiler API
 4. **Smart copying** includes function signature, body, and relevant comments
 
 **Supported Function Types:**
@@ -331,14 +338,35 @@ const UserProfile = () => {
 
 ### Command Palette Integration
 
-Access all features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
+Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 
-**Core Commands**:
+**Right-Click Menu Only** (hidden from Command Palette):
+
+- `additionalContextMenus.copyFunction` - Copy Function
+- `additionalContextMenus.copyFunctionToFile` - Copy Function to File
+- `additionalContextMenus.moveFunctionToFile` - Move Function to File
+- `additionalContextMenus.copyContentToFile` - Copy Content to File
+- `additionalContextMenus.moveContentToFile` - Move Content to File
+- `additionalContextMenus.generateEnum` - Generate Enum from Union Type
+- `additionalContextMenus.generateCronTimer` - Generate Cron Expression
+
+**Command Palette Accessible**:
 
 - `Additional Context Menus: Enable` - Enable the extension
 - `Additional Context Menus: Disable` - Disable the extension
+- `Additional Context Menus: Save All` - Save all open files
+- `Additional Context Menus: Open in Terminal` - Open terminal at file location
+- `Additional Context Menus: Show Output Channel` - View extension logs
+- `Additional Context Menus: Debug Context Variables` - Inspect extension state
+- `Additional Context Menus: Refresh Context Variables` - Force re-detection
+- `Additional Context Menus: Check Keybinding Conflicts` - View keybinding config
+- `Additional Context Menus: Enable Keybindings` - Enable custom keybindings
+- `Additional Context Menus: Disable Keybindings` - Disable custom keybindings
+- `Additional Context Menus: Rename File to Convention` - Rename file naming
+- `Additional Context Menus: Generate .env File` - Generate env file
+- `Additional Context Menus: Open Walkthrough` - Open getting started guide
 
-**Keyboard Shortcuts** (when `enableKeybindings` is `true`):
+**Keyboard Shortcuts** (active when extension is enabled):
 
 - `Ctrl+Alt+Shift+F` (`Cmd+Alt+Shift+F` on Mac) - Copy Function
 - `Ctrl+Alt+Shift+E` (`Cmd+Alt+Shift+E` on Mac) - Copy Function to File
@@ -352,7 +380,7 @@ Access all features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 
 ## 📋 Requirements
 
-- **VS Code**: Version 1.108.1 or higher
+- **VS Code**: Version 1.110.0 or higher
 - **Node.js**: Version 20+ required for development
 - **PNPM**: Package manager for dependency management (install with `npm install -g pnpm`)
 - **Project Type**: Node.js project with `package.json` (for smart detection)
@@ -669,7 +697,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
 - 🧠 **Intelligent Caching**: Project detection and file discovery results cached
 - 📊 **Memory Efficient**: Optimized for large codebases and complex project structures
-- ⚡ **Fast Function Detection**: Regex-based parsing for millisecond response times
+- ⚡ **Fast Function Detection**: AST-based parsing via TypeScript Compiler API for accurate results
 - 🔄 **Background Processing**: Non-blocking operations don't interrupt coding
 
 ### 🛡️ Enterprise-Grade Quality Assurance
@@ -707,7 +735,7 @@ Built with clear separation of concerns and enterprise-grade patterns:
 - **ConfigurationService**: Manages settings and real-time configuration changes
 - **FileDiscoveryService**: Discovers compatible files with smart filtering
 - **FileSaveService**: Handles bulk save operations with progress feedback
-- **CodeAnalysisService**: Regex-based function detection for fast and accurate code analysis
+- **CodeAnalysisService**: AST-based function detection using TypeScript Compiler API for accurate results
 - **TerminalService**: Cross-platform terminal integration with three modes (integrated/external/system-default)
 
 #### ⚡ **Performance Optimizations**
@@ -732,7 +760,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ### 🛠️ Development Setup
 
-**Prerequisites**: Node.js 16-24 required for development
+**Prerequisites**: Node.js 20+ required for development (20, 22, 24 supported)
 
 ```bash
 # 1. Clone and setup
@@ -749,14 +777,14 @@ pnpm run build
 
 ### 📋 Available Development Commands
 
-| Command                   | Description                                     | Performance              |
-| ------------------------- | ----------------------------------------------- | ------------------------ |
-| `pnpm run build`          | Build extension using TypeScript esbuild config | ⚡ ~1 second             |
-| `pnpm run watch`          | Watch mode for development                      | 🔄 Instant rebuilds      |
-| `pnpm run package`        | Production build with optimizations             | 📦 60KB core + 26KB lazy |
-| `pnpm run lint`           | Run ESLint on src directory                     | 🎨 Code quality          |
-| `pnpm run format`         | Format code using Prettier                      | ✨ Consistent style      |
-| `pnpm run create-minimal` | Create minimal extension package                | 📦 1MB vs 250MB          |
+| Command             | Description                                     | Performance              |
+| ------------------- | ----------------------------------------------- | ------------------------ |
+| `pnpm run build`    | Build extension using TypeScript esbuild config | ⚡ ~1 second             |
+| `pnpm run watch`    | Watch mode for development                      | 🔄 Instant rebuilds      |
+| `pnpm run package`  | Production build with optimizations             | 📦 60KB core + 26KB lazy |
+| `pnpm run lint`     | Run ESLint on src directory                     | 🎨 Code quality          |
+| `pnpm run lint:fix` | Auto-fix ESLint issues                          | 🔧 Auto-fix              |
+| `pnpm run format`   | Format code using Prettier                      | ✨ Consistent style      |
 
 ---
 
