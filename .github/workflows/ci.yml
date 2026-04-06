@@ -382,11 +382,16 @@ jobs:
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: [setup, deploy-pages]
+    needs: [setup, publish-vscode, publish-openvsx, deploy-pages]
     if: |
       always() &&
       needs.setup.result == 'success' &&
-      (needs.deploy-pages.result == 'success' || needs.deploy-pages.result == 'skipped')
+      needs.publish-vscode.result == 'success' &&
+      needs.publish-openvsx.result == 'success' &&
+      (
+        needs.deploy-pages.result == 'success' ||
+        (needs.setup.outputs.is_prerelease == 'true' && needs.deploy-pages.result == 'skipped')
+      )
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
