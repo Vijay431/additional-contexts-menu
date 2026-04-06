@@ -11,8 +11,8 @@ assignees: ''
 - [ ] Copy Function
 - [ ] Copy Function to File
 - [ ] Move Function to File
-- [ ] Copy Content to File
-- [ ] Move Content to File
+- [ ] Copy Selection to File
+- [ ] Move Selection to File
 - [ ] Save All
 - [ ] Open in Terminal
 - [ ] Generate Enum from Union Type

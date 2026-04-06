@@ -21,27 +21,27 @@
   "marketplace": {
     "screenshots": [
       {
-        "path": "images/screenshots/copy-function.png",
+        "path": "docs/images/screenshots/copy-function.png",
         "label": "Extract functions with intelligent import handling"
       },
       {
-        "path": "images/screenshots/copy-to-file.png",
+        "path": "docs/images/screenshots/copy-to-file.png",
         "label": "Smart file discovery with framework-aware filtering"
       },
       {
-        "path": "images/screenshots/context-menu.png",
+        "path": "docs/images/screenshots/context-menu.png",
         "label": "Complete context menu integration"
       },
       {
-        "path": "images/screenshots/enum-generator.png",
+        "path": "docs/images/screenshots/enum-generator.png",
         "label": "Generate enums from union types"
       },
       {
-        "path": "images/screenshots/terminal-integration.png",
+        "path": "docs/images/screenshots/terminal-integration.png",
         "label": "Cross-platform terminal integration"
       }
     ],
-    "banner": "images/banner.png"
+    "banner": "docs/images/banner.png"
   },
   "keywords": [
     "context",
@@ -83,7 +83,7 @@
   ],
   "engines": {
     "node": ">=20",
-    "vscode": ">=1.108.0"
+    "vscode": ">=1.110.0"
   },
   "activationEvents": [
     "onStartupFinished",
@@ -101,14 +101,14 @@
         "icon": "$(symbol-function)"
       },
       {
-        "command": "additionalContextMenus.copyContentToFile",
-        "title": "Copy Content to File",
+        "command": "additionalContextMenus.copySelectionToFile",
+        "title": "Copy Selection to File",
         "category": "Additional Context Menus",
         "icon": "$(copy)"
       },
       {
-        "command": "additionalContextMenus.moveContentToFile",
-        "title": "Move Content to File",
+        "command": "additionalContextMenus.moveSelectionToFile",
+        "title": "Move Selection to File",
         "category": "Additional Context Menus",
         "icon": "$(arrow-right)"
       },
@@ -120,12 +120,12 @@
       },
       {
         "command": "additionalContextMenus.enable",
-        "title": "Additional Context Menus: Enable",
+        "title": "Enable",
         "category": "Additional Context Menus"
       },
       {
         "command": "additionalContextMenus.disable",
-        "title": "Additional Context Menus: Disable",
+        "title": "Disable",
         "category": "Additional Context Menus"
       },
       {
@@ -220,34 +220,97 @@
           {
             "id": "additionalContextMenus.step.copyFunction",
             "title": "Copy a Function",
-            "description": "Place your cursor inside any TypeScript or JavaScript function, then right-click and choose **Copy Function** to copy the entire function — including its imports — to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
+            "description": "Place your cursor inside any function, then right-click and choose **Copy Function** to copy it to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
             "media": {
-              "markdown": "docs/walkthrough/copy-function.md"
+              "image": "docs/images/screenshots/copy-function.gif",
+              "altText": "Demonstration of Copy Function feature"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.copyFunction"
             ]
           },
           {
-            "id": "additionalContextMenus.step.copyContentToFile",
-            "title": "Copy Content to Another File",
-            "description": "Select any code block, right-click, and choose **Copy Content to File** to copy the selection directly into another file in your project — with smart import merging.\n\n[Try it now](command:additionalContextMenus.copyContentToFile)",
+            "id": "additionalContextMenus.step.copyFunctionToFile",
+            "title": "Copy Function to File",
+            "description": "Place your cursor inside a function, right-click and choose **Copy Function to File** to copy it directly into another file.\n\n[Try it now](command:additionalContextMenus.copyFunctionToFile)",
             "media": {
-              "markdown": "docs/walkthrough/copy-content-to-file.md"
+              "image": "docs/images/screenshots/copy-function-to-file.gif",
+              "altText": "Demonstration of Copy Function to File feature"
             },
             "completionEvents": [
-              "onCommand:additionalContextMenus.copyContentToFile"
+              "onCommand:additionalContextMenus.copyFunctionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.moveFunctionToFile",
+            "title": "Move Function to File",
+            "description": "Place your cursor inside a function, right-click and choose **Move Function to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveFunctionToFile)",
+            "media": {
+              "image": "docs/images/screenshots/move-function-to-file.gif",
+              "altText": "Demonstration of Move Function to File feature"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.moveFunctionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.copySelectionToFile",
+            "title": "Copy Selection to File",
+            "description": "Select any code block, right-click, and choose **Copy Selection to File** to copy it into another file in your project.\n\n[Try it now](command:additionalContextMenus.copySelectionToFile)",
+            "media": {
+              "image": "docs/images/screenshots/copy-selection-to-file.gif",
+              "altText": "Demonstration of Copy Selection to File feature"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.copySelectionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.moveSelectionToFile",
+            "title": "Move Selection to File",
+            "description": "Select any code block, right-click, and choose **Move Selection to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveSelectionToFile)",
+            "media": {
+              "image": "docs/images/screenshots/move-selection-to-file.gif",
+              "altText": "Demonstration of Move Selection to File feature"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.moveSelectionToFile"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.saveAll",
+            "title": "Save All Files",
+            "description": "Right-click anywhere in the editor and choose **Save All** to save every open file at once.\n\n[Try it now](command:additionalContextMenus.saveAll)",
+            "media": {
+              "image": "docs/images/screenshots/save-all.gif",
+              "altText": "Demonstration of Save All feature"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.saveAll"
             ]
           },
           {
             "id": "additionalContextMenus.step.openInTerminal",
             "title": "Open in Terminal",
-            "description": "Right-click any file or folder and choose **Open in Terminal** to instantly open a terminal at that location — integrated or external, your choice.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
+            "description": "Right-click any file and choose **Open in Terminal** to instantly open a terminal at that location.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
             "media": {
-              "markdown": "docs/walkthrough/open-in-terminal.md"
+              "image": "docs/images/screenshots/open-in-terminal.gif",
+              "altText": "Demonstration of Open in Terminal feature"
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.openInTerminal"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.renameFileConvention",
+            "title": "Rename File to Convention",
+            "description": "Right-click any file or folder in the Explorer and choose **Rename File to Convention** to rename to kebab-case, camelCase, or PascalCase.\n\n[Try it now](command:additionalContextMenus.renameFileConvention)",
+            "media": {
+              "image": "docs/images/screenshots/rename-file-convention.gif",
+              "altText": "Demonstration of Rename File to Convention feature"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.renameFileConvention"
             ]
           }
         ]
@@ -377,6 +440,12 @@
         }
       }
     },
+    "submenus": [
+      {
+        "id": "additionalContextMenus.submenu",
+        "label": "Additional Context Menus"
+      }
+    ],
     "menus": {
       "commandPalette": [
         {
@@ -392,11 +461,11 @@
           "when": "false"
         },
         {
-          "command": "additionalContextMenus.copyContentToFile",
+          "command": "additionalContextMenus.copySelectionToFile",
           "when": "false"
         },
         {
-          "command": "additionalContextMenus.moveContentToFile",
+          "command": "additionalContextMenus.moveSelectionToFile",
           "when": "false"
         },
         {
@@ -410,49 +479,68 @@
       ],
       "editor/context": [
         {
+          "submenu": "additionalContextMenus.submenu",
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "group": "navigation"
+        }
+      ],
+      "additionalContextMenus.submenu": [
+        {
           "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyFunction",
-          "group": "1_modification@1"
+          "group": "1_function@1"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.copyFunctionToFile",
-          "group": "1_modification@1.1"
+          "group": "1_function@2"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled && additionalContextMenus.isInFunction && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
           "command": "additionalContextMenus.moveFunctionToFile",
-          "group": "1_modification@1.2"
+          "group": "1_function@3"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
-          "command": "additionalContextMenus.copyContentToFile",
-          "group": "1_modification@2"
+          "command": "additionalContextMenus.copySelectionToFile",
+          "group": "2_selection@1"
         },
         {
           "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
-          "command": "additionalContextMenus.moveContentToFile",
-          "group": "1_modification@3"
+          "command": "additionalContextMenus.moveSelectionToFile",
+          "group": "2_selection@2"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.saveAll",
-          "group": "2_workspace@1"
+          "group": "3_workspace@1"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.openInTerminal",
-          "group": "2_workspace@2"
+          "group": "3_workspace@2"
         },
         {
-          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/",
+          "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx)$/",
           "command": "additionalContextMenus.generateEnum",
-          "group": "3_generation@1"
+          "group": "4_generation@1"
         },
         {
           "when": "editorTextFocus && additionalContextMenus.enabled",
           "command": "additionalContextMenus.generateCronTimer",
-          "group": "3_generation@2"
+          "group": "4_generation@2"
+        },
+        {
+          "when": "editorTextFocus && additionalContextMenus.enabled",
+          "command": "additionalContextMenus.generateEnvFile",
+          "group": "4_generation@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "when": "additionalContextMenus.enabled",
+          "command": "additionalContextMenus.renameFileConvention",
+          "group": "7_modification@1"
         }
       ]
     },
@@ -461,31 +549,31 @@
         "command": "additionalContextMenus.copyFunction",
         "key": "ctrl+alt+shift+f",
         "mac": "cmd+alt+shift+f",
-        "when": "editorTextFocus && additionalContextMenus.enabled"
+        "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
         "command": "additionalContextMenus.copyFunctionToFile",
         "key": "ctrl+alt+shift+e",
         "mac": "cmd+alt+shift+e",
-        "when": "editorTextFocus && additionalContextMenus.enabled"
+        "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
-        "command": "additionalContextMenus.copyContentToFile",
+        "command": "additionalContextMenus.copySelectionToFile",
         "key": "ctrl+alt+shift+c",
         "mac": "cmd+alt+shift+c",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled"
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
         "command": "additionalContextMenus.moveFunctionToFile",
         "key": "ctrl+alt+shift+r",
         "mac": "cmd+alt+shift+r",
-        "when": "editorTextFocus && additionalContextMenus.enabled"
+        "when": "editorTextFocus && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
-        "command": "additionalContextMenus.moveContentToFile",
+        "command": "additionalContextMenus.moveSelectionToFile",
         "key": "ctrl+alt+shift+m",
         "mac": "cmd+alt+shift+m",
-        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled"
+        "when": "editorTextFocus && editorHasSelection && additionalContextMenus.enabled && resourceExtname =~ /\\.(ts|tsx|js|jsx)$/"
       },
       {
         "command": "additionalContextMenus.saveAll",
@@ -520,6 +608,9 @@
     "vscode:prepublish": "tsx esbuild.config.ts --production",
     "build": "tsx esbuild.config.ts",
     "watch": "tsx esbuild.config.ts --watch",
+    "clean": "rimraf dist *.vsix",
+    "rebuild": "pnpm run clean && pnpm run build && vsce package",
+    "test:activation": "node scripts/test-activation.mjs",
     "package": "vsce package",
     "package:openvsx": "ovsx package",
     "publish": "vsce publish",
@@ -547,16 +638,6 @@
     "embeddedLanguageFormatting": "auto"
   },
   "lint-staged": {
-    "test/fixtures/**/*.{ts,tsx}": [
-      "prettier --write"
-    ],
-    "test/e2e/extension-e2e.test.ts": [
-      "echo 'Skipping eslint for extension-e2e.test.ts (use IDE for validation)'"
-    ],
-    "test/**/*.{ts,tsx}": [
-      "eslint --no-cache --fix --quiet",
-      "prettier --write"
-    ],
     "src/**/*.{ts,tsx}": [
       "eslint --no-cache --fix --quiet",
       "prettier --write"
@@ -590,7 +671,7 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.39.4",
-    "@types/node": "^24.12.0",
+    "@types/node": "^20.0.0",
     "@types/vscode": "^1.110.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
@@ -599,7 +680,7 @@
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-n": "^17.0.0",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-security": "^3.0.1",
@@ -607,8 +688,9 @@
     "lint-staged": "^16.4.0",
     "ovsx": "^0.10.10",
     "prettier": "^3.8.1",
+    "rimraf": "^6.0.1",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.58.0"
   }
 }

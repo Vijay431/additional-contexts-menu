@@ -13,8 +13,17 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     extensionManager = new ExtensionManager();
     await extensionManager.activate(context);
   } catch (error) {
-    console.error('Failed to activate Additional Context Menus extension:', error);
-    vscode.window.showErrorMessage('Failed to activate Additional Context Menus extension');
+    const message = error instanceof Error ? `${error.message}\n${error.stack}` : String(error);
+    console.error('Failed to activate Additional Context Menus extension:', message);
+    const channel = vscode.window.createOutputChannel(
+      'Additional Context Menus - Activation Error',
+    );
+    channel.appendLine(message);
+    channel.show(true);
+    // Note: Channel intentionally not disposed to keep error visible for debugging
+    vscode.window.showErrorMessage(
+      `Additional Context Menus activation failed: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 

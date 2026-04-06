@@ -105,8 +105,28 @@ export class CodeAnalysisService implements ICodeAnalysisService {
 
     const visit = (node: ts.Node) => {
       if (position >= node.pos && position <= node.end) {
-        if (this.isFunctionNode(node) && !result) {
-          result = node as ts.FunctionLike;
+        if (
+          ts.isFunctionDeclaration(node) ||
+          ts.isArrowFunction(node) ||
+          ts.isMethodDeclaration(node) ||
+          ts.isFunctionExpression(node)
+        ) {
+          // Allow overwriting to find the innermost (most deeply nested) function
+          if (!result || (node.pos >= result.pos && node.end <= result.end)) {
+            result = node as ts.FunctionLike;
+          }
+        } else if (ts.isVariableStatement(node)) {
+          const declaration = node.declarationList.declarations[0];
+          if (
+            declaration?.initializer &&
+            (ts.isArrowFunction(declaration.initializer) ||
+              ts.isFunctionExpression(declaration.initializer))
+          ) {
+            const initializer = declaration.initializer as ts.FunctionLike;
+            if (!result || (initializer.pos >= result.pos && initializer.end <= result.end)) {
+              result = initializer;
+            }
+          }
         }
         ts.forEachChild(node, visit);
       }
@@ -143,15 +163,25 @@ export class CodeAnalysisService implements ICodeAnalysisService {
   private extractFunctionInfo(node: ts.FunctionLike, sourceFile: ts.SourceFile): FunctionInfo {
     const name = this.getFunctionName(node, sourceFile);
     const type = this.getFunctionType(node, sourceFile);
-    const startPos = sourceFile.getLineAndCharacterOfPosition(node.getStart());
-    const endPos = sourceFile.getLineAndCharacterOfPosition(node.end);
+
+    // For arrow/function expressions assigned to a variable, capture the full `const foo = () => {}` statement
+    const textNode =
+      (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) &&
+      ts.isVariableDeclaration(node.parent) &&
+      ts.isVariableDeclarationList(node.parent.parent) &&
+      ts.isVariableStatement(node.parent.parent.parent)
+        ? node.parent.parent.parent
+        : node;
+
+    const startPos = sourceFile.getLineAndCharacterOfPosition(textNode.getStart());
+    const endPos = sourceFile.getLineAndCharacterOfPosition(textNode.end);
 
     return {
       name,
       type,
       startLine: startPos.line + 1,
       endLine: endPos.line + 1,
-      fullText: sourceFile.text.substring(node.pos, node.end),
+      fullText: sourceFile.text.substring(textNode.pos, textNode.end).trimStart(),
       isAsync:
         ts.canHaveModifiers(node) &&
         ((node.modifiers as ts.ModifiersArray | undefined)?.some(
@@ -166,12 +196,13 @@ export class CodeAnalysisService implements ICodeAnalysisService {
       return node.name.text;
     }
 
-    if (ts.isVariableStatement(node)) {
-      const declaration = node.declarationList.declarations[0];
-      if (declaration?.name) {
-        return declaration.name.getText(sourceFile);
-      }
-      return 'anonymous';
+    // Arrow/function expression assigned to a variable: `const foo = () => {}`
+    if (
+      (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) &&
+      ts.isVariableDeclaration(node.parent) &&
+      ts.isIdentifier(node.parent.name)
+    ) {
+      return node.parent.name.getText(sourceFile);
     }
 
     if (ts.isMethodDeclaration(node)) {
@@ -303,9 +334,29 @@ export class CodeAnalysisService implements ICodeAnalysisService {
     const sourceFile = this.parseSourceFile(text, document.fileName);
 
     const visit = (node: ts.Node) => {
-      if (this.isFunctionNode(node)) {
-        const func = node as ts.FunctionLike;
-        functions.push(this.extractFunctionInfo(func, sourceFile));
+      // Handle variable-assigned functions at the statement level to avoid duplicates
+      if (ts.isVariableStatement(node)) {
+        const declaration = node.declarationList.declarations[0];
+        if (
+          declaration?.initializer &&
+          (ts.isArrowFunction(declaration.initializer) ||
+            ts.isFunctionExpression(declaration.initializer))
+        ) {
+          functions.push(
+            this.extractFunctionInfo(declaration.initializer as ts.FunctionLike, sourceFile),
+          );
+          ts.forEachChild(node, visit);
+          return; // Skip children to avoid duplicate extraction of the initializer
+        }
+      }
+      if (
+        ts.isFunctionDeclaration(node) ||
+        ts.isMethodDeclaration(node) ||
+        // Only match standalone arrow/function expressions (not in variable declarations)
+        ((ts.isArrowFunction(node) || ts.isFunctionExpression(node)) &&
+          !ts.isVariableDeclaration(node.parent))
+      ) {
+        functions.push(this.extractFunctionInfo(node as ts.FunctionLike, sourceFile));
       }
       ts.forEachChild(node, visit);
     };

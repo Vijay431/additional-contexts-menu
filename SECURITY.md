@@ -6,9 +6,10 @@ We provide security updates for the following versions of Additional Context Men
 
 | Version | Supported          | Node.js Compatibility |
 | ------- | ------------------ | --------------------- |
-| 1.2.x   | :white_check_mark: | Node.js 16-24         |
-| 1.1.x   | :white_check_mark: | Node.js 16-24         |
-| 1.0.x   | :white_check_mark: | Node.js 16-24         |
+| 2.0.x   | :white_check_mark: | Node.js 20, 22, 24    |
+| 1.2.x   | :x:                | —                     |
+| 1.1.x   | :x:                | —                     |
+| 1.0.x   | :x:                | —                     |
 
 ## Reporting a Vulnerability
 
@@ -67,6 +68,6 @@ Security updates will be released through:
 
 ## Node.js Compatibility & Security
 
-This extension is compatible with Node.js versions 16-24. Security updates will maintain compatibility across this range. If you're using an unsupported Node.js version, please upgrade to receive security updates.
+This extension is compatible with Node.js versions 20, 22, and 24. Security updates will maintain compatibility across this range. If you're using an unsupported Node.js version, please upgrade to receive security updates.
 
 Thank you for helping keep Additional Context Menus and its users safe!

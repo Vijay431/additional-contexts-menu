@@ -23,7 +23,7 @@ const createConfig = (isProduction = false): esbuild.BuildOptions => ({
   entryPoints: ['./src/extension.ts'],
   bundle: true,
   outfile: './dist/extension.js',
-  external: ['vscode', 'typescript', ...lazyServiceExternals],
+  external: ['vscode', ...lazyServiceExternals],
   format: 'cjs',
   platform: 'node',
   target: 'node20',
@@ -67,7 +67,7 @@ async function buildLazyServices(isProduction: boolean): Promise<void> {
       entryPoints: [service],
       bundle: true,
       outfile,
-      external: ['vscode', 'typescript'],
+      external: ['vscode'],
       format: 'cjs',
       platform: 'node',
       target: 'node20',
@@ -114,9 +114,8 @@ async function build(production = false): Promise<void> {
       // Calculate bundle metrics
       const stats = readFileSync('./dist/extension.js');
       const sizeKB = (stats.length / 1024).toFixed(2);
-      // Target: 100KB for main bundle (accounts for TypeScript Compiler API for AST-based function detection)
-      // This is still very aggressive - most VS Code extensions are 1-5 MB
-      // VS Code Marketplace limit is 50 MB for the entire VSIX package
+      // Size targets apply to production (minified) builds only.
+      // Dev builds include inline sourcemaps and are naturally much larger.
       const coreTargetKB = 100;
       const lazyTargetKB = 50;
 
@@ -138,24 +137,26 @@ async function build(production = false): Promise<void> {
       console.log(`📦 Lazy services total: ${lazyTotal.toFixed(2)} KB`);
       console.log(`📦 Total size: ${(parseFloat(sizeKB) + lazyTotal).toFixed(2)} KB`);
 
-      // Target verification with more realistic goals
-      const totalSize = parseFloat(sizeKB) + lazyTotal;
-      const totalTarget = coreTargetKB + lazyTargetKB;
+      // Only enforce size targets on production builds
+      if (production) {
+        const totalSize = parseFloat(sizeKB) + lazyTotal;
+        const totalTarget = coreTargetKB + lazyTargetKB;
 
-      if (parseFloat(sizeKB) > coreTargetKB) {
-        console.log(
-          `⚠️  Main bundle exceeds ${coreTargetKB}KB target by ${(parseFloat(sizeKB) - coreTargetKB).toFixed(2)}KB`,
-        );
-      } else {
-        console.log(
-          `✨ Main bundle is ${(coreTargetKB - parseFloat(sizeKB)).toFixed(2)}KB under ${coreTargetKB}KB target!`,
-        );
-      }
+        if (parseFloat(sizeKB) > coreTargetKB) {
+          console.log(
+            `⚠️  Main bundle exceeds ${coreTargetKB}KB target by ${(parseFloat(sizeKB) - coreTargetKB).toFixed(2)}KB`,
+          );
+        } else {
+          console.log(
+            `✨ Main bundle is ${(coreTargetKB - parseFloat(sizeKB)).toFixed(2)}KB under ${coreTargetKB}KB target!`,
+          );
+        }
 
-      if (totalSize > totalTarget) {
-        console.log(
-          `⚠️  Total bundle exceeds ${totalTarget}KB target by ${(totalSize - totalTarget).toFixed(2)}KB`,
-        );
+        if (totalSize > totalTarget) {
+          console.log(
+            `⚠️  Total bundle exceeds ${totalTarget}KB target by ${(totalSize - totalTarget).toFixed(2)}KB`,
+          );
+        }
       }
 
       // Bundle analysis summary

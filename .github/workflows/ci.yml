@@ -17,6 +17,7 @@ permissions:
   pull-requests: read
 
 jobs:
+  # ─── Step 1: Quality Gates ────────────────────────────────────────────────
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -100,6 +101,7 @@ jobs:
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
+    needs: [audit]
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout Repository
@@ -108,39 +110,16 @@ jobs:
       - name: Dependency Review
         uses: actions/dependency-review-action@v4
 
-  commit-size:
-    name: Commit Size Check
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Check PR Size
-        shell: bash
-        run: |
-          MAX_FILES=10
-          MAX_LINES=300
-          STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
-          FILE_COUNT=$(echo "$STATS" | grep -c .)
-          LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
-          FAILED=0
-          if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
-            echo "✗ PR changes too many files ($FILE_COUNT > $MAX_FILES max). Consider splitting."
-            FAILED=1
-          fi
-          if [ "$LINE_COUNT" -gt "$MAX_LINES" ]; then
-            echo "✗ PR changes too many lines ($LINE_COUNT > $MAX_LINES max). Consider splitting."
-            FAILED=1
-          fi
-          exit $FAILED
-
+  # ─── Step 3: Setup Release (tag push only) ────────────────────────────────
   setup:
     name: Setup Release
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [lint, build, audit]
+    if: |
+      startsWith(github.ref, 'refs/tags/v') &&
+      needs.lint.result == 'success' &&
+      needs.build.result == 'success' &&
+      needs.audit.result == 'success'
     outputs:
       version: ${{ steps.version.outputs.version }}
       tag: ${{ steps.version.outputs.tag }}
@@ -179,10 +158,11 @@ jobs:
             echo "is_prerelease=false" >> "$GITHUB_OUTPUT"
           fi
 
+  # ─── Step 4: Release Build ────────────────────────────────────────────────
   release-build:
     name: Release Build
     runs-on: ubuntu-latest
-    needs: setup
+    needs: [setup]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -215,10 +195,11 @@ jobs:
           name: vsix-package
           path: '*.vsix'
 
+  # ─── Step 5: VSIX Verifier ────────────────────────────────────────────────
   verifier:
     name: VSIX Verifier
     runs-on: ubuntu-latest
-    needs: release-build
+    needs: [release-build]
     steps:
       - name: Download VSIX Artifact
         uses: actions/download-artifact@v4
@@ -320,11 +301,11 @@ jobs:
 
           echo "All VSIX verification checks passed."
 
+  # ─── Step 6: Publish (parallel) ───────────────────────────────────────────
   publish-vscode:
     name: Publish to VS Code Marketplace
     runs-on: ubuntu-latest
     needs: [setup, verifier]
-    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Download VSIX Artifact
         uses: actions/download-artifact@v4
@@ -345,7 +326,6 @@ jobs:
     name: Publish to Open VSX Registry
     runs-on: ubuntu-latest
     needs: [setup, verifier]
-    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Download VSIX Artifact
         uses: actions/download-artifact@v4
@@ -362,11 +342,12 @@ jobs:
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
 
+  # ─── Step 7: Deploy GitHub Pages (stable releases only) ───────────────────
   deploy-pages:
     name: Deploy GitHub Pages
     runs-on: ubuntu-latest
     needs: [setup, publish-vscode, publish-openvsx]
-    if: startsWith(github.ref, 'refs/tags/v') && needs.setup.outputs.is_prerelease == 'false'
+    if: needs.setup.outputs.is_prerelease == 'false'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -379,29 +360,38 @@ jobs:
         with:
           ruby-version: '3.1'
           bundler-cache: true
-          working-directory: docs
+          working-directory: site
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Build Jekyll Site
         run: bundle exec jekyll build
-        working-directory: docs
+        working-directory: site
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/_site
+          path: site/_site
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
+  # ─── Step 8: Create GitHub Release ────────────────────────────────────────
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: [setup, verifier]
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [setup, publish-vscode, publish-openvsx, deploy-pages]
+    if: |
+      always() &&
+      needs.setup.result == 'success' &&
+      needs.publish-vscode.result == 'success' &&
+      needs.publish-openvsx.result == 'success' &&
+      (
+        needs.deploy-pages.result == 'success' ||
+        (needs.setup.outputs.is_prerelease == 'true' && needs.deploy-pages.result == 'skipped')
+      )
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

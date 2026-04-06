@@ -5,13 +5,14 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-04-02
+## [2.0.0] - 2026-04-05 (unreleased)
 
 ### Added
 
+- **🗂️ Unified Context Menu Submenu**: All commands are now grouped under a single **Additional Context Menus ▶** submenu in the right-click menu, replacing the previous scattered entries across multiple groups. The submenu appears in any file when the extension is enabled, with commands organised into four logical groups: Function Operations, Selection Operations, Workspace, and Generation.
 - **🖥️ Open in Terminal in right-click menu**: `Open in Terminal` command now appears in the editor context menu (group `2_workspace@2`) in addition to its existing keyboard shortcut
 - **⚙️ 6 utility commands in Command Palette**: `Show Output Channel`, `Debug Context Variables`, `Refresh Context Variables`, `Check Keybinding Conflicts`, `Enable Keybindings`, and `Disable Keybindings` are now declared in `package.json` and visible in the Command Palette
-- **🎓 First-Run Walkthrough**: New `WalkthroughManager` displays a VS Code built-in Walkthrough on first install, introducing Copy Function, Copy Content to File, and Open in Terminal features
+- **🎓 First-Run Walkthrough**: New `WalkthroughManager` displays a VS Code built-in Walkthrough on first install, introducing Copy Function, Copy Selection to File, and Open in Terminal features
 - **🔄 Open Walkthrough Command**: `Additional Context Menus: Open Walkthrough` command allows users to reopen the walkthrough at any time via the Command Palette
 - **📦 No package.json Detection**: Informational message shown when no `package.json` is found in the workspace, explaining that Node.js project detection is required
 - **🛡️ ConfigValidator**: New utility validates all string-enum configuration values on activation and logs warnings with the invalid key, received value, and fallback for any unrecognized setting
@@ -28,6 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **⏱️ Generate Cron Expression**: Now inserts the bare cron expression at cursor position (e.g. `0 9 * * *`) — no comment line, no quotes
+- **📁 Repository structure**: Jekyll GitHub Pages site moved from `docs/` to `site/`; VS Code walkthrough markdown files moved from `walkthrough/` to `docs/`
+- **📚 Features documentation realigned**: `site/services/` now documents the 11 user-facing features (Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File Convention, Generate Enum, Generate Cron, Generate .env File) instead of internal infrastructure services. Infrastructure services (CodeAnalysis, FileDiscovery, Configuration, ProjectDetection, Accessibility) no longer have standalone site docs.
 - **🚀 CI release pipeline**: All publish/release jobs now trigger on `v*` tag pushes (previously incorrectly conditioned on `refs/heads/main`)
 - **🌿 Release builds from `main`**: `release-build` job now checks out the `main` branch (`ref: main`) to ensure releases always use the latest stable code
 - **📦 Pre-release support**: Tags containing `-rc`, `-next`, `-beta`, or `-alpha` automatically publish with `--pre-release` flag to both VS Code Marketplace and Open VSX Registry
@@ -69,9 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **⌨️ Keyboard Shortcuts**: Complete keybinding system with 7 shortcuts for core commands
   - `Ctrl+Alt+Shift+F` - Copy Function
   - `Ctrl+Alt+Shift+E` - Copy Function to File
-  - `Ctrl+Alt+Shift+C` - Copy Content to File
+  - `Ctrl+Alt+Shift+C` - Copy Selection to File
   - `Ctrl+Alt+Shift+R` - Move Function to File
-  - `Ctrl+Alt+Shift+M` - Move Content to File
+  - `Ctrl+Alt+Shift+M` - Move Selection to File
   - `Ctrl+Alt+Shift+A` - Save All
   - `Ctrl+Alt+Shift+T` - Open in Terminal
 - **🎯 Function Detection Context**: New `additionalContextMenus.isInFunction` context variable for smarter menu visibility
@@ -109,8 +113,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed (Breaking Changes)
 
 - **🔄 Command Renaming**:
-  - `copyCodeToFile` → `copyContentToFile` (BREAKING - command ID changed)
-  - `moveCodeToFile` → `moveContentToFile` (BREAKING - command ID changed)
+  - `copyCodeToFile` → `copySelectionToFile` (BREAKING - command ID changed)
+  - `moveCodeToFile` → `moveSelectionToFile` (BREAKING - command ID changed)
 - **📦 Version bump to 2.0.0**: Major version due to breaking command changes and feature removal
 
 ### Removed

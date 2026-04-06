@@ -110,6 +110,7 @@ export interface RenameResult {
   success: boolean;
   renamedFiles: { oldPath: string; newPath: string }[];
   failedFiles: { path: string; error: string }[];
+  skippedFiles: number;
   totalFiles: number;
 }
 
@@ -338,6 +339,7 @@ export class FileNamingConventionService {
     const startTime = Date.now();
     const renamedFiles: { oldPath: string; newPath: string }[] = [];
     const failedFiles: { path: string; error: string }[] = [];
+    let skippedFiles = 0;
 
     try {
       // Get all files in directory
@@ -368,21 +370,26 @@ export class FileNamingConventionService {
           } else {
             const result = await this.renameFile(file, convention);
 
-            if (result.success && result.newPath) {
+            if (result.success && result.newPath && result.newPath !== file) {
               renamedFiles.push({ oldPath: file, newPath: result.newPath });
-            } else {
+            } else if (!result.success) {
               failedFiles.push({
                 path: file,
                 error: result.error ?? 'Unknown error',
               });
+            } else {
+              skippedFiles++;
             }
           }
+        } else {
+          skippedFiles++;
         }
       }
 
       const duration = Date.now() - startTime;
       this.logger.info(`Bulk rename operation completed in ${duration}ms`, {
         renamedFiles: renamedFiles.length,
+        skippedFiles,
         failedFiles: failedFiles.length,
       });
 
@@ -390,6 +397,7 @@ export class FileNamingConventionService {
         success: failedFiles.length === 0,
         renamedFiles,
         failedFiles,
+        skippedFiles,
         totalFiles: files.length,
       };
     } catch (error) {
@@ -398,14 +406,11 @@ export class FileNamingConventionService {
         success: false,
         renamedFiles,
         failedFiles,
+        skippedFiles,
         totalFiles: 0,
       };
     }
   }
-
-  /**
-   * Display rename suggestions in a QuickPick
-   */
   public async showRenameSuggestions(convention: NamingConvention): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -468,6 +473,64 @@ export class FileNamingConventionService {
    */
   public clearAllDiagnostics(): void {
     this.diagnosticCollection.clear();
+  }
+
+  /**
+   * Rename a file or all files in a folder to the given convention.
+   */
+  public async renameByPath(
+    targetPath: string,
+    convention: NamingConvention,
+  ): Promise<RenameResult> {
+    try {
+      const resolvedPath = path.resolve(targetPath);
+      if (!isSafeFilePath(resolvedPath)) {
+        return {
+          success: false,
+          renamedFiles: [],
+          failedFiles: [{ path: targetPath, error: 'Path validation failed' }],
+          skippedFiles: 0,
+          totalFiles: 0,
+        };
+      }
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- path validated by isSafeFilePath()
+      const stat = await fs.stat(resolvedPath);
+
+      if (stat.isDirectory()) {
+        return await this.bulkRenameFiles(resolvedPath, convention);
+      }
+
+      const result = await this.renameFile(resolvedPath, convention);
+      if (result.success && result.newPath && result.newPath !== resolvedPath) {
+        return {
+          success: true,
+          renamedFiles: [{ oldPath: resolvedPath, newPath: result.newPath }],
+          failedFiles: [],
+          skippedFiles: 0,
+          totalFiles: 1,
+        };
+      }
+      if (result.success) {
+        return { success: true, renamedFiles: [], failedFiles: [], skippedFiles: 1, totalFiles: 1 };
+      }
+      return {
+        success: false,
+        renamedFiles: [],
+        failedFiles: [{ path: resolvedPath, error: result.error ?? 'Unknown error' }],
+        skippedFiles: 0,
+        totalFiles: 1,
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('Error in renameByPath', error);
+      return {
+        success: false,
+        renamedFiles: [],
+        failedFiles: [{ path: targetPath, error: errorMessage }],
+        skippedFiles: 0,
+        totalFiles: 0,
+      };
+    }
   }
 
   /**

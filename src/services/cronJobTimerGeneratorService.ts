@@ -333,12 +333,8 @@ export class CronJobTimerGeneratorService {
       return;
     }
 
-    const comment = `# ${this.getCronDescription(expression)}`;
-    const code = `'${expression}'`;
-
     await editor.edit((editBuilder) => {
-      const position = editor.selection.active;
-      editBuilder.insert(position, `${comment}\n${code}\n`);
+      editBuilder.insert(editor.selection.active, expression);
     });
 
     const description = this.getCronDescription(expression);

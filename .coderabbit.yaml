@@ -11,12 +11,13 @@ reviews:
     base_branches:
       - main
 
+  summary:
+    auto_update: true
+
   path_filters:
     - '!dist/**'
-    - '!docs/**'
     - '!images/**'
     - '!.husky/**'
-    - '!scripts/**'
     - '!*.vsix'
     - '!pnpm-lock.yaml'
 

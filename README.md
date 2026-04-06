@@ -13,7 +13,7 @@ author: Vijay Gangatharan
 
 <div align="center">
 
-![Copy Function Demo](images/screenshots/copy-function.png)
+![Copy Function Demo](docs/images/screenshots/copy-function.gif)
 _Extract functions in one click with intelligent import handling_
 
 </div>
@@ -26,8 +26,8 @@ _Extract functions in one click with intelligent import handling_
 
 1. **Install** the extension from VS Code Marketplace
 2. **Open** any Node.js project with `package.json`
-3. **Right-click** in a TypeScript/JavaScript file to see new context menu options
-4. **Try it out:** Select some code → Right-click → "Copy Content to File"
+3. **Right-click** in any file → look for **Additional Context Menus ▶** in the context menu
+4. **Try it out:** Select some code → Right-click → Additional Context Menus → "Copy Selection to File"
 
 ### 💡 Common Workflows
 
@@ -44,25 +44,37 @@ _Extract functions in one click with intelligent import handling_
 
 ## 🎬 Feature Showcase
 
+### Copy Function
+
+![Copy Function Demo](docs/images/screenshots/copy-function.gif)
+
 ### Copy Function to File
 
-![Copy Function Demo](images/screenshots/copy-function.png)
+![Copy Function to File Demo](docs/images/screenshots/copy-function-to-file.gif)
 
-### Smart File Discovery
+### Move Function to File
 
-![File Discovery](images/screenshots/copy-to-file.png)
+![Move Function to File Demo](docs/images/screenshots/move-function-to-file.gif)
 
-### Context Menu Integration
+### Copy Selection to File
 
-![Full Context Menu](images/screenshots/context-menu.png)
+![Copy Selection to File Demo](docs/images/screenshots/copy-selection-to-file.gif)
 
-### Code Generation
+### Move Selection to File
 
-![Enum Generator](images/screenshots/enum-generator.png)
+![Move Selection to File Demo](docs/images/screenshots/move-selection-to-file.gif)
 
-### Terminal Integration
+### Save All
 
-![Terminal Integration](images/screenshots/terminal-integration.png)
+![Save All Demo](docs/images/screenshots/save-all.gif)
+
+### Open in Terminal
+
+![Open in Terminal Demo](docs/images/screenshots/open-in-terminal.gif)
+
+### Rename File to Convention
+
+![Rename File to Convention Demo](docs/images/screenshots/rename-file-convention.gif)
 
 ---
 
@@ -81,25 +93,25 @@ _Extract functions in one click with intelligent import handling_
 
 ---
 
-## 📚 Services Documentation
+## 📚 Features Documentation
 
-Detailed documentation for all 11 services with API references, examples, and best practices.
+Detailed documentation for all 11 features with usage guides and examples.
 
-| Service                | Documentation                                                                                                       | Purpose                        |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| Code Analysis          | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/codeAnalysisService.html)          | Function detection and parsing |
-| Configuration          | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/configurationService.html)         | Settings management            |
-| File Discovery         | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/fileDiscoveryService.html)         | File scanning and filtering    |
-| File Save              | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/fileSaveService.html)              | Enhanced save operations       |
-| Terminal               | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/terminalService.html)              | Terminal integration           |
-| Cron Timer Generator   | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html) | Cron expression generation     |
-| Enum Generator         | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/enumGenerator.html)                | Union type to enum             |
-| Env File Generator     | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/envFileGeneratorService.html)      | .env file creation             |
-| File Naming Convention | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/fileNamingConventionService.html)  | Naming enforcement             |
-| Project Detection      | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/projectDetectionService.html)      | Framework detection            |
-| Accessibility          | [View Docs](https://vijaygangatharan.github.io/additional-contexts-menu/services/accessibilityService.html)         | Screen reader support          |
+| Feature                | Documentation                                                                                               | Purpose                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Copy Function          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunction.html)                 | Copy function at cursor                                                               |
+| Copy Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunctionToFile.html)           | Copy function to target file                                                          |
+| Move Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveFunctionToFile.html)           | Move function to target file                                                          |
+| Copy Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copySelectionToFile.html)          | Copy selected code to file                                                            |
+| Move Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveSelectionToFile.html)          | Move selected code to file                                                            |
+| Save All               | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileSaveService.html)              | Enhanced save operations                                                              |
+| Open in Terminal       | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/terminalService.html)              | Terminal integration                                                                  |
+| Rename File Convention | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileNamingConventionService.html)  | Rename files/folders to kebab-case, camelCase, or PascalCase via Explorer right-click |
+| Generate Enum          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/enumGeneratorService.html)         | Union type to enum                                                                    |
+| Generate Cron          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html) | Cron expression generation                                                            |
+| Generate .env File     | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/envFileGeneratorService.html)      | .env file creation                                                                    |
 
-[**View All Services** →](https://vijaygangatharan.github.io/additional-contexts-menu/services/)
+[**View All Features** →](https://vijay431.github.io/additional-contexts-menu/services/)
 
 ---
 
@@ -107,22 +119,32 @@ Detailed documentation for all 11 services with API references, examples, and be
 
 ### 🎯 Core Functionality
 
-#### Main Features (Command Palette + Right-Click Menu)
+#### Main Features (Right-Click Menu Only)
 
-- 🎯 **Copy Function** - Regex-based function detection and copying with intelligent import handling
-- 📋 **Copy Content to File** - Smart code copying with import conflict resolution
-- ✂️ **Move Content to File** - Intelligent code moving with automatic cleanup
+- 🎯 **Copy Function** - AST-based function detection and copying with intelligent import handling
+- 📋 **Copy Function to File** - Copy function at cursor to a target file
+- ✂️ **Move Function to File** - Move function at cursor to a target file (removes from source)
+- 📋 **Copy Selection to File** - Smart code copying with import conflict resolution
+- ✂️ **Move Selection to File** - Intelligent code moving with automatic cleanup
 - 💾 **Save All** - Enhanced save functionality with progress feedback and read-only handling
 - 🖥️ **Open in Terminal** - Cross-platform terminal integration
+- 🔢 **Generate Enum from Union Type** - Convert TypeScript union types to enums
+- ⏱️ **Generate Cron Expression** - Interactive cron expression builder
 
 #### Extension Management (Command Palette Only)
 
-- ⚙️ **Enable/Disable Extension** - Global extension control via command palette
+- ⚙️ **Enable/Disable Extension** - Global extension control
 - 🔍 **Show Output Channel** - View extension logs
 - 🐛 **Debug Context Variables** - Inspect extension state
 - 🔄 **Refresh Context Variables** - Force re-detection of project context
 - ⌨️ **Check Keybinding Conflicts** - View keybinding configuration
 - 🔛 **Enable/Disable Keybindings** - Toggle custom keybindings
+- 🌿 **Generate .env File** - Generate environment file from usage patterns
+- 🚶 **Open Walkthrough** - Open the getting started walkthrough
+
+#### Explorer Right-Click Menu
+
+- 🗂️ **Rename File to Convention** - Right-click any file or folder in the Explorer to rename to kebab-case, camelCase, or PascalCase. Processes a single file or recursively renames all files in a folder. Reports renamed, skipped (already compliant), and failed counts.
 
 ### Project Intelligence
 
@@ -133,7 +155,7 @@ Detailed documentation for all 11 services with API references, examples, and be
 
 ### Code Operations
 
-- 🧠 **Lightweight Code Analysis** - Uses optimized regex-based parsing for fast function detection
+- 🧠 **AST-Based Code Analysis** - Uses TypeScript Compiler API for accurate function detection
 - 🔀 **Import Management** - Merge, duplicate, or skip import statements
 - 📍 **Smart Insertion** - Intelligent code placement (smart, end, beginning)
 - 💬 **Comment Preservation** - Maintains code comments during operations
@@ -157,7 +179,7 @@ The extension provides comprehensive accessibility configuration options:
   - `normal` - All operations (default, recommended)
   - `verbose` - Detailed progress and contextual information
 
-- `additionalContextMenus.accessibility.screenReaderMode` - Enable enhanced screen reader support with additional ARIA labels
+- `additionalContextMenus.accessibility.screenReaderMode` - Enable enhanced screen reader support with additional ARIA labels (default: `false` — announcements are opt-in)
 
 - `additionalContextMenus.accessibility.keyboardNavigation` - Show keyboard navigation hints in Quick Pick dialogs
 
@@ -165,15 +187,15 @@ The extension provides comprehensive accessibility configuration options:
 
 All commands are keyboard accessible:
 
-| Command               | Windows/Linux      | macOS             |
-| --------------------- | ------------------ | ----------------- |
-| Copy Function         | `Ctrl+Alt+Shift+F` | `Cmd+Alt+Shift+F` |
-| Copy Function to File | `Ctrl+Alt+Shift+E` | `Cmd+Alt+Shift+E` |
-| Copy Content to File  | `Ctrl+Alt+Shift+C` | `Cmd+Alt+Shift+C` |
-| Move Function to File | `Ctrl+Alt+Shift+R` | `Cmd+Alt+Shift+R` |
-| Move Content to File  | `Ctrl+Alt+Shift+M` | `Cmd+Alt+Shift+M` |
-| Save All              | `Ctrl+Alt+Shift+A` | `Cmd+Alt+Shift+A` |
-| Open in Terminal      | `Ctrl+Alt+Shift+T` | `Cmd+Alt+Shift+T` |
+| Command                | Windows/Linux      | macOS             |
+| ---------------------- | ------------------ | ----------------- |
+| Copy Function          | `Ctrl+Alt+Shift+F` | `Cmd+Alt+Shift+F` |
+| Copy Function to File  | `Ctrl+Alt+Shift+E` | `Cmd+Alt+Shift+E` |
+| Copy Selection to File | `Ctrl+Alt+Shift+C` | `Cmd+Alt+Shift+C` |
+| Move Function to File  | `Ctrl+Alt+Shift+R` | `Cmd+Alt+Shift+R` |
+| Move Selection to File | `Ctrl+Alt+Shift+M` | `Cmd+Alt+Shift+M` |
+| Save All               | `Ctrl+Alt+Shift+A` | `Cmd+Alt+Shift+A` |
+| Open in Terminal       | `Ctrl+Alt+Shift+T` | `Cmd+Alt+Shift+T` |
 
 #### Screen Reader Support
 
@@ -185,7 +207,7 @@ The extension supports NVDA (Windows), VoiceOver (macOS), and Orca (Linux):
 - **Progress Announcements**: Long-running operations announce progress percentage
 - **Operation Feedback**: Success/failure announcements for all operations
 
-For detailed accessibility documentation, see [Accessibility Guide](https://vijaygangatharan.github.io/additional-contexts-menu/accessibility.html).
+For detailed accessibility documentation, see [Accessibility Guide](https://vijay431.github.io/additional-contexts-menu/accessibility.html).
 
 ---
 
@@ -274,7 +296,7 @@ const UserProfile = () => {
 
 1. **Position cursor** inside any function (arrow, regular, method, React component)
 2. **Right-click** → Select "Copy Function"
-3. **Automatic detection** of function boundaries using regex-based pattern matching
+3. **Automatic detection** of function boundaries using AST-based parsing via TypeScript Compiler API
 4. **Smart copying** includes function signature, body, and relevant comments
 
 **Supported Function Types:**
@@ -331,20 +353,44 @@ const UserProfile = () => {
 
 ### Command Palette Integration
 
-Access all features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
+Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 
-**Core Commands**:
+**Right-Click Menu Only** (hidden from Command Palette):
+
+- `additionalContextMenus.copyFunction` - Copy Function
+- `additionalContextMenus.copyFunctionToFile` - Copy Function to File
+- `additionalContextMenus.moveFunctionToFile` - Move Function to File
+- `additionalContextMenus.copySelectionToFile` - Copy Selection to File
+- `additionalContextMenus.moveSelectionToFile` - Move Selection to File
+- `additionalContextMenus.generateEnum` - Generate Enum from Union Type
+- `additionalContextMenus.generateCronTimer` - Generate Cron Expression
+
+**Command Palette Accessible**:
 
 - `Additional Context Menus: Enable` - Enable the extension
 - `Additional Context Menus: Disable` - Disable the extension
+- `Additional Context Menus: Save All` - Save all open files
+- `Additional Context Menus: Open in Terminal` - Open terminal at file location
+- `Additional Context Menus: Show Output Channel` - View extension logs
+- `Additional Context Menus: Debug Context Variables` - Inspect extension state
+- `Additional Context Menus: Refresh Context Variables` - Force re-detection
+- `Additional Context Menus: Check Keybinding Conflicts` - View keybinding config
+- `Additional Context Menus: Enable Keybindings` - Enable custom keybindings
+- `Additional Context Menus: Disable Keybindings` - Disable custom keybindings
+- `Additional Context Menus: Generate .env File` - Generate env file
+- `Additional Context Menus: Open Walkthrough` - Open getting started guide
 
-**Keyboard Shortcuts** (when `enableKeybindings` is `true`):
+**Explorer Right-Click**:
+
+- `Additional Context Menus: Rename File to Convention` - Right-click a file or folder in the Explorer to rename to a naming convention
+
+**Keyboard Shortcuts** (active when extension is enabled):
 
 - `Ctrl+Alt+Shift+F` (`Cmd+Alt+Shift+F` on Mac) - Copy Function
 - `Ctrl+Alt+Shift+E` (`Cmd+Alt+Shift+E` on Mac) - Copy Function to File
-- `Ctrl+Alt+Shift+C` (`Cmd+Alt+Shift+C` on Mac) - Copy Content to File
+- `Ctrl+Alt+Shift+C` (`Cmd+Alt+Shift+C` on Mac) - Copy Selection to File
 - `Ctrl+Alt+Shift+R` (`Cmd+Alt+Shift+R` on Mac) - Move Function to File
-- `Ctrl+Alt+Shift+M` (`Cmd+Alt+Shift+M` on Mac) - Move Content to File
+- `Ctrl+Alt+Shift+M` (`Cmd+Alt+Shift+M` on Mac) - Move Selection to File
 - `Ctrl+Alt+Shift+A` (`Cmd+Alt+Shift+A` on Mac) - Save All
 - `Ctrl+Alt+Shift+T` (`Cmd+Alt+Shift+T` on Mac) - Open in Terminal
 
@@ -352,7 +398,7 @@ Access all features via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 
 ## 📋 Requirements
 
-- **VS Code**: Version 1.108.1 or higher
+- **VS Code**: Version 1.110.0 or higher
 - **Node.js**: Version 20+ required for development
 - **PNPM**: Package manager for dependency management (install with `npm install -g pnpm`)
 - **Project Type**: Node.js project with `package.json` (for smart detection)
@@ -617,7 +663,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 - **🔧 Enhanced Context Menu Visibility**: All commands properly available in command palette and context menus
 - **📦 Complete Command Palette Coverage**: All 20 commands registered in package.json
 - **🎯 Function Detection Context**: Smart context variable for function-aware menu visibility
-- **🔄 Command Renaming**: More accurate naming (Copy/Move Content to File)
+- **🔄 Command Renaming**: More accurate naming (Copy/Move Selection to File)
 - **🏗️ Service Cleanup**: Removed unused services (BulkFileRenamer, Gitignore)
 - **📚 Documentation Corrections**: Accurate service count (11)
 
@@ -655,21 +701,19 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 **Build Performance:**
 
 - ⚡ **Lightning Fast Builds**: esbuild compilation in ~1 second (20x faster than webpack)
-- 📦 **Minimal Bundle Size**: 60KB core bundle + 26KB lazy-loaded services
 - 🔄 **Instant Rebuilds**: Near-instant watch mode for development
 - 🎯 **Smart Bundling**: Tree-shaking eliminates unused dependencies
 
 ### 🚀 Performance Optimizations
 
 - **Lazy-Loaded Services**: Generator services (Enum, Env, Cron) load only when needed
-- **60 KB Core Bundle**: Essential features load instantly
-- **On-Demand Features**: Rarely-used generators load in ~10KB chunks when invoked
+- **On-Demand Features**: Rarely-used generators load in small chunks when invoked
 
 **Runtime Performance:**
 
 - 🧠 **Intelligent Caching**: Project detection and file discovery results cached
 - 📊 **Memory Efficient**: Optimized for large codebases and complex project structures
-- ⚡ **Fast Function Detection**: Regex-based parsing for millisecond response times
+- ⚡ **Fast Function Detection**: AST-based parsing via TypeScript Compiler API for accurate results
 - 🔄 **Background Processing**: Non-blocking operations don't interrupt coding
 
 ### 🛡️ Enterprise-Grade Quality Assurance
@@ -707,7 +751,7 @@ Built with clear separation of concerns and enterprise-grade patterns:
 - **ConfigurationService**: Manages settings and real-time configuration changes
 - **FileDiscoveryService**: Discovers compatible files with smart filtering
 - **FileSaveService**: Handles bulk save operations with progress feedback
-- **CodeAnalysisService**: Regex-based function detection for fast and accurate code analysis
+- **CodeAnalysisService**: AST-based function detection using TypeScript Compiler API for accurate results
 - **TerminalService**: Cross-platform terminal integration with three modes (integrated/external/system-default)
 
 #### ⚡ **Performance Optimizations**
@@ -732,7 +776,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ### 🛠️ Development Setup
 
-**Prerequisites**: Node.js 16-24 required for development
+**Prerequisites**: Node.js 20+ required for development (20, 22, 24 supported)
 
 ```bash
 # 1. Clone and setup
@@ -749,14 +793,14 @@ pnpm run build
 
 ### 📋 Available Development Commands
 
-| Command                   | Description                                     | Performance              |
-| ------------------------- | ----------------------------------------------- | ------------------------ |
-| `pnpm run build`          | Build extension using TypeScript esbuild config | ⚡ ~1 second             |
-| `pnpm run watch`          | Watch mode for development                      | 🔄 Instant rebuilds      |
-| `pnpm run package`        | Production build with optimizations             | 📦 60KB core + 26KB lazy |
-| `pnpm run lint`           | Run ESLint on src directory                     | 🎨 Code quality          |
-| `pnpm run format`         | Format code using Prettier                      | ✨ Consistent style      |
-| `pnpm run create-minimal` | Create minimal extension package                | 📦 1MB vs 250MB          |
+| Command             | Description                                     | Performance         |
+| ------------------- | ----------------------------------------------- | ------------------- |
+| `pnpm run build`    | Build extension using TypeScript esbuild config | ⚡ ~1 second        |
+| `pnpm run watch`    | Watch mode for development                      | 🔄 Instant rebuilds |
+| `pnpm run package`  | Production build with optimizations             | 📦 Optimized        |
+| `pnpm run lint`     | Run ESLint on src directory                     | 🎨 Code quality     |
+| `pnpm run lint:fix` | Auto-fix ESLint issues                          | 🔧 Auto-fix         |
+| `pnpm run format`   | Format code using Prettier                      | ✨ Consistent style |
 
 ---
 
@@ -801,7 +845,6 @@ Special thanks to:
 
 ## 📈 Extension Stats
 
-- 📦 **60 KB Core Bundle** - Lightning fast startup
 - 🔄 **Lazy-Loaded Services** - Generators load on demand
 - ⚡ **~1 Second Builds** - esbuild powered
 

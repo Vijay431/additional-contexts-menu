@@ -109,10 +109,10 @@ export class ContextMenuManager {
       vscode.commands.registerCommand('additionalContextMenus.copyFunction', () =>
         this.handleCopyFunction(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.copyContentToFile', () =>
+      vscode.commands.registerCommand('additionalContextMenus.copySelectionToFile', () =>
         this.handleCopyLinesToFile(),
       ),
-      vscode.commands.registerCommand('additionalContextMenus.moveContentToFile', () =>
+      vscode.commands.registerCommand('additionalContextMenus.moveSelectionToFile', () =>
         this.handleMoveLinesToFile(),
       ),
       vscode.commands.registerCommand('additionalContextMenus.saveAll', () => this.handleSaveAll()),
@@ -135,7 +135,7 @@ export class ContextMenuManager {
       ),
       vscode.commands.registerCommand(
         'additionalContextMenus.renameFileConvention',
-        async () => await this.handleRenameFileConvention(),
+        async (uri?: vscode.Uri) => await this.handleRenameFileConvention(uri),
       ),
       vscode.commands.registerCommand(
         'additionalContextMenus.showOutputChannel',
@@ -186,6 +186,11 @@ export class ContextMenuManager {
         return;
       }
 
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage('Copy Function only supports .ts, .tsx, .js, .jsx files.');
+        return;
+      }
+
       const document = editor.document;
       const position = editor.selection.active;
 
@@ -227,6 +232,13 @@ export class ContextMenuManager {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
         vscode.window.showErrorMessage('No active editor found');
+        return;
+      }
+
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Copy Selection to File only supports .ts, .tsx, .js, .jsx files.',
+        );
         return;
       }
 
@@ -285,6 +297,13 @@ export class ContextMenuManager {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
         vscode.window.showErrorMessage('No active editor found');
+        return;
+      }
+
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Move Selection to File only supports .ts, .tsx, .js, .jsx files.',
+        );
         return;
       }
 
@@ -513,6 +532,13 @@ export class ContextMenuManager {
         return;
       }
 
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Copy Function to File only supports .ts, .tsx, .js, .jsx files.',
+        );
+        return;
+      }
+
       const document = editor.document;
       const position = editor.selection.active;
 
@@ -549,7 +575,7 @@ export class ContextMenuManager {
         return;
       }
 
-      await this.copyCodeToTargetFile(functionInfo.fullText, targetFilePath, document);
+      await this.insertFunctionIntoFile(functionInfo.fullText, targetFilePath);
 
       const fileName = this.getFileName(targetFilePath);
       vscode.window.showInformationMessage(`Function '${functionInfo.name}' copied to ${fileName}`);
@@ -574,6 +600,13 @@ export class ContextMenuManager {
         return;
       }
 
+      if (!this.isSupportedFileType(editor.document.fileName)) {
+        vscode.window.showWarningMessage(
+          'Move Function to File only supports .ts, .tsx, .js, .jsx files.',
+        );
+        return;
+      }
+
       const document = editor.document;
       const position = editor.selection.active;
 
@@ -610,7 +643,7 @@ export class ContextMenuManager {
         return;
       }
 
-      await this.copyCodeToTargetFile(functionInfo.fullText, targetFilePath, document);
+      await this.insertFunctionIntoFile(functionInfo.fullText, targetFilePath);
 
       const range = new vscode.Range(
         new vscode.Position(functionInfo.startLine - 1, 0),
@@ -669,15 +702,44 @@ export class ContextMenuManager {
     return lastDot >= 0 ? fileName.substring(lastDot) : '';
   }
 
+  private isSupportedFileType(fileName: string): boolean {
+    return ['.ts', '.tsx', '.js', '.jsx'].includes(this.getFileExtension(fileName));
+  }
+
+  private async insertFunctionIntoFile(code: string, targetFilePath: string): Promise<void> {
+    const targetUri = vscode.Uri.file(targetFilePath);
+    const targetDocument = await vscode.workspace.openTextDocument(targetUri);
+    const insertionPoint = this.getInsertionPoint(targetDocument, code);
+    const targetEditor = await vscode.window.showTextDocument(
+      targetDocument,
+      vscode.ViewColumn.Beside,
+    );
+    const applied = await targetEditor.edit((editBuilder) => {
+      editBuilder.insert(insertionPoint, `\n${code}\n`);
+    });
+    if (!applied) {
+      throw new Error(`Failed to insert code into '${targetFilePath}'`);
+    }
+  }
+
   private getFileName(filePath: string): string {
     const lastSlash = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
     return lastSlash >= 0 ? filePath.substring(lastSlash + 1) : filePath;
   }
 
-  private async handleRenameFileConvention(): Promise<void> {
+  private async handleRenameFileConvention(uri?: vscode.Uri): Promise<void> {
     this.logger.info('Rename File Convention command triggered');
 
     try {
+      const targetPath = uri?.fsPath ?? vscode.window.activeTextEditor?.document.uri.fsPath;
+
+      if (!targetPath) {
+        vscode.window.showErrorMessage(
+          'No file or folder selected. Select a file or folder in the Explorer and try again.',
+        );
+        return;
+      }
+
       const conventions = [
         getAccessibleQuickPickItem(
           {
@@ -685,35 +747,15 @@ export class ContextMenuManager {
             description: 'my-component-name.ts',
             value: 'kebab-case' as const,
           },
-          {
-            ariaLabel:
-              'Kebab case naming convention. Converts file names to lowercase with hyphens, like my-component-name.ts',
-            ariaDescription: 'Example: my-component-name.ts',
-          },
+          { ariaLabel: 'Kebab case: my-component-name.ts' },
         ),
         getAccessibleQuickPickItem(
-          {
-            label: 'camelCase',
-            description: 'myComponentName.ts',
-            value: 'camelCase' as const,
-          },
-          {
-            ariaLabel:
-              'Camel case naming convention. First word lowercase, subsequent words capitalized, like myComponentName.ts',
-            ariaDescription: 'Example: myComponentName.ts',
-          },
+          { label: 'camelCase', description: 'myComponentName.ts', value: 'camelCase' as const },
+          { ariaLabel: 'Camel case: myComponentName.ts' },
         ),
         getAccessibleQuickPickItem(
-          {
-            label: 'PascalCase',
-            description: 'MyComponentName.ts',
-            value: 'PascalCase' as const,
-          },
-          {
-            ariaLabel:
-              'Pascal case naming convention. All words capitalized, like MyComponentName.ts',
-            ariaDescription: 'Example: MyComponentName.ts',
-          },
+          { label: 'PascalCase', description: 'MyComponentName.ts', value: 'PascalCase' as const },
+          { ariaLabel: 'Pascal case: MyComponentName.ts' },
         ),
       ];
 
@@ -725,16 +767,39 @@ export class ContextMenuManager {
         return;
       }
 
-      await this.announce(`Selected ${selected.label} naming convention`, 'normal');
-      await this.fileNamingConventionService.showRenameSuggestions(
-        (selected as vscode.QuickPickItem & { value: 'kebab-case' | 'camelCase' | 'PascalCase' })
-          .value,
-      );
+      const convention = (
+        selected as vscode.QuickPickItem & { value: 'kebab-case' | 'camelCase' | 'PascalCase' }
+      ).value;
+
+      const result = await this.fileNamingConventionService.renameByPath(targetPath, convention);
+
+      if (result.totalFiles === 0) {
+        vscode.window.showInformationMessage('No files found to rename.');
+        return;
+      }
+
+      const parts: string[] = [];
+      if (result.renamedFiles.length > 0) parts.push(`${result.renamedFiles.length} renamed`);
+      if (result.skippedFiles > 0)
+        parts.push(`${result.skippedFiles} already follow ${convention}`);
+      if (result.failedFiles.length > 0) parts.push(`${result.failedFiles.length} failed`);
+      const summary = parts.join(', ');
+
+      if (result.failedFiles.length > 0) {
+        vscode.window.showWarningMessage(
+          `Rename complete: ${summary}. Check Output Channel for details.`,
+        );
+        result.failedFiles.forEach((f) =>
+          this.logger.error(`Failed to rename: ${f.path} — ${f.error}`),
+        );
+      } else {
+        vscode.window.showInformationMessage(`Rename complete: ${summary}.`);
+      }
+
+      await this.announce(`Rename complete: ${summary}`, 'normal');
     } catch (error) {
       this.logger.error('Error in rename file convention', error);
-      vscode.window.showErrorMessage(
-        `Failed to show rename suggestions: ${(error as Error).message}`,
-      );
+      vscode.window.showErrorMessage(`Failed to rename files: ${(error as Error).message}`);
       await this.announceError('Rename File Convention', (error as Error).message);
     }
   }
@@ -942,8 +1007,7 @@ export class ContextMenuManager {
 
   private isAccessibilityEnabled(): boolean {
     try {
-      const config = this.configService.getAccessibilityConfig();
-      return config.screenReaderMode === true;
+      return this.configService.getConfiguration().accessibility.screenReaderMode === true;
     } catch {
       return false;
     }
