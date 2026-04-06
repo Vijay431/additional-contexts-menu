@@ -165,8 +165,9 @@ Use constructor injection - services are passed to your command:
 
 ```typescript
 constructor(
-  codeAnalysisService: ICodeAnalysisService,
+  logger: ILogger,
   accessibilityService: IAccessibilityService,
+  codeAnalysisService: ICodeAnalysisService,
 ) {
   // Services injected by DI container
 }

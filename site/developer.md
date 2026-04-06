@@ -158,7 +158,7 @@ pnpm run build
 pnpm run watch
 ```
 
-**Build output:** `dist/extension.js`
+**Build output:** `dist/extension.js` (entry bundle) + `dist/lazy/enumGeneratorService.js`, `dist/lazy/envFileGeneratorService.js`, `dist/lazy/cronJobTimerGeneratorService.js` (lazy-loaded chunks)
 
 ---
 
@@ -401,7 +401,7 @@ pnpm run build          # Type check and build
 # Build extension with esbuild
 pnpm run build
 
-# Creates: dist/extension.js
+# Creates: dist/extension.js (entry bundle) + dist/lazy/*.js (lazy-loaded chunks)
 # Optimizations enabled: minification, tree-shaking, lazy loading
 ```
 

@@ -305,7 +305,6 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                             <p><strong>Access:</strong> Command Palette only</p>
                         </div>
                     </div>
-                    </div>
                 </div>
             </div>
         </div>

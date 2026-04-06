@@ -82,8 +82,8 @@ export interface IConfigurationService {
 export class ConfigurationService implements IConfigurationService {
   constructor(private readonly outputChannel: vscode.OutputChannel) {}
 
-  public static create(outputChannel: vscode.OutputChannel): IConfigurationService {
-    return new ConfigurationService(outputChannel);
+  public static create(logger: ILogger): IConfigurationService {
+    return new ConfigurationService(logger);
   }
 
   // ... implementation
