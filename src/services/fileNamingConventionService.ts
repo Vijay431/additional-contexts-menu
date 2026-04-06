@@ -484,6 +484,16 @@ export class FileNamingConventionService {
   ): Promise<RenameResult> {
     try {
       const resolvedPath = path.resolve(targetPath);
+      if (!isSafeFilePath(resolvedPath)) {
+        return {
+          success: false,
+          renamedFiles: [],
+          failedFiles: [{ path: targetPath, error: 'Path validation failed' }],
+          skippedFiles: 0,
+          totalFiles: 0,
+        };
+      }
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- path validated by isSafeFilePath()
       const stat = await fs.stat(resolvedPath);
 
       if (stat.isDirectory()) {

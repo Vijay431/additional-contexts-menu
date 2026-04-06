@@ -105,22 +105,26 @@ export class CodeAnalysisService implements ICodeAnalysisService {
 
     const visit = (node: ts.Node) => {
       if (position >= node.pos && position <= node.end) {
-        if (!result) {
-          if (
-            ts.isFunctionDeclaration(node) ||
-            ts.isArrowFunction(node) ||
-            ts.isMethodDeclaration(node) ||
-            ts.isFunctionExpression(node)
-          ) {
+        if (
+          ts.isFunctionDeclaration(node) ||
+          ts.isArrowFunction(node) ||
+          ts.isMethodDeclaration(node) ||
+          ts.isFunctionExpression(node)
+        ) {
+          // Allow overwriting to find the innermost (most deeply nested) function
+          if (!result || (node.pos >= result.pos && node.end <= result.end)) {
             result = node as ts.FunctionLike;
-          } else if (ts.isVariableStatement(node)) {
-            const declaration = node.declarationList.declarations[0];
-            if (
-              declaration?.initializer &&
-              (ts.isArrowFunction(declaration.initializer) ||
-                ts.isFunctionExpression(declaration.initializer))
-            ) {
-              result = declaration.initializer as ts.FunctionLike;
+          }
+        } else if (ts.isVariableStatement(node)) {
+          const declaration = node.declarationList.declarations[0];
+          if (
+            declaration?.initializer &&
+            (ts.isArrowFunction(declaration.initializer) ||
+              ts.isFunctionExpression(declaration.initializer))
+          ) {
+            const initializer = declaration.initializer as ts.FunctionLike;
+            if (!result || (initializer.pos >= result.pos && initializer.end <= result.end)) {
+              result = initializer;
             }
           }
         }
@@ -330,14 +334,8 @@ export class CodeAnalysisService implements ICodeAnalysisService {
     const sourceFile = this.parseSourceFile(text, document.fileName);
 
     const visit = (node: ts.Node) => {
-      if (
-        ts.isFunctionDeclaration(node) ||
-        ts.isArrowFunction(node) ||
-        ts.isMethodDeclaration(node) ||
-        ts.isFunctionExpression(node)
-      ) {
-        functions.push(this.extractFunctionInfo(node as ts.FunctionLike, sourceFile));
-      } else if (ts.isVariableStatement(node)) {
+      // Handle variable-assigned functions at the statement level to avoid duplicates
+      if (ts.isVariableStatement(node)) {
         const declaration = node.declarationList.declarations[0];
         if (
           declaration?.initializer &&
@@ -347,7 +345,18 @@ export class CodeAnalysisService implements ICodeAnalysisService {
           functions.push(
             this.extractFunctionInfo(declaration.initializer as ts.FunctionLike, sourceFile),
           );
+          ts.forEachChild(node, visit);
+          return; // Skip children to avoid duplicate extraction of the initializer
         }
+      }
+      if (
+        ts.isFunctionDeclaration(node) ||
+        ts.isMethodDeclaration(node) ||
+        // Only match standalone arrow/function expressions (not in variable declarations)
+        ((ts.isArrowFunction(node) || ts.isFunctionExpression(node)) &&
+          !ts.isVariableDeclaration(node.parent))
+      ) {
+        functions.push(this.extractFunctionInfo(node as ts.FunctionLike, sourceFile));
       }
       ts.forEachChild(node, visit);
     };

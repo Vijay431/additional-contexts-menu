@@ -714,9 +714,12 @@ export class ContextMenuManager {
       targetDocument,
       vscode.ViewColumn.Beside,
     );
-    await targetEditor.edit((editBuilder) => {
+    const applied = await targetEditor.edit((editBuilder) => {
       editBuilder.insert(insertionPoint, `\n${code}\n`);
     });
+    if (!applied) {
+      throw new Error(`Failed to insert code into '${targetFilePath}'`);
+    }
   }
 
   private getFileName(filePath: string): string {

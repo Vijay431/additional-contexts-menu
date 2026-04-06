@@ -20,6 +20,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     );
     channel.appendLine(message);
     channel.show(true);
+    // Note: Channel intentionally not disposed to keep error visible for debugging
     vscode.window.showErrorMessage(
       `Additional Context Menus activation failed: ${error instanceof Error ? error.message : String(error)}`,
     );
