@@ -25,6 +25,8 @@ By participating in this project, you are expected to uphold our [Code of Conduc
 - [PNPM](https://pnpm.io/) (install with `npm install -g pnpm`)
 - [Visual Studio Code](https://code.visualstudio.com/) (for development and testing)
 - [Git](https://git-scm.com/)
+- [Ruby](https://www.ruby-lang.org/en/downloads/) >= 3.1 — required for local GitHub Pages preview (`pnpm run site:serve`)
+- [Bundler](https://bundler.io/) — Ruby gem manager, install with `gem install bundler` (auto-invoked by `pnpm install` via the `prepare` script)
 
 ### Types of Contributions
 

@@ -1,10 +1,3 @@
----
-title: Additional Context Menus - VS Code Extension for Node.js
-description: Extract functions, generate code, and automate React, Angular, Express, and Next.js development with intelligent context menus
-keywords: vscode extension, refactoring tool, code generation, react tools, typescript tools, nodejs development, extract function, context menu, developer productivity
-author: Vijay Gangatharan
----
-
 # Additional Context Menus - VS Code Extension
 
 🚀 **Enhanced right-click context menus for Node.js development** with intelligent code operations for React, Angular, Express, Next.js, TypeScript, and JavaScript projects.
@@ -419,6 +412,11 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 - **Project Type**: Node.js project with `package.json` (for smart detection)
 - **File Types**: TypeScript/JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`)
 - **Optional**: Framework dependencies (React, Angular, Express, Next.js) for enhanced features
+
+### Site Development (GitHub Pages only)
+
+- **Ruby**: >= 3.1 — [ruby-lang.org](https://www.ruby-lang.org/en/downloads/)
+- **Bundler**: `gem install bundler` — auto-invoked by `pnpm install` via the `prepare` script
 
 ---
 
