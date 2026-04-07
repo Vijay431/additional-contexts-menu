@@ -9,7 +9,6 @@ on:
       - '**'
 
 permissions:
-  contents: write
   pages: write
   id-token: write
   pull-requests: read
@@ -368,53 +367,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  # ─── Step 8: Create GitHub Release ────────────────────────────────────────
-  create-release:
-    name: Create GitHub Release
-    runs-on: ubuntu-latest
-    needs: [setup, publish-vscode, publish-openvsx, deploy-pages]
-    if: |
-      always() &&
-      needs.setup.result == 'success' &&
-      needs.publish-vscode.result == 'success' &&
-      needs.publish-openvsx.result == 'success' &&
-      (
-        needs.deploy-pages.result == 'success' ||
-        (needs.setup.outputs.is_prerelease == 'true' && needs.deploy-pages.result == 'skipped')
-      )
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.x'
-
-      - name: Generate Changelog
-        run: node scripts/generate-changelog.js ${{ needs.setup.outputs.tag }}
-
-      - name: Commit Changelog
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git diff --staged --quiet || git commit -m "chore(release): update CHANGELOG for ${{ needs.setup.outputs.tag }}"
-          git push origin main
-
-      - name: Download VSIX Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: vsix-package
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ needs.setup.outputs.tag }}
-          files: '*.vsix'
-          generate_release_notes: true
-          prerelease: ${{ needs.setup.outputs.is_prerelease == 'true' }}
