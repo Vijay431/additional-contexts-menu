@@ -518,11 +518,10 @@ git tag v2.1.0
 git push origin v2.1.0
 ```
 
-| Tag             | Marketplace     | GitHub Pages | GitHub Release |
-| --------------- | --------------- | ------------ | -------------- |
-| `v2.0.0`        | stable          | ✅ deployed  | stable         |
-| `v2.1.0-rc.1`   | `--pre-release` | ❌ skipped   | pre-release    |
-| `v2.1.0-beta.1` | `--pre-release` | ❌ skipped   | pre-release    |
+| Tag      | Marketplace | GitHub Pages | GitHub Release |
+| -------- | ----------- | ------------ | -------------- |
+| `v2.0.0` | stable      | ✅ deployed  | stable         |
+| `v2.0.1` | stable      | ✅ deployed  | stable         |
 
 ---
 

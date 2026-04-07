@@ -6,7 +6,7 @@ This file is the single source of truth for the **Additional Context Menus** VS 
 
 - **Name:** Additional Context Menus
 - **Publisher:** VijayGangatharan
-- **Version:** 2.0.0
+- **Version:** 2.0.1
 - **VS Code engine:** >=1.110.0
 - **Node.js:** >=20
 - **Package manager:** pnpm
@@ -82,6 +82,13 @@ src/
 docs/                           # VS Code walkthrough markdown files
 site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-contexts-menu)
 ```
+
+### GitHub Pages site (`site/`)
+
+- **Styles:** [`site/assets/css/main.css`](site/assets/css/main.css) (global layout, design tokens, `prefers-color-scheme: dark`, responsive nav), [`site/assets/css/pages.css`](site/assets/css/pages.css) (page-specific grids/cards, installation/download/docs grids, **`code-operations.md`** operation/example/workflow/best-practices blocks).
+- **Scripts:** [`site/assets/js/main.js`](site/assets/js/main.js) — mobile nav, scroll reveal, code-block copy buttons, tabs. Exposes `window.AdditionalContextMenusSite` (legacy alias `window.FileInsights`).
+- **Documentation page:** [`site/documentation.md`](site/documentation.md) Commands API uses `.commands-api` … `.command-item` markup; styles are scoped under `.commands-api` in [`site/assets/css/pages.css`](site/assets/css/pages.css) so generic class names do not affect e.g. installation’s `.command-list` UL wrapper.
+- **Layout:** [`site/_layouts/default.html`](site/_layouts/default.html). Markdown-only pages (e.g. `developer.md`) get a readable column via `.main-content > :not(section)`; section-based marketing pages stay full width with inner `.container`.
 
 ---
 
@@ -164,7 +171,7 @@ These power the features internally. They have **no standalone user-facing docs*
 
 ### Copy Selection to File / Move Selection to File
 
-- Previously named `copyContentToFile` / `moveContentToFile` — renamed in v2.1.0 (breaking change)
+- Previously named `copyContentToFile` / `moveContentToFile` — renamed in v2.0.0 (breaking change)
 - Old command IDs no longer exist
 
 ### Function Detection (`codeAnalysisService.ts`)
@@ -188,19 +195,16 @@ These power the features internally. They have **no standalone user-facing docs*
 Walkthrough ID: `additionalContextMenus.gettingStarted`
 Markdown files live in `docs/` (root-level, not the Jekyll site).
 
-| Step ID                     | Title                         | Markdown file               |
-| --------------------------- | ----------------------------- | --------------------------- |
-| `step.copyFunction`         | Copy a Function               | `copy-function.md`          |
-| `step.copyFunctionToFile`   | Copy Function to File         | `copy-function-to-file.md`  |
-| `step.moveFunctionToFile`   | Move Function to File         | `move-function-to-file.md`  |
-| `step.copySelectionToFile`  | Copy Selection to File        | `copy-selection-to-file.md` |
-| `step.moveSelectionToFile`  | Move Selection to File        | `move-selection-to-file.md` |
-| `step.saveAll`              | Save All Files                | `save-all.md`               |
-| `step.openInTerminal`       | Open in Terminal              | `open-in-terminal.md`       |
-| `step.generateEnum`         | Generate Enum from Union Type | `generate-enum.md`          |
-| `step.generateCronTimer`    | Generate Cron Expression      | `generate-cron.md`          |
-| `step.renameFileConvention` | Rename File to Convention     | `rename-file-convention.md` |
-| `step.generateEnvFile`      | Generate .env File            | `generate-env-file.md`      |
+| Step ID                     | Title                     | Markdown file               |
+| --------------------------- | ------------------------- | --------------------------- |
+| `step.copyFunction`         | Copy a Function           | `copy-function.md`          |
+| `step.copyFunctionToFile`   | Copy Function to File     | `copy-function-to-file.md`  |
+| `step.moveFunctionToFile`   | Move Function to File     | `move-function-to-file.md`  |
+| `step.copySelectionToFile`  | Copy Selection to File    | `copy-selection-to-file.md` |
+| `step.moveSelectionToFile`  | Move Selection to File    | `move-selection-to-file.md` |
+| `step.saveAll`              | Save All Files            | `save-all.md`               |
+| `step.openInTerminal`       | Open in Terminal          | `open-in-terminal.md`       |
+| `step.renameFileConvention` | Rename File to Convention | `rename-file-convention.md` |
 
 ---
 
@@ -255,10 +259,10 @@ fi
 
 ### Release Checklist
 
-**Stable release (`v2.0.0`):**
+**Stable release (`v2.0.1`):**
 
-1. Ensure `package.json` version is `2.0.0`
-2. Push tag: `git tag v2.0.0 && git push origin v2.0.0`
+1. Ensure `package.json` version is `2.0.1`
+2. Push tag: `git tag v2.0.1 && git push origin v2.0.1`
 3. CI publishes to VS Code Marketplace + Open VSX, deploys GitHub Pages, creates GitHub Release
 
 **Pre-release (`v2.1.0-beta.1`):**

@@ -122,7 +122,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 <div class="feature-icon">
                     <i class="fas fa-terminal"></i>
                 </div>
-                <h3 class="feature-title">Cross-Platform Terminal Integration <span class="version-badge">v1.2.0</span></h3>
+                <h3 class="feature-title">Cross-Platform Terminal Integration</h3>
                 <p class="feature-description">
                     Right-click "Open in Terminal" with intelligent platform detection. Supports Windows, macOS, and Linux with configurable terminal types and directory behaviors.
                 </p>

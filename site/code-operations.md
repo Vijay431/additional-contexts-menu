@@ -119,13 +119,13 @@ throw error;
 
 </section>
 
-<!-- Copy to Existing File Section -->
+<!-- Copy Selection to File Section -->
 <section class="operation-section">
     <div class="container">
         <div class="operation-header">
             <h2 class="operation-title">
                 <i class="fas fa-copy"></i>
-                Copy to Existing File
+                Copy Selection to File
             </h2>
             <p class="operation-desc">
                 Copy selected code to existing files with intelligent import handling and smart insertion points.
@@ -148,7 +148,7 @@ throw error;
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3>Right-Click</h3>
-                        <p>Right-click on selection and choose "Copy to Existing File"</p>
+                        <p>Right-click on selection and choose "Copy Selection to File"</p>
                     </div>
                 </div>
                 
@@ -218,13 +218,13 @@ throw error;
     </div>
 </section>
 
-<!-- Move to Existing File Section -->
+<!-- Move Selection to File Section -->
 <section class="operation-section">
     <div class="container">
         <div class="operation-header">
             <h2 class="operation-title">
                 <i class="fas fa-cut"></i>
-                Move to Existing File
+                Move Selection to File
             </h2>
             <p class="operation-desc">
                 Move code between files with automatic cleanup of the source file and intelligent dependency management.
