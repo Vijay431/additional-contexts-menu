@@ -45,6 +45,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **🔧 CI: Missing pnpm setup in publish jobs**: Added `Install PNPM` and `Setup Node.js` steps to `publish-vscode` and `publish-openvsx` jobs — previously `pnpm dlx` would fail as pnpm was not available on the runner
+- **🔧 CI: Removed unnecessary pnpm install from `setup` job**: The `setup` job only extracts version/tag from `GITHUB_REF` via a shell script; it never calls pnpm, so the `Install PNPM`, `Setup Node.js`, and `Install Dependencies` steps were redundant
+- **🔧 CI: Removed `schedule` trigger**: Weekly scheduled runs were not required and have been removed from the workflow
 - **🔐 Dependency Vulnerabilities**: Upgraded `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`, `@stylistic/eslint-plugin`, `@vscode/vsce`, `ovsx`, `lint-staged`, `mocha`, and `@vscode/test-cli` to resolve 33 high/moderate vulnerabilities in dev tooling (none affected the shipped VSIX)
 - **🔄 CodeAnalysisService**: Migrated from regex-based to AST-based function detection using TypeScript Compiler API
   - Improved accuracy for nested functions (returns inner-most function)
