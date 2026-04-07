@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: 'Developer Guide'
 description: 'Complete guide for setting up, developing, and contributing to the Additional Context Menus VS Code extension.'
 ---

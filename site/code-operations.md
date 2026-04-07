@@ -62,7 +62,7 @@ function calculateTotal(items: CartItem[]): number {
                         <pre><code class="language-tsx">
 
 // Right-click anywhere in this component
-const UserProfile: React.FC<UserProfileProps> = ({ user, onEdit }) => {
+const UserProfile: React.FC&lt;UserProfileProps&gt; = ({ user, onEdit }) => {
 const [isEditing, setIsEditing] = useState(false);
 
     return (

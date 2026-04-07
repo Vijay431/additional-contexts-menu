@@ -11,9 +11,7 @@ description: 'Explore the comprehensive features and intelligent code operations
         <p class="page-description">
             Discover the comprehensive features that make Additional Context Menus essential for Node.js development with React, Angular, Express, and Next.js.
         </p>
-        </div>
     </div>
-
 </section>
 
 <!-- Core Features Section -->
@@ -122,6 +120,9 @@ description: 'Explore the comprehensive features and intelligent code operations
                             <li><strong>Intelligent Fallbacks:</strong> Automatic fallback to integrated terminal on errors</li>
                             <li><strong>Path Validation:</strong> Robust error handling for permissions and invalid paths</li>
                         </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

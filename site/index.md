@@ -19,15 +19,15 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     Features smart function detection, intelligent import handling, cross-platform terminal integration, and ultra-fast esbuild compilation.
                 </p>
                 <div class="hero-buttons">
-                    <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary" target="_blank">
+                    <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-download"></i>
                         Install from Marketplace
                     </a>
-                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary" target="_blank">
+                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-download"></i>
                         Install from Open VSX
                     </a>
-                    <a href="{{ site.extension.github_url }}" class="btn btn-secondary" target="_blank">
+                    <a href="{{ site.extension.github_url }}" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-github"></i>
                         View on GitHub
                     </a>
@@ -47,7 +47,9 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 <div class="hero-demo">
                     <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-function.gif"
                          alt="Additional Context Menus - Context Menu Integration"
-                         class="hero-screenshot">
+                         class="hero-screenshot animate-floating"
+                         loading="lazy"
+                         decoding="async">
                     <p class="hero-caption">Intelligent context menus for Node.js development</p>
                 </div>
             </div>

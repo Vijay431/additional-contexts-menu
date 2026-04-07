@@ -145,165 +145,115 @@ description: 'Comprehensive technical documentation for Additional Context Menus
         <div class="section-header">
             <h2 class="section-title">Commands API</h2>
             <p class="section-description">
-                Complete reference for all extension commands and their functionality.
+                Command IDs as registered in the extension. User-visible titles and defaults live in <code>package.json</code>.
             </p>
         </div>
 
         <div class="commands-grid">
             <div class="command-category">
-                <h3>Right-Click Menu Only</h3>
+                <h3 class="command-category-title">Context menu</h3>
+                <p class="command-category-hint">Editor right-click · <code>.ts</code> <code>.tsx</code> <code>.js</code> <code>.jsx</code> (see extension for exact <code>when</code> clauses)</p>
                 <div class="command-list">
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copyFunction</h4>
-                        <p class="command-desc">Copy function at cursor position using AST detection</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu only</p>
-                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+F</p>
-                        </div>
+                        <p class="command-desc">Copy function at cursor (AST)</p>
+                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>F</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copyFunctionToFile</h4>
-                        <p class="command-desc">Copy function at cursor to a target file</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu only</p>
-                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+E</p>
-                        </div>
+                        <p class="command-desc">Copy function to another file</p>
+                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>E</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.moveFunctionToFile</h4>
-                        <p class="command-desc">Move function at cursor to a target file (removes from source)</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu only</p>
-                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+R</p>
-                        </div>
+                        <p class="command-desc">Move function to another file</p>
+                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>R</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copySelectionToFile</h4>
-                        <p class="command-desc">Copy selected code to another file with import handling</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu only</p>
-                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+C</p>
-                        </div>
+                        <p class="command-desc">Copy selection to another file</p>
+                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>C</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.moveSelectionToFile</h4>
-                        <p class="command-desc">Move selected code to another file (copy + delete)</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu only</p>
-                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+M</p>
-                        </div>
+                        <p class="command-desc">Move selection to another file</p>
+                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>M</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.generateEnum</h4>
-                        <p class="command-desc">Generate enum from selected TypeScript union type</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu only</p>
-                        </div>
+                        <p class="command-desc">Enum from union type</p>
+                        <p class="command-shortcut command-shortcut--none">No default keybinding</p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.generateCronTimer</h4>
-                        <p class="command-desc">Interactive cron expression builder</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu only</p>
-                        </div>
+                        <p class="command-desc">Cron expression helper</p>
+                        <p class="command-shortcut command-shortcut--none">No default keybinding</p>
                     </div>
                 </div>
             </div>
 
             <div class="command-category">
-                <h3>Command Palette Accessible</h3>
+                <h3 class="command-category-title">Palette &amp; menu</h3>
+                <p class="command-category-hint"><strong>Save All</strong> and <strong>Open in Terminal</strong> are in the context menu and the Command Palette; the other two are palette-only.</p>
                 <div class="command-list">
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.saveAll</h4>
-                        <p class="command-desc">Save all dirty documents with progress feedback</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu + Command Palette</p>
-                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+A</p>
-                        </div>
+                        <p class="command-desc">Save all dirty documents</p>
+                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>A</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.openInTerminal</h4>
-                        <p class="command-desc">Open terminal at file location</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Right-click menu + Command Palette</p>
-                            <p><strong>Shortcut:</strong> Ctrl+Alt+Shift+T</p>
-                        </div>
+                        <p class="command-desc">Open terminal at file path</p>
+                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>T</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.generateEnvFile</h4>
-                        <p class="command-desc">Generate .env file from usage patterns</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette</p>
-                        </div>
+                        <p class="command-desc">Generate <code>.env</code> from patterns</p>
+                        <p class="command-shortcut command-shortcut--none">Palette only</p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.renameFileConvention</h4>
-                        <p class="command-desc">Rename file to kebab-case, camelCase, or PascalCase</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette</p>
-                        </div>
+                        <p class="command-desc">Rename file to convention</p>
+                        <p class="command-shortcut command-shortcut--none">Palette only</p>
                     </div>
                 </div>
             </div>
 
             <div class="command-category">
-                <h3>Management Commands</h3>
-                <div class="command-list">
-                    <div class="command-item">
+                <h3 class="command-category-title">Management</h3>
+                <p class="command-category-hint">Command Palette only · enable/disable extension, logs, context debug, keybindings</p>
+                <div class="command-list command-list--compact">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.enable</h4>
-                        <p class="command-desc">Enable the extension</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Enable extension</p>
                     </div>
-                    <div class="command-item">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.disable</h4>
-                        <p class="command-desc">Disable the extension</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Disable extension</p>
                     </div>
-                    <div class="command-item">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.showOutputChannel</h4>
-                        <p class="command-desc">View extension logs</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Extension logs</p>
                     </div>
-                    <div class="command-item">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.debugContextVariables</h4>
-                        <p class="command-desc">Inspect extension state and context variables</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Debug context state</p>
                     </div>
-                    <div class="command-item">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.refreshContextVariables</h4>
-                        <p class="command-desc">Force re-detection of project context</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Refresh project context</p>
                     </div>
-                    <div class="command-item">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.checkKeybindingConflicts</h4>
-                        <p class="command-desc">View keybinding configuration</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Keybinding check</p>
                     </div>
-                    <div class="command-item">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.enableKeybindings</h4>
-                        <p class="command-desc">Enable custom keybindings</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Enable extension keybindings</p>
                     </div>
-                    <div class="command-item">
+                    <div class="command-item command-item--compact">
                         <h4 class="command-name">additionalContextMenus.disableKeybindings</h4>
-                        <p class="command-desc">Disable custom keybindings</p>
-                        <div class="command-details">
-                            <p><strong>Access:</strong> Command Palette only</p>
-                        </div>
+                        <p class="command-desc">Disable extension keybindings</p>
                     </div>
                 </div>
             </div>
