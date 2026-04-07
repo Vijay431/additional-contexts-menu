@@ -622,7 +622,7 @@
     "format": "prettier --write .",
     "site:serve": "cd site && bundle exec jekyll serve --baseurl ''",
     "site:live": "cd site && bundle exec jekyll serve --baseurl '' --livereload",
-    "prepare": "concurrently \"husky\" \"cd site && bundle config set --local path vendor/bundle && bundle install\""
+    "system:verify": "concurrently \"husky\" \"cd site && bundle config set --local path vendor/bundle && bundle install\""
   },
   "prettier": {
     "printWidth": 100,

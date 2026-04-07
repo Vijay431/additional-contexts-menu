@@ -416,7 +416,7 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 ### Site Development (GitHub Pages only)
 
 - **Ruby**: >= 3.1 — [ruby-lang.org](https://www.ruby-lang.org/en/downloads/)
-- **Bundler**: `gem install bundler` — auto-invoked by `pnpm install` via the `prepare` script
+- **Bundler**: `gem install bundler` — run `pnpm run system:verify` after install to set up Husky and site dependencies
 
 ---
 
