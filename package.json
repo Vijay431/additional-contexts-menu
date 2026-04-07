@@ -620,7 +620,9 @@
     "lint:fix": "eslint src --fix",
     "lint-staged": "lint-staged",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "site:serve": "cd site && bundle exec jekyll serve --baseurl ''",
+    "site:live": "cd site && bundle exec jekyll serve --baseurl '' --livereload",
+    "prepare": "concurrently \"husky\" \"cd site && bundle config set --local path vendor/bundle && bundle install\""
   },
   "prettier": {
     "printWidth": 100,
@@ -677,6 +679,7 @@
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "@vscode/vsce": "^3.7.1",
+    "concurrently": "^9.1.2",
     "esbuild": "^0.28.0",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^9.1.2",
