@@ -58,7 +58,48 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
                     </p>
                 </div>
             </div>
-            
+
+            <!-- Open VSX Registry -->
+            <div class="download-card primary">
+                <div class="download-header">
+                    <i class="fas fa-store"></i>
+                    <h2 class="download-title">Open VSX Registry</h2>
+                    <span class="download-badge">VSCodium / Open Source</span>
+                </div>
+                <div class="download-content">
+                    <p class="download-description">
+                        Open-source marketplace for VS Code compatible editors including VSCodium, Gitpod, and Eclipse Theia.
+                    </p>
+                    <div class="download-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Automatic updates</li>
+                            <li><i class="fas fa-check"></i> One-click installation</li>
+                            <li><i class="fas fa-check"></i> VSCodium compatible</li>
+                            <li><i class="fas fa-check"></i> Open-source registry</li>
+                        </ul>
+                    </div>
+                    <div class="download-stats">
+                        <div class="stat">
+                            <span class="stat-label">Version</span>
+                            <span class="stat-value">{{ site.extension.version }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Publisher</span>
+                            <span class="stat-value">{{ site.extension.publisher }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="download-actions">
+                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-download"></i>
+                        Install from Open VSX
+                    </a>
+                    <p class="download-note">
+                        Opens in Open VSX Registry for direct installation
+                    </p>
+                </div>
+            </div>
+
             <!-- GitHub Releases -->
             <div class="download-card">
                 <div class="download-header">
@@ -98,7 +139,7 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
                     </p>
                 </div>
             </div>
-            
+
             <!-- Command Line -->
             <div class="download-card">
                 <div class="download-header">
@@ -133,6 +174,7 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- Installation Instructions -->

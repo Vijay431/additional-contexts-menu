@@ -1,16 +1,19 @@
-// File Insights - Main JavaScript for GitHub Pages
+// Additional Context Menus — GitHub Pages site scripts
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Initialize all components
   initializeNavigation();
   initializeScrollEffects();
   initializeCodeCopyButtons();
   initializeTabSwitching();
   initializeInteractiveElements();
-
-  // Add loading animations
-  addLoadingAnimations();
 });
+
+function setNavExpanded(isOpen) {
+  const navToggle = document.getElementById('nav-toggle');
+  if (navToggle) {
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+}
 
 /**
  * Initialize responsive navigation
@@ -20,11 +23,15 @@ function initializeNavigation() {
   const navMenu = document.getElementById('nav-menu');
 
   if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function () {
+    setNavExpanded(navMenu.classList.contains('active'));
+
+    navToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const willOpen = !navMenu.classList.contains('active');
       navMenu.classList.toggle('active');
       navToggle.classList.toggle('active');
+      setNavExpanded(willOpen);
 
-      // Animate hamburger menu
       const spans = navToggle.querySelectorAll('span');
       spans.forEach((span, index) => {
         if (navToggle.classList.contains('active')) {
@@ -38,13 +45,12 @@ function initializeNavigation() {
       });
     });
 
-    // Close menu when clicking outside
     document.addEventListener('click', function (e) {
       if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
         navMenu.classList.remove('active');
         navToggle.classList.remove('active');
+        setNavExpanded(false);
 
-        // Reset hamburger menu
         const spans = navToggle.querySelectorAll('span');
         spans.forEach((span) => {
           span.style.transform = 'none';
@@ -53,11 +59,16 @@ function initializeNavigation() {
       }
     });
 
-    // Close menu on escape key
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
         navToggle.classList.remove('active');
+        setNavExpanded(false);
+        navToggle.querySelectorAll('span').forEach((s) => {
+          s.style.transform = 'none';
+          s.style.opacity = '1';
+        });
+        navToggle.focus();
       }
     });
   }
@@ -67,23 +78,39 @@ function initializeNavigation() {
  * Initialize scroll effects and animations
  */
 function initializeScrollEffects() {
-  // Add scroll-based animations
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px',
   };
 
+  let delayCounter = 0;
+  let resetDelayTimeout = null;
+
   const observer = new IntersectionObserver(function (entries) {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
+        // Add a stagger delay if multiple elements appear at once
+        if (delayCounter > 0) {
+          entry.target.style.transitionDelay = `${delayCounter * 100}ms`;
+        }
+        
         entry.target.classList.add('animate-in');
+        
+        delayCounter++;
+        
+        // Reset the counter when batch finishes
+        clearTimeout(resetDelayTimeout);
+        resetDelayTimeout = setTimeout(() => {
+          delayCounter = 0;
+        }, 100);
+        
+        observer.unobserve(entry.target);
       }
     });
   }, observerOptions);
 
-  // Observe elements for animation
   const animateElements = document.querySelectorAll(
-    '.feature-card, .step, .command-card, .architecture-card, .metric-card, .screenshot-item, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card',
+    '.feature-card, .feature-item, .example-card, .service-card, .step, .command-card, .architecture-card, .metric-card, .screenshot-item, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card, .import-option, .move-feature, .save-feature, .practice-card, .step-flow .step-item, .arch-layer, .layer-components .component, .build-feature, .dev-section, .perf-stat, .download-card, .version-card, .support-card, .changelog-preview, .installation-tabs',
   );
 
   animateElements.forEach((el) => {
@@ -91,12 +118,13 @@ function initializeScrollEffects() {
     observer.observe(el);
   });
 
-  // Smooth scrolling for anchor links
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
+      const id = this.getAttribute('href');
+      if (!id || id === '#') return;
+      const target = document.querySelector(id);
       if (target) {
+        e.preventDefault();
         target.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
@@ -105,7 +133,6 @@ function initializeScrollEffects() {
     });
   });
 
-  // Header shadow on scroll
   const header = document.querySelector('.site-header');
   if (header) {
     window.addEventListener('scroll', function () {
@@ -122,13 +149,13 @@ function initializeScrollEffects() {
  * Initialize code copy buttons
  */
 function initializeCodeCopyButtons() {
-  // Add copy buttons to code blocks
   const codeBlocks = document.querySelectorAll('pre code, .code-example code');
 
   codeBlocks.forEach((codeBlock) => {
     const wrapper = codeBlock.closest('pre') || codeBlock.closest('.code-example');
     if (wrapper && !wrapper.querySelector('.copy-button')) {
       const copyButton = document.createElement('button');
+      copyButton.type = 'button';
       copyButton.className = 'copy-button';
       copyButton.innerHTML = '<i class="fas fa-copy"></i>';
       copyButton.title = 'Copy to clipboard';
@@ -140,7 +167,6 @@ function initializeCodeCopyButtons() {
         const code = codeBlock.textContent;
         copyToClipboard(code);
 
-        // Show success feedback
         const originalHTML = copyButton.innerHTML;
         copyButton.innerHTML = '<i class="fas fa-check"></i>';
         copyButton.classList.add('success');
@@ -165,11 +191,9 @@ function initializeTabSwitching() {
     button.addEventListener('click', function () {
       const targetTab = this.dataset.tab;
 
-      // Remove active class from all buttons and panels
       tabButtons.forEach((btn) => btn.classList.remove('active'));
       tabPanels.forEach((panel) => panel.classList.remove('active'));
 
-      // Add active class to clicked button and corresponding panel
       this.classList.add('active');
       const targetPanel = document.getElementById(targetTab);
       if (targetPanel) {
@@ -178,7 +202,6 @@ function initializeTabSwitching() {
     });
   });
 
-  // Keyboard navigation for tabs
   tabButtons.forEach((button, index) => {
     button.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
@@ -198,9 +221,8 @@ function initializeTabSwitching() {
  * Initialize interactive elements
  */
 function initializeInteractiveElements() {
-  // Add hover effects to cards
   const cards = document.querySelectorAll(
-    '.feature-card, .command-card, .architecture-card, .metric-card, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card',
+    '.feature-card, .service-card, .command-card, .architecture-card, .metric-card, .method-card, .requirement-card, .config-card, .trouble-card, .next-step-card, .import-option, .move-feature, .save-feature, .practice-card',
   );
 
   cards.forEach((card) => {
@@ -213,17 +235,12 @@ function initializeInteractiveElements() {
     });
   });
 
-  // Add click handlers for download buttons
   const downloadButtons = document.querySelectorAll(
     '.btn[href*="marketplace"], .btn[href*="releases"]',
   );
 
   downloadButtons.forEach((button) => {
-    button.addEventListener('click', function (e) {
-      // Track download attempts (you could send to analytics here)
-      console.log('Download button clicked:', this.href);
-
-      // Add visual feedback
+    button.addEventListener('click', function () {
       this.style.transform = 'scale(0.95)';
       setTimeout(() => {
         this.style.transform = 'scale(1)';
@@ -231,7 +248,6 @@ function initializeInteractiveElements() {
     });
   });
 
-  // Add tooltips to buttons and links
   const tooltipElements = document.querySelectorAll('[title]');
   tooltipElements.forEach((element) => {
     element.addEventListener('mouseenter', showTooltip);
@@ -240,114 +256,29 @@ function initializeInteractiveElements() {
 }
 
 /**
- * Add loading animations
- */
-function addLoadingAnimations() {
-  // Add CSS classes for animations
-  const style = document.createElement('style');
-  style.textContent = `
-    .animate-on-scroll {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    
-    .animate-on-scroll.animate-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .site-header.scrolled {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .copy-button {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: var(--primary-color);
-      color: var(--text-inverse);
-      border: none;
-      border-radius: 4px;
-      padding: 6px 8px;
-      font-size: 12px;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.3s ease, background-color 0.3s ease;
-    }
-    
-    .copy-button:hover {
-      background: var(--primary-dark);
-    }
-    
-    .copy-button.success {
-      background: var(--accent-color);
-    }
-    
-    pre:hover .copy-button,
-    .code-example:hover .copy-button {
-      opacity: 1;
-    }
-    
-    .tooltip {
-      position: absolute;
-      background: var(--bg-dark);
-      color: var(--text-inverse);
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 12px;
-      white-space: nowrap;
-      z-index: 1000;
-      pointer-events: none;
-      opacity: 0;
-      transform: translateY(-5px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    
-    .tooltip.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .nav-menu.active {
-      display: flex !important;
-    }
-    
-    @media (max-width: 768px) {
-      .nav-menu {
-        display: none;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-/**
  * Copy text to clipboard
  */
 function copyToClipboard(text) {
   if (navigator.clipboard && window.isSecureContext) {
-    // Use the modern clipboard API
     return navigator.clipboard.writeText(text);
-  } else {
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-999999px';
-    textArea.style.top = '-999999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
+  }
 
-    try {
-      document.execCommand('copy');
-      textArea.remove();
-      return Promise.resolve();
-    } catch (err) {
-      textArea.remove();
-      return Promise.reject(err);
-    }
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  textArea.style.top = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    document.execCommand('copy');
+    textArea.remove();
+    return Promise.resolve();
+  } catch (err) {
+    textArea.remove();
+    return Promise.reject(err);
   }
 }
 
@@ -359,21 +290,17 @@ function showTooltip(e) {
   tooltip.className = 'tooltip';
   tooltip.textContent = e.target.title;
 
-  // Remove the title attribute to prevent default tooltip
   e.target.dataset.originalTitle = e.target.title;
   e.target.removeAttribute('title');
 
   document.body.appendChild(tooltip);
 
-  // Position the tooltip
   const rect = e.target.getBoundingClientRect();
   tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + 'px';
   tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
 
-  // Show tooltip
   setTimeout(() => tooltip.classList.add('show'), 100);
 
-  // Store reference for cleanup
   e.target.tooltipElement = tooltip;
 }
 
@@ -386,16 +313,12 @@ function hideTooltip(e) {
     e.target.tooltipElement = null;
   }
 
-  // Restore the title attribute
   if (e.target.dataset.originalTitle) {
     e.target.title = e.target.dataset.originalTitle;
     delete e.target.dataset.originalTitle;
   }
 }
 
-/**
- * Debounce function for performance
- */
 function debounce(func, wait) {
   let timeout;
   return function executedFunction(...args) {
@@ -408,9 +331,6 @@ function debounce(func, wait) {
   };
 }
 
-/**
- * Throttle function for scroll events
- */
 function throttle(func, limit) {
   let inThrottle;
   return function () {
@@ -424,23 +344,21 @@ function throttle(func, limit) {
   };
 }
 
-// Add performance optimizations
 window.addEventListener(
   'scroll',
   throttle(function () {
-    // Handle scroll events with throttling
+    /* reserved for scroll-driven UI */
   }, 16),
-); // ~60fps
+);
 
 window.addEventListener(
   'resize',
   debounce(function () {
-    // Handle resize events with debouncing
+    /* reserved for layout-sensitive UI */
   }, 250),
 );
 
-// Export functions for global use
-window.FileInsights = {
+window.AdditionalContextMenusSite = {
   copyToClipboard,
   initializeNavigation,
   initializeScrollEffects,
@@ -448,3 +366,5 @@ window.FileInsights = {
   initializeTabSwitching,
   initializeInteractiveElements,
 };
+
+window.FileInsights = window.AdditionalContextMenusSite;

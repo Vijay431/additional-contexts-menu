@@ -71,8 +71,9 @@ navigation:
 # Extension details
 extension:
   name: 'Additional Context Menus'
-  version: '2.0.0'
+  version: '2.0.1'
   marketplace_url: 'https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus'
+  openvsx_url: 'https://open-vsx.org/extension/VijayGangatharan/additional-context-menus'
   github_url: 'https://github.com/Vijay431/additional-contexts-menu'
   publisher: 'VijayGangatharan'
   test_coverage: '53 e2e tests'

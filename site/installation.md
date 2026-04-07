@@ -64,7 +64,43 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                     </div>
                 </div>
             </div>
-            
+
+            <!-- Open VSX Registry -->
+            <div class="method-card">
+                <div class="method-header">
+                    <i class="fas fa-store"></i>
+                    <h2>Open VSX Registry</h2>
+                </div>
+                <div class="method-content">
+                    <p class="method-description">
+                        Install from Open VSX Registry for VSCodium, Gitpod, Eclipse Theia, and other VS Code compatible editors.
+                    </p>
+
+                    <div class="installation-steps">
+                        <h3>Method 1: Extensions View</h3>
+                        <ol class="step-list">
+                            <li>Open your VS Code compatible editor</li>
+                            <li>Click on the Extensions icon in the Activity Bar</li>
+                            <li>Search for <strong>"Additional Context Menus"</strong></li>
+                            <li>Click the <strong>Install</strong> button</li>
+                        </ol>
+
+                        <h3>Method 2: Open VSX Registry Website</h3>
+                        <ol class="step-list">
+                            <li>Visit the <a href="{{ site.extension.openvsx_url }}" target="_blank" rel="noopener noreferrer">Open VSX listing</a></li>
+                            <li>Click <strong>Install</strong> to install directly into your editor</li>
+                        </ol>
+                    </div>
+
+                    <div class="method-actions">
+                        <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open in Open VSX
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Manual Installation -->
             <div class="method-card">
                 <div class="method-header">
@@ -75,7 +111,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                     <p class="method-description">
                         Download and install the VSIX package manually for offline environments or specific version control.
                     </p>
-                    
+
                     <div class="installation-steps">
                         <h3>Download & Install</h3>
                         <ol class="step-list">
@@ -87,7 +123,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                             <li>Restart VS Code if prompted</li>
                         </ol>
                     </div>
-                    
+
                     <div class="method-actions">
                         <a href="{{ site.extension.github_url }}/releases" class="btn btn-secondary" target="_blank">
                             <i class="fas fa-download"></i>
@@ -98,6 +134,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
             </div>
         </div>
     </div>
+
 </section>
 
 <!-- System Requirements -->

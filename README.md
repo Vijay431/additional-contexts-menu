@@ -1,10 +1,3 @@
----
-title: Additional Context Menus - VS Code Extension for Node.js
-description: Extract functions, generate code, and automate React, Angular, Express, and Next.js development with intelligent context menus
-keywords: vscode extension, refactoring tool, code generation, react tools, typescript tools, nodejs development, extract function, context menu, developer productivity
-author: Vijay Gangatharan
----
-
 # Additional Context Menus - VS Code Extension
 
 🚀 **Enhanced right-click context menus for Node.js development** with intelligent code operations for React, Angular, Express, Next.js, TypeScript, and JavaScript projects.
@@ -326,7 +319,7 @@ const UserProfile = () => {
 #### Copy/Move Code
 
 1. **Select** the code block you want to transfer
-2. **Right-click** → Choose "Copy to Existing File" or "Move to Existing File"
+2. **Right-click** → Choose "Copy Selection to File" or "Move Selection to File"
 3. **Browse** compatible files (smart filtering by extension)
 4. **Select target** from organized file list with last-modified timestamps
 5. **Smart insertion** with configurable placement (smart/beginning/end)
@@ -346,7 +339,7 @@ const UserProfile = () => {
 - **Detailed reporting** shows success/failure/skipped counts
 - **Error handling** continues operation even if some files fail
 
-#### Open in Terminal (v1.2.0+)
+#### Open in Terminal
 
 1. **Right-click** on any file in the editor
 2. **Select** "Open in Terminal" from context menu
@@ -420,6 +413,11 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 - **File Types**: TypeScript/JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`)
 - **Optional**: Framework dependencies (React, Angular, Express, Next.js) for enhanced features
 
+### Site Development (GitHub Pages only)
+
+- **Ruby**: >= 3.1 — [ruby-lang.org](https://www.ruby-lang.org/en/downloads/)
+- **Bundler**: `gem install bundler` — run `pnpm run system:verify` after install to set up Husky and site dependencies
+
 ---
 
 ## ⚙️ Extension Settings
@@ -451,7 +449,7 @@ Additional Context Menus provides extensive configuration options:
 - `additionalContextMenus.saveAll.showNotification` (boolean, default: `true`) - Show notification after saving all files
 - `additionalContextMenus.saveAll.skipReadOnly` (boolean, default: `true`) - Skip read-only files when saving all
 
-### Terminal Settings (v1.2.0+)
+### Terminal Settings
 
 - `additionalContextMenus.terminal.type` (string, default: `"integrated"`) - Type of terminal to open
   - `"integrated"` - VS Code's built-in terminal
@@ -670,7 +668,12 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
-### [2.0.0] - Latest
+### [2.0.1] - Latest
+
+- **🎨 GitHub Pages UI/UX**: Improved responsive layout, fluid typography, touch-friendly controls, dark mode support, and accessible mobile nav
+- **🔧 Site fixes**: Fixed broken DOM on Features page, unstyled blocks on Code Operations page, and Commands API copy improvements
+
+### [2.0.0] - Previous Release
 
 - **📝 Copy Function to File**: Copy function at cursor position to target file
 - **📝 Move Function to File**: Move function at cursor position to target file (removes from source)
@@ -703,8 +706,8 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 - Support for React, Angular, Express, Next.js projects
 - TypeScript and JavaScript intelligent code operations
 - Copy Function feature with AST-based function detection
-- Copy to Existing File with smart import handling
-- Move to Existing File with conflict resolution
+- Copy Selection to File with smart import handling
+- Move Selection to File with conflict resolution
 - Save All functionality with progress feedback
 
 ---

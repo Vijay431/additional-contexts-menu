@@ -11,9 +11,7 @@ description: 'Explore the comprehensive features and intelligent code operations
         <p class="page-description">
             Discover the comprehensive features that make Additional Context Menus essential for Node.js development with React, Angular, Express, and Next.js.
         </p>
-        </div>
     </div>
-
 </section>
 
 <!-- Core Features Section -->
@@ -53,7 +51,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         <i class="fas fa-copy"></i>
                     </div>
                     <div class="feature-content">
-                        <h3 class="feature-name">Smart Code Copy to Existing File</h3>
+                        <h3 class="feature-name">Copy Selection to File</h3>
                         <p class="feature-desc">
                             Copy selected code or functions to existing files with intelligent import handling, 
                             conflict resolution, and smart insertion point detection.
@@ -72,7 +70,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         <i class="fas fa-cut"></i>
                     </div>
                     <div class="feature-content">
-                        <h3 class="feature-name">Move Code to Existing File</h3>
+                        <h3 class="feature-name">Move Selection to File</h3>
                         <p class="feature-desc">
                             Move code between files with automatic cleanup of the source file, including removal of 
                             unused imports and proper handling of dependencies.
@@ -109,7 +107,7 @@ description: 'Explore the comprehensive features and intelligent code operations
                         <i class="fas fa-terminal"></i>
                     </div>
                     <div class="feature-content">
-                        <h3 class="feature-name">Cross-Platform Terminal Integration <span class="version-badge">v1.2.0+</span></h3>
+                        <h3 class="feature-name">Cross-Platform Terminal Integration</h3>
                         <p class="feature-desc">
                             Right-click "Open in Terminal" functionality with intelligent cross-platform detection
                             and configurable terminal types for seamless command-line access from any file.
@@ -122,6 +120,9 @@ description: 'Explore the comprehensive features and intelligent code operations
                             <li><strong>Intelligent Fallbacks:</strong> Automatic fallback to integrated terminal on errors</li>
                             <li><strong>Path Validation:</strong> Robust error handling for permissions and invalid paths</li>
                         </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

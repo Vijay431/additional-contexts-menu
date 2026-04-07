@@ -19,11 +19,15 @@ description: 'Enhanced right-click context menus for Node.js development with in
                     Features smart function detection, intelligent import handling, cross-platform terminal integration, and ultra-fast esbuild compilation.
                 </p>
                 <div class="hero-buttons">
-                    <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary" target="_blank">
+                    <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-download"></i>
                         Install from Marketplace
                     </a>
-                    <a href="{{ site.extension.github_url }}" class="btn btn-secondary" target="_blank">
+                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-download"></i>
+                        Install from Open VSX
+                    </a>
+                    <a href="{{ site.extension.github_url }}" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-github"></i>
                         View on GitHub
                     </a>
@@ -43,7 +47,9 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 <div class="hero-demo">
                     <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-function.gif"
                          alt="Additional Context Menus - Context Menu Integration"
-                         class="hero-screenshot">
+                         class="hero-screenshot animate-floating"
+                         loading="lazy"
+                         decoding="async">
                     <p class="hero-caption">Intelligent context menus for Node.js development</p>
                 </div>
             </div>
@@ -116,7 +122,7 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 <div class="feature-icon">
                     <i class="fas fa-terminal"></i>
                 </div>
-                <h3 class="feature-title">Cross-Platform Terminal Integration <span class="version-badge">v1.2.0</span></h3>
+                <h3 class="feature-title">Cross-Platform Terminal Integration</h3>
                 <p class="feature-description">
                     Right-click "Open in Terminal" with intelligent platform detection. Supports Windows, macOS, and Linux with configurable terminal types and directory behaviors.
                 </p>
@@ -289,135 +295,97 @@ description: 'Enhanced right-click context menus for Node.js development with in
 <section class="services-docs">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Services Documentation</h2>
+            <h2 class="section-title">Features Documentation</h2>
             <p class="section-description">
-                Comprehensive documentation for all 11 services with API references, examples, and best practices.
+                Comprehensive documentation for all 11 user-facing features with usage guides and examples.
             </p>
         </div>
         
         <div class="services-grid">
-            <!-- Code Analysis -->
             <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <h3 class="service-name">Code Analysis Service</h3>
-                <p class="service-desc">Function detection and code parsing</p>
-                <a href="/services/codeAnalysisService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-            
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h3 class="service-name">File Discovery Service</h3>
-                <p class="service-desc">Workspace file scanning</p>
-                <a href="/services/fileDiscoveryService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-            
-            <!-- Configuration -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-cog"></i>
-                </div>
-                <h3 class="service-name">Configuration Service</h3>
-                <p class="service-desc">Extension settings management</p>
-                <a href="/services/configurationService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-            
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-project-diagram"></i>
-                </div>
-                <h3 class="service-name">Project Detection Service</h3>
-                <p class="service-desc">Framework detection</p>
-                <a href="/services/projectDetectionService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-            
-            <!-- File Operations -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-save"></i>
-                </div>
-                <h3 class="service-name">File Save Service</h3>
-                <p class="service-desc">Enhanced save operations</p>
-                <a href="/services/fileSaveService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="service-icon"><i class="fas fa-copy"></i></div>
+                <h3 class="service-name">Copy Function</h3>
+                <p class="service-desc">Copy function at cursor to clipboard</p>
+                <a href="{{ site.baseurl }}/services/copyFunction.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-font"></i>
-                </div>
-                <h3 class="service-name">File Naming Convention</h3>
-                <p class="service-desc">File naming enforcement</p>
-                <a href="/services/fileNamingConventionService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <!-- Code Generation -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <h3 class="service-name">Cron Timer Generator</h3>
-                <p class="service-desc">Cron expression generation</p>
-                <a href="/services/cronJobTimerGeneratorService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="service-icon"><i class="fas fa-file-export"></i></div>
+                <h3 class="service-name">Copy Function to File</h3>
+                <p class="service-desc">Copy function at cursor to a target file</p>
+                <a href="{{ site.baseurl }}/services/copyFunctionToFile.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-list-ol"></i>
-                </div>
-                <h3 class="service-name">Enum Generator</h3>
-                <p class="service-desc">Union type to enum</p>
-                <a href="/services/enumGeneratorService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="service-icon"><i class="fas fa-cut"></i></div>
+                <h3 class="service-name">Move Function to File</h3>
+                <p class="service-desc">Move function at cursor to a target file</p>
+                <a href="{{ site.baseurl }}/services/moveFunctionToFile.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <h3 class="service-name">Env File Generator</h3>
-                <p class="service-desc">.env file creation</p>
-                <a href="/services/envFileGeneratorService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="service-icon"><i class="fas fa-clone"></i></div>
+                <h3 class="service-name">Copy Selection to File</h3>
+                <p class="service-desc">Copy selected code to a target file</p>
+                <a href="{{ site.baseurl }}/services/copySelectionToFile.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
             </div>
 
-            <!-- Project Operations -->
             <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-terminal"></i>
-                </div>
-                <h3 class="service-name">Terminal Service</h3>
-                <p class="service-desc">Cross-platform terminal</p>
-                <a href="/services/terminalService.html" class="service-link">
-                    View Documentation <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="service-icon"><i class="fas fa-scissors"></i></div>
+                <h3 class="service-name">Move Selection to File</h3>
+                <p class="service-desc">Move selected code to a target file</p>
+                <a href="{{ site.baseurl }}/services/moveSelectionToFile.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-save"></i></div>
+                <h3 class="service-name">Save All</h3>
+                <p class="service-desc">Enhanced save operations with progress feedback</p>
+                <a href="{{ site.baseurl }}/services/fileSaveService.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-terminal"></i></div>
+                <h3 class="service-name">Open in Terminal</h3>
+                <p class="service-desc">Cross-platform terminal integration</p>
+                <a href="{{ site.baseurl }}/services/terminalService.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-font"></i></div>
+                <h3 class="service-name">Rename File to Convention</h3>
+                <p class="service-desc">Rename files to kebab-case, camelCase, or PascalCase</p>
+                <a href="{{ site.baseurl }}/services/fileNamingConventionService.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-list-ol"></i></div>
+                <h3 class="service-name">Generate Enum</h3>
+                <p class="service-desc">Convert union types to enums</p>
+                <a href="{{ site.baseurl }}/services/enumGeneratorService.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-clock"></i></div>
+                <h3 class="service-name">Generate Cron Expression</h3>
+                <p class="service-desc">Interactive cron expression builder</p>
+                <a href="{{ site.baseurl }}/services/cronJobTimerGeneratorService.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-file-alt"></i></div>
+                <h3 class="service-name">Generate .env File</h3>
+                <p class="service-desc">.env file creation from usage patterns</p>
+                <a href="{{ site.baseurl }}/services/envFileGeneratorService.html" class="service-link">View Documentation <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
 
         <div class="services-cta">
             <h3>Need More Help?</h3>
-            <p>Explore detailed API documentation and examples for each service.</p>
-            <a href="/services/" class="btn btn-primary">
+            <p>Explore detailed documentation and examples for each feature.</p>
+            <a href="{{ site.baseurl }}/services/" class="btn btn-primary">
                 <i class="fas fa-book"></i>
-                View All Services
+                View All Features
             </a>
         </div>
     </div>
@@ -436,6 +404,10 @@ description: 'Enhanced right-click context menus for Node.js development with in
                 <a href="{{ site.extension.marketplace_url }}" class="btn btn-primary btn-large" target="_blank">
                     <i class="fas fa-download"></i>
                     Install Now - Free
+                </a>
+                <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary btn-large" target="_blank">
+                    <i class="fas fa-download"></i>
+                    Install from Open VSX
                 </a>
                 <a href="{{ site.baseurl }}/features" class="btn btn-secondary btn-large">
                     <i class="fas fa-code"></i>
