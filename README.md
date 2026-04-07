@@ -226,6 +226,21 @@ For detailed accessibility documentation, see [Accessibility Guide](https://vija
 code --install-extension VijayGangatharan.additional-context-menus
 ```
 
+### Pre-release Versions
+
+Pre-release builds are published to both VS Code Marketplace and Open VSX Registry for early access to new features before a stable release.
+
+**VS Code Marketplace:**
+
+1. Open the extension page in VS Code
+2. Click the dropdown arrow next to **Uninstall**
+3. Select **Switch to Pre-Release Version**
+
+**Open VSX Registry:**
+Pre-release versions are listed alongside stable versions on the extension page.
+
+Pre-release tags follow the format `vX.ODD_MINOR.PATCH-suffix` (e.g. `v2.1.0-beta.1`, `v2.1.0-rc.1`). Stable releases use even minor versions (e.g. `v2.0.0`, `v2.2.0`).
+
 ---
 
 ## 🚀 Usage Guide

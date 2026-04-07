@@ -223,6 +223,57 @@ Markdown files live in `docs/` (root-level, not the Jekyll site).
 | `additionalContextMenus.accessibility.screenReaderMode`   | boolean | `false`                       | Enhanced screen reader support                              |
 | `additionalContextMenus.accessibility.keyboardNavigation` | boolean | `true`                        | Show keyboard hints in Quick Pick                           |
 
+## Release & Versioning Strategy
+
+### Version Line Convention (VS Code Marketplace)
+
+VS Code Marketplace uses minor parity to distinguish stable from pre-release:
+
+| Minor | Line        | Example tags                   | Publishes as   |
+| ----- | ----------- | ------------------------------ | -------------- |
+| Even  | Stable      | `v2.0.0`, `v2.2.0`, `v2.2.1`   | Stable release |
+| Odd   | Pre-release | `v2.1.0-beta.1`, `v2.1.0-rc.1` | Pre-release    |
+
+**Current lines:**
+
+- `2.0.x` — stable (current unreleased)
+- `2.1.x` — pre-release line (next, after `2.0.0` ships)
+- `2.2.x` — next stable line (after pre-release graduates)
+
+### How CI Detects Pre-release
+
+The `setup` job checks the tag for `-rc`, `-next`, `-beta`, or `-alpha`:
+
+```bash
+if echo "$VERSION" | grep -qE '\-(rc|next|beta|alpha)'; then
+  echo "is_prerelease=true"
+fi
+```
+
+- Pre-release tags → both marketplaces publish with `--pre-release`; `deploy-pages` is skipped
+- Stable tags → both marketplaces publish as stable; `deploy-pages` runs and GitHub Pages is updated
+
+### Release Checklist
+
+**Stable release (`v2.0.0`):**
+
+1. Ensure `package.json` version is `2.0.0`
+2. Push tag: `git tag v2.0.0 && git push origin v2.0.0`
+3. CI publishes to VS Code Marketplace + Open VSX, deploys GitHub Pages, creates GitHub Release
+
+**Pre-release (`v2.1.0-beta.1`):**
+
+1. Bump `package.json` version to `2.1.0`
+2. Push tag: `git tag v2.1.0-beta.1 && git push origin v2.1.0-beta.1`
+3. CI publishes with `--pre-release` to both marketplaces; GitHub Pages is NOT updated
+
+**Graduating pre-release to stable (`v2.2.0`):**
+
+1. Bump `package.json` version to `2.2.0`
+2. Push tag: `git tag v2.2.0 && git push origin v2.2.0`
+
+---
+
 ## Steps to follow:
 
 - All new changes should be added to the `CLAUDE.md` file
