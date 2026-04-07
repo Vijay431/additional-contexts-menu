@@ -126,7 +126,7 @@
 }
 
 /* ===== Keyframes for Micro-animations ===== */
-@keyframes fadeUpIn {
+@keyframes fade-up-in {
   from {
     opacity: 0;
     transform: translateY(30px);
@@ -477,7 +477,7 @@ a:focus-visible {
   font-weight: 700;
   margin-bottom: var(--spacing-lg);
   line-height: 1.1;
-  animation: fadeUpIn 0.8s var(--transition-bounce) both;
+  animation: fade-up-in 0.8s var(--transition-bounce) both;
   animation-delay: 100ms;
 }
 
@@ -494,7 +494,7 @@ a:focus-visible {
   color: var(--text-secondary);
   margin-bottom: var(--spacing-xl);
   line-height: 1.5;
-  animation: fadeUpIn 0.8s var(--transition-bounce) both;
+  animation: fade-up-in 0.8s var(--transition-bounce) both;
   animation-delay: 200ms;
 }
 
@@ -503,7 +503,7 @@ a:focus-visible {
   flex-wrap: wrap;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-xl);
-  animation: fadeUpIn 0.8s var(--transition-bounce) both;
+  animation: fade-up-in 0.8s var(--transition-bounce) both;
   animation-delay: 300ms;
 }
 

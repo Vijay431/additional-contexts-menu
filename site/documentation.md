@@ -157,27 +157,32 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copyFunction</h4>
                         <p class="command-desc">Copy function at cursor (AST)</p>
-                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>F</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding Windows/Linux"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>F</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding macOS"><kbd>Cmd</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>F</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copyFunctionToFile</h4>
                         <p class="command-desc">Copy function to another file</p>
-                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>E</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding Windows/Linux"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>E</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding macOS"><kbd>Cmd</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>E</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.moveFunctionToFile</h4>
                         <p class="command-desc">Move function to another file</p>
-                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>R</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding Windows/Linux"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>R</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding macOS"><kbd>Cmd</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>R</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.copySelectionToFile</h4>
                         <p class="command-desc">Copy selection to another file</p>
-                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>C</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding Windows/Linux"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>C</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding macOS"><kbd>Cmd</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>C</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.moveSelectionToFile</h4>
                         <p class="command-desc">Move selection to another file</p>
-                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>M</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding Windows/Linux"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>M</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding macOS"><kbd>Cmd</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>M</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.generateEnum</h4>
@@ -199,12 +204,14 @@ description: 'Comprehensive technical documentation for Additional Context Menus
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.saveAll</h4>
                         <p class="command-desc">Save all dirty documents</p>
-                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>A</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding Windows/Linux"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>A</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding macOS"><kbd>Cmd</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>A</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.openInTerminal</h4>
                         <p class="command-desc">Open terminal at file path</p>
-                        <p class="command-shortcut" aria-label="Keybinding"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>T</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding Windows/Linux"><kbd>Ctrl</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>T</kbd></p>
+                        <p class="command-shortcut" aria-label="Keybinding macOS"><kbd>Cmd</kbd><span class="cmd-kbd-plus">+</span><kbd>Alt</kbd><span class="cmd-kbd-plus">+</span><kbd>Shift</kbd><span class="cmd-kbd-plus">+</span><kbd>T</kbd></p>
                     </div>
                     <div class="command-item">
                         <h4 class="command-name">additionalContextMenus.generateEnvFile</h4>

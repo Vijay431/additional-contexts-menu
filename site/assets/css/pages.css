@@ -1252,7 +1252,7 @@
   margin-bottom: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.82rem;
-  word-break: break-word;
+  overflow-wrap: anywhere;
   background-color: var(--bg-code);
   border: 1px solid var(--border-color);
 }
@@ -1414,7 +1414,7 @@
   font-size: 0.78rem;
   font-weight: 600;
   line-height: 1.35;
-  word-break: break-word;
+  overflow-wrap: anywhere;
   color: var(--primary-color);
 }
 

@@ -90,7 +90,7 @@ description: 'Download Additional Context Menus VS Code extension from multiple 
                     </div>
                 </div>
                 <div class="download-actions">
-                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary btn-large" target="_blank">
+                    <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-download"></i>
                         Install from Open VSX
                     </a>

@@ -87,13 +87,13 @@ description: 'Complete step-by-step installation guide for Additional Context Me
 
                         <h3>Method 2: Open VSX Registry Website</h3>
                         <ol class="step-list">
-                            <li>Visit the <a href="{{ site.extension.openvsx_url }}" target="_blank">Open VSX listing</a></li>
+                            <li>Visit the <a href="{{ site.extension.openvsx_url }}" target="_blank" rel="noopener noreferrer">Open VSX listing</a></li>
                             <li>Click <strong>Install</strong> to install directly into your editor</li>
                         </ol>
                     </div>
 
                     <div class="method-actions">
-                        <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary" target="_blank">
+                        <a href="{{ site.extension.openvsx_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-external-link-alt"></i>
                             Open in Open VSX
                         </a>

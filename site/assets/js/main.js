@@ -64,6 +64,10 @@ function initializeNavigation() {
         navMenu.classList.remove('active');
         navToggle.classList.remove('active');
         setNavExpanded(false);
+        navToggle.querySelectorAll('span').forEach((s) => {
+          s.style.transform = 'none';
+          s.style.opacity = '1';
+        });
         navToggle.focus();
       }
     });
