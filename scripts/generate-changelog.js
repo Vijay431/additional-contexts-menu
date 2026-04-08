@@ -47,7 +47,7 @@ function generateMarkdown(groups, version, previousTag) {
   const lines = [`## [${version}] - ${date}`, ''];
 
   if (previousTag) {
-    lines.push(`*Full changelog:* https://github.com/Vijay431/additional-contexts-menu/compare/${previousTag}...v${version}`, '');
+    lines.push(`*Full changelog:* https://github.com/Vijay431/additional-context-menus/compare/${previousTag}...v${version}`, '');
   }
 
   const typeLabels = {

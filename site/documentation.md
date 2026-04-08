@@ -283,9 +283,9 @@ description: 'Comprehensive technical documentation for Additional Context Menus
             <div class="dev-section">
                 <h3>Setup & Build</h3>
                 <div class="code-block">
-                    <pre><code>git clone https://github.com/Vijay431/additional-contexts-menu.git
+                    <pre><code>git clone https://github.com/Vijay431/additional-context-menus.git
 
-cd additional-contexts-menu
+cd additional-context-menus
 pnpm install
 pnpm run build</code></pre>
 
