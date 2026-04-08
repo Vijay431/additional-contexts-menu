@@ -24,7 +24,6 @@ export interface ExtensionConfig {
   supportedExtensions: string[];
   copyCode: {
     insertionPoint: 'smart' | 'end' | 'beginning';
-    handleImports: 'merge' | 'duplicate' | 'skip';
     preserveComments: boolean;
   };
   saveAll: {

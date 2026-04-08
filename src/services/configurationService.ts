@@ -124,10 +124,6 @@ export class ConfigurationService implements IConfigurationService {
           'copyCode.insertionPoint',
           'smart',
         ),
-        handleImports: config.get<'merge' | 'duplicate' | 'skip'>(
-          'copyCode.handleImports',
-          'merge',
-        ),
         preserveComments: config.get<boolean>('copyCode.preserveComments', true),
       },
       saveAll: {
@@ -183,10 +179,6 @@ export class ConfigurationService implements IConfigurationService {
         insertionPoint: config.get<'smart' | 'end' | 'beginning'>(
           'copyCode.insertionPoint',
           'smart',
-        ),
-        handleImports: config.get<'merge' | 'duplicate' | 'skip'>(
-          'copyCode.handleImports',
-          'merge',
         ),
         preserveComments: config.get<boolean>('copyCode.preserveComments', true),
       },

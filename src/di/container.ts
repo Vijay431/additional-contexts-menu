@@ -205,7 +205,7 @@ export async function initializeContainer(context: {
   const { TerminalService } = await import('../services/terminalService');
   const { FileNamingConventionService } = await import('../services/fileNamingConventionService');
   const { AccessibilityService } = await import('../services/accessibilityService');
-  // Generator services are loaded lazily in command handlers to reduce bundle size
+  // Generator services are loaded lazily in command handlers for an optimized bundle
 
   // Register all services as singletons
   // Logger is the root service with no dependencies
@@ -271,7 +271,7 @@ export async function initializeContainer(context: {
   );
 
   // Generator services are NOT registered here - they are loaded lazily via dynamic imports
-  // in ContextMenuManager to reduce initial bundle size
+  // in ContextMenuManager for an optimized initial bundle
 }
 
 /**

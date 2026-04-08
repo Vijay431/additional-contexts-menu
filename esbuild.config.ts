@@ -41,7 +41,7 @@ const createConfig = (isProduction = false): esbuild.BuildOptions => ({
   drop: isProduction ? ['console', 'debugger'] : [],
   metafile: true,
   plugins: [],
-  // Additional production optimizations for bundle size reduction
+  // Additional production optimizations for an optimized bundle
   ...(isProduction && {
     minifyWhitespace: true,
     minifyIdentifiers: true,
@@ -120,7 +120,7 @@ async function build(production = false): Promise<void> {
       const lazyTargetKB = 50;
 
       console.log('✅ Build completed successfully!');
-      console.log(`📦 Main bundle size: ${sizeKB} KB`);
+      console.log(`📦 Main bundle (optimized): ${sizeKB} KB`);
 
       // Calculate lazy services total
       let lazyTotal = 0;

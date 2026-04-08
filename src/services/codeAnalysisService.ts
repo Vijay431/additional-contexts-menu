@@ -294,7 +294,10 @@ export class CodeAnalysisService implements ICodeAnalysisService {
           const moduleLiteral = statement.moduleSpecifier.getText();
 
           if (statement.importClause) {
-            if (ts.isNamespaceImport(statement.importClause.namedBindings)) {
+            if (
+              statement.importClause.namedBindings &&
+              ts.isNamespaceImport(statement.importClause.namedBindings)
+            ) {
               type = 'namespace';
             } else if (statement.importClause.name) {
               type = 'default';

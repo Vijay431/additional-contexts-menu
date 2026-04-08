@@ -73,13 +73,13 @@ export class FileDiscoveryService implements IFileDiscoveryService {
     accessibilityService: IAccessibilityService,
     private configService?: IConfigurationService,
     private projectDetectionService?: unknown,
+    cacheTTL: number = 5 * 60 * 1000,
   ) {
     this.logger = logger;
     this.accessibilityService = accessibilityService;
-    // Cache file lists for 5 minutes
     this.fileCache = new Cache<CompatibleFile[]>({
       maxSize: 100,
-      defaultTTL: 5 * 60 * 1000, // 5 minutes
+      defaultTTL: cacheTTL,
       trackStats: false,
     });
   }
@@ -113,12 +113,14 @@ export class FileDiscoveryService implements IFileDiscoveryService {
     accessibilityService: IAccessibilityService,
     configService?: IConfigurationService,
     projectDetectionService?: unknown,
+    cacheTTL?: number,
   ): FileDiscoveryService {
     return new FileDiscoveryService(
       logger,
       accessibilityService,
       configService,
       projectDetectionService,
+      cacheTTL,
     );
   }
 
