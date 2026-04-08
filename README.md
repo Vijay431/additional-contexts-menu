@@ -805,16 +805,16 @@ pnpm run build
 
 ### 📋 Available Development Commands
 
-| Command                          | Description                                     | Performance              |
-| -------------------------------- | ----------------------------------------------- | ------------------------ |
-| `pnpm run build`                 | Build extension using TypeScript esbuild config | ⚡ ~1 second             |
-| `pnpm run watch`                 | Watch mode for development                      | 🔄 Instant rebuilds      |
-| `pnpm run package`               | Production build with optimizations             | 📦 Optimized             |
-| `pnpm run lint`                  | Run ESLint on src directory                     | 🎨 Code quality          |
-| `pnpm run lint:fix`              | Auto-fix ESLint issues                          | 🔧 Auto-fix              |
-| `pnpm run format`                | Format code using Prettier                      | ✨ Consistent style      |
-| `pnpm run test:unit`             | Run unit tests (Vitest)                         | ⚡ Fast, no display      |
-| `pnpm run test:unit:integration` | Run integration tests (VS Code)                 | 🧪 Full feature coverage |
+| Command                     | Description                                     | Performance              |
+| --------------------------- | ----------------------------------------------- | ------------------------ |
+| `pnpm run build`            | Build extension using TypeScript esbuild config | ⚡ ~1 second             |
+| `pnpm run watch`            | Watch mode for development                      | 🔄 Instant rebuilds      |
+| `pnpm run package`          | Production build with optimizations             | 📦 Optimized             |
+| `pnpm run lint`             | Run ESLint on src directory                     | 🎨 Code quality          |
+| `pnpm run lint:fix`         | Auto-fix ESLint issues                          | 🔧 Auto-fix              |
+| `pnpm run format`           | Format code using Prettier                      | ✨ Consistent style      |
+| `pnpm run test:unit`        | Run unit tests (Vitest)                         | ⚡ Fast, no display      |
+| `pnpm run test:integration` | Run integration tests (VS Code, Ubuntu/Linux)   | 🧪 Full feature coverage |
 
 ---
 
