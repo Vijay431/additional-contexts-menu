@@ -1,7 +1,7 @@
 {
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
-  "description": "Supercharge your Node.js development with intelligent right-click menus. Extract functions, generate enums/env/cron, and refactor React/Angular/Express/Next.js code in seconds. Features AST-based detection, smart imports, and 60KB optimized bundle.",
+  "description": "Supercharge your Node.js development with intelligent right-click menus. Extract functions, generate enums/env/cron, and refactor React/Angular/Express/Next.js code in seconds. Features AST-based detection, smart imports, and an optimized bundle.",
   "version": "2.0.1",
   "license": "MIT",
   "publisher": "VijayGangatharan",
@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Vijay431/additional-contexts-menu.git"
+    "url": "https://github.com/Vijay431/additional-context-menus.git"
   },
   "bugs": {
-    "url": "https://github.com/Vijay431/additional-contexts-menu/issues"
+    "url": "https://github.com/Vijay431/additional-context-menus/issues"
   },
-  "homepage": "https://github.com/Vijay431/additional-contexts-menu#readme",
+  "homepage": "https://github.com/Vijay431/additional-context-menus#readme",
   "marketplace": {
     "screenshots": [
       {
@@ -353,17 +353,6 @@
           "description": "Where to insert copied code in target file",
           "markdownDescription": "Controls where copied code is inserted in the target file.\n\n- `smart` *(default)* — inserts after the last import statement, before the first export, or at the end\n- `end` — always appends to the bottom of the file\n- `beginning` — always inserts at the top of the file\n\n**Example:** Use `\"end\"` if you prefer all pasted code to appear at the bottom of the target file."
         },
-        "additionalContextMenus.copyCode.handleImports": {
-          "type": "string",
-          "enum": [
-            "merge",
-            "duplicate",
-            "skip"
-          ],
-          "default": "merge",
-          "description": "How to handle import statements when copying code",
-          "markdownDescription": "Determines how import statements are handled when copying code to a target file.\n\n- `merge` *(default)* — combines new imports with existing ones, avoiding duplicates\n- `duplicate` — copies imports as-is, even if they already exist in the target\n- `skip` — omits import statements entirely from the copied code\n\n**Example:** Use `\"skip\"` when copying utility functions that share imports already present in the target file."
-        },
         "additionalContextMenus.copyCode.preserveComments": {
           "type": "boolean",
           "default": true,
@@ -605,13 +594,19 @@
     "yarn": false
   },
   "main": "./dist/extension.js",
+  "pnpm": {
+    "overrides": {
+      "serialize-javascript": "7.0.5"
+    }
+  },
   "scripts": {
     "vscode:prepublish": "tsx esbuild.config.ts --production",
     "build": "tsx esbuild.config.ts",
     "watch": "tsx esbuild.config.ts --watch",
     "clean": "rimraf dist *.vsix",
     "rebuild": "pnpm run clean && pnpm run build && vsce package",
-    "test:activation": "node scripts/test-activation.mjs",
+    "test:unit": "vitest run",
+    "test:integration": "npx tsc -p tsconfig.test.json --outDir dist --noEmitOnError false; xvfb-run -a node ./dist/test/runTests.js",
     "package": "vsce package",
     "package:openvsx": "ovsx package",
     "publish": "vsce publish",
@@ -674,10 +669,13 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.39.4",
+    "@types/mocha": "10.0.10",
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.110.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
+    "@vitest/coverage-v8": "3.1.1",
+    "@vscode/test-electron": "2.5.2",
     "@vscode/vsce": "^3.7.1",
     "concurrently": "^9.1.2",
     "esbuild": "^0.28.0",
@@ -688,13 +686,16 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-security": "^3.0.1",
+    "glob": "^13.0.6",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
+    "mocha": "11.1.0",
     "ovsx": "^0.10.10",
     "prettier": "^3.8.1",
     "rimraf": "^6.0.1",
     "tsx": "^4.21.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.58.0"
+    "typescript-eslint": "^8.58.0",
+    "vitest": "3.1.1"
   }
 }

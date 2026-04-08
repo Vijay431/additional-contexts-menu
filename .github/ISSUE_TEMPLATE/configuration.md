@@ -42,7 +42,6 @@ What is actually happening?
   "additionalContextMenus.autoDetectProjects": true,
   "additionalContextMenus.supportedExtensions": [".ts", ".tsx", ".js", ".jsx"],
   "additionalContextMenus.copyCode.insertionPoint": "smart",
-  "additionalContextMenus.copyCode.handleImports": "merge",
   "additionalContextMenus.copyCode.preserveComments": true,
   "additionalContextMenus.saveAll.showNotification": true,
   "additionalContextMenus.saveAll.skipReadOnly": true,

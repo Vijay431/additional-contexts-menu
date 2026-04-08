@@ -21,7 +21,7 @@ import { getAccessibleQuickPickItem } from '../utils/accessibilityHelper';
  * Context Menu Manager
  *
  * Manages context menu commands and their visibility based on project type
- * and cursor position. Uses lazy loading via DI container for optimal bundle size.
+ * and cursor position. Uses lazy loading via DI container for an optimized bundle.
  *
  * @category Managers
  */
@@ -375,7 +375,7 @@ export class ContextMenuManager {
   private async copyCodeToTargetFile(
     code: string,
     targetFilePath: string,
-    sourceDocument: vscode.TextDocument,
+    _sourceDocument: vscode.TextDocument,
   ): Promise<void> {
     try {
       // Open target file
@@ -395,11 +395,6 @@ export class ContextMenuManager {
       await targetEditor.edit((editBuilder) => {
         editBuilder.insert(insertionPoint, `\n${code}\n`);
       });
-
-      // Handle imports if configured
-      if (this.configService.getCopyCodeConfig().handleImports === 'merge') {
-        await this.handleImportMerging(sourceDocument, targetDocument, code);
-      }
     } catch (error) {
       this.logger.error('Error copying code to target file', error);
       const isPermissionError =
@@ -455,40 +450,6 @@ export class ContextMenuManager {
       return new vscode.Position(firstExportLine, 0);
     } else {
       return new vscode.Position(document.lineCount, 0);
-    }
-  }
-
-  private async handleImportMerging(
-    sourceDocument: vscode.TextDocument,
-    targetDocument: vscode.TextDocument,
-    copiedCode: string,
-  ): Promise<void> {
-    try {
-      // Extract imports from copied code
-      const sourceImports = this.codeAnalysisService.extractImports(
-        copiedCode,
-        sourceDocument.languageId,
-      );
-
-      if (sourceImports.length === 0) {
-        return;
-      }
-
-      // Get existing imports from target file
-      const targetText = targetDocument.getText();
-      const targetImports = this.codeAnalysisService.extractImports(
-        targetText,
-        targetDocument.languageId,
-      );
-
-      // TODO: Implement smart import merging logic
-      // This would involve parsing import statements and merging them intelligently
-      this.logger.debug('Import merging not yet fully implemented', {
-        sourceImports: sourceImports.length,
-        targetImports: targetImports.length,
-      });
-    } catch (error) {
-      this.logger.warn('Error handling import merging', error);
     }
   }
 

@@ -19,17 +19,18 @@ This file is the single source of truth for the **Additional Context Menus** VS 
 ## Development Commands
 
 ```bash
-pnpm install             # install dependencies
-pnpm run build           # build extension (~1s)
-pnpm run watch           # watch mode
-pnpm run package         # production build
-pnpm run lint            # ESLint
-pnpm run lint:fix        # auto-fix lint issues
-pnpm run format          # format files with Prettier
-pnpm run test:activation # test activation
-pnpm run publish         # publish to VS Code Marketplace
-pnpm run publish:openvsx # publish to Open VSX Registry
-pnpm run lint-staged     # lint staged files
+pnpm install              # install dependencies
+pnpm run build            # build extension (~1s)
+pnpm run watch            # watch mode
+pnpm run package          # production build
+pnpm run lint             # ESLint
+pnpm run lint:fix         # auto-fix lint issues
+pnpm run format           # format files with Prettier
+pnpm run test:unit        # run unit tests (Vitest)
+pnpm run test:integration # run integration tests (Mocha + VS Code)
+pnpm run publish          # publish to VS Code Marketplace
+pnpm run publish:openvsx  # publish to Open VSX Registry
+pnpm run lint-staged      # lint staged files
 ```
 
 Press **F5** in VS Code to launch the Extension Development Host.
@@ -80,7 +81,15 @@ src/
     metrics.ts
     pathValidator.ts
 docs/                           # VS Code walkthrough markdown files
-site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-contexts-menu)
+site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-context-menus)
+test/
+  __mocks__/vscode.ts           # minimal vscode mock for Vitest unit tests
+  unit/                         # Vitest unit tests (infrastructure, no VS Code API)
+  suite/                        # Mocha integration tests (feature-level, live VS Code)
+  fixtures/                     # test fixture files (sample.ts, package.json files)
+  runTests.ts                   # @vscode/test-electron launcher
+vitest.config.ts                # Vitest config (aliases vscode to mock)
+tsconfig.test.json              # TypeScript config for compiling integration tests
 ```
 
 ### GitHub Pages site (`site/`)
@@ -216,7 +225,6 @@ Markdown files live in `docs/` (root-level, not the Jekyll site).
 | `additionalContextMenus.autoDetectProjects`               | boolean | `true`                        | Auto-detect frameworks                                      |
 | `additionalContextMenus.supportedExtensions`              | array   | `[".ts",".tsx",".js",".jsx"]` | File extensions for context menus                           |
 | `additionalContextMenus.copyCode.insertionPoint`          | enum    | `"smart"`                     | `smart` / `end` / `beginning`                               |
-| `additionalContextMenus.copyCode.handleImports`           | enum    | `"merge"`                     | `merge` / `duplicate` / `skip`                              |
 | `additionalContextMenus.copyCode.preserveComments`        | boolean | `true`                        | Preserve comments when copying                              |
 | `additionalContextMenus.saveAll.showNotification`         | boolean | `true`                        | Show notification after Save All                            |
 | `additionalContextMenus.saveAll.skipReadOnly`             | boolean | `true`                        | Skip read-only files                                        |
@@ -283,3 +291,11 @@ fi
 - All new changes should be added to the `CLAUDE.md` file
 - All new changes that user viewable should be added to the `docs`, `site` and `README.md` files
 - All new changes should be logged in the `CHANGELOG.md` file under unreleased section
+
+## Test Conventions:
+
+- **Unit tests** (`test/unit/`, run with `pnpm run test:unit`): infrastructure utilities and services where VS Code API is mocked. No live VS Code instance required.
+- **Integration tests** (`test/suite/`, run with `pnpm run test:unit:integration`): feature-level tests that exercise the 11 user-facing commands end-to-end in a real VS Code Extension Development Host.
+- Never add VS Code API-dependent logic to unit tests; never add pure-logic tests to the integration suite.
+- On Linux CI, integration tests run under `xvfb-run -a`.
+- All test descriptions must start with `"should "` (e.g. `it('should detect React', ...)`).

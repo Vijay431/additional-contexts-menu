@@ -95,12 +95,12 @@ export class ProjectDetectionService implements IProjectDetectionService {
   private constructor(
     logger: ILogger,
     private configService?: IConfigurationService,
+    cacheTTL: number = 10 * 60 * 1000,
   ) {
     this.logger = logger;
-    // Cache project type for 10 minutes
     this.projectTypeCache = new Cache<OldProjectType>({
       maxSize: 50,
-      defaultTTL: 10 * 60 * 1000, // 10 minutes
+      defaultTTL: cacheTTL,
       trackStats: false,
     });
     this.logger = logger;
@@ -128,8 +128,9 @@ export class ProjectDetectionService implements IProjectDetectionService {
   public static create(
     logger: ILogger,
     configService?: IConfigurationService,
+    cacheTTL?: number,
   ): ProjectDetectionService {
-    return new ProjectDetectionService(logger, configService);
+    return new ProjectDetectionService(logger, configService, cacheTTL);
   }
 
   public async detectProjectType(workspaceFolder?: vscode.WorkspaceFolder): Promise<ProjectType> {

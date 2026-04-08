@@ -5,7 +5,29 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.1] - 2026-04-08
+## [2.0.2] - 2026-04-08
+
+### Added
+
+- **🧪 Test suite**: Two-layer test infrastructure — Vitest unit tests for infrastructure utilities/services (`Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`) and Mocha + `@vscode/test-electron` integration tests for all 11 user-facing features end-to-end.
+- **CI test jobs**: `test-unit` and `test-integration` jobs run in parallel after `lint` and must pass before `build` in the CI pipeline.
+
+### Changed
+
+- **Repo name corrected**: All URLs and references updated from `additional-contexts-menu` to `additional-context-menus`.
+- **Bundle size references**: Replaced specific KB figures with "optimized" across all user-facing documentation and source comments.
+- **Cache TTL injectable**: `ProjectDetectionService.create()` and `FileDiscoveryService.create()` now accept an optional `cacheTTL` parameter (defaults: 10 min and 5 min respectively), enabling precise cache expiry testing without mocking.
+- **Test description convention**: All test descriptions now start with `"should "`.
+
+### Removed
+
+- **`copyCode.handleImports` setting**: Removed the unimplemented `handleImports` configuration option (`merge` / `duplicate` / `skip`) and all its references across source, types, config validator, configuration service, `ContextMenuManager`, `package.json`, and documentation. The import merging logic was never implemented (stub with TODO).
+
+### Fixed
+
+- **`CodeAnalysisService.extractImports`**: Fixed crash when `importClause.namedBindings` is `undefined` for default imports (e.g. `import React from 'react'`). `ts.isNamespaceImport()` was called without a null guard, causing a `TypeError`.
+
+## [2.0.1] - 2026-04-07
 
 ### Changed
 
@@ -59,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Improved accuracy for nested functions (returns inner-most function)
   - Eliminated false positives in comments and strings
   - Enhanced React component and hook detection
-  - Bundle size increased by ~275KB (TypeScript Compiler API dependency)
+  - Bundle size increased (TypeScript Compiler API dependency)
   - No breaking changes to public API
   - Updated 7 documentation files to reflect AST-based approach
 
@@ -167,7 +189,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **TypeScript-first scripting**: All build scripts use direct TypeScript execution via tsx
 - **📊 Performance Improvements**: Build system optimization
   - Enhanced build performance reporting with detailed metrics and target verification
-  - Bundle size monitoring with lazy-loaded services (60KB core + 26KB lazy)
+  - Bundle size monitoring with lazy-loaded services (optimized core + lazy)
   - Improved development experience with faster builds and better error reporting
 
 ### Technical Improvements
@@ -301,7 +323,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Build System Migration**: Migrated from webpack to esbuild for dramatically improved performance
 - **Build Speed**: 20x faster builds (~19 seconds → ~1 second)
-- **Bundle Size**: 95.9% size reduction (601KB → 24.75KB production bundle)
+- **Bundle Size**: Optimized production bundle with significant size reduction
 - **Development Experience**: Near-instant rebuilds in watch mode
 - **Bundle Analysis**: Added comprehensive bundle composition analysis script
 - **Dependency Optimization**: Removed 99 unnecessary webpack-related packages
@@ -343,7 +365,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented bundle analysis with metafile generation
 - Removed unused dependencies (webpack, terser-webpack-plugin, ts-loader, recast)
 - Updated all build scripts to use esbuild
-- Added bundle size monitoring and performance reporting
+- Added bundle optimization monitoring and performance reporting
 - Maintained full VS Code extension compatibility
 - Preserved all existing functionality with comprehensive test coverage
 
