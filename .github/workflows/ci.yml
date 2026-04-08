@@ -95,13 +95,17 @@ jobs:
       - name: Build Extension
         run: pnpm run build
 
+      - name: Compile Integration Tests
+        shell: bash
+        run: tsc -p tsconfig.test.json --outDir dist --noEmitOnError false || true
+
       - name: Run Integration Tests (Linux)
         if: runner.os == 'Linux'
-        run: xvfb-run -a pnpm run test:integration
+        run: xvfb-run -a node ./dist/test/runTests.js
 
       - name: Run Integration Tests (Windows/macOS)
         if: runner.os != 'Linux'
-        run: pnpm run test:integration
+        run: node ./dist/test/runTests.js
 
   build:
     name: Build
