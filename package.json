@@ -690,7 +690,7 @@
     "eslint-plugin-security": "^3.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "ovsx": "^0.10.10",
+    "ovsx": "^0.10.11",
     "prettier": "^3.8.1",
     "rimraf": "^6.0.1",
     "tsx": "^4.21.0",
