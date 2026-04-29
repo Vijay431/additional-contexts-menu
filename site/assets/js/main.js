@@ -93,17 +93,17 @@ function initializeScrollEffects() {
         if (delayCounter > 0) {
           entry.target.style.transitionDelay = `${delayCounter * 100}ms`;
         }
-        
+
         entry.target.classList.add('animate-in');
-        
+
         delayCounter++;
-        
+
         // Reset the counter when batch finishes
         clearTimeout(resetDelayTimeout);
         resetDelayTimeout = setTimeout(() => {
           delayCounter = 0;
         }, 100);
-        
+
         observer.unobserve(entry.target);
       }
     });

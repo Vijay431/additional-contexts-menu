@@ -1,0 +1,8 @@
+.kiro
+.vscode-test
+dist
+node_modules
+
+site/_site/
+site/.bundle
+site/vendor

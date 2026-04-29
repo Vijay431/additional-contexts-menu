@@ -28,5 +28,6 @@
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules", ".vscode-test", "test/e2e/**/*", "test/suite/**/*", "dist/test/**/*"]
+  "exclude": ["node_modules", ".vscode-test", "test/e2e/**/*", "test/suite/**/*", "dist/test/**/*"],
+  "include": ["src/**/*"]
 }
