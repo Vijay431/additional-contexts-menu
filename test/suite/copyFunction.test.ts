@@ -33,7 +33,9 @@ suite('Copy Function', () => {
     const editor = vscode.window.activeTextEditor!;
     editor.selection = new vscode.Selection(0, 0, 0, 0);
 
-    await assert.doesNotReject(Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.copyFunction')));
+    await assert.doesNotReject(
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.copyFunction')),
+    );
   });
 
   test('should detects innermost function when cursor is in nested function', async () => {

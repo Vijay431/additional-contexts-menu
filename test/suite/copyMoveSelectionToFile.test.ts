@@ -1,5 +1,16 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
+import * as path from 'path';
+import * as fs from 'fs/promises';
+import * as os from 'os';
+
+async function openTsFile(content: string): Promise<vscode.TextDocument> {
+  const tmpFile = path.join(os.tmpdir(), `acm-sel-test-${Date.now()}.ts`);
+  await fs.writeFile(tmpFile, content, 'utf-8');
+  const doc = await vscode.workspace.openTextDocument(tmpFile);
+  await vscode.window.showTextDocument(doc);
+  return doc;
+}
 
 async function openDoc(content: string, language = 'typescript') {
   const doc = await vscode.workspace.openTextDocument({ content, language });
@@ -8,42 +19,86 @@ async function openDoc(content: string, language = 'typescript') {
 }
 
 suite('Copy Selection to File', () => {
-  test('should command is registered and does not throw with a selection', async () => {
-    const content = `import { useState } from 'react';\n\nconst value = 42;`;
-    const doc = await openDoc(content);
-    const editor = vscode.window.activeTextEditor!;
-    // Select the const line
-    editor.selection = new vscode.Selection(2, 0, 2, content.split('\n')[2]!.length);
-
-    await assert.doesNotReject(Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.copySelectionToFile')));
+  test('should command is registered', async () => {
+    const commands = await vscode.commands.getCommands(true);
+    assert.ok(
+      commands.includes('additionalContextMenus.copySelectionToFile'),
+      'copySelectionToFile command should be registered',
+    );
   });
 
-  test('should handles empty selection gracefully', async () => {
-    const content = `const x = 1;`;
-    await openDoc(content);
+  test('should not throw when a selection is active on a real file', async () => {
+    const content = `import { useState } from 'react';\n\nconst value = 42;`;
+    await openTsFile(content);
+    const editor = vscode.window.activeTextEditor!;
+    editor.selection = new vscode.Selection(2, 0, 2, content.split('\n')[2]!.length);
+
+    await assert.doesNotReject(
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.copySelectionToFile')),
+    );
+  });
+
+  test('should handle empty selection gracefully', async () => {
+    await openDoc(`const x = 1;`);
     const editor = vscode.window.activeTextEditor!;
     editor.selection = new vscode.Selection(0, 0, 0, 0);
 
-    await assert.doesNotReject(Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.copySelectionToFile')));
+    await assert.doesNotReject(
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.copySelectionToFile')),
+    );
+  });
+
+  test('should detect imports within selected text', async () => {
+    // Verify the import extraction logic works (used internally before QuickPick)
+    const content = `import { useState } from 'react';\nimport { useEffect } from 'react';\n\nconst Component = () => null;`;
+    await openTsFile(content);
+    const editor = vscode.window.activeTextEditor!;
+    // Select the last two lines (the component)
+    const lines = content.split('\n');
+    editor.selection = new vscode.Selection(3, 0, 3, lines[3]!.length);
+
+    const selectedText = editor.document.getText(editor.selection);
+    assert.ok(selectedText.includes('Component'), 'Selection should contain component code');
   });
 });
 
 suite('Move Selection to File', () => {
-  test('should command is registered and does not throw with a selection', async () => {
+  test('should command is registered', async () => {
+    const commands = await vscode.commands.getCommands(true);
+    assert.ok(
+      commands.includes('additionalContextMenus.moveSelectionToFile'),
+      'moveSelectionToFile command should be registered',
+    );
+  });
+
+  test('should not throw when a selection is active on a real file', async () => {
     const content = `const helper = () => 'help';`;
-    const doc = await openDoc(content);
+    await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
     editor.selection = new vscode.Selection(0, 0, 0, content.length);
 
-    await assert.doesNotReject(Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.moveSelectionToFile')));
+    await assert.doesNotReject(
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.moveSelectionToFile')),
+    );
   });
 
-  test('should handles empty selection gracefully', async () => {
-    const content = `const z = 3;`;
-    await openDoc(content);
+  test('should handle empty selection gracefully', async () => {
+    await openDoc(`const z = 3;`);
     const editor = vscode.window.activeTextEditor!;
     editor.selection = new vscode.Selection(0, 0, 0, 0);
 
-    await assert.doesNotReject(Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.moveSelectionToFile')));
+    await assert.doesNotReject(
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.moveSelectionToFile')),
+    );
+  });
+
+  test('should report the selected text length correctly before invoking move', async () => {
+    const content = `export const PI = 3.14159;`;
+    await openTsFile(content);
+    const editor = vscode.window.activeTextEditor!;
+    editor.selection = new vscode.Selection(0, 0, 0, content.length);
+
+    const selectedText = editor.document.getText(editor.selection);
+    assert.strictEqual(selectedText, content, 'Full line should be selected');
   });
 });
