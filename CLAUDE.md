@@ -254,6 +254,7 @@ Markdown files live in `docs/` (root-level, not the Jekyll site).
 | `additionalContextMenus.accessibility.verbosity`          | enum    | `"normal"`                    | `minimal` / `normal` / `verbose`                            |
 | `additionalContextMenus.accessibility.screenReaderMode`   | boolean | `false`                       | Enhanced screen reader support                              |
 | `additionalContextMenus.accessibility.keyboardNavigation` | boolean | `true`                        | Show keyboard hints in Quick Pick                           |
+| `additionalContextMenus.fileDiscovery.cacheTTL`           | number  | `300000`                      | File discovery cache TTL in ms (0 = disabled)               |
 
 ## Release & Versioning Strategy
 

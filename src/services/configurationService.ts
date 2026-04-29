@@ -236,6 +236,11 @@ export class ConfigurationService implements IConfigurationService {
     return this.getConfiguration().terminal;
   }
 
+  public getFileDiscoveryCacheTTL(): number {
+    const config = vscode.workspace.getConfiguration(this.configSection);
+    return config.get<number>('fileDiscovery.cacheTTL', 5 * 60 * 1000);
+  }
+
   public onConfigurationChanged(callback: () => void): vscode.Disposable {
     return vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration(this.configSection)) {

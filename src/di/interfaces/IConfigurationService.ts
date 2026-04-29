@@ -113,6 +113,15 @@ export interface IConfigurationService {
   getTerminalConfig(): ExtensionConfig['terminal'];
 
   /**
+   * Get the file discovery cache TTL in milliseconds
+   *
+   * Uses the 'additionalContextMenus.fileDiscovery.cacheTTL' setting.
+   *
+   * @returns Cache TTL in ms (default 300000, i.e. 5 minutes)
+   */
+  getFileDiscoveryCacheTTL(): number;
+
+  /**
    * Listen for configuration changes
    *
    * Registers a callback that will be invoked when any extension

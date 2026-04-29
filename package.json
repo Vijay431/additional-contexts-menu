@@ -426,6 +426,13 @@
           "default": true,
           "description": "Enable enhanced keyboard navigation hints in Quick Pick dialogs",
           "markdownDescription": "When `true`, Quick Pick dialogs display keyboard shortcut hints to help navigate options without a mouse.\n\n**Example:** Set to `false` if you prefer a cleaner Quick Pick UI without navigation hints."
+        },
+        "additionalContextMenus.fileDiscovery.cacheTTL": {
+          "type": "number",
+          "default": 300000,
+          "minimum": 0,
+          "description": "Time-to-live (ms) for the file discovery cache. Set to 0 to disable caching.",
+          "markdownDescription": "How long (in milliseconds) discovered file lists are cached before being refreshed.\n\n- Default: `300000` (5 minutes)\n- Set to `0` to disable caching entirely.\n\n**Example:** Set to `60000` for a 1-minute cache in rapidly-changing workspaces."
         }
       }
     },

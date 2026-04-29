@@ -252,6 +252,7 @@ export async function initializeContainer(context: {
       accessibilityService,
       configService,
       projectDetection,
+      configService.getFileDiscoveryCacheTTL(),
     );
   });
 
