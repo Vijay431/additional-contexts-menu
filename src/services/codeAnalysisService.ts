@@ -7,7 +7,6 @@ import type {
   ImportInfo,
 } from '../di/interfaces/ICodeAnalysisService';
 import type { ILogger } from '../di/interfaces/ILogger';
-import { FunctionInfo as OldFunctionInfo } from '../types/extension';
 import { Logger } from '../utils/logger';
 
 export class CodeAnalysisService implements ICodeAnalysisService {
@@ -70,29 +69,6 @@ export class CodeAnalysisService implements ICodeAnalysisService {
     }
   }
 
-  /**
-   * @deprecated For backward compatibility, use findFunctionAtPosition instead
-   */
-  public async findFunctionAtPositionOld(
-    document: vscode.TextDocument,
-    position: vscode.Position,
-  ): Promise<OldFunctionInfo | null> {
-    const result = await this.findFunctionAtPosition(document, position);
-    if (!result) return null;
-
-    return {
-      name: result.name,
-      startLine: result.startLine,
-      endLine: result.endLine,
-      startColumn: 0,
-      endColumn: 0,
-      type: result.type === 'arrow' ? 'arrow' : result.type === 'method' ? 'method' : 'function',
-      isExported: false,
-      hasDecorators: false,
-      fullText: result.fullText,
-    };
-  }
-
   private parseSourceFile(code: string, fileName: string): ts.SourceFile {
     return ts.createSourceFile(fileName, code, ts.ScriptTarget.Latest, true);
   }
@@ -134,30 +110,6 @@ export class CodeAnalysisService implements ICodeAnalysisService {
 
     visit(sourceFile);
     return result;
-  }
-
-  private isFunctionNode(node: ts.Node): boolean {
-    return (
-      ts.isFunctionDeclaration(node) ||
-      ts.isArrowFunction(node) ||
-      ts.isMethodDeclaration(node) ||
-      ts.isFunctionExpression(node) ||
-      this.isVariableFunctionDeclaration(node)
-    );
-  }
-
-  private isVariableFunctionDeclaration(node: ts.Node): boolean {
-    if (ts.isVariableStatement(node)) {
-      const declaration = node.declarationList.declarations[0];
-      if (declaration?.initializer) {
-        return (
-          ts.isArrowFunction(declaration.initializer) ||
-          ts.isFunctionExpression(declaration.initializer)
-        );
-      }
-      return false;
-    }
-    return false;
   }
 
   private extractFunctionInfo(node: ts.FunctionLike, sourceFile: ts.SourceFile): FunctionInfo {
@@ -256,21 +208,6 @@ export class CodeAnalysisService implements ICodeAnalysisService {
     return 'function';
   }
 
-  private isExported(node: ts.Node): boolean {
-    if (ts.canHaveModifiers(node)) {
-      return node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword) ?? false;
-    }
-    return false;
-  }
-
-  private hasDecorators(node: ts.Node): boolean {
-    if ('decorators' in node) {
-      const decorators = (node as { decorators?: ts.NodeArray<ts.Decorator> }).decorators;
-      return decorators !== undefined && decorators.length > 0;
-    }
-    return false;
-  }
-
   public extractImports(code: string, _languageId: string): ImportInfo[] {
     const imports: ImportInfo[] = [];
 
@@ -309,15 +246,20 @@ export class CodeAnalysisService implements ICodeAnalysisService {
             }
           }
 
-          imports.push({
+          const names =
+            type === 'named' || type === 'namespace'
+              ? extractImportNames(statement.importClause?.namedBindings)
+              : undefined;
+
+          const importInfo: ImportInfo = {
             fullText: fullText.trim(),
             type,
             module: moduleLiteral.replace(/['"]/g, ''),
-            names:
-              type === 'named' || type === 'namespace'
-                ? extractImportNames(statement.importClause?.namedBindings)
-                : undefined,
-          });
+          };
+          if (names !== undefined) {
+            importInfo.names = names;
+          }
+          imports.push(importInfo);
         }
       });
     } catch (error) {

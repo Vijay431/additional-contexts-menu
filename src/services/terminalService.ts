@@ -344,10 +344,11 @@ export class TerminalService implements ITerminalService {
   }
 
   public async executeCommand(command: string, directoryPath?: string): Promise<void> {
-    const terminal = vscode.window.createTerminal({
-      name: 'Command Execution',
-      cwd: directoryPath,
-    });
+    const terminalOptions: vscode.TerminalOptions = { name: 'Command Execution' };
+    if (directoryPath !== undefined) {
+      terminalOptions.cwd = directoryPath;
+    }
+    const terminal = vscode.window.createTerminal(terminalOptions);
     terminal.sendText(command);
     terminal.show();
   }

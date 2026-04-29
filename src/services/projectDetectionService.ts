@@ -9,7 +9,6 @@ import type {
   IProjectDetectionService,
   ProjectType,
 } from '../di/interfaces/IProjectDetectionService';
-import { ProjectType as OldProjectType } from '../types/extension';
 import { Cache } from '../utils/cache';
 import { Logger } from '../utils/logger';
 import { isSafeFilePath } from '../utils/pathValidator';
@@ -90,15 +89,15 @@ import { isSafeFilePath } from '../utils/pathValidator';
 export class ProjectDetectionService implements IProjectDetectionService {
   private static instance: ProjectDetectionService | undefined;
   private logger: ILogger;
-  private projectTypeCache: Cache<OldProjectType>;
+  private projectTypeCache: Cache<ProjectType>;
 
   private constructor(
     logger: ILogger,
-    private configService?: IConfigurationService,
+    _configService?: IConfigurationService,
     cacheTTL: number = 10 * 60 * 1000,
   ) {
     this.logger = logger;
-    this.projectTypeCache = new Cache<OldProjectType>({
+    this.projectTypeCache = new Cache<ProjectType>({
       maxSize: 50,
       defaultTTL: cacheTTL,
       trackStats: false,
@@ -308,24 +307,6 @@ export class ProjectDetectionService implements IProjectDetectionService {
     };
   }
 
-  /**
-   * Legacy method for backward compatibility
-   * @deprecated Use detectProjectType() instead
-   */
-  private createOldProjectType(
-    isNodeProject: boolean,
-    frameworks: string[],
-    hasTypeScript: boolean,
-    supportLevel: 'full' | 'partial' | 'none',
-  ): OldProjectType {
-    return {
-      isNodeProject,
-      frameworks,
-      hasTypeScript,
-      supportLevel,
-    };
-  }
-
   public async updateContextVariables(): Promise<void> {
     const projectType = await this.detectProjectType();
 
@@ -353,7 +334,7 @@ export class ProjectDetectionService implements IProjectDetectionService {
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.hasNextjs',
-      projectType.frameworks.includes('nextjs'),
+      projectType.frameworks.includes('next'),
     );
     await vscode.commands.executeCommand(
       'setContext',

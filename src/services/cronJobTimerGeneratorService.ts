@@ -8,7 +8,7 @@ import {
 import { Logger } from '../utils/logger';
 
 export interface CronSchedule {
-  expression: string;
+  value: string;
   description: string;
 }
 
@@ -72,7 +72,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every minute',
-            expression: '* * * * *',
+            value: '* * * * *',
             description: 'Run every minute',
           },
           {
@@ -84,7 +84,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every hour',
-            expression: '0 * * * *',
+            value: '0 * * * *',
             description: 'Run at minute 0 of every hour',
           },
           {
@@ -96,7 +96,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every day at midnight',
-            expression: '0 0 * * *',
+            value: '0 0 * * *',
             description: 'Run at 00:00 daily',
           },
           {
@@ -108,7 +108,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every day at 9am',
-            expression: '0 9 * * *',
+            value: '0 9 * * *',
             description: 'Run at 09:00 daily',
           },
           {
@@ -120,7 +120,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every Monday at 9am',
-            expression: '0 9 * * 1',
+            value: '0 9 * * 1',
             description: 'Run at 09:00 every Monday',
           },
           {
@@ -132,7 +132,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every 1st of month at midnight',
-            expression: '0 0 1 * *',
+            value: '0 0 1 * *',
             description: 'Run at 00:00 on 1st of each month',
           },
           {
@@ -144,7 +144,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every weekday at 9am',
-            expression: '0 9 * * 1-5',
+            value: '0 9 * * 1-5',
             description: 'Run at 09:00 Mon-Fri',
           },
           {
@@ -156,7 +156,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Every 6 hours',
-            expression: '0 */6 * * *',
+            value: '0 */6 * * *',
             description: 'Run every 6 hours',
           },
           {
@@ -168,7 +168,7 @@ export class CronJobTimerGeneratorService {
         getAccessibleQuickPickItem(
           {
             label: 'Custom schedule',
-            expression: 'custom',
+            value: 'custom',
             description: 'Define your own schedule',
           },
           {
@@ -189,14 +189,14 @@ export class CronJobTimerGeneratorService {
 
       let cronExpression: string;
 
-      if (selected.expression === 'custom') {
+      if (selected.value === 'custom') {
         const customExpression = await this.promptForCustomSchedule();
         if (!customExpression) {
           return;
         }
         cronExpression = customExpression;
       } else {
-        cronExpression = selected.expression;
+        cronExpression = selected.value ?? selected.label;
         await this.accessibilityService.announce(
           `Selected schedule: ${selected.label}. Expression: ${cronExpression}`,
           'normal',
@@ -210,9 +210,7 @@ export class CronJobTimerGeneratorService {
       await this.insertCronExpression(cronExpression);
     } catch (error) {
       this.logger.error('Error generating cron expression', error);
-      vscode.window.showErrorMessage(
-        `Failed to generate cron expression: ${(error as Error).message}`,
-      );
+      vscode.window.showErrorMessage(`Failed to generate cron value: ${(error as Error).message}`);
       await this.accessibilityService.announceError('Generate Cron', (error as Error).message);
     }
   }
@@ -325,7 +323,7 @@ export class CronJobTimerGeneratorService {
     return cronExpression;
   }
 
-  private async insertCronExpression(expression: string): Promise<void> {
+  private async insertCronExpression(value: string): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
       vscode.window.showErrorMessage('No active editor found');
@@ -334,35 +332,33 @@ export class CronJobTimerGeneratorService {
     }
 
     await editor.edit((editBuilder) => {
-      editBuilder.insert(editor.selection.active, expression);
+      editBuilder.insert(editor.selection.active, value);
     });
 
-    const description = this.getCronDescription(expression);
-    vscode.window.showInformationMessage(
-      `Inserted cron expression: ${expression} - ${description}`,
-    );
+    const description = this.getCronDescription(value);
+    vscode.window.showInformationMessage(`Inserted cron value: ${value} - ${description}`);
     await this.accessibilityService.announceSuccess(
       'Insert Cron Expression',
-      `Expression ${expression} inserted: ${description}`,
+      `Expression ${value} inserted: ${description}`,
     );
-    this.logger.info(`Cron expression inserted: ${expression}`);
+    this.logger.info(`Cron expression inserted: ${value}`);
   }
 
-  private getCronDescription(expression: string): string {
-    const parts = expression.split(' ');
+  private getCronDescription(value: string): string {
+    const parts = value.split(' ');
     if (parts.length !== 5) {
       return 'Custom cron schedule';
     }
 
     const [min, hour, dom, month, dow] = parts;
 
-    if (expression === '* * * * *') {
+    if (value === '* * * * *') {
       return 'Run every minute';
     }
-    if (expression === '0 * * * *') {
+    if (value === '0 * * * *') {
       return 'Run every hour at minute 0';
     }
-    if (expression === '0 0 * * *') {
+    if (value === '0 0 * * *') {
       return 'Run daily at midnight';
     }
     if (min === '0' && dom === '*' && month === '*' && dow === '*') {
@@ -372,6 +368,6 @@ export class CronJobTimerGeneratorService {
       return `Run on day ${dow} at ${hour ?? '0'}:${min ?? '0'}`;
     }
 
-    return expression;
+    return value;
   }
 }

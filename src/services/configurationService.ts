@@ -251,7 +251,7 @@ export class ConfigurationService implements IConfigurationService {
     target?: 'Global' | 'Workspace' | 'WorkspaceFolder' | undefined,
   ): Promise<void> {
     const config = vscode.workspace.getConfiguration(this.configSection);
-    await config.update(key, value, target as vscode.ConfigurationTarget | undefined);
+    await config.update(key, value, target as unknown as vscode.ConfigurationTarget | undefined);
     this.logger.info(`Configuration updated: ${key} = ${JSON.stringify(value)}`);
   }
 }

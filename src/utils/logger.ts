@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 
 import type { ILogger } from '../di/interfaces/ILogger';
-import type { IMetricCollector } from '../utils/metrics';
 
 export enum LogLevel {
   DEBUG = 0,
@@ -61,7 +60,6 @@ export class Logger implements ILogger {
   private outputChannel: vscode.OutputChannel;
   private logLevel: LogLevel = LogLevel.INFO;
   private logFormat: LogFormat = LogFormat.TEXT;
-  private metricsCollector?: IMetricCollector;
 
   private constructor(outputChannel?: vscode.OutputChannel) {
     this.outputChannel =
@@ -87,22 +85,8 @@ export class Logger implements ILogger {
    * @param outputChannel Optional VS Code output channel
    * @returns A new Logger instance
    */
-  public static create(
-    metricsCollector?: IMetricCollector,
-    outputChannel?: vscode.OutputChannel,
-  ): Logger {
-    const logger = new Logger(outputChannel);
-    if (metricsCollector) {
-      logger.setMetricsCollector(metricsCollector);
-    }
-    return logger;
-  }
-
-  /**
-   * Set the metrics collector for performance tracking
-   */
-  public setMetricsCollector(metricsCollector: IMetricCollector): void {
-    this.metricsCollector = metricsCollector;
+  public static create(outputChannel?: vscode.OutputChannel): Logger {
+    return new Logger(outputChannel);
   }
 
   /**
@@ -179,7 +163,7 @@ export class Logger implements ILogger {
         message,
       };
       if (data) {
-        logEntry.data = data;
+        logEntry['data'] = data;
       }
       this.outputChannel.appendLine(JSON.stringify(logEntry));
     } else {

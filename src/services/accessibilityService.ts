@@ -207,7 +207,12 @@ export class AccessibilityService implements IAccessibilityService {
 
     try {
       // Use VS Code's accessibility API for screen reader announcements
-      await vscode.accessibility.announce(message);
+      const vsCodeAny = vscode as unknown as {
+        accessibility?: { announce(msg: string): Promise<void> };
+      };
+      if (vsCodeAny.accessibility) {
+        await vsCodeAny.accessibility.announce(message);
+      }
 
       this.logger.debug(`Accessibility announcement: ${message}`);
     } catch (error) {

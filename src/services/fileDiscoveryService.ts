@@ -19,6 +19,8 @@ import { Cache } from '../utils/cache';
 import { Logger } from '../utils/logger';
 import { isSafeFilePath } from '../utils/pathValidator';
 
+type FileQuickPickItem = vscode.QuickPickItem & { filePath: string };
+
 /**
  * File Discovery Service
  *
@@ -72,7 +74,7 @@ export class FileDiscoveryService implements IFileDiscoveryService {
     logger: ILogger,
     accessibilityService: IAccessibilityService,
     private configService?: IConfigurationService,
-    private projectDetectionService?: unknown,
+    _projectDetectionService?: unknown,
     cacheTTL: number = 5 * 60 * 1000,
   ) {
     this.logger = logger;
@@ -287,11 +289,11 @@ export class FileDiscoveryService implements IFileDiscoveryService {
     const quickPickItems = this.formatFileList(compatibleFiles);
     const placeholder = formatAccessiblePlaceholder('Select target file', compatibleFiles.length);
 
-    const selected = await vscode.window.showQuickPick(quickPickItems, {
+    const selected = (await vscode.window.showQuickPick(quickPickItems, {
       placeHolder: placeholder,
       matchOnDescription: true,
       matchOnDetail: true,
-    });
+    })) as FileQuickPickItem | undefined;
 
     if (selected) {
       const fileName = selected.label;
@@ -301,7 +303,7 @@ export class FileDiscoveryService implements IFileDiscoveryService {
     return selected?.filePath;
   }
 
-  private formatFileList(files: CompatibleFile[]): (vscode.QuickPickItem & { filePath: string })[] {
+  private formatFileList(files: CompatibleFile[]): FileQuickPickItem[] {
     return files.map((file, index) => {
       const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
       const workspaceName = workspaceFolder?.name ?? 'workspace';
@@ -332,7 +334,7 @@ export class FileDiscoveryService implements IFileDiscoveryService {
           ariaLabel,
           ariaDescription: accessibleDescription,
         },
-      );
+      ) as unknown as FileQuickPickItem;
     });
   }
 
@@ -398,13 +400,5 @@ export class FileDiscoveryService implements IFileDiscoveryService {
     }
     // Default check
     return ['.ts', '.tsx', '.js', '.jsx'].includes(extension);
-  }
-
-  /**
-   * Legacy compatibility method
-   * @deprecated Use isExtensionSupported instead
-   */
-  public isCompatibleExtensionLegacy(source: string, target: string): boolean {
-    return this.isExtensionSupported(target);
   }
 }

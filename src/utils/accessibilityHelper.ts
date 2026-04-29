@@ -72,7 +72,12 @@ export function getAccessibleLabel(label: string, description?: string, detail?:
  */
 export async function announceToScreenReader(message: string, _priority = false): Promise<void> {
   try {
-    await vscode.accessibility.announce(message);
+    const vsCodeAny = vscode as unknown as {
+      accessibility?: { announce(msg: string): Promise<void> };
+    };
+    if (vsCodeAny.accessibility) {
+      await vsCodeAny.accessibility.announce(message);
+    }
   } catch (error) {
     console.error('Failed to announce to screen reader:', error);
   }
@@ -119,12 +124,12 @@ export function formatAccessiblePlaceholder(baseText: string, count: number): st
  * });
  */
 export function getAccessibleQuickPickItem<T = unknown>(
-  item: vscode.QuickPickItem & { value?: T },
+  item: vscode.QuickPickItem & { value?: T } & Record<string, unknown>,
   options: {
     ariaLabel?: string;
     ariaDescription?: string;
   } = {},
-): vscode.QuickPickItem & { value?: T } {
+): vscode.QuickPickItem & { value?: T } & Record<string, unknown> {
   return {
     ...item,
     ariaLabel: options.ariaLabel ?? item.label,
