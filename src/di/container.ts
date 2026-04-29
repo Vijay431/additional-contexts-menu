@@ -76,7 +76,9 @@ export class DIContainer {
   private parent?: DIContainer;
 
   constructor(parent?: DIContainer) {
-    this.parent = parent;
+    if (parent !== undefined) {
+      this.parent = parent;
+    }
   }
 
   /**
@@ -210,7 +212,7 @@ export async function initializeContainer(context: {
   // Register all services as singletons
   // Logger is the root service with no dependencies
   container.registerSingleton<ILogger>(TYPES.Logger, () => {
-    const logger = new Logger();
+    const logger = Logger.getInstance();
     context.subscriptions.push({ dispose: () => logger.dispose() });
     return logger;
   });

@@ -26,14 +26,14 @@ import type { ICommandHandler } from './ICommandHandler';
  * Saves all open text documents.
  */
 export class SaveAllCommand extends BaseCommandHandler implements ICommandHandler {
-  constructor(fileSaveService: IFileSaveService) {
+  constructor(
+    fileSaveService: IFileSaveService,
+    logger: import('../di/interfaces/ILogger').ILogger,
+  ) {
     super(
       'SaveAll',
-      fileSaveService as unknown as {
-        debug: (msg: string, data?: unknown) => void;
-        info: (msg: string, data?: unknown) => void;
-      },
-      {} as { announce: (msg: string, verbosity?: string) => Promise<void> },
+      logger,
+      {} as import('../di/interfaces/IAccessibilityService').IAccessibilityService,
     );
     this.fileSaveService = fileSaveService;
   }

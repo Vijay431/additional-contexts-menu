@@ -64,7 +64,7 @@ export class CommandRegistry {
   >();
   private readonly disposables: vscode.Disposable[] = [];
 
-  constructor(private readonly context: vscode.ExtensionContext) {}
+  constructor(private readonly _context: vscode.ExtensionContext) {}
 
   /**
    * Register a command

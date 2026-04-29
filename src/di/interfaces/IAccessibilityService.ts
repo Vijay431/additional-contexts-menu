@@ -16,6 +16,8 @@
  * @module di/interfaces/IAccessibilityService
  */
 
+import type * as vscode from 'vscode';
+
 /**
  * Accessibility verbosity levels
  */
@@ -72,6 +74,16 @@ export interface IAccessibilityService {
    * @returns Promise that resolves when announcement is made
    */
   announceError(operation: string, error: string): Promise<void>;
+
+  /**
+   * Announce progress for long-running operations
+   *
+   * @param operation - Name of the operation in progress
+   * @param current - Current step number
+   * @param total - Total number of steps
+   * @returns Promise that resolves when announcement is made
+   */
+  announceProgress(operation: string, current: number, total: number): Promise<void>;
 
   /**
    * Check if screen reader mode is enabled
