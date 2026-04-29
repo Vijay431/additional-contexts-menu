@@ -30,9 +30,7 @@ describe('getAccessibleLabel', () => {
 
 describe('formatAccessiblePlaceholder', () => {
   it('should return a no-items message for count 0', () => {
-    expect(formatAccessiblePlaceholder('Select file', 0)).toBe(
-      'Select file (no items available)',
-    );
+    expect(formatAccessiblePlaceholder('Select file', 0)).toBe('Select file (no items available)');
   });
 
   it('should return singular for count 1', () => {
@@ -40,9 +38,7 @@ describe('formatAccessiblePlaceholder', () => {
   });
 
   it('should return plural for count greater than 1', () => {
-    expect(formatAccessiblePlaceholder('Select file', 5)).toBe(
-      'Select file (5 items available)',
-    );
+    expect(formatAccessiblePlaceholder('Select file', 5)).toBe('Select file (5 items available)');
   });
 });
 
@@ -68,9 +64,7 @@ describe('createAccessibleValidationMessage', () => {
   });
 
   it('should prefix the error message with "Error:"', () => {
-    expect(createAccessibleValidationMessage(false, 'Name is empty')).toBe(
-      'Error: Name is empty',
-    );
+    expect(createAccessibleValidationMessage(false, 'Name is empty')).toBe('Error: Name is empty');
   });
 
   it('should return undefined when invalid and no error message is provided', () => {

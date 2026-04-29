@@ -68,7 +68,7 @@ describe('Cache', () => {
   it('should track hit and miss stats', () => {
     cache = new Cache({ maxSize: 3, defaultTTL: 1000, trackStats: true });
     cache.set('k', 'v');
-    cache.get('k');       // hit
+    cache.get('k'); // hit
     cache.get('missing'); // miss
     const stats = cache.getStats();
     expect(stats.hits).toBe(1);

@@ -9,7 +9,9 @@ function makeLogger(): ILogger & { warnings: string[] } {
     warnings,
     debug: () => {},
     info: () => {},
-    warn: (msg: string) => { warnings.push(msg); },
+    warn: (msg: string) => {
+      warnings.push(msg);
+    },
     error: () => {},
     dispose: () => {},
   };
@@ -80,6 +82,6 @@ describe('ConfigValidator.validate', () => {
     const config = validConfig();
     (config.copyCode.insertionPoint as string) = 'bad';
     ConfigValidator.validate(config, logger);
-    expect((config.copyCode.insertionPoint as string)).toBe('bad');
+    expect(config.copyCode.insertionPoint as string).toBe('bad');
   });
 });
