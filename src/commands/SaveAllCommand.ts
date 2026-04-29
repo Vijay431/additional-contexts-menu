@@ -14,7 +14,9 @@
  * @subcategory File Operations
  */
 
+import type { IAccessibilityService } from '../di/interfaces/IAccessibilityService';
 import type { IFileSaveService } from '../di/interfaces/IFileSaveService';
+import type { ILogger } from '../di/interfaces/ILogger';
 
 import { BaseCommandHandler } from './BaseCommandHandler';
 import type { CommandResult } from './BaseCommandHandler';
@@ -28,13 +30,10 @@ import type { ICommandHandler } from './ICommandHandler';
 export class SaveAllCommand extends BaseCommandHandler implements ICommandHandler {
   constructor(
     fileSaveService: IFileSaveService,
-    logger: import('../di/interfaces/ILogger').ILogger,
+    logger: ILogger,
+    accessibilityService: IAccessibilityService,
   ) {
-    super(
-      'SaveAll',
-      logger,
-      {} as import('../di/interfaces/IAccessibilityService').IAccessibilityService,
-    );
+    super('SaveAll', logger, accessibilityService);
     this.fileSaveService = fileSaveService;
   }
 

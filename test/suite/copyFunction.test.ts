@@ -15,7 +15,7 @@ async function openTsFile(content: string): Promise<vscode.TextDocument> {
 }
 
 suite('Copy Function', () => {
-  test('should copies function text to clipboard when cursor is inside function', async () => {
+  test('should copy function text to clipboard when cursor is inside function', async () => {
     const content = `function greet(name: string): string {\n  return 'Hello ' + name;\n}`;
     const doc = await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
@@ -27,7 +27,7 @@ suite('Copy Function', () => {
     assert.ok(clipboard.includes('greet'), 'Clipboard should contain function name');
   });
 
-  test('should shows error message when cursor is outside any function', async () => {
+  test('should show error message when cursor is outside any function', async () => {
     const content = `const x = 1;\nconst y = 2;`;
     await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
@@ -38,7 +38,7 @@ suite('Copy Function', () => {
     );
   });
 
-  test('should detects innermost function when cursor is in nested function', async () => {
+  test('should detect innermost function when cursor is in nested function', async () => {
     const content = `function outer() {\n  function inner() {\n    return 42;\n  }\n  return inner();\n}`;
     await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
@@ -50,7 +50,7 @@ suite('Copy Function', () => {
     assert.ok(clipboard.includes('inner'), 'Should copy innermost function');
   });
 
-  test('should handles arrow function', async () => {
+  test('should handle arrow function', async () => {
     const content = `const add = (a: number, b: number) => {\n  return a + b;\n};`;
     await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;

@@ -323,18 +323,18 @@ export class FileDiscoveryService implements IFileDiscoveryService {
       // Create ARIA label with position information
       const ariaLabel = `${fileName}. File ${index + 1} of ${files.length}. Located in ${directory}. Last modified ${modificationInfo}`;
 
-      return getAccessibleQuickPickItem(
+      const base = getAccessibleQuickPickItem(
         {
           label: file.name,
           description: directory,
           detail: `${workspaceName} • Modified: ${modificationInfo}`,
-          filePath: file.path,
         },
         {
           ariaLabel,
           ariaDescription: accessibleDescription,
         },
-      ) as unknown as FileQuickPickItem;
+      );
+      return { ...base, filePath: file.path } as FileQuickPickItem;
     });
   }
 

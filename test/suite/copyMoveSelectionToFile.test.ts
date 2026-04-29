@@ -19,7 +19,7 @@ async function openDoc(content: string, language = 'typescript') {
 }
 
 suite('Copy Selection to File', () => {
-  test('should command is registered', async () => {
+  test('should register the command', async () => {
     const commands = await vscode.commands.getCommands(true);
     assert.ok(
       commands.includes('additionalContextMenus.copySelectionToFile'),
@@ -49,21 +49,22 @@ suite('Copy Selection to File', () => {
   });
 
   test('should detect imports within selected text', async () => {
-    // Verify the import extraction logic works (used internally before QuickPick)
     const content = `import { useState } from 'react';\nimport { useEffect } from 'react';\n\nconst Component = () => null;`;
     await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
-    // Select the last two lines (the component)
     const lines = content.split('\n');
     editor.selection = new vscode.Selection(3, 0, 3, lines[3]!.length);
 
-    const selectedText = editor.document.getText(editor.selection);
-    assert.ok(selectedText.includes('Component'), 'Selection should contain component code');
+    await assert.doesNotReject(
+      Promise.resolve(
+        vscode.commands.executeCommand('additionalContextMenus.copySelectionToFile'),
+      ),
+    );
   });
 });
 
 suite('Move Selection to File', () => {
-  test('should command is registered', async () => {
+  test('should register the command', async () => {
     const commands = await vscode.commands.getCommands(true);
     assert.ok(
       commands.includes('additionalContextMenus.moveSelectionToFile'),
@@ -100,5 +101,11 @@ suite('Move Selection to File', () => {
 
     const selectedText = editor.document.getText(editor.selection);
     assert.strictEqual(selectedText, content, 'Full line should be selected');
+
+    await assert.doesNotReject(
+      Promise.resolve(
+        vscode.commands.executeCommand('additionalContextMenus.moveSelectionToFile'),
+      ),
+    );
   });
 });

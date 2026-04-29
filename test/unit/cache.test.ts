@@ -5,7 +5,7 @@ describe('Cache', () => {
   let cache: Cache<string>;
 
   afterEach(() => {
-    cache.dispose();
+    cache?.dispose();
   });
 
   it('should set and get a value', () => {

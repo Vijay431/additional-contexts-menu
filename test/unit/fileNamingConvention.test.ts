@@ -52,9 +52,11 @@ describe('FileNamingConventionService.validateFileName', () => {
 
   it('should use only the base name without extension for validation', () => {
     const service = FileNamingConventionService.getInstance();
-    // Extension (.test.ts) should not affect validation of base name
+    // path.extname returns '.ts', so basename is 'myFile.test' which contains a dot
     const result = service.validateFileName('/path/myFile.test.ts', 'camelCase');
-    // basename without extension is "myFile.test" — let's test with simple ext
+    // 'myFile.test' does not match camelCase pattern due to the dot
+    expect(result.isValid).toBe(false);
+
     const result2 = service.validateFileName('/path/myFile.ts', 'camelCase');
     expect(result2.isValid).toBe(true);
   });

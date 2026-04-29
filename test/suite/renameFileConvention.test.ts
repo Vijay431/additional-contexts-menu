@@ -1,11 +1,8 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import * as path from 'path';
-import * as fs from 'fs/promises';
-import * as os from 'os';
 
 suite('Rename File to Convention', () => {
-  test('should command is registered', async () => {
+  test('should register the command', async () => {
     const commands = await vscode.commands.getCommands(true);
     assert.ok(
       commands.includes('additionalContextMenus.renameFileConvention'),

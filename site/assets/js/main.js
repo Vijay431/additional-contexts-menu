@@ -99,8 +99,8 @@ function initializeScrollEffects() {
         delayCounter++;
 
         // Reset the counter when batch finishes
-        clearTimeout(resetDelayTimeout);
-        resetDelayTimeout = setTimeout(() => {
+        window.clearTimeout(resetDelayTimeout);
+        resetDelayTimeout = window.setTimeout(() => {
           delayCounter = 0;
         }, 100);
 

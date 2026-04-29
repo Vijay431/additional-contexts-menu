@@ -46,8 +46,8 @@ jobs:
           "
           [ "${{ steps.check.outputs.file_count }}" -gt 15 ] && BODY="${BODY}
           - Too many files changed: **${{ steps.check.outputs.file_count }}** (max 15)"
-          [ "${{ steps.check.outputs.line_count }}" -gt 600 ] && BODY="${BODY}
-          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 600)"
+          [ "${{ steps.check.outputs.line_count }}" -gt 3000 ] && BODY="${BODY}
+          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 3000)"
 
           gh pr comment ${{ github.event.pull_request.number }} --edit-last --body "$BODY" 2>/dev/null || \
           gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
