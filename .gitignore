@@ -4,6 +4,7 @@
 *.vsix
 dist/
 out/
+out-test/
 
 # ============================================
 # Dependencies

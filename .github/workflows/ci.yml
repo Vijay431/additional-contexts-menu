@@ -93,10 +93,10 @@ jobs:
 
       - name: Compile Integration Tests
         shell: bash
-        run: npx tsc -p tsconfig.test.json --outDir dist --noEmitOnError false || true
+        run: npx tsc -p tsconfig.test.json
 
       - name: Run Integration Tests
-        run: xvfb-run -a node ./dist/test/runTests.js
+        run: xvfb-run -a node ./out-test/test/runTests.js
 
   build:
     name: Build

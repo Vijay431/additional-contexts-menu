@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 This file is the single source of truth for the **Additional Context Menus** VS Code extension. Update it whenever architecture, commands, or conventions change.
 
 ---
@@ -22,16 +26,22 @@ This file is the single source of truth for the **Additional Context Menus** VS 
 pnpm install              # install dependencies
 pnpm run build            # build extension (~1s)
 pnpm run watch            # watch mode
-pnpm run package          # production build
+pnpm run clean            # remove dist/ and *.vsix
+pnpm run rebuild          # clean + build + package
+pnpm run package          # production build (.vsix)
 pnpm run lint             # ESLint
 pnpm run lint:fix         # auto-fix lint issues
 pnpm run format           # format files with Prettier
 pnpm run test:unit        # run unit tests (Vitest)
-pnpm run test:integration # run integration tests (Mocha + VS Code)
+pnpm run test:integration # run integration tests (Mocha + VS Code, requires display)
 pnpm run publish          # publish to VS Code Marketplace
 pnpm run publish:openvsx  # publish to Open VSX Registry
-pnpm run lint-staged      # lint staged files
+pnpm run site:serve       # serve Jekyll GitHub Pages site locally
+pnpm run site:live        # serve with live reload
 ```
+
+Run a single unit test file: `pnpm run test:unit -- test/unit/cache.test.ts`
+Run tests matching a name pattern: `pnpm run test:unit -- -t "should cache"`
 
 Press **F5** in VS Code to launch the Extension Development Host.
 
@@ -189,9 +199,19 @@ These power the features internally. They have **no standalone user-facing docs*
 - `extractFunctionInfo`: when the node's parent chain is `VariableDeclaration → VariableDeclarationList → VariableStatement`, uses the `VariableStatement` as the text boundary to capture the full `const foo = () => {}` declaration
 - `getFunctionName`: reads name from `node.parent` (`VariableDeclaration`) for arrow/function expressions
 
+### DI Container Pattern
+
+- All services are singletons, registered in `src/di/container.ts` via `container.registerSingleton(TYPES.Token, factory)`
+- Services are instantiated via static factory methods (`ServiceName.create(...)`) or `ServiceName.getInstance()` — not `new ServiceName()`
+- DI tokens are `symbol` constants defined in `src/di/types.ts`; interfaces live in `src/di/interfaces/`
+- Generator services (`enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService`) are **not** registered in the container at startup — they are dynamically imported in `ContextMenuManager` on first use
+- Child containers (`container.createChild()`) are supported for test isolation
+
 ### Lazy Loading
 
 - `enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService` are loaded at runtime from `dist/lazy/` via `require()` — not bundled in the core bundle
+- esbuild treats them as externals during the main bundle and builds them as separate entry points under `dist/lazy/`
+- **Bundle size targets (production only):** core bundle ≤ 100KB, lazy services total ≤ 50KB — enforced with a warning in `esbuild.config.ts`
 
 ### Context Variable
 
@@ -295,7 +315,9 @@ fi
 ## Test Conventions:
 
 - **Unit tests** (`test/unit/`, run with `pnpm run test:unit`): infrastructure utilities and services where VS Code API is mocked. No live VS Code instance required.
-- **Integration tests** (`test/suite/`, run with `pnpm run test:unit:integration`): feature-level tests that exercise the 11 user-facing commands end-to-end in a real VS Code Extension Development Host.
+- **Integration tests** (`test/suite/`, run with `pnpm run test:integration`): feature-level tests that exercise the 11 user-facing commands end-to-end in a real VS Code Extension Development Host.
+- **No separate E2E layer**: The integration suite already drives a real VS Code Extension Development Host, which is the canonical end-to-end layer for a VS Code extension. A separate `@vscode/test-web` layer is not warranted unless vscode.dev certification is required (out of scope for v2.0.x). Do not add a separate e2e folder.
+- Integration test build output goes to `out-test/` (not `dist/`). The script is `pnpm run test:integration`. Compile errors fail the build — `|| true` is not used in CI.
 - Never add VS Code API-dependent logic to unit tests; never add pure-logic tests to the integration suite.
 - On Linux CI, integration tests run under `xvfb-run -a`.
 - All test descriptions must start with `"should "` (e.g. `it('should detect React', ...)`).

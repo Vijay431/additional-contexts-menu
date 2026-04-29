@@ -606,7 +606,7 @@
     "clean": "rimraf dist *.vsix",
     "rebuild": "pnpm run clean && pnpm run build && vsce package",
     "test:unit": "vitest run",
-    "test:integration": "npx tsc -p tsconfig.test.json --outDir dist --noEmitOnError false; xvfb-run -a node ./dist/test/runTests.js",
+    "test:integration": "npx tsc -p tsconfig.test.json && xvfb-run -a node ./out-test/test/runTests.js",
     "package": "vsce package",
     "package:openvsx": "ovsx package",
     "publish": "vsce publish",
