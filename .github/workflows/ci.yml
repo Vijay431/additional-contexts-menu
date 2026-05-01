@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
 
@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
 
@@ -79,7 +79,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
 
@@ -153,7 +153,7 @@ jobs:
           ref: ${{ needs.setup.outputs.tag }}
 
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
 
@@ -283,7 +283,7 @@ jobs:
           name: vsix-package
 
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
 
@@ -313,7 +313,7 @@ jobs:
           name: vsix-package
 
       - name: Install PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
 
