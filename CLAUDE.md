@@ -113,7 +113,7 @@ tsconfig.test.json              # TypeScript config for compiling integration te
 
 ## Services
 
-### User-Facing Features (11)
+### User-Facing Features (12)
 
 These are the commands users interact with. Each has a walkthrough doc in `docs/` and a site service doc in `site/services/`.
 
@@ -130,6 +130,7 @@ These are the commands users interact with. Each has a walkthrough doc in `docs/
 | Generate Enum             | `additionalContextMenus.generateEnum`         | `generate-enum.md`          | `enumGeneratorService.md`         |
 | Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | `generate-cron.md`          | `cronJobTimerGeneratorService.md` |
 | Generate .env File        | `additionalContextMenus.generateEnvFile`      | `generate-env-file.md`      | `envFileGeneratorService.md`      |
+| Copy File Contents        | `additionalContextMenus.copyFileContents`     | —                           | `copyFileContents.md`             |
 
 ### Infrastructure Services (5)
 
@@ -149,15 +150,16 @@ These power the features internally. They have **no standalone user-facing docs*
 
 ### Right-Click Menu Only (hidden from Command Palette)
 
-| Command ID                                   | Title                         | Keybinding         | File Type Restriction |
-| -------------------------------------------- | ----------------------------- | ------------------ | --------------------- |
-| `additionalContextMenus.copyFunction`        | Copy Function                 | `Ctrl+Alt+Shift+F` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.copyFunctionToFile`  | Copy Function to File         | `Ctrl+Alt+Shift+E` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.moveFunctionToFile`  | Move Function to File         | `Ctrl+Alt+Shift+R` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.copySelectionToFile` | Copy Selection to File        | `Ctrl+Alt+Shift+C` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.moveSelectionToFile` | Move Selection to File        | `Ctrl+Alt+Shift+M` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.generateEnum`        | Generate Enum from Union Type | —                  | `.ts .tsx`            |
-| `additionalContextMenus.generateCronTimer`   | Generate Cron Expression      | —                  | -                     |
+| Command ID                                   | Title                         | Keybinding         | File Type Restriction             |
+| -------------------------------------------- | ----------------------------- | ------------------ | --------------------------------- |
+| `additionalContextMenus.copyFunction`        | Copy Function                 | `Ctrl+Alt+Shift+F` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.copyFunctionToFile`  | Copy Function to File         | `Ctrl+Alt+Shift+E` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.moveFunctionToFile`  | Move Function to File         | `Ctrl+Alt+Shift+R` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.copySelectionToFile` | Copy Selection to File        | `Ctrl+Alt+Shift+C` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.moveSelectionToFile` | Move Selection to File        | `Ctrl+Alt+Shift+M` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.generateEnum`        | Generate Enum from Union Type | —                  | `.ts .tsx`                        |
+| `additionalContextMenus.generateCronTimer`   | Generate Cron Expression      | —                  | -                                 |
+| `additionalContextMenus.copyFileContents`    | Copy File Contents            | —                  | — (all file types, explorer only) |
 
 ### Command Palette Accessible
 
@@ -234,6 +236,7 @@ Markdown files live in `docs/` (root-level, not the Jekyll site).
 | `step.saveAll`              | Save All Files            | `save-all.md`               |
 | `step.openInTerminal`       | Open in Terminal          | `open-in-terminal.md`       |
 | `step.renameFileConvention` | Rename File to Convention | `rename-file-convention.md` |
+| `step.copyFileContents`     | Copy File Contents        | — (inline description)      |
 
 ---
 

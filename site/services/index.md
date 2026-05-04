@@ -15,6 +15,7 @@ Complete documentation for all 11 user-facing features in Additional Context Men
 - [Move Function to File](moveFunctionToFile.html) - Move function at cursor to a target file
 - [Copy Selection to File](copySelectionToFile.html) - Copy selected code to a target file
 - [Move Selection to File](moveSelectionToFile.html) - Move selected code to a target file
+- [Copy File Contents](copyFileContents.html) - Copy entire file contents to clipboard without opening it
 
 ## Workspace
 
@@ -40,6 +41,7 @@ Complete documentation for all 11 user-facing features in Additional Context Men
 | Save All                  | `additionalContextMenus.saveAll`              | `Ctrl+Alt+Shift+A` |
 | Open in Terminal          | `additionalContextMenus.openInTerminal`       | `Ctrl+Alt+Shift+T` |
 | Rename File to Convention | `additionalContextMenus.renameFileConvention` | —                  |
+| Copy File Contents        | `additionalContextMenus.copyFileContents`     | —                  |
 | Generate Enum             | `additionalContextMenus.generateEnum`         | —                  |
 | Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | —                  |
 | Generate .env File        | `additionalContextMenus.generateEnvFile`      | —                  |

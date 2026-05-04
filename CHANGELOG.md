@@ -5,6 +5,12 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **📋 Copy File Contents**: New `additionalContextMenus.copyFileContents` command — right-click any single file in the Explorer to copy its entire contents to the clipboard without opening it. Appears in `explorer/context` under the "Copy Path" group; restricted to single non-folder files via `!explorerResourceIsFolder && !listMultiSelection` when-clause.
+
 ## [2.0.2] - 2026-04-08
 
 ### Added

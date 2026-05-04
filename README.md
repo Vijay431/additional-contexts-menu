@@ -88,7 +88,7 @@ _Extract functions in one click with intelligent import handling_
 
 ## 📚 Features Documentation
 
-Detailed documentation for all 11 features with usage guides and examples.
+Detailed documentation for all 12 features with usage guides and examples.
 
 | Feature                | Documentation                                                                                               | Purpose                                                                               |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
@@ -103,6 +103,7 @@ Detailed documentation for all 11 features with usage guides and examples.
 | Generate Enum          | [View Docs](https://vijay431.github.io/additional-context-menus/services/enumGeneratorService.html)         | Union type to enum                                                                    |
 | Generate Cron          | [View Docs](https://vijay431.github.io/additional-context-menus/services/cronJobTimerGeneratorService.html) | Cron expression generation                                                            |
 | Generate .env File     | [View Docs](https://vijay431.github.io/additional-context-menus/services/envFileGeneratorService.html)      | .env file creation                                                                    |
+| Copy File Contents     | [View Docs](https://vijay431.github.io/additional-context-menus/services/copyFileContents.html)             | Copy entire file to clipboard                                                         |
 
 [**View All Features** →](https://vijay431.github.io/additional-context-menus/services/)
 
@@ -138,6 +139,7 @@ Detailed documentation for all 11 features with usage guides and examples.
 #### Explorer Right-Click Menu
 
 - 🗂️ **Rename File to Convention** - Right-click any file or folder in the Explorer to rename to kebab-case, camelCase, or PascalCase. Processes a single file or recursively renames all files in a folder. Reports renamed, skipped (already compliant), and failed counts.
+- 📋 **Copy File Contents** - Copy the entire contents of any file to the clipboard directly from the Explorer, no editor tab needed
 
 ### Project Intelligence
 
