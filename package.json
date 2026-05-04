@@ -209,6 +209,12 @@
         "command": "additionalContextMenus.disableKeybindings",
         "title": "Disable Keybindings",
         "category": "Additional Context Menus"
+      },
+      {
+        "command": "additionalContextMenus.copyFileContents",
+        "title": "Copy File Contents",
+        "category": "Additional Context Menus",
+        "icon": "$(copy)"
       }
     ],
     "walkthroughs": [
@@ -311,6 +317,18 @@
             },
             "completionEvents": [
               "onCommand:additionalContextMenus.renameFileConvention"
+            ]
+          },
+          {
+            "id": "additionalContextMenus.step.copyFileContents",
+            "title": "Copy File Contents",
+            "description": "Right-click any single file in the Explorer and choose **Copy File Contents** to copy the entire file to the clipboard — no need to open it first.\n\n[Try it now](command:additionalContextMenus.copyFileContents)",
+            "media": {
+              "image": "docs/images/screenshots/copy-file-contents.gif",
+              "altText": "Demonstration of Copy File Contents feature"
+            },
+            "completionEvents": [
+              "onCommand:additionalContextMenus.copyFileContents"
             ]
           }
         ]
@@ -471,6 +489,10 @@
         {
           "command": "additionalContextMenus.generateCronTimer",
           "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.copyFileContents",
+          "when": "false"
         }
       ],
       "editor/context": [
@@ -537,6 +559,11 @@
           "when": "additionalContextMenus.enabled",
           "command": "additionalContextMenus.renameFileConvention",
           "group": "7_modification@1"
+        },
+        {
+          "when": "additionalContextMenus.enabled && !explorerResourceIsFolder && !listMultiSelection",
+          "command": "additionalContextMenus.copyFileContents",
+          "group": "6_copypath@2"
         }
       ]
     },
