@@ -170,6 +170,10 @@ export class ContextMenuManager {
       vscode.commands.registerCommand('additionalContextMenus.generateCronTimer', () =>
         this.handleGenerateCronTimer(),
       ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.copyFileContents',
+        async (uri?: vscode.Uri) => await this.handleCopyFileContents(uri),
+      ),
     );
 
     this.logger.debug('Commands registered');
@@ -762,6 +766,34 @@ export class ContextMenuManager {
       this.logger.error('Error in rename file convention', error);
       vscode.window.showErrorMessage(`Failed to rename files: ${(error as Error).message}`);
       await this.announceError('Rename File Convention', (error as Error).message);
+    }
+  }
+
+  private async handleCopyFileContents(uri?: vscode.Uri): Promise<void> {
+    this.logger.info('Copy File Contents command triggered');
+
+    try {
+      const targetUri = uri ?? vscode.window.activeTextEditor?.document.uri;
+
+      if (!targetUri) {
+        vscode.window.showErrorMessage(
+          'No file selected. Right-click a file in the Explorer and choose Copy File Contents.',
+        );
+        return;
+      }
+
+      const bytes = await vscode.workspace.fs.readFile(targetUri);
+      const contents = new TextDecoder().decode(bytes);
+      await vscode.env.clipboard.writeText(contents);
+
+      const fileName = path.basename(targetUri.fsPath);
+      vscode.window.showInformationMessage(`Copied contents of ${fileName} to clipboard`);
+      this.logger.info(`File contents copied: ${targetUri.fsPath}`);
+    } catch (error) {
+      this.logger.error('Error in Copy File Contents command', error);
+      vscode.window.showErrorMessage(
+        `Failed to copy file contents: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
 
