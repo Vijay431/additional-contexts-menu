@@ -4,15 +4,15 @@
 
 All 8 core service demos are recorded as GIFs and used in the README and website.
 
-| File | Feature |
-|------|---------|
-| `copy-function.gif` | Copy Function |
-| `copy-function-to-file.gif` | Copy Function to File |
-| `move-function-to-file.gif` | Move Function to File |
-| `copy-selection-to-file.gif` | Copy Selection to File |
-| `move-selection-to-file.gif` | Move Selection to File |
-| `save-all.gif` | Save All |
-| `open-in-terminal.gif` | Open in Terminal |
+| File                         | Feature                   |
+| ---------------------------- | ------------------------- |
+| `copy-function.gif`          | Copy Function             |
+| `copy-function-to-file.gif`  | Copy Function to File     |
+| `move-function-to-file.gif`  | Move Function to File     |
+| `copy-selection-to-file.gif` | Copy Selection to File    |
+| `move-selection-to-file.gif` | Move Selection to File    |
+| `save-all.gif`               | Save All                  |
+| `open-in-terminal.gif`       | Open in Terminal          |
 | `rename-file-convention.gif` | Rename File to Convention |
 
 ## Recording Guidelines

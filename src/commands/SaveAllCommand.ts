@@ -14,7 +14,9 @@
  * @subcategory File Operations
  */
 
+import type { IAccessibilityService } from '../di/interfaces/IAccessibilityService';
 import type { IFileSaveService } from '../di/interfaces/IFileSaveService';
+import type { ILogger } from '../di/interfaces/ILogger';
 
 import { BaseCommandHandler } from './BaseCommandHandler';
 import type { CommandResult } from './BaseCommandHandler';
@@ -26,15 +28,12 @@ import type { ICommandHandler } from './ICommandHandler';
  * Saves all open text documents.
  */
 export class SaveAllCommand extends BaseCommandHandler implements ICommandHandler {
-  constructor(fileSaveService: IFileSaveService) {
-    super(
-      'SaveAll',
-      fileSaveService as unknown as {
-        debug: (msg: string, data?: unknown) => void;
-        info: (msg: string, data?: unknown) => void;
-      },
-      {} as { announce: (msg: string, verbosity?: string) => Promise<void> },
-    );
+  constructor(
+    fileSaveService: IFileSaveService,
+    logger: ILogger,
+    accessibilityService: IAccessibilityService,
+  ) {
+    super('SaveAll', logger, accessibilityService);
     this.fileSaveService = fileSaveService;
   }
 

@@ -192,7 +192,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 <h3 class="req-title">System Resources</h3>
                 <div class="req-details">
                     <p class="req-spec">RAM: 4GB minimum</p>
-                    <p class="req-spec">Storage: ~48KB extension size</p>
+                    <p class="req-spec">Storage: Optimized extension size</p>
                     <p class="req-note">Minimal system impact</p>
                 </div>
             </div>
@@ -325,7 +325,6 @@ description: 'Complete step-by-step installation guide for Additional Context Me
   "additionalContextMenus.enabled": true,
   "additionalContextMenus.autoDetectProjects": true,
   "additionalContextMenus.copyCode.insertionPoint": "smart",
-  "additionalContextMenus.copyCode.handleImports": "merge",
   "additionalContextMenus.terminal.type": "integrated"
 }</code></pre>
                 </div>
@@ -365,7 +364,6 @@ description: 'Complete step-by-step installation guide for Additional Context Me
 "additionalContextMenus.enabled": true,
 "additionalContextMenus.saveAll.showNotification": false,
 "additionalContextMenus.copyCode.insertionPoint": "smart",
-"additionalContextMenus.copyCode.handleImports": "merge",
 "additionalContextMenus.supportedExtensions": [".ts", ".tsx", ".js", ".jsx"]
 }</code></pre>
 

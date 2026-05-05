@@ -46,8 +46,8 @@ We welcome several types of contributions:
 2. Clone your fork locally:
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/additional-contexts-menu.git
-   cd additional-contexts-menu
+   git clone https://github.com/YOUR_USERNAME/additional-context-menus.git
+   cd additional-context-menus
    ```
 
 ### 2. Install Dependencies
@@ -80,7 +80,24 @@ pnpm run lint
 pnpm run watch      # Watch mode for active development
 pnpm run package    # Production build + VSIX packaging
 pnpm run format     # Format code with Prettier
+pnpm run test:unit       # Run unit tests (Vitest)
+pnpm run test:integration  # Run integration tests (requires display/xvfb on Linux)
 ```
+
+## Testing
+
+The project has two test layers:
+
+| Layer       | Command                     | Framework                       | What's covered                                                     |
+| ----------- | --------------------------- | ------------------------------- | ------------------------------------------------------------------ |
+| Unit        | `pnpm run test:unit`        | Vitest                          | Infrastructure utilities and services with mocked VS Code API      |
+| Integration | `pnpm run test:integration` | Mocha + `@vscode/test-electron` | All 11 user-facing features, end-to-end in a real VS Code instance |
+
+**Unit tests** cover: `Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`.
+
+**Integration tests** cover: Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File to Convention, Generate Enum, Generate Cron, Generate .env.
+
+On Linux, integration tests require a display. Use `xvfb-run -a pnpm run test:integration` in headless environments.
 
 ## Making Changes
 
@@ -193,7 +210,9 @@ The repository uses a single consolidated GitHub Actions workflow at `.github/wo
 **On every push and PR:**
 
 - `lint` — runs `pnpm run lint`
-- `build` — builds on Ubuntu, Windows, macOS × Node 20/22/24 × VS Code stable/insiders
+- `test-unit` — runs `pnpm run test:unit` (Vitest, ubuntu only, after `lint`)
+- `test-integration` — runs `pnpm run test:integration` (Mocha + VS Code, ubuntu/windows/macOS, after `lint`, parallel with `test-unit`)
+- `build` — builds on Ubuntu, Windows, macOS × Node 20/22/24 × VS Code stable/insiders (after both test jobs pass)
 - `audit` — runs `pnpm audit --audit-level=high`
 - `dependency-review` — reviews dependency changes on PRs
 
@@ -244,6 +263,7 @@ See the [Pull Request Process](#pull-request-process) section above for the full
 pnpm run lint
 pnpm run format
 pnpm run build
+pnpm run test:unit
 ```
 
 ## Style Guidelines
@@ -343,8 +363,8 @@ Helpful extensions for development:
 
 If you have questions about contributing:
 
-1. Check existing [issues](https://github.com/Vijay431/additional-contexts-menu/issues)
-2. Search [discussions](https://github.com/Vijay431/additional-contexts-menu/discussions)
+1. Check existing [issues](https://github.com/Vijay431/additional-context-menus/issues)
+2. Search [discussions](https://github.com/Vijay431/additional-context-menus/discussions)
 3. Create a new issue with the "question" label
 4. Email the maintainer: <vijayanand431@gmail.com>
 

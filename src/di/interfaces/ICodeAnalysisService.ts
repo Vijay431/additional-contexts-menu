@@ -27,7 +27,7 @@ export interface FunctionInfo {
   /** Function/method name */
   name: string;
   /** Function type (function, arrow, method, class) */
-  type: 'function' | 'arrow' | 'method' | 'class' | 'component';
+  type: 'function' | 'arrow' | 'method' | 'class' | 'component' | 'hook' | 'async';
   /** Start line number (1-indexed) */
   startLine: number;
   /** End line number (1-indexed) */

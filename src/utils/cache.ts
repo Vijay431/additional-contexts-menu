@@ -286,7 +286,7 @@ export class Cache<T> {
   public dispose(): void {
     if (this.cleanupTimer) {
       clearInterval(this.cleanupTimer);
-      this.cleanupTimer = undefined;
+      delete (this as unknown as { cleanupTimer?: NodeJS.Timeout }).cleanupTimer;
     }
     this.clear();
   }
@@ -329,7 +329,11 @@ export function memoize(
     descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
-    const cache = new Cache<unknown>({ defaultTTL: ttl });
+    const cacheConfig: Partial<CacheConfig> = {};
+    if (ttl !== undefined) {
+      cacheConfig.defaultTTL = ttl;
+    }
+    const cache = new Cache<unknown>(cacheConfig);
 
     descriptor.value = function (...args: unknown[]) {
       // Generate cache key

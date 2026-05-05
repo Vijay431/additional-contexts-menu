@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 This file is the single source of truth for the **Additional Context Menus** VS Code extension. Update it whenever architecture, commands, or conventions change.
 
 ---
@@ -19,18 +23,25 @@ This file is the single source of truth for the **Additional Context Menus** VS 
 ## Development Commands
 
 ```bash
-pnpm install             # install dependencies
-pnpm run build           # build extension (~1s)
-pnpm run watch           # watch mode
-pnpm run package         # production build
-pnpm run lint            # ESLint
-pnpm run lint:fix        # auto-fix lint issues
-pnpm run format          # format files with Prettier
-pnpm run test:activation # test activation
-pnpm run publish         # publish to VS Code Marketplace
-pnpm run publish:openvsx # publish to Open VSX Registry
-pnpm run lint-staged     # lint staged files
+pnpm install              # install dependencies
+pnpm run build            # build extension (~1s)
+pnpm run watch            # watch mode
+pnpm run clean            # remove dist/ and *.vsix
+pnpm run rebuild          # clean + build + package
+pnpm run package          # production build (.vsix)
+pnpm run lint             # ESLint
+pnpm run lint:fix         # auto-fix lint issues
+pnpm run format           # format files with Prettier
+pnpm run test:unit        # run unit tests (Vitest)
+pnpm run test:integration # run integration tests (Mocha + VS Code, requires display)
+pnpm run publish          # publish to VS Code Marketplace
+pnpm run publish:openvsx  # publish to Open VSX Registry
+pnpm run site:serve       # serve Jekyll GitHub Pages site locally
+pnpm run site:live        # serve with live reload
 ```
+
+Run a single unit test file: `pnpm run test:unit -- test/unit/cache.test.ts`
+Run tests matching a name pattern: `pnpm run test:unit -- -t "should cache"`
 
 Press **F5** in VS Code to launch the Extension Development Host.
 
@@ -44,7 +55,6 @@ src/
   managers/
     ExtensionManager.ts         # lifecycle coordinator
     ContextMenuManager.ts       # command registration & all handlers
-    WalkthroughManager.ts       # first-run walkthrough
     CommandRegistry.ts
   commands/
     BaseCommandHandler.ts
@@ -79,8 +89,16 @@ src/
     configValidator.ts
     metrics.ts
     pathValidator.ts
-docs/                           # VS Code walkthrough markdown files
-site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-contexts-menu)
+docs/                           # screenshots (docs/images/screenshots/)
+site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-context-menus)
+test/
+  __mocks__/vscode.ts           # minimal vscode mock for Vitest unit tests
+  unit/                         # Vitest unit tests (infrastructure, no VS Code API)
+  suite/                        # Mocha integration tests (feature-level, live VS Code)
+  fixtures/                     # test fixture files (sample.ts, package.json files)
+  runTests.ts                   # @vscode/test-electron launcher
+vitest.config.ts                # Vitest config (aliases vscode to mock)
+tsconfig.test.json              # TypeScript config for compiling integration tests
 ```
 
 ### GitHub Pages site (`site/`)
@@ -94,23 +112,24 @@ site/                           # Jekyll GitHub Pages site (vijay431.github.io/a
 
 ## Services
 
-### User-Facing Features (11)
+### User-Facing Features (12)
 
-These are the commands users interact with. Each has a walkthrough doc in `docs/` and a site service doc in `site/services/`.
+These are the commands users interact with. Each has a site service doc in `site/services/`.
 
-| Feature                   | Command ID                                    | `docs/` file                | `site/services/` doc              |
-| ------------------------- | --------------------------------------------- | --------------------------- | --------------------------------- |
-| Copy Function             | `additionalContextMenus.copyFunction`         | `copy-function.md`          | `copyFunction.md`                 |
-| Copy Function to File     | `additionalContextMenus.copyFunctionToFile`   | `copy-function-to-file.md`  | `copyFunctionToFile.md`           |
-| Move Function to File     | `additionalContextMenus.moveFunctionToFile`   | `move-function-to-file.md`  | `moveFunctionToFile.md`           |
-| Copy Selection to File    | `additionalContextMenus.copySelectionToFile`  | `copy-selection-to-file.md` | `copySelectionToFile.md`          |
-| Move Selection to File    | `additionalContextMenus.moveSelectionToFile`  | `move-selection-to-file.md` | `moveSelectionToFile.md`          |
-| Save All                  | `additionalContextMenus.saveAll`              | `save-all.md`               | `fileSaveService.md`              |
-| Open in Terminal          | `additionalContextMenus.openInTerminal`       | `open-in-terminal.md`       | `terminalService.md`              |
-| Rename File to Convention | `additionalContextMenus.renameFileConvention` | `rename-file-convention.md` | `fileNamingConventionService.md`  |
-| Generate Enum             | `additionalContextMenus.generateEnum`         | `generate-enum.md`          | `enumGeneratorService.md`         |
-| Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | `generate-cron.md`          | `cronJobTimerGeneratorService.md` |
-| Generate .env File        | `additionalContextMenus.generateEnvFile`      | `generate-env-file.md`      | `envFileGeneratorService.md`      |
+| Feature                   | Command ID                                    | `site/services/` doc              |
+| ------------------------- | --------------------------------------------- | --------------------------------- |
+| Copy Function             | `additionalContextMenus.copyFunction`         | `copyFunction.md`                 |
+| Copy Function to File     | `additionalContextMenus.copyFunctionToFile`   | `copyFunctionToFile.md`           |
+| Move Function to File     | `additionalContextMenus.moveFunctionToFile`   | `moveFunctionToFile.md`           |
+| Copy Selection to File    | `additionalContextMenus.copySelectionToFile`  | `copySelectionToFile.md`          |
+| Move Selection to File    | `additionalContextMenus.moveSelectionToFile`  | `moveSelectionToFile.md`          |
+| Save All                  | `additionalContextMenus.saveAll`              | `fileSaveService.md`              |
+| Open in Terminal          | `additionalContextMenus.openInTerminal`       | `terminalService.md`              |
+| Rename File to Convention | `additionalContextMenus.renameFileConvention` | `fileNamingConventionService.md`  |
+| Generate Enum             | `additionalContextMenus.generateEnum`         | `enumGeneratorService.md`         |
+| Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | `cronJobTimerGeneratorService.md` |
+| Generate .env File        | `additionalContextMenus.generateEnvFile`      | `envFileGeneratorService.md`      |
+| Copy File Contents        | `additionalContextMenus.copyFileContents`     | `copyFileContents.md`             |
 
 ### Infrastructure Services (5)
 
@@ -130,15 +149,16 @@ These power the features internally. They have **no standalone user-facing docs*
 
 ### Right-Click Menu Only (hidden from Command Palette)
 
-| Command ID                                   | Title                         | Keybinding         | File Type Restriction |
-| -------------------------------------------- | ----------------------------- | ------------------ | --------------------- |
-| `additionalContextMenus.copyFunction`        | Copy Function                 | `Ctrl+Alt+Shift+F` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.copyFunctionToFile`  | Copy Function to File         | `Ctrl+Alt+Shift+E` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.moveFunctionToFile`  | Move Function to File         | `Ctrl+Alt+Shift+R` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.copySelectionToFile` | Copy Selection to File        | `Ctrl+Alt+Shift+C` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.moveSelectionToFile` | Move Selection to File        | `Ctrl+Alt+Shift+M` | `.ts .tsx .js .jsx`   |
-| `additionalContextMenus.generateEnum`        | Generate Enum from Union Type | —                  | `.ts .tsx`            |
-| `additionalContextMenus.generateCronTimer`   | Generate Cron Expression      | —                  | -                     |
+| Command ID                                   | Title                         | Keybinding         | File Type Restriction             |
+| -------------------------------------------- | ----------------------------- | ------------------ | --------------------------------- |
+| `additionalContextMenus.copyFunction`        | Copy Function                 | `Ctrl+Alt+Shift+F` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.copyFunctionToFile`  | Copy Function to File         | `Ctrl+Alt+Shift+E` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.moveFunctionToFile`  | Move Function to File         | `Ctrl+Alt+Shift+R` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.copySelectionToFile` | Copy Selection to File        | `Ctrl+Alt+Shift+C` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.moveSelectionToFile` | Move Selection to File        | `Ctrl+Alt+Shift+M` | `.ts .tsx .js .jsx`               |
+| `additionalContextMenus.generateEnum`        | Generate Enum from Union Type | —                  | `.ts .tsx`                        |
+| `additionalContextMenus.generateCronTimer`   | Generate Cron Expression      | —                  | -                                 |
+| `additionalContextMenus.copyFileContents`    | Copy File Contents            | —                  | — (all file types, explorer only) |
 
 ### Command Palette Accessible
 
@@ -156,7 +176,6 @@ These power the features internally. They have **no standalone user-facing docs*
 | `additionalContextMenus.disableKeybindings`       | Disable Keybindings        | —                  |
 | `additionalContextMenus.renameFileConvention`     | Rename File to Convention  | —                  |
 | `additionalContextMenus.generateEnvFile`          | Generate .env File         | —                  |
-| `additionalContextMenus.openWalkthrough`          | Open Walkthrough           | —                  |
 
 ---
 
@@ -180,31 +199,32 @@ These power the features internally. They have **no standalone user-facing docs*
 - `extractFunctionInfo`: when the node's parent chain is `VariableDeclaration → VariableDeclarationList → VariableStatement`, uses the `VariableStatement` as the text boundary to capture the full `const foo = () => {}` declaration
 - `getFunctionName`: reads name from `node.parent` (`VariableDeclaration`) for arrow/function expressions
 
+### Command Handler Pattern
+
+Two patterns coexist — do not mix them when adding new commands:
+
+- **Class-based (`src/commands/`)**: `CopyFunctionCommand`, `SaveAllCommand`, `OpenInTerminalCommand` each implement `ICommandHandler` with a `BaseCommandHandler` base class. Use this for commands with complex logic or standalone testability needs.
+- **Inline handlers (`ContextMenuManager`)**: All other commands (selection/function-to-file moves, generator commands, `copyFileContents`) are implemented as private `handle*` methods directly in `ContextMenuManager`. Use this for simpler commands.
+
+New commands should follow the inline pattern unless the logic is substantial enough to warrant a separate class.
+
+### DI Container Pattern
+
+- All services are singletons, registered in `src/di/container.ts` via `container.registerSingleton(TYPES.Token, factory)`
+- Services are instantiated via static factory methods (`ServiceName.create(...)`) or `ServiceName.getInstance()` — not `new ServiceName()`
+- DI tokens are `symbol` constants defined in `src/di/types.ts`; interfaces live in `src/di/interfaces/`
+- Generator services (`enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService`) are **not** registered in the container at startup — they are dynamically imported in `ContextMenuManager` on first use
+- Child containers (`container.createChild()`) are supported for test isolation
+
 ### Lazy Loading
 
 - `enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService` are loaded at runtime from `dist/lazy/` via `require()` — not bundled in the core bundle
+- esbuild treats them as externals during the main bundle and builds them as separate entry points under `dist/lazy/`
+- **Bundle size targets (production only):** core bundle ≤ 100KB, lazy services total ≤ 50KB — enforced with a warning in `esbuild.config.ts`
 
 ### Context Variable
 
 - `additionalContextMenus.isInFunction` — set on every cursor move; controls visibility of Copy/Move Function to File in the context menu
-
----
-
-## Walkthrough Steps
-
-Walkthrough ID: `additionalContextMenus.gettingStarted`
-Markdown files live in `docs/` (root-level, not the Jekyll site).
-
-| Step ID                     | Title                     | Markdown file               |
-| --------------------------- | ------------------------- | --------------------------- |
-| `step.copyFunction`         | Copy a Function           | `copy-function.md`          |
-| `step.copyFunctionToFile`   | Copy Function to File     | `copy-function-to-file.md`  |
-| `step.moveFunctionToFile`   | Move Function to File     | `move-function-to-file.md`  |
-| `step.copySelectionToFile`  | Copy Selection to File    | `copy-selection-to-file.md` |
-| `step.moveSelectionToFile`  | Move Selection to File    | `move-selection-to-file.md` |
-| `step.saveAll`              | Save All Files            | `save-all.md`               |
-| `step.openInTerminal`       | Open in Terminal          | `open-in-terminal.md`       |
-| `step.renameFileConvention` | Rename File to Convention | `rename-file-convention.md` |
 
 ---
 
@@ -216,7 +236,6 @@ Markdown files live in `docs/` (root-level, not the Jekyll site).
 | `additionalContextMenus.autoDetectProjects`               | boolean | `true`                        | Auto-detect frameworks                                      |
 | `additionalContextMenus.supportedExtensions`              | array   | `[".ts",".tsx",".js",".jsx"]` | File extensions for context menus                           |
 | `additionalContextMenus.copyCode.insertionPoint`          | enum    | `"smart"`                     | `smart` / `end` / `beginning`                               |
-| `additionalContextMenus.copyCode.handleImports`           | enum    | `"merge"`                     | `merge` / `duplicate` / `skip`                              |
 | `additionalContextMenus.copyCode.preserveComments`        | boolean | `true`                        | Preserve comments when copying                              |
 | `additionalContextMenus.saveAll.showNotification`         | boolean | `true`                        | Show notification after Save All                            |
 | `additionalContextMenus.saveAll.skipReadOnly`             | boolean | `true`                        | Skip read-only files                                        |
@@ -226,6 +245,7 @@ Markdown files live in `docs/` (root-level, not the Jekyll site).
 | `additionalContextMenus.accessibility.verbosity`          | enum    | `"normal"`                    | `minimal` / `normal` / `verbose`                            |
 | `additionalContextMenus.accessibility.screenReaderMode`   | boolean | `false`                       | Enhanced screen reader support                              |
 | `additionalContextMenus.accessibility.keyboardNavigation` | boolean | `true`                        | Show keyboard hints in Quick Pick                           |
+| `additionalContextMenus.fileDiscovery.cacheTTL`           | number  | `300000`                      | File discovery cache TTL in ms (0 = disabled)               |
 
 ## Release & Versioning Strategy
 
@@ -283,3 +303,13 @@ fi
 - All new changes should be added to the `CLAUDE.md` file
 - All new changes that user viewable should be added to the `docs`, `site` and `README.md` files
 - All new changes should be logged in the `CHANGELOG.md` file under unreleased section
+
+## Test Conventions:
+
+- **Unit tests** (`test/unit/`, run with `pnpm run test:unit`): infrastructure utilities and services where VS Code API is mocked. No live VS Code instance required.
+- **Integration tests** (`test/suite/`, run with `pnpm run test:integration`): feature-level tests that exercise the 11 user-facing commands end-to-end in a real VS Code Extension Development Host.
+- **No separate E2E layer**: The integration suite already drives a real VS Code Extension Development Host, which is the canonical end-to-end layer for a VS Code extension. A separate `@vscode/test-web` layer is not warranted unless vscode.dev certification is required (out of scope for v2.0.x). Do not add a separate e2e folder.
+- Integration test build output goes to `out-test/` (not `dist/`). The script is `pnpm run test:integration`. Compile errors fail the build — `|| true` is not used in CI.
+- Never add VS Code API-dependent logic to unit tests; never add pure-logic tests to the integration suite.
+- On Linux CI, integration tests run under `xvfb-run -a`.
+- All test descriptions must start with `"should "` (e.g. `it('should detect React', ...)`).

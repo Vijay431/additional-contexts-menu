@@ -124,10 +124,6 @@ export class ConfigurationService implements IConfigurationService {
           'copyCode.insertionPoint',
           'smart',
         ),
-        handleImports: config.get<'merge' | 'duplicate' | 'skip'>(
-          'copyCode.handleImports',
-          'merge',
-        ),
         preserveComments: config.get<boolean>('copyCode.preserveComments', true),
       },
       saveAll: {
@@ -183,10 +179,6 @@ export class ConfigurationService implements IConfigurationService {
         insertionPoint: config.get<'smart' | 'end' | 'beginning'>(
           'copyCode.insertionPoint',
           'smart',
-        ),
-        handleImports: config.get<'merge' | 'duplicate' | 'skip'>(
-          'copyCode.handleImports',
-          'merge',
         ),
         preserveComments: config.get<boolean>('copyCode.preserveComments', true),
       },
@@ -244,6 +236,11 @@ export class ConfigurationService implements IConfigurationService {
     return this.getConfiguration().terminal;
   }
 
+  public getFileDiscoveryCacheTTL(): number {
+    const config = vscode.workspace.getConfiguration(this.configSection);
+    return config.get<number>('fileDiscovery.cacheTTL', 5 * 60 * 1000);
+  }
+
   public onConfigurationChanged(callback: () => void): vscode.Disposable {
     return vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration(this.configSection)) {
@@ -259,7 +256,7 @@ export class ConfigurationService implements IConfigurationService {
     target?: 'Global' | 'Workspace' | 'WorkspaceFolder' | undefined,
   ): Promise<void> {
     const config = vscode.workspace.getConfiguration(this.configSection);
-    await config.update(key, value, target as vscode.ConfigurationTarget | undefined);
+    await config.update(key, value, target as unknown as vscode.ConfigurationTarget | undefined);
     this.logger.info(`Configuration updated: ${key} = ${JSON.stringify(value)}`);
   }
 }

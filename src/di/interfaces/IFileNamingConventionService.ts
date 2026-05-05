@@ -32,20 +32,6 @@ export interface RenameResult {
 }
 
 /**
- * File naming suggestion with metadata
- */
-export interface NamingSuggestion {
-  /** The suggested file name */
-  name: string;
-  /** The convention used to generate the name */
-  convention: NamingConvention;
-  /** Current file name for comparison */
-  current: string;
-  /** Whether this is the current name */
-  isCurrent: boolean;
-}
-
-/**
  * File Naming Convention Service Interface
  *
  * All file naming convention operations must implement this interface.
@@ -77,37 +63,6 @@ export interface IFileNamingConventionService {
   convertToConvention(fileName: string, convention: NamingConvention): string;
 
   /**
-   * Get all naming convention suggestions for a file
-   *
-   * Returns file name suggestions in all supported conventions.
-   *
-   * @param fileName - The file name to convert
-   * @returns Array of naming suggestions
-   */
-  getSuggestions(fileName: string): NamingSuggestion[];
-
-  /**
-   * Detect the naming convention of a file name
-   *
-   * Analyzes a file name to determine which convention it follows.
-   *
-   * @param fileName - The file name to analyze
-   * @returns The detected naming convention
-   */
-  detectConvention(fileName: string): NamingConvention;
-
-  /**
-   * Parse a file name into words
-   *
-   * Splits a file name into its constituent words regardless
-   * of the original naming convention.
-   *
-   * @param fileName - The file name to parse (without extension)
-   * @returns Array of words extracted from the file name
-   */
-  parseFileName(fileName: string): string[];
-
-  /**
    * Rename the current file to a new name
    *
    * Performs the actual file rename operation.
@@ -116,7 +71,10 @@ export interface IFileNamingConventionService {
    * @param newName - The new file name
    * @returns Promise that resolves when file is renamed
    */
-  renameFile(currentPath: string, newName: string): Promise<void>;
+  renameFile(
+    currentPath: string,
+    newName: string,
+  ): Promise<{ success: boolean; newPath?: string; error?: string }>;
 
   /**
    * Rename a file or all files in a folder to the given convention.

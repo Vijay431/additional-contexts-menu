@@ -25,14 +25,14 @@ import type { ICommandHandler } from './ICommandHandler';
  * Opens a terminal for the current file.
  */
 export class OpenInTerminalCommand extends BaseCommandHandler implements ICommandHandler {
-  constructor(terminalService: ITerminalService) {
+  constructor(
+    terminalService: ITerminalService,
+    logger: import('../di/interfaces/ILogger').ILogger,
+  ) {
     super(
       'OpenInTerminal',
-      terminalService as unknown as {
-        debug: (msg: string, data?: unknown) => void;
-        info: (msg: string, data?: unknown) => void;
-      },
-      {} as { announce: (msg: string, verbosity?: string) => Promise<void> },
+      logger,
+      {} as import('../di/interfaces/IAccessibilityService').IAccessibilityService,
     );
     this.terminalService = terminalService;
   }
@@ -43,7 +43,7 @@ export class OpenInTerminalCommand extends BaseCommandHandler implements IComman
     this.logInfo('Open in Terminal command triggered');
 
     try {
-      const editor = this.getRequiredActiveEditor();
+      const editor = this.requireActiveEditor();
       const filePath = editor.document.fileName;
 
       await this.terminalService.openInTerminal(filePath);

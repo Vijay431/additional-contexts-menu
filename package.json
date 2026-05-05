@@ -1,7 +1,7 @@
 {
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
-  "description": "Supercharge your Node.js development with intelligent right-click menus. Extract functions, generate enums/env/cron, and refactor React/Angular/Express/Next.js code in seconds. Features AST-based detection, smart imports, and 60KB optimized bundle.",
+  "description": "Supercharge your Node.js development with intelligent right-click menus. Extract functions, generate enums/env/cron, and refactor React/Angular/Express/Next.js code in seconds. Features AST-based detection, smart imports, and an optimized bundle.",
   "version": "2.0.1",
   "license": "MIT",
   "publisher": "VijayGangatharan",
@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Vijay431/additional-contexts-menu.git"
+    "url": "https://github.com/Vijay431/additional-context-menus.git"
   },
   "bugs": {
-    "url": "https://github.com/Vijay431/additional-contexts-menu/issues"
+    "url": "https://github.com/Vijay431/additional-context-menus/issues"
   },
-  "homepage": "https://github.com/Vijay431/additional-contexts-menu#readme",
+  "homepage": "https://github.com/Vijay431/additional-context-menus#readme",
   "marketplace": {
     "screenshots": [
       {
@@ -171,12 +171,6 @@
         "icon": "$(edit)"
       },
       {
-        "command": "additionalContextMenus.openWalkthrough",
-        "title": "Open Walkthrough",
-        "category": "Additional Context Menus",
-        "icon": "$(book)"
-      },
-      {
         "command": "additionalContextMenus.showOutputChannel",
         "title": "Show Output Channel",
         "category": "Additional Context Menus",
@@ -209,111 +203,12 @@
         "command": "additionalContextMenus.disableKeybindings",
         "title": "Disable Keybindings",
         "category": "Additional Context Menus"
-      }
-    ],
-    "walkthroughs": [
+      },
       {
-        "id": "additionalContextMenus.gettingStarted",
-        "title": "Get Started with Additional Context Menus",
-        "description": "Discover how to supercharge your Node.js development workflow with intelligent right-click menus.",
-        "steps": [
-          {
-            "id": "additionalContextMenus.step.copyFunction",
-            "title": "Copy a Function",
-            "description": "Place your cursor inside any function, then right-click and choose **Copy Function** to copy it to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
-            "media": {
-              "image": "docs/images/screenshots/copy-function.gif",
-              "altText": "Demonstration of Copy Function feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.copyFunction"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.copyFunctionToFile",
-            "title": "Copy Function to File",
-            "description": "Place your cursor inside a function, right-click and choose **Copy Function to File** to copy it directly into another file.\n\n[Try it now](command:additionalContextMenus.copyFunctionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/copy-function-to-file.gif",
-              "altText": "Demonstration of Copy Function to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.copyFunctionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.moveFunctionToFile",
-            "title": "Move Function to File",
-            "description": "Place your cursor inside a function, right-click and choose **Move Function to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveFunctionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/move-function-to-file.gif",
-              "altText": "Demonstration of Move Function to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.moveFunctionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.copySelectionToFile",
-            "title": "Copy Selection to File",
-            "description": "Select any code block, right-click, and choose **Copy Selection to File** to copy it into another file in your project.\n\n[Try it now](command:additionalContextMenus.copySelectionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/copy-selection-to-file.gif",
-              "altText": "Demonstration of Copy Selection to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.copySelectionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.moveSelectionToFile",
-            "title": "Move Selection to File",
-            "description": "Select any code block, right-click, and choose **Move Selection to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveSelectionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/move-selection-to-file.gif",
-              "altText": "Demonstration of Move Selection to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.moveSelectionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.saveAll",
-            "title": "Save All Files",
-            "description": "Right-click anywhere in the editor and choose **Save All** to save every open file at once.\n\n[Try it now](command:additionalContextMenus.saveAll)",
-            "media": {
-              "image": "docs/images/screenshots/save-all.gif",
-              "altText": "Demonstration of Save All feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.saveAll"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.openInTerminal",
-            "title": "Open in Terminal",
-            "description": "Right-click any file and choose **Open in Terminal** to instantly open a terminal at that location.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
-            "media": {
-              "image": "docs/images/screenshots/open-in-terminal.gif",
-              "altText": "Demonstration of Open in Terminal feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.openInTerminal"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.renameFileConvention",
-            "title": "Rename File to Convention",
-            "description": "Right-click any file or folder in the Explorer and choose **Rename File to Convention** to rename to kebab-case, camelCase, or PascalCase.\n\n[Try it now](command:additionalContextMenus.renameFileConvention)",
-            "media": {
-              "image": "docs/images/screenshots/rename-file-convention.gif",
-              "altText": "Demonstration of Rename File to Convention feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.renameFileConvention"
-            ]
-          }
-        ]
+        "command": "additionalContextMenus.copyFileContents",
+        "title": "Copy File Contents",
+        "category": "Additional Context Menus",
+        "icon": "$(copy)"
       }
     ],
     "configuration": {
@@ -352,17 +247,6 @@
           "default": "smart",
           "description": "Where to insert copied code in target file",
           "markdownDescription": "Controls where copied code is inserted in the target file.\n\n- `smart` *(default)* — inserts after the last import statement, before the first export, or at the end\n- `end` — always appends to the bottom of the file\n- `beginning` — always inserts at the top of the file\n\n**Example:** Use `\"end\"` if you prefer all pasted code to appear at the bottom of the target file."
-        },
-        "additionalContextMenus.copyCode.handleImports": {
-          "type": "string",
-          "enum": [
-            "merge",
-            "duplicate",
-            "skip"
-          ],
-          "default": "merge",
-          "description": "How to handle import statements when copying code",
-          "markdownDescription": "Determines how import statements are handled when copying code to a target file.\n\n- `merge` *(default)* — combines new imports with existing ones, avoiding duplicates\n- `duplicate` — copies imports as-is, even if they already exist in the target\n- `skip` — omits import statements entirely from the copied code\n\n**Example:** Use `\"skip\"` when copying utility functions that share imports already present in the target file."
         },
         "additionalContextMenus.copyCode.preserveComments": {
           "type": "boolean",
@@ -437,6 +321,13 @@
           "default": true,
           "description": "Enable enhanced keyboard navigation hints in Quick Pick dialogs",
           "markdownDescription": "When `true`, Quick Pick dialogs display keyboard shortcut hints to help navigate options without a mouse.\n\n**Example:** Set to `false` if you prefer a cleaner Quick Pick UI without navigation hints."
+        },
+        "additionalContextMenus.fileDiscovery.cacheTTL": {
+          "type": "number",
+          "default": 300000,
+          "minimum": 0,
+          "description": "Time-to-live (ms) for the file discovery cache. Set to 0 to disable caching.",
+          "markdownDescription": "How long (in milliseconds) discovered file lists are cached before being refreshed.\n\n- Default: `300000` (5 minutes)\n- Set to `0` to disable caching entirely.\n\n**Example:** Set to `60000` for a 1-minute cache in rapidly-changing workspaces."
         }
       }
     },
@@ -474,6 +365,10 @@
         },
         {
           "command": "additionalContextMenus.generateCronTimer",
+          "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.copyFileContents",
           "when": "false"
         }
       ],
@@ -541,6 +436,11 @@
           "when": "additionalContextMenus.enabled",
           "command": "additionalContextMenus.renameFileConvention",
           "group": "7_modification@1"
+        },
+        {
+          "when": "additionalContextMenus.enabled && !explorerResourceIsFolder && !listMultiSelection",
+          "command": "additionalContextMenus.copyFileContents",
+          "group": "6_copypath@2"
         }
       ]
     },
@@ -605,13 +505,19 @@
     "yarn": false
   },
   "main": "./dist/extension.js",
+  "pnpm": {
+    "overrides": {
+      "serialize-javascript": "7.0.5"
+    }
+  },
   "scripts": {
     "vscode:prepublish": "tsx esbuild.config.ts --production",
     "build": "tsx esbuild.config.ts",
     "watch": "tsx esbuild.config.ts --watch",
     "clean": "rimraf dist *.vsix",
     "rebuild": "pnpm run clean && pnpm run build && vsce package",
-    "test:activation": "node scripts/test-activation.mjs",
+    "test:unit": "vitest run",
+    "test:integration": "npx tsc -p tsconfig.test.json && xvfb-run -a node ./out-test/test/runTests.js",
     "package": "vsce package",
     "package:openvsx": "ovsx package",
     "publish": "vsce publish",
@@ -674,10 +580,13 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.39.4",
+    "@types/mocha": "10.0.10",
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.110.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
+    "@vitest/coverage-v8": "3.1.1",
+    "@vscode/test-electron": "2.5.2",
     "@vscode/vsce": "^3.7.1",
     "concurrently": "^9.1.2",
     "esbuild": "^0.28.0",
@@ -688,13 +597,16 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-security": "^3.0.1",
+    "glob": "^13.0.6",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
+    "mocha": "11.1.0",
     "ovsx": "^0.10.10",
     "prettier": "^3.8.1",
     "rimraf": "^6.0.1",
     "tsx": "^4.21.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.58.0"
+    "typescript-eslint": "^8.58.0",
+    "vitest": "3.1.1"
   }
 }

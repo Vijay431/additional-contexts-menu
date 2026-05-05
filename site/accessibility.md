@@ -317,7 +317,7 @@ Accessibility behavior can be verified by checking ARIA label presence, screen r
 If you encounter accessibility problems, please report them:
 
 1. **Check Known Issues** - Review [Known Limitations](#known-limitations)
-2. **Search Existing Issues** - Check [GitHub Issues](https://github.com/Vijay431/additional-contexts-menu/issues)
+2. **Search Existing Issues** - Check [GitHub Issues](https://github.com/Vijay431/additional-context-menus/issues)
 3. **Create Detailed Report** - Include:
    - Screen reader name and version
    - Operating system and version

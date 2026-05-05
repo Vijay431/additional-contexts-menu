@@ -7,7 +7,7 @@ description: >-
   Extract functions, generate enums/env/cron, refactor React components, and automate Node.js development
   with intelligent right-click context menus. Supports React, Angular, Express, Next.js, TypeScript, and JavaScript.
 
-baseurl: '/additional-contexts-menu' # the subpath of your site, e.g. /blog
+baseurl: '/additional-context-menus' # the subpath of your site, e.g. /blog
 url: 'https://vijay431.github.io' # the base hostname & protocol for your site
 
 # Author
@@ -17,7 +17,7 @@ author:
   github: 'Vijay431'
 
 # Repository
-repository: 'Vijay431/additional-contexts-menu'
+repository: 'Vijay431/additional-context-menus'
 github_username: Vijay431
 
 # Build settings
@@ -74,12 +74,12 @@ extension:
   version: '2.0.1'
   marketplace_url: 'https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus'
   openvsx_url: 'https://open-vsx.org/extension/VijayGangatharan/additional-context-menus'
-  github_url: 'https://github.com/Vijay431/additional-contexts-menu'
+  github_url: 'https://github.com/Vijay431/additional-context-menus'
   publisher: 'VijayGangatharan'
   test_coverage: '53 e2e tests'
   success_rate: '100%'
-  bundle_size: '60KB'
-  lazy_services: '26KB'
+  bundle_size: 'optimized'
+  lazy_services: 'optimized'
   build_time: '~1 second'
 
 # SEO and social

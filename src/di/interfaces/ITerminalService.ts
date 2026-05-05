@@ -56,6 +56,14 @@ export type TerminalOpenBehavior = 'parent-directory' | 'workspace-root' | 'curr
  */
 export interface ITerminalService {
   /**
+   * Open a terminal at the location of the given file
+   *
+   * @param filePath - Absolute path to the file
+   * @returns Promise that resolves when terminal is opened
+   */
+  openInTerminal(filePath: string): Promise<void>;
+
+  /**
    * Get configured terminal type
    *
    * @returns The configured terminal type
