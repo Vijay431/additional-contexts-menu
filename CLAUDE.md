@@ -55,7 +55,6 @@ src/
   managers/
     ExtensionManager.ts         # lifecycle coordinator
     ContextMenuManager.ts       # command registration & all handlers
-    WalkthroughManager.ts       # first-run walkthrough
     CommandRegistry.ts
   commands/
     BaseCommandHandler.ts
@@ -90,7 +89,7 @@ src/
     configValidator.ts
     metrics.ts
     pathValidator.ts
-docs/                           # VS Code walkthrough markdown files
+docs/                           # screenshots (docs/images/screenshots/)
 site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-context-menus)
 test/
   __mocks__/vscode.ts           # minimal vscode mock for Vitest unit tests
@@ -115,22 +114,22 @@ tsconfig.test.json              # TypeScript config for compiling integration te
 
 ### User-Facing Features (12)
 
-These are the commands users interact with. Each has a walkthrough doc in `docs/` and a site service doc in `site/services/`.
+These are the commands users interact with. Each has a site service doc in `site/services/`.
 
-| Feature                   | Command ID                                    | `docs/` file                | `site/services/` doc              |
-| ------------------------- | --------------------------------------------- | --------------------------- | --------------------------------- |
-| Copy Function             | `additionalContextMenus.copyFunction`         | `copy-function.md`          | `copyFunction.md`                 |
-| Copy Function to File     | `additionalContextMenus.copyFunctionToFile`   | `copy-function-to-file.md`  | `copyFunctionToFile.md`           |
-| Move Function to File     | `additionalContextMenus.moveFunctionToFile`   | `move-function-to-file.md`  | `moveFunctionToFile.md`           |
-| Copy Selection to File    | `additionalContextMenus.copySelectionToFile`  | `copy-selection-to-file.md` | `copySelectionToFile.md`          |
-| Move Selection to File    | `additionalContextMenus.moveSelectionToFile`  | `move-selection-to-file.md` | `moveSelectionToFile.md`          |
-| Save All                  | `additionalContextMenus.saveAll`              | `save-all.md`               | `fileSaveService.md`              |
-| Open in Terminal          | `additionalContextMenus.openInTerminal`       | `open-in-terminal.md`       | `terminalService.md`              |
-| Rename File to Convention | `additionalContextMenus.renameFileConvention` | `rename-file-convention.md` | `fileNamingConventionService.md`  |
-| Generate Enum             | `additionalContextMenus.generateEnum`         | `generate-enum.md`          | `enumGeneratorService.md`         |
-| Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | `generate-cron.md`          | `cronJobTimerGeneratorService.md` |
-| Generate .env File        | `additionalContextMenus.generateEnvFile`      | `generate-env-file.md`      | `envFileGeneratorService.md`      |
-| Copy File Contents        | `additionalContextMenus.copyFileContents`     | —                           | `copyFileContents.md`             |
+| Feature                   | Command ID                                    | `site/services/` doc              |
+| ------------------------- | --------------------------------------------- | --------------------------------- |
+| Copy Function             | `additionalContextMenus.copyFunction`         | `copyFunction.md`                 |
+| Copy Function to File     | `additionalContextMenus.copyFunctionToFile`   | `copyFunctionToFile.md`           |
+| Move Function to File     | `additionalContextMenus.moveFunctionToFile`   | `moveFunctionToFile.md`           |
+| Copy Selection to File    | `additionalContextMenus.copySelectionToFile`  | `copySelectionToFile.md`          |
+| Move Selection to File    | `additionalContextMenus.moveSelectionToFile`  | `moveSelectionToFile.md`          |
+| Save All                  | `additionalContextMenus.saveAll`              | `fileSaveService.md`              |
+| Open in Terminal          | `additionalContextMenus.openInTerminal`       | `terminalService.md`              |
+| Rename File to Convention | `additionalContextMenus.renameFileConvention` | `fileNamingConventionService.md`  |
+| Generate Enum             | `additionalContextMenus.generateEnum`         | `enumGeneratorService.md`         |
+| Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | `cronJobTimerGeneratorService.md` |
+| Generate .env File        | `additionalContextMenus.generateEnvFile`      | `envFileGeneratorService.md`      |
+| Copy File Contents        | `additionalContextMenus.copyFileContents`     | `copyFileContents.md`             |
 
 ### Infrastructure Services (5)
 
@@ -177,7 +176,6 @@ These power the features internally. They have **no standalone user-facing docs*
 | `additionalContextMenus.disableKeybindings`       | Disable Keybindings        | —                  |
 | `additionalContextMenus.renameFileConvention`     | Rename File to Convention  | —                  |
 | `additionalContextMenus.generateEnvFile`          | Generate .env File         | —                  |
-| `additionalContextMenus.openWalkthrough`          | Open Walkthrough           | —                  |
 
 ---
 
@@ -201,6 +199,15 @@ These power the features internally. They have **no standalone user-facing docs*
 - `extractFunctionInfo`: when the node's parent chain is `VariableDeclaration → VariableDeclarationList → VariableStatement`, uses the `VariableStatement` as the text boundary to capture the full `const foo = () => {}` declaration
 - `getFunctionName`: reads name from `node.parent` (`VariableDeclaration`) for arrow/function expressions
 
+### Command Handler Pattern
+
+Two patterns coexist — do not mix them when adding new commands:
+
+- **Class-based (`src/commands/`)**: `CopyFunctionCommand`, `SaveAllCommand`, `OpenInTerminalCommand` each implement `ICommandHandler` with a `BaseCommandHandler` base class. Use this for commands with complex logic or standalone testability needs.
+- **Inline handlers (`ContextMenuManager`)**: All other commands (selection/function-to-file moves, generator commands, `copyFileContents`) are implemented as private `handle*` methods directly in `ContextMenuManager`. Use this for simpler commands.
+
+New commands should follow the inline pattern unless the logic is substantial enough to warrant a separate class.
+
 ### DI Container Pattern
 
 - All services are singletons, registered in `src/di/container.ts` via `container.registerSingleton(TYPES.Token, factory)`
@@ -218,25 +225,6 @@ These power the features internally. They have **no standalone user-facing docs*
 ### Context Variable
 
 - `additionalContextMenus.isInFunction` — set on every cursor move; controls visibility of Copy/Move Function to File in the context menu
-
----
-
-## Walkthrough Steps
-
-Walkthrough ID: `additionalContextMenus.gettingStarted`
-Markdown files live in `docs/` (root-level, not the Jekyll site).
-
-| Step ID                     | Title                     | Markdown file               |
-| --------------------------- | ------------------------- | --------------------------- |
-| `step.copyFunction`         | Copy a Function           | `copy-function.md`          |
-| `step.copyFunctionToFile`   | Copy Function to File     | `copy-function-to-file.md`  |
-| `step.moveFunctionToFile`   | Move Function to File     | `move-function-to-file.md`  |
-| `step.copySelectionToFile`  | Copy Selection to File    | `copy-selection-to-file.md` |
-| `step.moveSelectionToFile`  | Move Selection to File    | `move-selection-to-file.md` |
-| `step.saveAll`              | Save All Files            | `save-all.md`               |
-| `step.openInTerminal`       | Open in Terminal          | `open-in-terminal.md`       |
-| `step.renameFileConvention` | Rename File to Convention | `rename-file-convention.md` |
-| `step.copyFileContents`     | Copy File Contents        | — (inline description)      |
 
 ---
 

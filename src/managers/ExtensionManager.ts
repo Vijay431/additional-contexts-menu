@@ -5,20 +5,17 @@ import { ConfigValidator } from '../utils/configValidator';
 import { Logger } from '../utils/logger';
 
 import { ContextMenuManager } from './ContextMenuManager';
-import { WalkthroughManager } from './WalkthroughManager';
 
 export class ExtensionManager {
   private logger: Logger;
   private configService: ConfigurationService;
   private contextMenuManager: ContextMenuManager;
-  private walkthroughManager: WalkthroughManager;
   private disposables: vscode.Disposable[] = [];
 
   constructor() {
     this.logger = Logger.getInstance();
     this.configService = ConfigurationService.getInstance();
     this.contextMenuManager = new ContextMenuManager();
-    this.walkthroughManager = new WalkthroughManager();
   }
 
   public async activate(context: vscode.ExtensionContext): Promise<void> {
@@ -32,16 +29,6 @@ export class ExtensionManager {
       // Always initialize components - commands should always be registered
       // VS Code's when clauses will handle visibility based on configuration
       await this.initializeComponents();
-
-      // Initialize walkthrough manager (errors here must not block activation)
-      await this.walkthroughManager.initialize(context);
-
-      // Register the "Open Walkthrough" command
-      context.subscriptions.push(
-        vscode.commands.registerCommand('additionalContextMenus.openWalkthrough', () => {
-          void this.walkthroughManager.openWalkthrough();
-        }),
-      );
 
       // Warn if no Node.js project is detected in the workspace
       await this.checkForNodeProject();

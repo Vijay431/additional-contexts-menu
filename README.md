@@ -134,7 +134,6 @@ Detailed documentation for all 12 features with usage guides and examples.
 - ⌨️ **Check Keybinding Conflicts** - View keybinding configuration
 - 🔛 **Enable/Disable Keybindings** - Toggle custom keybindings
 - 🌿 **Generate .env File** - Generate environment file from usage patterns
-- 🚶 **Open Walkthrough** - Open the getting started walkthrough
 
 #### Explorer Right-Click Menu
 
@@ -388,7 +387,6 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 - `Additional Context Menus: Enable Keybindings` - Enable custom keybindings
 - `Additional Context Menus: Disable Keybindings` - Disable custom keybindings
 - `Additional Context Menus: Generate .env File` - Generate env file
-- `Additional Context Menus: Open Walkthrough` - Open getting started guide
 
 **Explorer Right-Click**:
 

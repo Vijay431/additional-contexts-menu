@@ -171,12 +171,6 @@
         "icon": "$(edit)"
       },
       {
-        "command": "additionalContextMenus.openWalkthrough",
-        "title": "Open Walkthrough",
-        "category": "Additional Context Menus",
-        "icon": "$(book)"
-      },
-      {
         "command": "additionalContextMenus.showOutputChannel",
         "title": "Show Output Channel",
         "category": "Additional Context Menus",
@@ -215,123 +209,6 @@
         "title": "Copy File Contents",
         "category": "Additional Context Menus",
         "icon": "$(copy)"
-      }
-    ],
-    "walkthroughs": [
-      {
-        "id": "additionalContextMenus.gettingStarted",
-        "title": "Get Started with Additional Context Menus",
-        "description": "Discover how to supercharge your Node.js development workflow with intelligent right-click menus.",
-        "steps": [
-          {
-            "id": "additionalContextMenus.step.copyFunction",
-            "title": "Copy a Function",
-            "description": "Place your cursor inside any function, then right-click and choose **Copy Function** to copy it to your clipboard.\n\n[Open a TypeScript file](command:workbench.action.files.openFile)",
-            "media": {
-              "image": "docs/images/screenshots/copy-function.gif",
-              "altText": "Demonstration of Copy Function feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.copyFunction"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.copyFunctionToFile",
-            "title": "Copy Function to File",
-            "description": "Place your cursor inside a function, right-click and choose **Copy Function to File** to copy it directly into another file.\n\n[Try it now](command:additionalContextMenus.copyFunctionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/copy-function-to-file.gif",
-              "altText": "Demonstration of Copy Function to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.copyFunctionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.moveFunctionToFile",
-            "title": "Move Function to File",
-            "description": "Place your cursor inside a function, right-click and choose **Move Function to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveFunctionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/move-function-to-file.gif",
-              "altText": "Demonstration of Move Function to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.moveFunctionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.copySelectionToFile",
-            "title": "Copy Selection to File",
-            "description": "Select any code block, right-click, and choose **Copy Selection to File** to copy it into another file in your project.\n\n[Try it now](command:additionalContextMenus.copySelectionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/copy-selection-to-file.gif",
-              "altText": "Demonstration of Copy Selection to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.copySelectionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.moveSelectionToFile",
-            "title": "Move Selection to File",
-            "description": "Select any code block, right-click, and choose **Move Selection to File** to move it to another file, removing it from the source.\n\n[Try it now](command:additionalContextMenus.moveSelectionToFile)",
-            "media": {
-              "image": "docs/images/screenshots/move-selection-to-file.gif",
-              "altText": "Demonstration of Move Selection to File feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.moveSelectionToFile"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.saveAll",
-            "title": "Save All Files",
-            "description": "Right-click anywhere in the editor and choose **Save All** to save every open file at once.\n\n[Try it now](command:additionalContextMenus.saveAll)",
-            "media": {
-              "image": "docs/images/screenshots/save-all.gif",
-              "altText": "Demonstration of Save All feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.saveAll"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.openInTerminal",
-            "title": "Open in Terminal",
-            "description": "Right-click any file and choose **Open in Terminal** to instantly open a terminal at that location.\n\n[Configure terminal settings](command:workbench.action.openSettings?%5B%22additionalContextMenus.terminal%22%5D)",
-            "media": {
-              "image": "docs/images/screenshots/open-in-terminal.gif",
-              "altText": "Demonstration of Open in Terminal feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.openInTerminal"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.renameFileConvention",
-            "title": "Rename File to Convention",
-            "description": "Right-click any file or folder in the Explorer and choose **Rename File to Convention** to rename to kebab-case, camelCase, or PascalCase.\n\n[Try it now](command:additionalContextMenus.renameFileConvention)",
-            "media": {
-              "image": "docs/images/screenshots/rename-file-convention.gif",
-              "altText": "Demonstration of Rename File to Convention feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.renameFileConvention"
-            ]
-          },
-          {
-            "id": "additionalContextMenus.step.copyFileContents",
-            "title": "Copy File Contents",
-            "description": "Right-click any single file in the Explorer and choose **Copy File Contents** to copy the entire file to the clipboard — no need to open it first.\n\n[Try it now](command:additionalContextMenus.copyFileContents)",
-            "media": {
-              "image": "docs/images/screenshots/copy-file-contents.gif",
-              "altText": "Demonstration of Copy File Contents feature"
-            },
-            "completionEvents": [
-              "onCommand:additionalContextMenus.copyFileContents"
-            ]
-          }
-        ]
       }
     ],
     "configuration": {

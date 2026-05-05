@@ -46,8 +46,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **🗂️ Unified Context Menu Submenu**: All commands are now grouped under a single **Additional Context Menus ▶** submenu in the right-click menu, replacing the previous scattered entries across multiple groups. The submenu appears in any file when the extension is enabled, with commands organised into four logical groups: Function Operations, Selection Operations, Workspace, and Generation.
 - **🖥️ Open in Terminal in right-click menu**: `Open in Terminal` command now appears in the editor context menu (group `2_workspace@2`) in addition to its existing keyboard shortcut
 - **⚙️ 6 utility commands in Command Palette**: `Show Output Channel`, `Debug Context Variables`, `Refresh Context Variables`, `Check Keybinding Conflicts`, `Enable Keybindings`, and `Disable Keybindings` are now declared in `package.json` and visible in the Command Palette
-- **🎓 First-Run Walkthrough**: New `WalkthroughManager` displays a VS Code built-in Walkthrough on first install, introducing Copy Function, Copy Selection to File, and Open in Terminal features
-- **🔄 Open Walkthrough Command**: `Additional Context Menus: Open Walkthrough` command allows users to reopen the walkthrough at any time via the Command Palette
 - **📦 No package.json Detection**: Informational message shown when no `package.json` is found in the workspace, explaining that Node.js project detection is required
 - **🛡️ ConfigValidator**: New utility validates all string-enum configuration values on activation and logs warnings with the invalid key, received value, and fallback for any unrecognized setting
 - **🔌 ICommandHandler Interface**: New `src/commands/ICommandHandler.ts` exports a formal `ICommandHandler` interface that all command handler classes now explicitly implement
@@ -64,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **⏱️ Generate Cron Expression**: Now inserts the bare cron expression at cursor position (e.g. `0 9 * * *`) — no comment line, no quotes
-- **📁 Repository structure**: Jekyll GitHub Pages site moved from `docs/` to `site/`; VS Code walkthrough markdown files moved from `walkthrough/` to `docs/`
+- **📁 Repository structure**: Jekyll GitHub Pages site moved from `docs/` to `site/`
 - **📚 Features documentation realigned**: `site/services/` now documents the 11 user-facing features (Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File Convention, Generate Enum, Generate Cron, Generate .env File) instead of internal infrastructure services. Infrastructure services (CodeAnalysis, FileDiscovery, Configuration, ProjectDetection, Accessibility) no longer have standalone site docs.
 - **🚀 CI release pipeline**: All publish/release jobs now trigger on `v*` tag pushes (previously incorrectly conditioned on `refs/heads/main`)
 - **🌿 Release builds from `main`**: `release-build` job now checks out the `main` branch (`ref: main`) to ensure releases always use the latest stable code

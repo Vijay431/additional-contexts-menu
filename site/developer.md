@@ -569,7 +569,6 @@ additional-context-menus/
 │ │ ├── ExtensionManager.ts
 │ │ ├── ContextMenuManager.ts
 │ │ ├── CommandRegistry.ts
-│ │ ├── WalkthroughManager.ts
 │ │ └── index.ts
 │ ├── services/ # Extension services
 │ │ ├── codeAnalysisService.ts
