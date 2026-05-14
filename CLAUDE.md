@@ -10,7 +10,7 @@ This file is the single source of truth for the **Additional Context Menus** VS 
 
 - **Name:** Additional Context Menus
 - **Publisher:** VijayGangatharan
-- **Version:** 2.0.1
+- **Version:** 2.1.0
 - **VS Code engine:** >=1.110.0
 - **Node.js:** >=20
 - **Package manager:** pnpm
@@ -33,6 +33,7 @@ pnpm run lint             # ESLint
 pnpm run lint:fix         # auto-fix lint issues
 pnpm run format           # format files with Prettier
 pnpm run test:unit        # run unit tests (Vitest)
+pnpm run test:unit:coverage # run unit tests with LCOV coverage
 pnpm run test:integration # run integration tests (Mocha + VS Code, requires display)
 pnpm run publish          # publish to VS Code Marketplace
 pnpm run publish:openvsx  # publish to Open VSX Registry
@@ -112,7 +113,7 @@ tsconfig.test.json              # TypeScript config for compiling integration te
 
 ## Services
 
-### User-Facing Features (12)
+### User-Facing Features (13)
 
 These are the commands users interact with. Each has a site service doc in `site/services/`.
 
@@ -130,6 +131,7 @@ These are the commands users interact with. Each has a site service doc in `site
 | Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | `cronJobTimerGeneratorService.md` |
 | Generate .env File        | `additionalContextMenus.generateEnvFile`      | `envFileGeneratorService.md`      |
 | Copy File Contents        | `additionalContextMenus.copyFileContents`     | `copyFileContents.md`             |
+| Duplicate File            | `additionalContextMenus.duplicateFile`        | `duplicateFile.md`                |
 
 ### Infrastructure Services (5)
 
@@ -159,6 +161,7 @@ These power the features internally. They have **no standalone user-facing docs*
 | `additionalContextMenus.generateEnum`        | Generate Enum from Union Type | —                  | `.ts .tsx`                        |
 | `additionalContextMenus.generateCronTimer`   | Generate Cron Expression      | —                  | -                                 |
 | `additionalContextMenus.copyFileContents`    | Copy File Contents            | —                  | — (all file types, explorer only) |
+| `additionalContextMenus.duplicateFile`       | Duplicate File                | —                  | — (all file types, explorer only) |
 
 ### Command Palette Accessible
 
@@ -204,7 +207,7 @@ These power the features internally. They have **no standalone user-facing docs*
 Two patterns coexist — do not mix them when adding new commands:
 
 - **Class-based (`src/commands/`)**: `CopyFunctionCommand`, `SaveAllCommand`, `OpenInTerminalCommand` each implement `ICommandHandler` with a `BaseCommandHandler` base class. Use this for commands with complex logic or standalone testability needs.
-- **Inline handlers (`ContextMenuManager`)**: All other commands (selection/function-to-file moves, generator commands, `copyFileContents`) are implemented as private `handle*` methods directly in `ContextMenuManager`. Use this for simpler commands.
+- **Inline handlers (`ContextMenuManager`)**: All other commands (selection/function-to-file moves, generator commands, `copyFileContents`, `duplicateFile`) are implemented as private `handle*` methods directly in `ContextMenuManager`. Use this for simpler commands.
 
 New commands should follow the inline pattern unless the logic is substantial enough to warrant a separate class.
 
@@ -249,24 +252,19 @@ New commands should follow the inline pattern unless the logic is substantial en
 
 ## Release & Versioning Strategy
 
-### Version Line Convention (VS Code Marketplace)
+This project follows [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html). Pre-release vs stable is determined by **tag suffix only** — minor versions have no parity meaning.
 
-VS Code Marketplace uses minor parity to distinguish stable from pre-release:
+### Automation Layout
 
-| Minor | Line        | Example tags                   | Publishes as   |
-| ----- | ----------- | ------------------------------ | -------------- |
-| Even  | Stable      | `v2.0.0`, `v2.2.0`, `v2.2.1`   | Stable release |
-| Odd   | Pre-release | `v2.1.0-beta.1`, `v2.1.0-rc.1` | Pre-release    |
+- `.github/workflows/ci.yml` runs PR/main quality gates: lint, unit coverage, integration tests, build matrix, audit, dependency review, and Codecov upload.
+- `.github/workflows/release.yml` runs only on `v*` tag pushes: package, verify, publish to VS Code Marketplace and Open VSX, deploy Pages for stable releases, and create a GitHub Release.
+- `.github/workflows/deploy-pages.yml` is a manual docs redeploy escape hatch.
+- Community automation lives in `.github/workflows/stale.yml`, `.github/workflows/labels-sync.yml`, and `.github/workflows/all-contributors.yml`.
+- Coverage uploads use `codecov/codecov-action` and require `CODECOV_TOKEN`. Release publishing requires `VSCE_PAT` and `OVSX_PAT`.
 
-**Current lines:**
+### How Release Detects Pre-release
 
-- `2.0.x` — stable (current unreleased)
-- `2.1.x` — pre-release line (next, after `2.0.0` ships)
-- `2.2.x` — next stable line (after pre-release graduates)
-
-### How CI Detects Pre-release
-
-The `setup` job checks the tag for `-rc`, `-next`, `-beta`, or `-alpha`:
+The release workflow `setup` job checks the tag for `-rc`, `-next`, `-beta`, or `-alpha`:
 
 ```bash
 if echo "$VERSION" | grep -qE '\-(rc|next|beta|alpha)'; then
@@ -279,22 +277,23 @@ fi
 
 ### Release Checklist
 
-**Stable release (`v2.0.1`):**
+**Stable patch release (`v2.0.2`):**
 
-1. Ensure `package.json` version is `2.0.1`
-2. Push tag: `git tag v2.0.1 && git push origin v2.0.1`
-3. CI publishes to VS Code Marketplace + Open VSX, deploys GitHub Pages, creates GitHub Release
+1. Ensure `package.json` version is `2.0.2`
+2. Push tag: `git tag v2.0.2 && git push origin v2.0.2`
+3. Release workflow publishes to VS Code Marketplace + Open VSX, deploys GitHub Pages, creates GitHub Release
 
 **Pre-release (`v2.1.0-beta.1`):**
 
 1. Bump `package.json` version to `2.1.0`
 2. Push tag: `git tag v2.1.0-beta.1 && git push origin v2.1.0-beta.1`
-3. CI publishes with `--pre-release` to both marketplaces; GitHub Pages is NOT updated
+3. Release workflow publishes with `--pre-release` to both marketplaces; GitHub Pages is NOT updated
 
-**Graduating pre-release to stable (`v2.2.0`):**
+**Graduating pre-release to stable (`v2.1.0`):**
 
-1. Bump `package.json` version to `2.2.0`
-2. Push tag: `git tag v2.2.0 && git push origin v2.2.0`
+1. `package.json` already says `2.1.0` — no change needed
+2. Push tag: `git tag v2.1.0 && git push origin v2.1.0`
+3. Release workflow publishes stable to both marketplaces and deploys GitHub Pages
 
 ---
 
@@ -303,11 +302,13 @@ fi
 - All new changes should be added to the `CLAUDE.md` file
 - All new changes that user viewable should be added to the `docs`, `site` and `README.md` files
 - All new changes should be logged in the `CHANGELOG.md` file under unreleased section
+- Community automation changes should update `AGENTS.md`, `CONTRIBUTING.md`, `.github/copilot-instructions.md`, and `THIRDPARTY.md` when commands, workflow ownership, or dependency notices change.
 
 ## Test Conventions:
 
 - **Unit tests** (`test/unit/`, run with `pnpm run test:unit`): infrastructure utilities and services where VS Code API is mocked. No live VS Code instance required.
-- **Integration tests** (`test/suite/`, run with `pnpm run test:integration`): feature-level tests that exercise the 11 user-facing commands end-to-end in a real VS Code Extension Development Host.
+- **Coverage** (`pnpm run test:unit:coverage`): Vitest coverage output is written to `coverage/lcov.info` for Codecov.
+- **Integration tests** (`test/suite/`, run with `pnpm run test:integration`): feature-level tests that exercise the 13 user-facing commands end-to-end in a real VS Code Extension Development Host.
 - **No separate E2E layer**: The integration suite already drives a real VS Code Extension Development Host, which is the canonical end-to-end layer for a VS Code extension. A separate `@vscode/test-web` layer is not warranted unless vscode.dev certification is required (out of scope for v2.0.x). Do not add a separate e2e folder.
 - Integration test build output goes to `out-test/` (not `dist/`). The script is `pnpm run test:integration`. Compile errors fail the build — `|| true` is not used in CI.
 - Never add VS Code API-dependent logic to unit tests; never add pure-logic tests to the integration suite.

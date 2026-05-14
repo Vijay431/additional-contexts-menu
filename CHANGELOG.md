@@ -9,13 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **📋 Copy File Contents**: New `additionalContextMenus.copyFileContents` command — right-click any single file in the Explorer to copy its entire contents to the clipboard without opening it. Appears in `explorer/context` under the "Copy Path" group; restricted to single non-folder files via `!explorerResourceIsFolder && !listMultiSelection` when-clause.
+- **📁 Duplicate File**: New `additionalContextMenus.duplicateFile` command — right-click any single file in the Explorer to create a duplicate alongside the original. The duplicate is named `<basename>-duplicate<ext>`; if that name already exists, it auto-increments (`<basename>-duplicate-1<ext>`, `-2`, …). Appears in the Explorer `7_modification` group; restricted to single non-folder files via `!explorerResourceIsFolder && !listMultiSelection`.
+- **Community standards**: Added structured YAML bug and feature issue forms, pull request template, funding metadata, release-note categories, canonical labels, stale automation, label sync, all-contributors metadata/workflow, and third-party notices.
+- **Cloud development**: Added a Dev Container/Codespaces setup with Node.js 20, pnpm, recommended VS Code extensions, and Linux packages for headless VS Code integration tests.
+- **Coverage reporting**: Added `pnpm run test:unit:coverage` and Codecov upload support through CI.
+- **Copilot guidance**: Added `.github/copilot-instructions.md` with architecture, command, test, and generated-file guidance.
 
-## [2.0.2] - 2026-04-08
+### Changed
+
+- **CI/release split**: Moved tag-driven publishing from `.github/workflows/ci.yml` into `.github/workflows/release.yml`; CI now focuses on PR/main quality gates.
+- **Contributor docs**: Updated `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, and `SECURITY.md` for coverage, workflow ownership, Codespaces, third-party notices, and supported versions.
+
+## [2.1.0] - 2026-05-06
+
+> First published as pre-release `v2.1.0-beta.1`. Stable `v2.1.0` follows after beta soak.
 
 ### Added
 
-- **🧪 Test suite**: Two-layer test infrastructure — Vitest unit tests for infrastructure utilities/services (`Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`) and Mocha + `@vscode/test-electron` integration tests for all 11 user-facing features end-to-end.
+- **📋 Copy File Contents**: New `additionalContextMenus.copyFileContents` command — right-click any single file in the Explorer to copy its entire contents to the clipboard without opening it. Appears in `explorer/context` under the "Copy Path" group; restricted to single non-folder files via `!explorerResourceIsFolder && !listMultiSelection` when-clause.
+- **🧪 Test suite**: Two-layer test infrastructure — Vitest unit tests for infrastructure utilities/services (`Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`) and Mocha + `@vscode/test-electron` integration tests for all 12 user-facing features end-to-end.
 - **CI test jobs**: `test-unit` and `test-integration` jobs run in parallel after `lint` and must pass before `build` in the CI pipeline.
 
 ### Changed
@@ -28,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - **`copyCode.handleImports` setting**: Removed the unimplemented `handleImports` configuration option (`merge` / `duplicate` / `skip`) and all its references across source, types, config validator, configuration service, `ContextMenuManager`, `package.json`, and documentation. The import merging logic was never implemented (stub with TODO).
+- **Walkthrough**: Removed `WalkthroughManager.ts` and `scripts/generate-changelog.js`.
 
 ### Fixed
 

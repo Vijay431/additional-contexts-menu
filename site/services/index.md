@@ -1,12 +1,12 @@
 ---
 layout: default
 title: 'Features Documentation'
-description: 'Documentation for all 11 user-facing features of Additional Context Menus.'
+description: 'Documentation for all 12 user-facing features of Additional Context Menus.'
 ---
 
 # Features Documentation
 
-Complete documentation for all 11 user-facing features in Additional Context Menus.
+Complete documentation for all 12 user-facing features in Additional Context Menus.
 
 ## Code Operations
 
@@ -16,6 +16,7 @@ Complete documentation for all 11 user-facing features in Additional Context Men
 - [Copy Selection to File](copySelectionToFile.html) - Copy selected code to a target file
 - [Move Selection to File](moveSelectionToFile.html) - Move selected code to a target file
 - [Copy File Contents](copyFileContents.html) - Copy entire file contents to clipboard without opening it
+- [Duplicate File](duplicateFile.html) - Duplicate any file with auto-incremented naming
 
 ## Workspace
 
@@ -42,6 +43,7 @@ Complete documentation for all 11 user-facing features in Additional Context Men
 | Open in Terminal          | `additionalContextMenus.openInTerminal`       | `Ctrl+Alt+Shift+T` |
 | Rename File to Convention | `additionalContextMenus.renameFileConvention` | —                  |
 | Copy File Contents        | `additionalContextMenus.copyFileContents`     | —                  |
+| Duplicate File            | `additionalContextMenus.duplicateFile`        | —                  |
 | Generate Enum             | `additionalContextMenus.generateEnum`         | —                  |
 | Generate Cron Expression  | `additionalContextMenus.generateCronTimer`    | —                  |
 | Generate .env File        | `additionalContextMenus.generateEnvFile`      | —                  |
