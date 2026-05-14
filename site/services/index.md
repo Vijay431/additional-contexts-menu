@@ -1,12 +1,12 @@
 ---
 layout: default
 title: 'Features Documentation'
-description: 'Documentation for all 12 user-facing features of Additional Context Menus.'
+description: 'Documentation for all 13 user-facing features of Additional Context Menus.'
 ---
 
 # Features Documentation
 
-Complete documentation for all 12 user-facing features in Additional Context Menus.
+Complete documentation for all 13 user-facing features in Additional Context Menus.
 
 ## Code Operations
 
