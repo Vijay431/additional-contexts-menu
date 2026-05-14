@@ -850,7 +850,7 @@ export class ContextMenuManager {
         await vscode.workspace.fs.copy(targetUri, newUri, { overwrite: false });
       } catch (copyError) {
         // FileSystemError on a naming collision = TOCTOU race condition
-        if (copyError instanceof vscode.FileSystemError) {
+        if (copyError instanceof vscode.FileSystemError && copyError.code === 'FileExists') {
           vscode.window.showWarningMessage(
             'Could not create duplicate — a naming collision occurred. Please try again.',
           );
