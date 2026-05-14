@@ -820,8 +820,8 @@ export class ContextMenuManager {
         return;
       }
 
-      const ext = path.extname(targetUri.fsPath);
-      const nameWithoutExt = path.basename(targetUri.fsPath, ext);
+      const ext = path.posix.extname(targetUri.path);
+      const nameWithoutExt = path.posix.basename(targetUri.path, ext);
 
       // Derive parent directory from the URI's POSIX path to preserve scheme/authority
       const parentPosixPath = targetUri.path.substring(0, targetUri.path.lastIndexOf('/'));
@@ -836,9 +836,12 @@ export class ContextMenuManager {
           // File exists — try next increment
           candidatePosixPath = `${parentPosixPath}/${nameWithoutExt}-duplicate-${counter}${ext}`;
           counter++;
-        } catch {
-          // Stat threw — slot is free
-          slotFound = true;
+        } catch (statError) {
+          if (statError instanceof vscode.FileSystemError && statError.code === 'FileNotFound') {
+            slotFound = true;
+          } else {
+            throw statError; // propagate permission / network errors to outer catch
+          }
         }
       }
 
@@ -856,7 +859,7 @@ export class ContextMenuManager {
         throw copyError; // re-throw non-collision errors to outer catch
       }
 
-      const originalName = path.basename(targetUri.fsPath);
+      const originalName = path.posix.basename(targetUri.path);
       const newName = candidatePosixPath.substring(candidatePosixPath.lastIndexOf('/') + 1);
       vscode.window.showInformationMessage(`Duplicated ${originalName} → ${newName}`);
       this.logger.info(`File duplicated: ${targetUri.toString()} → ${newUri.toString()}`);
