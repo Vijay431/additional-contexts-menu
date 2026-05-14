@@ -820,19 +820,21 @@ export class ContextMenuManager {
         return;
       }
 
-      const dir = path.dirname(targetUri.fsPath);
       const ext = path.extname(targetUri.fsPath);
       const nameWithoutExt = path.basename(targetUri.fsPath, ext);
 
+      // Derive parent directory from the URI's POSIX path to preserve scheme/authority
+      const parentPosixPath = targetUri.path.substring(0, targetUri.path.lastIndexOf('/'));
+
       // Find a free name: <name>-duplicate<ext>, then <name>-duplicate-1<ext>, etc.
-      let candidatePath = path.join(dir, `${nameWithoutExt}-duplicate${ext}`);
+      let candidatePosixPath = `${parentPosixPath}/${nameWithoutExt}-duplicate${ext}`;
       let counter = 1;
       let slotFound = false;
       while (!slotFound) {
         try {
-          await vscode.workspace.fs.stat(vscode.Uri.file(candidatePath));
+          await vscode.workspace.fs.stat(targetUri.with({ path: candidatePosixPath }));
           // File exists — try next increment
-          candidatePath = path.join(dir, `${nameWithoutExt}-duplicate-${counter}${ext}`);
+          candidatePosixPath = `${parentPosixPath}/${nameWithoutExt}-duplicate-${counter}${ext}`;
           counter++;
         } catch {
           // Stat threw — slot is free
@@ -840,13 +842,24 @@ export class ContextMenuManager {
         }
       }
 
-      const newUri = vscode.Uri.file(candidatePath);
-      await vscode.workspace.fs.copy(targetUri, newUri, { overwrite: false });
+      const newUri = targetUri.with({ path: candidatePosixPath });
+      try {
+        await vscode.workspace.fs.copy(targetUri, newUri, { overwrite: false });
+      } catch (copyError) {
+        // FileSystemError on a naming collision = TOCTOU race condition
+        if (copyError instanceof vscode.FileSystemError) {
+          vscode.window.showWarningMessage(
+            'Could not create duplicate — a naming collision occurred. Please try again.',
+          );
+          return;
+        }
+        throw copyError; // re-throw non-collision errors to outer catch
+      }
 
       const originalName = path.basename(targetUri.fsPath);
-      const newName = path.basename(candidatePath);
+      const newName = candidatePosixPath.substring(candidatePosixPath.lastIndexOf('/') + 1);
       vscode.window.showInformationMessage(`Duplicated ${originalName} → ${newName}`);
-      this.logger.info(`File duplicated: ${targetUri.fsPath} → ${candidatePath}`);
+      this.logger.info(`File duplicated: ${targetUri.toString()} → ${newUri.toString()}`);
     } catch (error) {
       this.logger.error('Error in Duplicate File command', error);
       vscode.window.showErrorMessage(
