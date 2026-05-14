@@ -815,7 +815,7 @@ export class ContextMenuManager {
       }
 
       const stat = await vscode.workspace.fs.stat(targetUri);
-      if (stat.type === vscode.FileType.Directory) {
+      if (stat.type & vscode.FileType.Directory) {
         vscode.window.showErrorMessage('Duplicate File only works on files, not folders.');
         return;
       }
@@ -830,7 +830,14 @@ export class ContextMenuManager {
       let candidatePosixPath = `${parentPosixPath}/${nameWithoutExt}-duplicate${ext}`;
       let counter = 1;
       let slotFound = false;
+      const MAX_DUPLICATES = 100;
       while (!slotFound) {
+        if (counter > MAX_DUPLICATES) {
+          vscode.window.showErrorMessage(
+            `Could not find a free name after ${MAX_DUPLICATES} attempts. Please rename or remove existing duplicates.`,
+          );
+          return;
+        }
         try {
           await vscode.workspace.fs.stat(targetUri.with({ path: candidatePosixPath }));
           // File exists — try next increment
