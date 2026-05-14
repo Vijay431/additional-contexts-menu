@@ -2,7 +2,7 @@
   "name": "additional-context-menus",
   "displayName": "Additional Context Menus",
   "description": "Supercharge your Node.js development with intelligent right-click menus. Extract functions, generate enums/env/cron, and refactor React/Angular/Express/Next.js code in seconds. Features AST-based detection, smart imports, and an optimized bundle.",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "license": "MIT",
   "publisher": "VijayGangatharan",
   "icon": "logo.png",
@@ -209,6 +209,12 @@
         "title": "Copy File Contents",
         "category": "Additional Context Menus",
         "icon": "$(copy)"
+      },
+      {
+        "command": "additionalContextMenus.duplicateFile",
+        "title": "Duplicate File",
+        "category": "Additional Context Menus",
+        "icon": "$(files)"
       }
     ],
     "configuration": {
@@ -370,6 +376,10 @@
         {
           "command": "additionalContextMenus.copyFileContents",
           "when": "false"
+        },
+        {
+          "command": "additionalContextMenus.duplicateFile",
+          "when": "false"
         }
       ],
       "editor/context": [
@@ -441,6 +451,11 @@
           "when": "additionalContextMenus.enabled && !explorerResourceIsFolder && !listMultiSelection",
           "command": "additionalContextMenus.copyFileContents",
           "group": "6_copypath@2"
+        },
+        {
+          "when": "additionalContextMenus.enabled && !explorerResourceIsFolder && !listMultiSelection",
+          "command": "additionalContextMenus.duplicateFile",
+          "group": "7_modification@2"
         }
       ]
     },
@@ -517,6 +532,7 @@
     "clean": "rimraf dist *.vsix",
     "rebuild": "pnpm run clean && pnpm run build && vsce package",
     "test:unit": "vitest run",
+    "test:unit:coverage": "vitest run --coverage --coverage.reporter=text --coverage.reporter=lcov",
     "test:integration": "npx tsc -p tsconfig.test.json && xvfb-run -a node ./out-test/test/runTests.js",
     "package": "vsce package",
     "package:openvsx": "ovsx package",
@@ -588,6 +604,7 @@
     "@vitest/coverage-v8": "3.1.1",
     "@vscode/test-electron": "2.5.2",
     "@vscode/vsce": "^3.7.1",
+    "all-contributors-cli": "^6.26.1",
     "concurrently": "^9.1.2",
     "esbuild": "^0.28.0",
     "eslint": "^9.39.4",

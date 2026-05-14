@@ -174,6 +174,10 @@ export class ContextMenuManager {
         'additionalContextMenus.copyFileContents',
         async (uri?: vscode.Uri) => await this.handleCopyFileContents(uri),
       ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.duplicateFile',
+        async (uri?: vscode.Uri) => await this.handleDuplicateFile(uri),
+      ),
     );
 
     this.logger.debug('Commands registered');
@@ -793,6 +797,60 @@ export class ContextMenuManager {
       this.logger.error('Error in Copy File Contents command', error);
       vscode.window.showErrorMessage(
         `Failed to copy file contents: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
+
+  private async handleDuplicateFile(uri?: vscode.Uri): Promise<void> {
+    this.logger.info('Duplicate File command triggered');
+
+    try {
+      const targetUri = uri ?? vscode.window.activeTextEditor?.document.uri;
+
+      if (!targetUri) {
+        vscode.window.showErrorMessage(
+          'No file selected. Right-click a file in the Explorer and choose Duplicate File.',
+        );
+        return;
+      }
+
+      const stat = await vscode.workspace.fs.stat(targetUri);
+      if (stat.type === vscode.FileType.Directory) {
+        vscode.window.showErrorMessage('Duplicate File only works on files, not folders.');
+        return;
+      }
+
+      const dir = path.dirname(targetUri.fsPath);
+      const ext = path.extname(targetUri.fsPath);
+      const nameWithoutExt = path.basename(targetUri.fsPath, ext);
+
+      // Find a free name: <name>-duplicate<ext>, then <name>-duplicate-1<ext>, etc.
+      let candidatePath = path.join(dir, `${nameWithoutExt}-duplicate${ext}`);
+      let counter = 1;
+      let slotFound = false;
+      while (!slotFound) {
+        try {
+          await vscode.workspace.fs.stat(vscode.Uri.file(candidatePath));
+          // File exists — try next increment
+          candidatePath = path.join(dir, `${nameWithoutExt}-duplicate-${counter}${ext}`);
+          counter++;
+        } catch {
+          // Stat threw — slot is free
+          slotFound = true;
+        }
+      }
+
+      const newUri = vscode.Uri.file(candidatePath);
+      await vscode.workspace.fs.copy(targetUri, newUri, { overwrite: false });
+
+      const originalName = path.basename(targetUri.fsPath);
+      const newName = path.basename(candidatePath);
+      vscode.window.showInformationMessage(`Duplicated ${originalName} → ${newName}`);
+      this.logger.info(`File duplicated: ${targetUri.fsPath} → ${candidatePath}`);
+    } catch (error) {
+      this.logger.error('Error in Duplicate File command', error);
+      vscode.window.showErrorMessage(
+        `Failed to duplicate file: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
