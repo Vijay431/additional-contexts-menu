@@ -50,7 +50,9 @@ describe('FileDiscoveryService.isCompatibleExtension', () => {
   it('should handle extensions without a leading dot', () => {
     expect(service.isCompatibleExtension('ts', 'tsx')).toBe(true);
   });
+});
 
+describe('FileDiscoveryService.getCompatibleFiles', () => {
   it('should return an empty array when no workspace folders exist', async () => {
     const files = await service.getCompatibleFiles('.ts');
     expect(files).toEqual([]);

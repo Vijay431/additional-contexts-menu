@@ -13,6 +13,8 @@ function makeLogger(): ILogger & { warnings: string[] } {
       warnings.push(msg);
     },
     error: () => {},
+    setLogLevel: () => {},
+    show: () => {},
     dispose: () => {},
   };
 }

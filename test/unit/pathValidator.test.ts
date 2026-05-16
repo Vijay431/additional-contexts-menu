@@ -19,7 +19,7 @@ describe('isSafeFilePath', () => {
   });
 
   it('should return false for a path containing node_modules', () => {
-    expect(isSafeFilePath('/project/node_modules/lodash/index.js')).toBe(false);
+    expect(isSafeFilePath('/project/node_modules/lodash/index.ts')).toBe(false);
   });
 
   it('should return false for a .exe extension', () => {
