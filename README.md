@@ -847,6 +847,8 @@ Thanks goes to these wonderful people:
 
 This project follows the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome.
 
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full contributors list including AI pair programmers.
+
 ## 📄 License
 
 This extension is licensed under the [MIT License](LICENSE).

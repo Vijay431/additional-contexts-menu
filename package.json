@@ -604,7 +604,44 @@
     "commit": false,
     "commitType": "docs",
     "contributorsPerLine": 7,
-    "contributors": []
+    "contributors": [
+      {
+        "login": "Vijay431",
+        "name": "Vijay Gangatharan",
+        "avatar_url": "https://github.com/Vijay431.png",
+        "profile": "https://github.com/Vijay431",
+        "contributions": [
+          "code",
+          "doc",
+          "design",
+          "infra",
+          "maintenance"
+        ]
+      },
+      {
+        "login": "claude-anthropic",
+        "name": "Claude (Anthropic)",
+        "avatar_url": "https://avatars.githubusercontent.com/u/76263028",
+        "profile": "https://claude.ai",
+        "contributions": [
+          "code",
+          "doc",
+          "test",
+          "review"
+        ]
+      },
+      {
+        "login": "codex-openai",
+        "name": "Codex (OpenAI)",
+        "avatar_url": "https://avatars.githubusercontent.com/u/14957082",
+        "profile": "https://openai.com",
+        "contributions": [
+          "code",
+          "doc",
+          "review"
+        ]
+      }
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
