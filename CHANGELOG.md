@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Changed
+
+- **Bundle size reduced from 7.52MB to 3.82MB**: VSIX now well below the 5MB target.
+  - `codeAnalysisService` moved to `dist/lazy/` (same pattern as generator services). The TypeScript compiler (~3.4MB minified) is no longer bundled in the core `extension.js`; it loads on the first Copy/Move Function command invocation. Core bundle drops from 3.46MB to 64KB, restoring the documented ≤100KB target.
+  - GIF screenshots re-encoded with ffmpeg (fps 8, 70% scale, 64-colour palette): 6.0MB → 2.9MB (~51% reduction).
+  - Dev-only files excluded from VSIX: `.devcontainer/`, `AGENTS.md`, `.cursorignore`, `.code-review-graph`.
+  - Removed broken `marketplace` block from `package.json` (referenced 5 non-existent PNG screenshots and a missing `banner.png`).
+  - Codespaces SVG badge removed from `README.md` (VS Code Marketplace restricts SVG image URLs).
 
 ## [2.1.0] - 2026-05-06
 

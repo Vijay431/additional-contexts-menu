@@ -71,6 +71,7 @@ src/
     terminalService.ts
     projectDetectionService.ts
     accessibilityService.ts
+    codeAnalysisService.ts      # lazy-loaded (bundles TypeScript compiler)
     enumGeneratorService.ts     # lazy-loaded
     envFileGeneratorService.ts  # lazy-loaded
     cronJobTimerGeneratorService.ts  # lazy-loaded
@@ -217,13 +218,14 @@ New commands should follow the inline pattern unless the logic is substantial en
 - Services are instantiated via static factory methods (`ServiceName.create(...)`) or `ServiceName.getInstance()` — not `new ServiceName()`
 - DI tokens are `symbol` constants defined in `src/di/types.ts`; interfaces live in `src/di/interfaces/`
 - Generator services (`enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService`) are **not** registered in the container at startup — they are dynamically imported in `ContextMenuManager` on first use
+- `codeAnalysisService` is registered in the DI container but loads lazily: the `registerSingleton` factory calls `require(dist/lazy/codeAnalysisService.js)` on first invocation, deferring the TypeScript compiler load until the first Copy/Move Function command
 - Child containers (`container.createChild()`) are supported for test isolation
 
 ### Lazy Loading
 
-- `enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService` are loaded at runtime from `dist/lazy/` via `require()` — not bundled in the core bundle
+- `codeAnalysisService`, `enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService` are loaded at runtime from `dist/lazy/` via `require()` — not bundled in the core bundle
 - esbuild treats them as externals during the main bundle and builds them as separate entry points under `dist/lazy/`
-- **Bundle size targets (production only):** core bundle ≤ 100KB, lazy services total ≤ 50KB — enforced with a warning in `esbuild.config.ts`
+- **Bundle size targets (production only):** core bundle ≤ 100KB — enforced with a warning in `esbuild.config.ts`. `codeAnalysisService.js` alone is ~3.4MB (bundles the TypeScript compiler); lazy total target is advisory only.
 
 ### Context Variable
 
