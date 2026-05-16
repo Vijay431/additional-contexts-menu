@@ -884,7 +884,7 @@ export class ContextMenuManager {
       }
 
       const originalName = path.posix.basename(targetUri.path);
-      const newName = candidatePosixPath.substring(candidatePosixPath.lastIndexOf('/') + 1);
+      const newName = path.posix.basename(candidatePosixPath);
       vscode.window.showInformationMessage(`Duplicated ${originalName} → ${newName}`);
       this.logger.info(`File duplicated: ${targetUri.toString()} → ${newUri.toString()}`);
     } catch (error) {
