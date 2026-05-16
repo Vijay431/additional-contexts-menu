@@ -1,67 +1,11 @@
-# ============================================
-# Build & Distribution Artifacts
-# ============================================
-*.vsix
-dist/
-out/
-
-# ============================================
-# Dependencies
-# ============================================
-node_modules/
-.pnpm-debug.log*
-
-# ============================================
-# Testing & Coverage
-# ============================================
+.claude/
+.code-review-graph/
 .vscode-test/
-.vscode-test-web/
+dist/
 coverage/
-
-# ============================================
-# Compiled Files
-# ============================================
-src/**/*.js
-src/**/*.js.map
+node_modules/
+out-test/
 test/**/*.js
 test/**/*.js.map
-*.map
 
-# ============================================
-# Debug & Logs
-# ============================================
-debug.log
-meta.json
-
-# ============================================
-# OS Generated Files
-# ============================================
-.DS_Store
-Thumbs.db
-
-# ============================================
-# AI & Tool Configuration
-# ============================================
-.claude/
-.auto-claude/
-.sisyphus/
-.opencode/
-.auto-claude-security.json
-.claude_settings.json
-.specify/
-specs/
-.mcp.json
-
-# ============================================
-# Documentation & Content
-# ============================================
-blogs/
 TODO.md
-
-# ============================================
-# Development Tools
-# ============================================
-opencode.json
-.automaker/
-.worktrees/
-logs/security/

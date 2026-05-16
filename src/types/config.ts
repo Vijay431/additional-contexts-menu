@@ -23,8 +23,6 @@
 export interface CopyCodeConfig {
   /** Where to insert copied code in target file */
   insertionPoint: 'smart' | 'end' | 'beginning';
-  /** How to handle import statements when copying code */
-  handleImports: 'merge' | 'duplicate' | 'skip';
   /** Whether to preserve comments when copying code */
   preserveComments: boolean;
 }
@@ -115,7 +113,6 @@ export const CONFIG_KEYS = {
   AUTO_DETECT_PROJECTS: 'autoDetectProjects',
   SUPPORTED_EXTENSIONS: 'supportedExtensions',
   COPY_CODE_INSERTION_POINT: 'copyCode.insertionPoint',
-  COPY_CODE_HANDLE_IMPORTS: 'copyCode.handleImports',
   COPY_CODE_PRESERVE_COMMENTS: 'copyCode.preserveComments',
   SAVE_ALL_SHOW_NOTIFICATION: 'saveAll.showNotification',
   SAVE_ALL_SKIP_READ_ONLY: 'saveAll.skipReadOnly',
@@ -138,7 +135,6 @@ export const DEFAULT_CONFIG: ExtensionConfiguration = {
   supportedExtensions: ['.ts', '.tsx', '.js', '.jsx'],
   copyCode: {
     insertionPoint: 'smart',
-    handleImports: 'merge',
     preserveComments: true,
   },
   saveAll: {
@@ -204,13 +200,6 @@ export function isTerminalConfig(config: unknown): config is TerminalConfig {
  */
 export function isValidInsertionPoint(value: string): value is CopyCodeConfig['insertionPoint'] {
   return ['smart', 'end', 'beginning'].includes(value);
-}
-
-/**
- * Validate Handle Imports Value
- */
-export function isValidHandleImports(value: string): value is CopyCodeConfig['handleImports'] {
-  return ['merge', 'duplicate', 'skip'].includes(value);
 }
 
 /**

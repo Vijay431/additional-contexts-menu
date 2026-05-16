@@ -543,7 +543,7 @@ export class FileNamingConventionService {
   /**
    * Convert a file name to a specific naming convention
    */
-  private convertToConvention(fileName: string, convention: NamingConvention): string {
+  public convertToConvention(fileName: string, convention: NamingConvention): string {
     // Remove any existing separators and split into words
     const words = fileName
       .replace(/[_-]/g, ' ')

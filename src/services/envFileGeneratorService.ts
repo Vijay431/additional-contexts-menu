@@ -109,7 +109,11 @@ export class EnvFileGeneratorService {
       const activeEditor = vscode.window.activeTextEditor;
       const activeFolder =
         activeEditor && vscode.workspace.getWorkspaceFolder(activeEditor.document.uri);
-      const workspaceRoot = (activeFolder ?? workspaceFolders[0]).uri.fsPath;
+      const fallbackFolder = workspaceFolders[0];
+      if (!fallbackFolder) {
+        return;
+      }
+      const workspaceRoot = (activeFolder ?? fallbackFolder).uri.fsPath;
       const envExamplePath = path.join(workspaceRoot, '.env.example');
 
       if (!isSafeFilePath(envExamplePath)) {

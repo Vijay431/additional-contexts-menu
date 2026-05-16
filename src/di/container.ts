@@ -76,7 +76,9 @@ export class DIContainer {
   private parent?: DIContainer;
 
   constructor(parent?: DIContainer) {
-    this.parent = parent;
+    if (parent !== undefined) {
+      this.parent = parent;
+    }
   }
 
   /**
@@ -205,12 +207,12 @@ export async function initializeContainer(context: {
   const { TerminalService } = await import('../services/terminalService');
   const { FileNamingConventionService } = await import('../services/fileNamingConventionService');
   const { AccessibilityService } = await import('../services/accessibilityService');
-  // Generator services are loaded lazily in command handlers to reduce bundle size
+  // Generator services are loaded lazily in command handlers for an optimized bundle
 
   // Register all services as singletons
   // Logger is the root service with no dependencies
   container.registerSingleton<ILogger>(TYPES.Logger, () => {
-    const logger = new Logger();
+    const logger = Logger.getInstance();
     context.subscriptions.push({ dispose: () => logger.dispose() });
     return logger;
   });
@@ -250,6 +252,7 @@ export async function initializeContainer(context: {
       accessibilityService,
       configService,
       projectDetection,
+      configService.getFileDiscoveryCacheTTL(),
     );
   });
 
@@ -271,7 +274,7 @@ export async function initializeContainer(context: {
   );
 
   // Generator services are NOT registered here - they are loaded lazily via dynamic imports
-  // in ContextMenuManager to reduce initial bundle size
+  // in ContextMenuManager for an optimized initial bundle
 }
 
 /**

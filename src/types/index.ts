@@ -26,7 +26,6 @@ export {
   isSaveAllConfig,
   isTerminalConfig,
   isValidInsertionPoint,
-  isValidHandleImports,
   isValidTerminalType,
   isValidOpenBehavior,
   isValidVerbosity,

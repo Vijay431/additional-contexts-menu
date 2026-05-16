@@ -93,17 +93,17 @@ function initializeScrollEffects() {
         if (delayCounter > 0) {
           entry.target.style.transitionDelay = `${delayCounter * 100}ms`;
         }
-        
+
         entry.target.classList.add('animate-in');
-        
+
         delayCounter++;
-        
+
         // Reset the counter when batch finishes
-        clearTimeout(resetDelayTimeout);
-        resetDelayTimeout = setTimeout(() => {
+        window.clearTimeout(resetDelayTimeout);
+        resetDelayTimeout = window.setTimeout(() => {
           delayCounter = 0;
         }, 100);
-        
+
         observer.unobserve(entry.target);
       }
     });
@@ -333,11 +333,9 @@ function debounce(func, wait) {
 
 function throttle(func, limit) {
   let inThrottle;
-  return function () {
-    const args = arguments;
-    const context = this;
+  return function (...args) {
     if (!inThrottle) {
-      func.apply(context, args);
+      func.apply(this, args);
       inThrottle = true;
       setTimeout(() => (inThrottle = false), limit);
     }

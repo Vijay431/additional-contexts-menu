@@ -29,8 +29,8 @@ Get up and running in 5 minutes:
 
 ```bash
 # 1. Fork and clone the repository
-git clone https://github.com/YOUR_USERNAME/additional-contexts-menu.git
-cd additional-contexts-menu
+git clone https://github.com/YOUR_USERNAME/additional-context-menus.git
+cd additional-context-menus
 
 # 2. Install dependencies
 pnpm install
@@ -87,7 +87,7 @@ bundler --version # Should show Bundler version (site dev only)
 
 #### Forking (Required for contributing)
 
-1. Visit the repository: https://github.com/Vijay431/additional-contexts-menu
+1. Visit the repository: https://github.com/Vijay431/additional-context-menus
 2. Click the **Fork** button in the top-right corner
 3. Choose your GitHub account as the destination
 
@@ -95,10 +95,10 @@ bundler --version # Should show Bundler version (site dev only)
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/additional-contexts-menu.git
+git clone https://github.com/YOUR_USERNAME/additional-context-menus.git
 
 # Navigate into the project
-cd additional-contexts-menu
+cd additional-context-menus
 ```
 
 #### Adding Upstream Remote
@@ -107,16 +107,16 @@ Keep your fork in sync with the original repository:
 
 ```bash
 # Add the original repository as upstream
-git remote add upstream https://github.com/Vijay431/additional-contexts-menu.git
+git remote add upstream https://github.com/Vijay431/additional-context-menus.git
 
 # Verify remotes
 git remote -v
 
 # You should see:
-# origin    https://github.com/YOUR_USERNAME/additional-contexts-menu.git (fetch)
-# origin    https://github.com/YOUR_USERNAME/additional-contexts-menu.git (push)
-# upstream  https://github.com/Vijay431/additional-contexts-menu.git (fetch)
-# upstream  https://github.com/Vijay431/additional-contexts-menu.git (push)
+# origin    https://github.com/YOUR_USERNAME/additional-context-menus.git (fetch)
+# origin    https://github.com/YOUR_USERNAME/additional-context-menus.git (push)
+# upstream  https://github.com/Vijay431/additional-context-menus.git (fetch)
+# upstream  https://github.com/Vijay431/additional-context-menus.git (push)
 ```
 
 ### Step 2: Install Dependencies
@@ -454,7 +454,7 @@ Edit `package.json`:
 
 ```json
 {
-  "version": "2.0.1"
+  "version": "2.1.0"
 }
 ```
 
@@ -463,7 +463,7 @@ Edit `package.json`:
 Edit `CHANGELOG.md` with release notes:
 
 ```markdown
-## [2.0.1] - 2024-01-31
+## [2.1.0] - 2026-05-06
 
 ### Added
 
@@ -485,14 +485,14 @@ The CI pipeline handles publishing automatically when a tag is pushed. You do no
 ```bash
 # Commit version bump and changelog
 git add package.json CHANGELOG.md
-git commit -m "chore(release): bump version to 2.0.1"
+git commit -m "chore(release): bump version to 2.1.0-beta.1"
 
 # Push the commit to main first
 git push origin main
 
 # Create and push the tag — this triggers the full release pipeline
-git tag v2.0.1
-git push origin v2.0.1
+git tag v2.1.0-beta.1
+git push origin v2.1.0-beta.1
 ```
 
 **What happens after pushing a tag:**
@@ -510,18 +510,20 @@ Tags containing `-rc`, `-next`, `-beta`, or `-alpha` are treated as pre-releases
 
 ```bash
 # Pre-release tag — publishes with --pre-release flag, skips pages deployment
-git tag v2.1.0-rc.1
-git push origin v2.1.0-rc.1
+git tag v2.1.0-beta.1
+git push origin v2.1.0-beta.1
 
-# Stable release tag — full publish + pages deployment
+# Stable release tag — full publish + pages deployment (same package.json version)
 git tag v2.1.0
 git push origin v2.1.0
 ```
 
-| Tag      | Marketplace | GitHub Pages | GitHub Release |
-| -------- | ----------- | ------------ | -------------- |
-| `v2.0.0` | stable      | ✅ deployed  | stable         |
-| `v2.0.1` | stable      | ✅ deployed  | stable         |
+| Tag             | Marketplace | GitHub Pages | GitHub Release |
+| --------------- | ----------- | ------------ | -------------- |
+| `v2.0.0`        | stable      | ✅ deployed  | stable         |
+| `v2.0.1`        | stable      | ✅ deployed  | stable         |
+| `v2.1.0-beta.1` | pre-release | ⏭️ skipped   | pre-release    |
+| `v2.1.0`        | stable      | ✅ deployed  | stable         |
 
 ---
 
@@ -530,7 +532,7 @@ git push origin v2.1.0
 ### Directory Overview
 
 ```markdown
-additional-contexts-menu/
+additional-context-menus/
 ├── .github/ # GitHub configuration
 │ ├── ISSUE_TEMPLATE/ # Issue templates
 │ ├── pull_request_template.md # PR template
@@ -569,7 +571,6 @@ additional-contexts-menu/
 │ │ ├── ExtensionManager.ts
 │ │ ├── ContextMenuManager.ts
 │ │ ├── CommandRegistry.ts
-│ │ ├── WalkthroughManager.ts
 │ │ └── index.ts
 │ ├── services/ # Extension services
 │ │ ├── codeAnalysisService.ts
@@ -617,7 +618,7 @@ additional-contexts-menu/
 
 #### Entry Point
 
-**[`src/extension.ts`](https://github.com/Vijay431/additional-contexts-menu/blob/main/src/extension.ts)** - Extension activation and deactivation
+**[`src/extension.ts`](https://github.com/Vijay431/additional-context-menus/blob/main/src/extension.ts)** - Extension activation and deactivation
 
 ```typescript
 // Extension entry point
@@ -639,9 +640,9 @@ export function deactivate() {
 
 #### Managers
 
-**[`src/managers/extensionManager.ts`](https://github.com/Vijay431/additional-contexts-menu/blob/main/src/managers/extensionManager.ts)** - Coordinates lifecycle and initialization
+**[`src/managers/extensionManager.ts`](https://github.com/Vijay431/additional-context-menus/blob/main/src/managers/extensionManager.ts)** - Coordinates lifecycle and initialization
 
-**[`src/managers/contextMenuManager.ts`](https://github.com/Vijay431/additional-contexts-menu/blob/main/src/managers/contextMenuManager.ts)** - Handles command registration and menu visibility
+**[`src/managers/contextMenuManager.ts`](https://github.com/Vijay431/additional-context-menus/blob/main/src/managers/contextMenuManager.ts)** - Handles command registration and menu visibility
 
 #### Services (Singleton Pattern)
 
@@ -847,8 +848,8 @@ pnpm --version
 
 If you encounter issues not covered here:
 
-1. **Check existing issues:** https://github.com/Vijay431/additional-contexts-menu/issues
-2. **Search discussions:** https://github.com/Vijay431/additional-contexts-menu/discussions
+1. **Check existing issues:** https://github.com/Vijay431/additional-context-menus/issues
+2. **Search discussions:** https://github.com/Vijay431/additional-context-menus/discussions
 3. **Create a new issue** with OS, Node.js version, steps to reproduce, and command output
 4. **Contact maintainer:** vijayanand431@gmail.com
 
@@ -872,12 +873,12 @@ If you encounter issues not covered here:
 
 ### Project Links
 
-- **GitHub Repository:** https://github.com/Vijay431/additional-contexts-menu
+- **GitHub Repository:** https://github.com/Vijay431/additional-context-menus
 - **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus
-- **Issues:** https://github.com/Vijay431/additional-contexts-menu/issues
-- **Discussions:** https://github.com/Vijay431/additional-contexts-menu/discussions
+- **Issues:** https://github.com/Vijay431/additional-context-menus/issues
+- **Discussions:** https://github.com/Vijay431/additional-context-menus/discussions
 - **Services Documentation:** [{{ site.baseurl }}/services/]({{ site.baseurl }}/services/)
-- **Contributing Guide:** https://github.com/Vijay431/additional-contexts-menu/blob/main/CONTRIBUTING.md
+- **Contributing Guide:** https://github.com/Vijay431/additional-context-menus/blob/main/CONTRIBUTING.md
 
 ### Related Tools
 
@@ -888,8 +889,8 @@ If you encounter issues not covered here:
 
 ## Next Steps
 
-- Read [CONTRIBUTING.md](https://github.com/Vijay431/additional-contexts-menu/blob/main/CONTRIBUTING.md) for contribution guidelines
-- Explore [source code](https://github.com/Vijay431/additional-contexts-menu/tree/main/src) to understand architecture
+- Read [CONTRIBUTING.md](https://github.com/Vijay431/additional-context-menus/blob/main/CONTRIBUTING.md) for contribution guidelines
+- Explore [source code](https://github.com/Vijay431/additional-context-menus/tree/main/src) to understand architecture
 - Check [Services Documentation]({{ site.baseurl }}/services/) for API references
 - See [Adding Commands]({{ site.baseurl }}/developer-guides/adding-commands) for extending the extension
 

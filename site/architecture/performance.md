@@ -87,28 +87,30 @@ console.log(`Hit rate: ${(stats.hitRate * 100).toFixed(1)}%`);
 
 #### ProjectDetectionService
 
-- **TTL**: 10 minutes
+- **Default TTL**: 10 minutes (injectable via `create()` for testing)
 - **Max size**: 50 entries
-- **Invalidation**: On workspace change
+- **Invalidation**: On workspace change or TTL expiry
 
 ```typescript
 // Project type is cached per workspace
 const projectType = await detectionService.detectProjectType();
 // First call: scans package.json
-// Subsequent calls (within 10 min): returns cached result
+// Subsequent calls (within TTL): returns cached result
+// After TTL expires: re-scans automatically
 ```
 
 #### FileDiscoveryService
 
-- **TTL**: 5 minutes
+- **Default TTL**: 5 minutes (injectable via `create()` for testing)
 - **Max size**: 100 entries
-- **Invalidation**: On file system change
+- **Invalidation**: On file system change or TTL expiry
 
 ```typescript
 // File lists are cached per extension
 const files = await discoveryService.getCompatibleFiles('.ts');
 // First call: scans workspace
-// Subsequent calls (within 5 min): returns cached result
+// Subsequent calls (within TTL): returns cached result
+// After TTL expires: re-scans automatically
 ```
 
 ## Performance Metrics

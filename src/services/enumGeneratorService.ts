@@ -249,7 +249,7 @@ export class EnumGeneratorService implements IEnumGeneratorService {
     return value
       .replace(/[^a-zA-Z0-9]/g, '_')
       .replace(/^_+/, '')
-      .replace(/_+(.)/g, (match, letter) => letter.toUpperCase())
+      .replace(/_+(.)/g, (_match, letter) => letter.toUpperCase())
       .replace(/([a-z])([A-Z])/g, '$1_$2');
   }
 

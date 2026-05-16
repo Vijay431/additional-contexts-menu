@@ -1,0 +1,59 @@
+name: All Contributors
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  add-contributor:
+    name: Add Contributor
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.comment.body, '@all-contributors please add')
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: pnpm
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Add Requested Contributor
+        if: github.event_name == 'issue_comment'
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        shell: bash
+        run: |
+          REQUEST="${COMMENT_BODY#@all-contributors please add }"
+          USERNAME="${REQUEST%% for *}"
+          CONTRIBUTIONS="${REQUEST##* for }"
+          USERNAME="${USERNAME#@}"
+          pnpm exec all-contributors add "${USERNAME}" "${CONTRIBUTIONS}"
+
+      - name: Generate Contributors Table
+        run: pnpm exec all-contributors generate
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'docs(contributors): update all-contributors'
+          title: 'docs(contributors): update all-contributors'
+          body: Updates the contributors table from all-contributors metadata.
+          branch: docs/update-all-contributors

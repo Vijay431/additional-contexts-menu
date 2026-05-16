@@ -38,7 +38,6 @@ import type { ExtensionConfiguration } from '../types/config';
 
 export interface CopyCodeConfig {
   insertionPoint: 'smart' | 'end' | 'beginning';
-  handleImports: 'merge' | 'duplicate' | 'skip';
   preserveComments: boolean;
 }
 
@@ -66,10 +65,6 @@ export class ConfigurationService implements IConfigurationService {
         insertionPoint: config.get<'smart' | 'end' | 'beginning'>(
           'copyCode.insertionPoint',
           'smart',
-        ),
-        handleImports: config.get<'merge' | 'duplicate' | 'skip'>(
-          'copyCode.handleImports',
-          'merge',
         ),
         // Returns properly typed interface, not 'any'
         preserveComments: config.get<boolean>('copyCode.preserveComments', true),

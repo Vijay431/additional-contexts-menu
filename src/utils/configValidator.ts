@@ -14,7 +14,6 @@ import type { ExtensionConfig } from '../types/extension';
 
 /** Allowed values for each string-enum setting */
 const VALID_INSERTION_POINTS = ['smart', 'end', 'beginning'] as const;
-const VALID_HANDLE_IMPORTS = ['merge', 'duplicate', 'skip'] as const;
 const VALID_VERBOSITY = ['minimal', 'normal', 'verbose'] as const;
 const VALID_TERMINAL_TYPES = ['integrated', 'external', 'system-default'] as const;
 const VALID_OPEN_BEHAVIORS = ['parent-directory', 'workspace-root', 'current-directory'] as const;
@@ -22,7 +21,6 @@ const VALID_OPEN_BEHAVIORS = ['parent-directory', 'workspace-root', 'current-dir
 /** Default values for each string-enum setting */
 const DEFAULTS = {
   'copyCode.insertionPoint': 'smart' as const,
-  'copyCode.handleImports': 'merge' as const,
   'accessibility.verbosity': 'normal' as const,
   'terminal.type': 'integrated' as const,
   'terminal.openBehavior': 'parent-directory' as const,
@@ -65,17 +63,6 @@ export class ConfigValidator {
           `Valid values are: ${VALID_INSERTION_POINTS.join(', ')}.`,
       );
       result.copyCode.insertionPoint = fallback;
-    }
-
-    // copyCode.handleImports
-    if (!(VALID_HANDLE_IMPORTS as readonly string[]).includes(result.copyCode.handleImports)) {
-      const fallback = DEFAULTS['copyCode.handleImports'];
-      logger.warn(
-        `Invalid value for "copyCode.handleImports": "${result.copyCode.handleImports}". ` +
-          `Falling back to default: "${fallback}". ` +
-          `Valid values are: ${VALID_HANDLE_IMPORTS.join(', ')}.`,
-      );
-      result.copyCode.handleImports = fallback;
     }
 
     // accessibility.verbosity
@@ -156,15 +143,6 @@ export function validateExtensionConfig(
       message: 'Invalid insertion point value',
       value: config.copyCode.insertionPoint,
       suggestion: `Must be one of: ${VALID_INSERTION_POINTS.join(', ')}`,
-    });
-  }
-
-  if (!VALID_HANDLE_IMPORTS.includes(config.copyCode.handleImports)) {
-    errors.push({
-      key: 'copyCode.handleImports',
-      message: 'Invalid handle imports value',
-      value: config.copyCode.handleImports,
-      suggestion: `Must be one of: ${VALID_HANDLE_IMPORTS.join(', ')}`,
     });
   }
 

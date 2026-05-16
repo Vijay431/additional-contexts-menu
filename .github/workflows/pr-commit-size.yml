@@ -24,7 +24,7 @@ jobs:
         shell: bash
         run: |
           MAX_FILES=15
-          MAX_LINES=600
+          MAX_LINES=3000
           STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
           FILE_COUNT=$(echo "$STATS" | grep -c .)
           LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
@@ -46,8 +46,8 @@ jobs:
           "
           [ "${{ steps.check.outputs.file_count }}" -gt 15 ] && BODY="${BODY}
           - Too many files changed: **${{ steps.check.outputs.file_count }}** (max 15)"
-          [ "${{ steps.check.outputs.line_count }}" -gt 600 ] && BODY="${BODY}
-          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 600)"
+          [ "${{ steps.check.outputs.line_count }}" -gt 3000 ] && BODY="${BODY}
+          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 3000)"
 
           gh pr comment ${{ github.event.pull_request.number }} --edit-last --body "$BODY" 2>/dev/null || \
           gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"

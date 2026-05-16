@@ -13,6 +13,8 @@
  * @subcategory Terminal Operations
  */
 
+import type { IAccessibilityService } from '../di/interfaces/IAccessibilityService';
+import type { ILogger } from '../di/interfaces/ILogger';
 import type { ITerminalService } from '../di/interfaces/ITerminalService';
 
 import { BaseCommandHandler } from './BaseCommandHandler';
@@ -25,15 +27,12 @@ import type { ICommandHandler } from './ICommandHandler';
  * Opens a terminal for the current file.
  */
 export class OpenInTerminalCommand extends BaseCommandHandler implements ICommandHandler {
-  constructor(terminalService: ITerminalService) {
-    super(
-      'OpenInTerminal',
-      terminalService as unknown as {
-        debug: (msg: string, data?: unknown) => void;
-        info: (msg: string, data?: unknown) => void;
-      },
-      {} as { announce: (msg: string, verbosity?: string) => Promise<void> },
-    );
+  constructor(
+    terminalService: ITerminalService,
+    logger: ILogger,
+    accessibilityService: IAccessibilityService,
+  ) {
+    super('OpenInTerminal', logger, accessibilityService);
     this.terminalService = terminalService;
   }
 
@@ -43,7 +42,7 @@ export class OpenInTerminalCommand extends BaseCommandHandler implements IComman
     this.logInfo('Open in Terminal command triggered');
 
     try {
-      const editor = this.getRequiredActiveEditor();
+      const editor = this.requireActiveEditor();
       const filePath = editor.document.fileName;
 
       await this.terminalService.openInTerminal(filePath);

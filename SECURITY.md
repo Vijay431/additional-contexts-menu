@@ -6,6 +6,7 @@ We provide security updates for the following versions of Additional Context Men
 
 | Version | Supported          | Node.js Compatibility |
 | ------- | ------------------ | --------------------- |
+| 2.1.x   | :white_check_mark: | Node.js 20, 22, 24    |
 | 2.0.x   | :white_check_mark: | Node.js 20, 22, 24    |
 | 1.2.x   | :x:                | —                     |
 | 1.1.x   | :x:                | —                     |

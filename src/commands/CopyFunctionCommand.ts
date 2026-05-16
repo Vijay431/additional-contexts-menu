@@ -41,15 +41,9 @@ export class CopyFunctionCommand extends BaseCommandHandler implements ICommandH
   constructor(
     codeAnalysisService: ICodeAnalysisService,
     accessibilityService: IAccessibilityService,
+    logger: import('../di/interfaces/ILogger').ILogger,
   ) {
-    super(
-      'CopyFunction',
-      codeAnalysisService as unknown as {
-        debug: (msg: string, data?: unknown) => void;
-        info: (msg: string, data?: unknown) => void;
-      },
-      accessibilityService,
-    );
+    super('CopyFunction', logger, accessibilityService);
     this.codeAnalysisService = codeAnalysisService;
   }
 
@@ -59,7 +53,7 @@ export class CopyFunctionCommand extends BaseCommandHandler implements ICommandH
     this.logInfo('Copy Function command triggered');
 
     try {
-      const editor = this.getRequiredActiveEditor();
+      const editor = this.requireActiveEditor();
       const document = editor.document;
       const position = editor.selection.active;
 

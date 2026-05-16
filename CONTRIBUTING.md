@@ -46,8 +46,8 @@ We welcome several types of contributions:
 2. Clone your fork locally:
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/additional-contexts-menu.git
-   cd additional-contexts-menu
+   git clone https://github.com/YOUR_USERNAME/additional-context-menus.git
+   cd additional-context-menus
    ```
 
 ### 2. Install Dependencies
@@ -80,7 +80,28 @@ pnpm run lint
 pnpm run watch      # Watch mode for active development
 pnpm run package    # Production build + VSIX packaging
 pnpm run format     # Format code with Prettier
+pnpm run test:unit       # Run unit tests (Vitest)
+pnpm run test:unit:coverage  # Run unit tests with LCOV coverage
+pnpm run test:integration  # Run integration tests (requires display/xvfb on Linux)
 ```
+
+The repository also includes a Dev Container and GitHub Codespaces configuration. Opening the project in that environment installs Node.js 20, pnpm dependencies, recommended VS Code extensions, and Linux packages required for headless integration tests.
+
+## Testing
+
+The project has two test layers:
+
+| Layer       | Command                       | Framework                       | What's covered                                                     |
+| ----------- | ----------------------------- | ------------------------------- | ------------------------------------------------------------------ |
+| Unit        | `pnpm run test:unit`          | Vitest                          | Infrastructure utilities and services with mocked VS Code API      |
+| Coverage    | `pnpm run test:unit:coverage` | Vitest + V8 coverage            | Unit tests plus `coverage/lcov.info` for Codecov                   |
+| Integration | `pnpm run test:integration`   | Mocha + `@vscode/test-electron` | All 11 user-facing features, end-to-end in a real VS Code instance |
+
+**Unit tests** cover: `Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`.
+
+**Integration tests** cover: Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File to Convention, Generate Enum, Generate Cron, Generate .env.
+
+On Linux, integration tests require a display. Use `xvfb-run -a pnpm run test:integration` in headless environments.
 
 ## Making Changes
 
@@ -186,26 +207,35 @@ Commits before `v2.0.0` predate this enforcement and are not subject to these ru
 6. At least one maintainer review is required before merging
 7. PRs are squash-merged to keep the history clean
 
-### CI Workflows
+### Automation Workflows
 
-The repository uses a single consolidated GitHub Actions workflow at `.github/workflows/ci.yml`.
+The repository separates quality gates, release publishing, and community automation.
 
-**On every push and PR:**
+**CI (`.github/workflows/ci.yml`, on PRs and pushes to `main`):**
 
 - `lint` — runs `pnpm run lint`
-- `build` — builds on Ubuntu, Windows, macOS × Node 20/22/24 × VS Code stable/insiders
+- `test-unit` — runs `pnpm run test:unit:coverage` and uploads `coverage/lcov.info` to Codecov
+- `test-integration` — runs `pnpm run test:integration` (Mocha + VS Code, Ubuntu, after `lint`, parallel with `test-unit`)
+- `build` — builds on Ubuntu, Windows, macOS × Node 20/22/24 × VS Code stable/insiders (after both test jobs pass)
 - `audit` — runs `pnpm audit --audit-level=high`
 - `dependency-review` — reviews dependency changes on PRs
 
-**On `v*` tag push (release pipeline):**
+**Release (`.github/workflows/release.yml`, on `v*` tag push):**
 
 - `setup` — extracts version, detects pre-release (`-rc`, `-next`, `-beta`, `-alpha`)
-- `release-build` — checks out `main` branch and builds the production VSIX
+- `release-build` — checks out the tag and builds the production VSIX
 - `verifier` — validates VSIX contents (no source files, no node_modules, correct bundle)
 - `publish-vscode` — publishes to VS Code Marketplace (stable or `--pre-release`)
 - `publish-openvsx` — publishes to Open VSX Registry (stable or `--pre-release`)
 - `deploy-pages` — deploys docs to GitHub Pages (stable releases only, runs after both publishes succeed)
 - `create-release` — creates a GitHub Release with the VSIX attached
+
+**Community automation:**
+
+- `stale.yml` marks inactive issues and PRs stale.
+- `labels-sync.yml` syncs labels from `.github/labels.yml`.
+- `all-contributors.yml` refreshes the README contributors table.
+- `deploy-pages.yml` manually redeploys the Jekyll site when maintainers need a docs-only rerun.
 
 ### Code Architecture
 
@@ -244,6 +274,7 @@ See the [Pull Request Process](#pull-request-process) section above for the full
 pnpm run lint
 pnpm run format
 pnpm run build
+pnpm run test:unit
 ```
 
 ## Style Guidelines
@@ -343,8 +374,8 @@ Helpful extensions for development:
 
 If you have questions about contributing:
 
-1. Check existing [issues](https://github.com/Vijay431/additional-contexts-menu/issues)
-2. Search [discussions](https://github.com/Vijay431/additional-contexts-menu/discussions)
+1. Check existing [issues](https://github.com/Vijay431/additional-context-menus/issues)
+2. Search [discussions](https://github.com/Vijay431/additional-context-menus/discussions)
 3. Create a new issue with the "question" label
 4. Email the maintainer: <vijayanand431@gmail.com>
 

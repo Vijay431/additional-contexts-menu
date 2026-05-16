@@ -1,0 +1,8 @@
+.claude/
+.code-review-graph/
+.vscode-test/
+dist/
+node_modules/
+out-test/
+
+TODO.md

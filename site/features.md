@@ -143,7 +143,7 @@ description: 'Explore the comprehensive features and intelligent code operations
         
         <div class="screenshot-grid">
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-function.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/copy-function.gif"
                      alt="Copy Function"
                      class="screenshot-image">
                 <h3>Copy Function</h3>
@@ -151,7 +151,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
 
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-function-to-file.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/copy-function-to-file.gif"
                      alt="Copy Function to File"
                      class="screenshot-image">
                 <h3>Copy Function to File</h3>
@@ -159,7 +159,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
 
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/move-function-to-file.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/move-function-to-file.gif"
                      alt="Move Function to File"
                      class="screenshot-image">
                 <h3>Move Function to File</h3>
@@ -167,7 +167,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
 
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/copy-selection-to-file.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/copy-selection-to-file.gif"
                      alt="Copy Selection to File"
                      class="screenshot-image">
                 <h3>Copy Selection to File</h3>
@@ -175,7 +175,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
 
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/move-selection-to-file.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/move-selection-to-file.gif"
                      alt="Move Selection to File"
                      class="screenshot-image">
                 <h3>Move Selection to File</h3>
@@ -183,7 +183,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
 
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/save-all.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/save-all.gif"
                      alt="Save All"
                      class="screenshot-image">
                 <h3>Save All</h3>
@@ -191,7 +191,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
 
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/open-in-terminal.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/open-in-terminal.gif"
                      alt="Open in Terminal"
                      class="screenshot-image">
                 <h3>Open in Terminal</h3>
@@ -199,7 +199,7 @@ description: 'Explore the comprehensive features and intelligent code operations
             </div>
 
             <div class="screenshot-item">
-                <img src="https://raw.githubusercontent.com/Vijay431/additional-contexts-menu/main/docs/images/screenshots/rename-file-convention.gif"
+                <img src="https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/docs/images/screenshots/rename-file-convention.gif"
                      alt="Rename File to Convention"
                      class="screenshot-image">
                 <h3>Rename File to Convention</h3>
