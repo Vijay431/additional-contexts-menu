@@ -32,6 +32,9 @@ vitest.config.ts
 tsconfig.test.json
 .vscode-test.mjs
 .lintstagedrc
+.devcontainer/
+.cursorignore
+.code-review-graph
 
 # ============================================
 # VS Code Configuration & Workspaces
@@ -67,3 +70,4 @@ IMPLEMENTATION_SUMMARY.md
 opencode.json
 .auto-claude-security.json
 DEVELOPER.md
+AGENTS.md

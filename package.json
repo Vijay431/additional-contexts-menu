@@ -18,31 +18,6 @@
     "url": "https://github.com/Vijay431/additional-context-menus/issues"
   },
   "homepage": "https://github.com/Vijay431/additional-context-menus#readme",
-  "marketplace": {
-    "screenshots": [
-      {
-        "path": "public/images/screenshots/copy-function.png",
-        "label": "Extract functions with intelligent import handling"
-      },
-      {
-        "path": "public/images/screenshots/copy-to-file.png",
-        "label": "Smart file discovery with framework-aware filtering"
-      },
-      {
-        "path": "public/images/screenshots/context-menu.png",
-        "label": "Complete context menu integration"
-      },
-      {
-        "path": "public/images/screenshots/enum-generator.png",
-        "label": "Generate enums from union types"
-      },
-      {
-        "path": "public/images/screenshots/terminal-integration.png",
-        "label": "Cross-platform terminal integration"
-      }
-    ],
-    "banner": "public/images/banner.png"
-  },
   "keywords": [
     "context",
     "menu",
