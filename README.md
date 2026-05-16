@@ -408,8 +408,8 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 
 ## 📋 Requirements
 
-- **VS Code**: Version 1.110.0 or higher
-- **Node.js**: Version 20+ required for development
+- **VS Code**: Version 1.111.0 or higher (last 10 minor versions supported)
+- **Node.js**: Version 22+ runtime (Node 24 LTS recommended for development)
 - **PNPM**: Package manager for dependency management (install with `npm install -g pnpm`)
 - **Project Type**: Node.js project with `package.json` (for smart detection)
 - **File Types**: TypeScript/JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`)
@@ -800,7 +800,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ### 🛠️ Development Setup
 
-**Prerequisites**: Node.js 20+ required for development (20, 22, 24 supported)
+**Prerequisites**: Node.js 22+ runtime (22, 24, 26 supported); development uses Node 24 LTS. VS Code 1.111+ required (last 10 minor versions supported).
 
 ```bash
 # 1. Clone and setup
@@ -815,7 +815,7 @@ pnpm run build
 # Press F5 in VS Code to launch Extension Development Host
 ```
 
-You can also open the project in GitHub Codespaces or a VS Code Dev Container. The container installs Node.js 20, pnpm dependencies, recommended VS Code extensions, and Linux packages needed for headless integration tests.
+You can also open the project in GitHub Codespaces or a VS Code Dev Container. The container installs Node.js 24 (latest LTS), pnpm dependencies, recommended VS Code extensions, and Linux packages needed for headless integration tests.
 
 ### 📋 Available Development Commands
 

@@ -21,7 +21,7 @@ By participating in this project, you are expected to uphold our [Code of Conduc
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (version 20+ required, 20, 22, and 24 supported)
+- [Node.js](https://nodejs.org/) (version 22+ required, 22, 24, and 26 supported; Node 24 LTS recommended for development)
 - [PNPM](https://pnpm.io/) (install with `npm install -g pnpm`)
 - [Visual Studio Code](https://code.visualstudio.com/) (for development and testing)
 - [Git](https://git-scm.com/)
@@ -59,7 +59,7 @@ pnpm install
 ### 3. Build and Verify
 
 ```bash
-# Build the extension (requires Node.js 20+)
+# Build the extension (requires Node.js 22+; Node 24 LTS recommended)
 pnpm run build
 
 # Run ESLint — uses tsconfig.eslint.json for type-aware rules
@@ -85,7 +85,7 @@ pnpm run test:unit:coverage  # Run unit tests with LCOV coverage
 pnpm run test:integration  # Run integration tests (requires display/xvfb on Linux)
 ```
 
-The repository also includes a Dev Container and GitHub Codespaces configuration. Opening the project in that environment installs Node.js 20, pnpm dependencies, recommended VS Code extensions, and Linux packages required for headless integration tests.
+The repository also includes a Dev Container and GitHub Codespaces configuration. Opening the project in that environment installs Node.js 24 (latest LTS), pnpm dependencies, recommended VS Code extensions, and Linux packages required for headless integration tests.
 
 ## Testing
 

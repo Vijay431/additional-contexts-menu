@@ -50,21 +50,21 @@ pnpm run watch
 
 ### Required Tools
 
-| Tool        | Version                     | Purpose                        | Installation                                             |
-| ----------- | --------------------------- | ------------------------------ | -------------------------------------------------------- |
-| **Node.js** | >= 20.0.0 (20-24 supported) | JavaScript runtime             | [nodejs.org](https://nodejs.org/)                        |
-| **pnpm**    | 10.x.x                      | Package manager                | `npm install -g pnpm`                                    |
-| **Git**     | Latest                      | Version control                | [git-scm.com](https://git-scm.com/)                      |
-| **VS Code** | >= 1.110.0                  | IDE for development            | [code.visualstudio.com](https://code.visualstudio.com/)  |
-| **Ruby**    | >= 3.1                      | Required for Jekyll (site dev) | [ruby-lang.org](https://www.ruby-lang.org/en/downloads/) |
-| **Bundler** | Latest                      | Ruby gem manager (site dev)    | `gem install bundler`                                    |
+| Tool        | Version                                                   | Purpose                        | Installation                                             |
+| ----------- | --------------------------------------------------------- | ------------------------------ | -------------------------------------------------------- |
+| **Node.js** | >= 22.0.0 (22, 24, 26 supported; Node 24 LTS recommended) | JavaScript runtime             | [nodejs.org](https://nodejs.org/)                        |
+| **pnpm**    | 10.x.x                                                    | Package manager                | `npm install -g pnpm`                                    |
+| **Git**     | Latest                                                    | Version control                | [git-scm.com](https://git-scm.com/)                      |
+| **VS Code** | >= 1.111.0                                                | IDE for development            | [code.visualstudio.com](https://code.visualstudio.com/)  |
+| **Ruby**    | >= 3.1                                                    | Required for Jekyll (site dev) | [ruby-lang.org](https://www.ruby-lang.org/en/downloads/) |
+| **Bundler** | Latest                                                    | Ruby gem manager (site dev)    | `gem install bundler`                                    |
 
 > **Note:** Ruby and Bundler are only required if you intend to work on the GitHub Pages site (`site/`). They are not needed for extension development.
 
 ### Verify Installation
 
 ```bash
-node --version    # Should show v20.x.x or higher
+node --version    # Should show v22.x.x or higher (Node 24 LTS recommended)
 pnpm --version    # Should show 10.x.x or higher
 git --version     # Should show git version 2.x.x or higher
 code --version    # Should show VS Code version
