@@ -13,7 +13,7 @@ async function openTsFile(content: string): Promise<vscode.TextDocument> {
 }
 
 suite('Open in Terminal', () => {
-  test('should command is registered', async () => {
+  test('should register the openInTerminal command', async () => {
     const commands = await vscode.commands.getCommands(true);
     assert.ok(
       commands.includes('additionalContextMenus.openInTerminal'),

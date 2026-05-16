@@ -4,7 +4,9 @@ import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
-async function openTsFile(content: string): Promise<{ doc: vscode.TextDocument; filePath: string }> {
+async function openTsFile(
+  content: string,
+): Promise<{ doc: vscode.TextDocument; filePath: string }> {
   const filePath = path.join(os.tmpdir(), `acm-save-test-${Date.now()}.ts`);
   await fs.writeFile(filePath, content, 'utf-8');
   const doc = await vscode.workspace.openTextDocument(filePath);
@@ -13,7 +15,7 @@ async function openTsFile(content: string): Promise<{ doc: vscode.TextDocument; 
 }
 
 suite('Save All', () => {
-  test('should command is registered', async () => {
+  test('should register the saveAll command', async () => {
     const commands = await vscode.commands.getCommands(true);
     assert.ok(
       commands.includes('additionalContextMenus.saveAll'),

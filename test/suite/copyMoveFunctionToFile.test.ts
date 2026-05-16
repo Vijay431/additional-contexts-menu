@@ -13,7 +13,7 @@ async function openTsFile(content: string): Promise<vscode.TextDocument> {
 }
 
 suite('Copy Function to File', () => {
-  test('should command is registered', async () => {
+  test('should register the copyFunctionToFile command', async () => {
     const commands = await vscode.commands.getCommands(true);
     assert.ok(
       commands.includes('additionalContextMenus.copyFunctionToFile'),
@@ -59,7 +59,7 @@ suite('Copy Function to File', () => {
 });
 
 suite('Move Function to File', () => {
-  test('should command is registered', async () => {
+  test('should register the moveFunctionToFile command', async () => {
     const commands = await vscode.commands.getCommands(true);
     assert.ok(
       commands.includes('additionalContextMenus.moveFunctionToFile'),

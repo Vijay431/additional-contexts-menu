@@ -47,7 +47,7 @@ suite('Copy File Contents', () => {
     await fs.unlink(filePath);
   });
 
-  test('should show error and not throw when file does not exist', async () => {
+  test('should not throw when file does not exist', async () => {
     const uri = vscode.Uri.file(path.join(os.tmpdir(), 'acm-nonexistent-file.ts'));
     await assert.doesNotReject(
       Promise.resolve(

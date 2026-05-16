@@ -48,7 +48,7 @@ suite('Copy Selection to File', () => {
     );
   });
 
-  test('should detect imports within selected text', async () => {
+  test('should not throw when copying selection to file', async () => {
     const content = `import { useState } from 'react';\nimport { useEffect } from 'react';\n\nconst Component = () => null;`;
     await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
@@ -56,9 +56,7 @@ suite('Copy Selection to File', () => {
     editor.selection = new vscode.Selection(3, 0, 3, lines[3]!.length);
 
     await assert.doesNotReject(
-      Promise.resolve(
-        vscode.commands.executeCommand('additionalContextMenus.copySelectionToFile'),
-      ),
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.copySelectionToFile')),
     );
   });
 });
@@ -93,7 +91,7 @@ suite('Move Selection to File', () => {
     );
   });
 
-  test('should report the selected text length correctly before invoking move', async () => {
+  test('should not throw when full line is selected', async () => {
     const content = `export const PI = 3.14159;`;
     await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
@@ -103,9 +101,7 @@ suite('Move Selection to File', () => {
     assert.strictEqual(selectedText, content, 'Full line should be selected');
 
     await assert.doesNotReject(
-      Promise.resolve(
-        vscode.commands.executeCommand('additionalContextMenus.moveSelectionToFile'),
-      ),
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.moveSelectionToFile')),
     );
   });
 });

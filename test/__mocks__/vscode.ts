@@ -6,7 +6,7 @@
 
 export const workspace = {
   workspaceFolders: undefined as
-    | Array<{ uri: { fsPath: string }; name: string; index: number }>
+    | { uri: { fsPath: string }; name: string; index: number }[]
     | undefined,
   findFiles: async () => [],
   onDidCreateFiles: () => ({ dispose: () => {} }),
@@ -75,7 +75,12 @@ export const extensions = {
 
 export const Uri = {
   file: (path: string) => ({ fsPath: path, scheme: 'file', path }),
-  parse: (uri: string) => ({ fsPath: uri, scheme: 'file', path: uri }),
+  parse: (uri: string) => {
+    const match = uri.match(/^([a-z][a-z0-9+.-]*):(\/\/)?(.*)$/i);
+    const scheme = match?.[1] ?? 'file';
+    const path = match?.[3] ?? uri;
+    return { fsPath: path, scheme, path };
+  },
 };
 
 export enum DiagnosticSeverity {
@@ -99,10 +104,14 @@ export enum FileType {
 }
 
 export class EventEmitter<T = void> {
-  private listeners: Array<(e: T) => unknown> = [];
+  private listeners: ((e: T) => unknown)[] = [];
   event = (listener: (e: T) => unknown) => {
     this.listeners.push(listener);
-    return { dispose: () => { this.listeners = this.listeners.filter((l) => l !== listener); } };
+    return {
+      dispose: () => {
+        this.listeners = this.listeners.filter((l) => l !== listener);
+      },
+    };
   };
   fire(data: T) {
     this.listeners.forEach((l) => l(data));
@@ -141,9 +150,7 @@ export class Selection extends Range {
     super(anchor, active);
   }
   get isEmpty() {
-    return (
-      this.anchor.line === this.active.line && this.anchor.character === this.active.character
-    );
+    return this.anchor.line === this.active.line && this.anchor.character === this.active.character;
   }
 }
 
@@ -164,7 +171,7 @@ export class TextEdit {
 }
 
 export class WorkspaceEdit {
-  private edits: Array<{ uri: unknown; edit: TextEdit }> = [];
+  private edits: { uri: unknown; edit: TextEdit }[] = [];
   replace(uri: unknown, range: Range, newText: string) {
     this.edits.push({ uri, edit: TextEdit.replace(range, newText) });
   }

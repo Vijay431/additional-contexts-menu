@@ -27,7 +27,7 @@ suite('Copy Function', () => {
     assert.ok(clipboard.includes('greet'), 'Clipboard should contain function name');
   });
 
-  test('should show error message when cursor is outside any function', async () => {
+  test('should not throw when cursor is outside any function', async () => {
     const content = `const x = 1;\nconst y = 2;`;
     await openTsFile(content);
     const editor = vscode.window.activeTextEditor!;
