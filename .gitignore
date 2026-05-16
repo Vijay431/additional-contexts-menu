@@ -36,6 +36,9 @@ docs/vendor/
 docs/Gemfile.lock
 docs/.jekyll-cache/
 
+# Legacy site/ directory (renamed to docs/)
+site/
+
 # Local-only docs
 TODO.md
 CHANGELOG_RELEASE.md

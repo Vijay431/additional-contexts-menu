@@ -300,7 +300,7 @@ fi
 ## Steps to follow:
 
 - All new changes should be added to the `CLAUDE.md` file
-- All new changes that user viewable should be added to the `docs`, `site` and `README.md` files
+- All new changes that user viewable should be added to the `docs/`, `public/`, and `README.md` files
 - All new changes should be logged in the `CHANGELOG.md` file under unreleased section
 - Community automation changes should update `AGENTS.md`, `CONTRIBUTING.md`, `.github/copilot-instructions.md`, and `THIRDPARTY.md` when commands, workflow ownership, or dependency notices change.
 - Configuration or command behavior changes must update `package.json`, related types in `src/types/`, tests, and docs together.
