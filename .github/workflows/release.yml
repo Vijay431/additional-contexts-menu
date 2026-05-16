@@ -223,7 +223,7 @@ jobs:
         with:
           ruby-version: '3.1'
           bundler-cache: true
-          working-directory: site
+          working-directory: docs
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -235,7 +235,7 @@ jobs:
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site/_site
+          path: docs/_site
 
       - name: Deploy to GitHub Pages
         id: deployment
