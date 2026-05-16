@@ -37,8 +37,8 @@ pnpm run test:unit:coverage # run unit tests with LCOV coverage
 pnpm run test:integration # run integration tests (Mocha + VS Code, requires display)
 pnpm run publish          # publish to VS Code Marketplace
 pnpm run publish:openvsx  # publish to Open VSX Registry
-pnpm run site:serve       # serve Jekyll GitHub Pages site locally
-pnpm run site:live        # serve with live reload
+pnpm run docs:serve       # serve Jekyll GitHub Pages site locally
+pnpm run docs:live        # serve with live reload
 ```
 
 Run a single unit test file: `pnpm run test:unit -- test/unit/cache.test.ts`
@@ -90,8 +90,8 @@ src/
     configValidator.ts
     metrics.ts
     pathValidator.ts
-docs/                           # screenshots (docs/images/screenshots/)
-site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-context-menus)
+public/                         # packaged extension assets (images, screenshots)
+docs/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-context-menus)
 test/
   __mocks__/vscode.ts           # minimal vscode mock for Vitest unit tests
   unit/                         # Vitest unit tests (infrastructure, no VS Code API)
@@ -102,12 +102,12 @@ vitest.config.ts                # Vitest config (aliases vscode to mock)
 tsconfig.test.json              # TypeScript config for compiling integration tests
 ```
 
-### GitHub Pages site (`site/`)
+### GitHub Pages site (`docs/`)
 
-- **Styles:** [`site/assets/css/main.css`](site/assets/css/main.css) (global layout, design tokens, `prefers-color-scheme: dark`, responsive nav), [`site/assets/css/pages.css`](site/assets/css/pages.css) (page-specific grids/cards, installation/download/docs grids, **`code-operations.md`** operation/example/workflow/best-practices blocks).
-- **Scripts:** [`site/assets/js/main.js`](site/assets/js/main.js) — mobile nav, scroll reveal, code-block copy buttons, tabs. Exposes `window.AdditionalContextMenusSite` (legacy alias `window.FileInsights`).
-- **Documentation page:** [`site/documentation.md`](site/documentation.md) Commands API uses `.commands-api` … `.command-item` markup; styles are scoped under `.commands-api` in [`site/assets/css/pages.css`](site/assets/css/pages.css) so generic class names do not affect e.g. installation’s `.command-list` UL wrapper.
-- **Layout:** [`site/_layouts/default.html`](site/_layouts/default.html). Markdown-only pages (e.g. `developer.md`) get a readable column via `.main-content > :not(section)`; section-based marketing pages stay full width with inner `.container`.
+- **Styles:** [`docs/assets/css/main.css`](docs/assets/css/main.css) (global layout, design tokens, `prefers-color-scheme: dark`, responsive nav), [`docs/assets/css/pages.css`](docs/assets/css/pages.css) (page-specific grids/cards, installation/download/docs grids, **`code-operations.md`** operation/example/workflow/best-practices blocks).
+- **Scripts:** [`docs/assets/js/main.js`](docs/assets/js/main.js) — mobile nav, scroll reveal, code-block copy buttons, tabs. Exposes `window.AdditionalContextMenusSite` (legacy alias `window.FileInsights`).
+- **Documentation page:** [`docs/documentation.md`](docs/documentation.md) Commands API uses `.commands-api` … `.command-item` markup; styles are scoped under `.commands-api` in [`docs/assets/css/pages.css`](docs/assets/css/pages.css) so generic class names do not affect e.g. installation’s `.command-list` UL wrapper.
+- **Layout:** [`docs/_layouts/default.html`](docs/_layouts/default.html). Markdown-only pages (e.g. `developer.md`) get a readable column via `.main-content > :not(section)`; section-based marketing pages stay full width with inner `.container`.
 
 ---
 
@@ -115,9 +115,9 @@ tsconfig.test.json              # TypeScript config for compiling integration te
 
 ### User-Facing Features (13)
 
-These are the commands users interact with. Each has a site service doc in `site/services/`.
+These are the commands users interact with. Each has a site service doc in `docs/services/`.
 
-| Feature                   | Command ID                                    | `site/services/` doc              |
+| Feature                   | Command ID                                    | `docs/services/` doc              |
 | ------------------------- | --------------------------------------------- | --------------------------------- |
 | Copy Function             | `additionalContextMenus.copyFunction`         | `copyFunction.md`                 |
 | Copy Function to File     | `additionalContextMenus.copyFunctionToFile`   | `copyFunctionToFile.md`           |
@@ -135,7 +135,7 @@ These are the commands users interact with. Each has a site service doc in `site
 
 ### Infrastructure Services (5)
 
-These power the features internally. They have **no standalone user-facing docs** — do not create `site/services/` pages for them.
+These power the features internally. They have **no standalone user-facing docs** — do not create `docs/services/` pages for them.
 
 | Service                 | Source File                               | Purpose                                                  |
 | ----------------------- | ----------------------------------------- | -------------------------------------------------------- |
