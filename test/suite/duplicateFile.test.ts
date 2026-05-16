@@ -26,7 +26,11 @@ suite('Duplicate File', () => {
     const duplicatePath = path.join(os.tmpdir(), `${nameWithoutExt}-duplicate.ts`);
 
     const duplicateContent = await fs.readFile(duplicatePath, 'utf-8');
-    assert.strictEqual(duplicateContent, content, 'Duplicate file should have same content as original');
+    assert.strictEqual(
+      duplicateContent,
+      content,
+      'Duplicate file should have same content as original',
+    );
 
     await fs.unlink(filePath);
     await fs.unlink(duplicatePath);
@@ -53,8 +57,16 @@ suite('Duplicate File', () => {
     const duplicateContent = await fs.readFile(duplicatePath, 'utf-8');
     const duplicate1Content = await fs.readFile(duplicate1Path, 'utf-8');
 
-    assert.strictEqual(duplicateContent, content, 'First duplicate should have same content as original');
-    assert.strictEqual(duplicate1Content, content, 'Second duplicate should have same content as original');
+    assert.strictEqual(
+      duplicateContent,
+      content,
+      'First duplicate should have same content as original',
+    );
+    assert.strictEqual(
+      duplicate1Content,
+      content,
+      'Second duplicate should have same content as original',
+    );
 
     await fs.unlink(filePath);
     await fs.unlink(duplicatePath);
@@ -83,9 +95,7 @@ suite('Duplicate File', () => {
   test('should not throw when called on a non-existent file', async () => {
     const uri = vscode.Uri.file(path.join(os.tmpdir(), 'acm-nonexistent-duplicate.ts'));
     await assert.doesNotReject(
-      Promise.resolve(
-        vscode.commands.executeCommand('additionalContextMenus.duplicateFile', uri),
-      ),
+      Promise.resolve(vscode.commands.executeCommand('additionalContextMenus.duplicateFile', uri)),
     );
   });
 });
