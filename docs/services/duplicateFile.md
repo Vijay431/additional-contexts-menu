@@ -33,4 +33,4 @@ description: 'Documentation for Duplicate File - duplicate any file from the Exp
 <li>Create test fixtures based on existing files</li>
 </ul>
 
-<a href="../index.html" class="btn">Back to Services</a>
+<a href="./index.html" class="btn">Back to Services</a>

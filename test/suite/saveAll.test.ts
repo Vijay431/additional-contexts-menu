@@ -39,10 +39,19 @@ suite('Save All', () => {
 
     assert.ok(doc.isDirty, 'Document should be dirty after edit');
 
-    await vscode.commands.executeCommand('additionalContextMenus.saveAll');
+    const saved = new Promise<void>((resolve) => {
+      const disposable = vscode.workspace.onDidSaveTextDocument((saved) => {
+        if (saved.uri.toString() === doc.uri.toString()) {
+          disposable.dispose();
+          resolve();
+        }
+      });
+      // 5-second fallback in case the event doesn't fire
+      setTimeout(() => { disposable.dispose(); resolve(); }, 5000);
+    });
 
-    // Give VS Code time to flush the save
-    await new Promise((r) => setTimeout(r, 300));
+    await vscode.commands.executeCommand('additionalContextMenus.saveAll');
+    await saved;
 
     assert.ok(!doc.isDirty, 'Document should not be dirty after saveAll');
   });

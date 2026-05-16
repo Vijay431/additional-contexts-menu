@@ -4,13 +4,22 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import * as os from 'os';
 
+const createdTmpFiles: string[] = [];
+
 async function openTsFile(content: string): Promise<vscode.TextDocument> {
   const tmpFile = path.join(os.tmpdir(), `acm-fn-test-${Date.now()}.ts`);
   await fs.writeFile(tmpFile, content, 'utf-8');
+  createdTmpFiles.push(tmpFile);
   const doc = await vscode.workspace.openTextDocument(tmpFile);
   await vscode.window.showTextDocument(doc);
   return doc;
 }
+
+suiteTeardown(async () => {
+  for (const f of createdTmpFiles) {
+    await fs.unlink(f).catch(() => {});
+  }
+});
 
 suite('Copy Function to File', () => {
   test('should register the copyFunctionToFile command', async () => {
@@ -51,7 +60,7 @@ suite('Copy Function to File', () => {
 
     const { CodeAnalysisService } = require('../../src/services/codeAnalysisService');
     const svc = CodeAnalysisService.getInstance();
-    const fnInfo = svc.findFunctionAtPosition(editor.document, editor.selection.active);
+    const fnInfo = await svc.findFunctionAtPosition(editor.document, editor.selection.active);
 
     assert.ok(fnInfo, 'Should find function at cursor position');
     assert.ok(fnInfo.name === 'transform', `Expected "transform", got "${fnInfo?.name}"`);
@@ -95,7 +104,7 @@ suite('Move Function to File', () => {
 
     const { CodeAnalysisService } = require('../../src/services/codeAnalysisService');
     const svc = CodeAnalysisService.getInstance();
-    const fnInfo = svc.findFunctionAtPosition(editor.document, editor.selection.active);
+    const fnInfo = await svc.findFunctionAtPosition(editor.document, editor.selection.active);
 
     assert.ok(fnInfo, 'Should find arrow function at cursor position');
     assert.strictEqual(fnInfo!.name, 'multiply');

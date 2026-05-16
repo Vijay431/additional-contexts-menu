@@ -177,10 +177,10 @@ Breaking changes: append `!` after the type — `feat!: remove deprecated API`
 
 | Limit                        | Value   | Rationale                            |
 | ---------------------------- | ------- | ------------------------------------ |
-| Max files per commit         | **15**  | Keeps commits focused and reviewable |
-| Max lines changed per commit | **600** | Prevents large, hard-to-review diffs |
+| Max files per commit         | **10**  | Keeps commits focused and reviewable |
+| Max lines changed per commit | **400** | Prevents large, hard-to-review diffs |
 
-If your change exceeds these limits, split it into multiple focused commits:
+If your change exceeds these limits, split it into multiple focused commits. For sweeping refactors that cannot reasonably be split, add the `size/override` label to the PR — the CI check will post a warning but will not hard-fail.
 
 ```bash
 # Stage and commit one logical group at a time

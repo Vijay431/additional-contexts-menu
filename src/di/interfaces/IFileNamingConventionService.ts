@@ -69,7 +69,7 @@ export interface IFileNamingConventionService {
    *
    * @param currentPath - The current file path
    * @param newName - The new file name
-   * @returns Promise that resolves when file is renamed
+   * @returns Promise resolving to `{ success, newPath?, error? }`
    */
   renameFile(
     currentPath: string,

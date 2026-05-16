@@ -587,6 +587,12 @@
       "prettier --write"
     ]
   },
+  "pnpm": {
+    "overrides": {
+      "fast-uri": ">=3.1.2",
+      "serialize-javascript": ">=7.0.5"
+    }
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"

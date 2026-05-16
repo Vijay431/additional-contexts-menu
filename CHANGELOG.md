@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **CI/release split**: Moved tag-driven publishing from `.github/workflows/ci.yml` into `.github/workflows/release.yml`; CI now focuses on PR/main quality gates.
 - **Contributor docs**: Updated `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, and `SECURITY.md` for coverage, workflow ownership, Codespaces, third-party notices, and supported versions.
+- **Site restructure**: Renamed Jekyll source from `site/` to `docs/`; moved packaged images from `docs/images/` to `public/images/` for cleaner extension packaging. Updated `release.yml` and `deploy-pages.yml` build paths accordingly.
 
 ## [2.1.0] - 2026-05-06
 

@@ -23,8 +23,8 @@ jobs:
         id: check
         shell: bash
         run: |
-          MAX_FILES=15
-          MAX_LINES=3000
+          MAX_FILES=10
+          MAX_LINES=400
           STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
           FILE_COUNT=$(echo "$STATS" | grep -c .)
           LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
@@ -44,14 +44,16 @@ jobs:
 
           This PR exceeds the recommended size limits. Consider splitting it into smaller PRs.
           "
-          [ "${{ steps.check.outputs.file_count }}" -gt 15 ] && BODY="${BODY}
-          - Too many files changed: **${{ steps.check.outputs.file_count }}** (max 15)"
-          [ "${{ steps.check.outputs.line_count }}" -gt 3000 ] && BODY="${BODY}
-          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 3000)"
+          [ "${{ steps.check.outputs.file_count }}" -gt 10 ] && BODY="${BODY}
+          - Too many files changed: **${{ steps.check.outputs.file_count }}** (max 10)"
+          [ "${{ steps.check.outputs.line_count }}" -gt 400 ] && BODY="${BODY}
+          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 400)"
 
           gh pr comment ${{ github.event.pull_request.number }} --edit-last --body "$BODY" 2>/dev/null || \
           gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
 
       - name: Fail if PR Too Large
-        if: steps.check.outputs.failed == '1'
+        if: >-
+          steps.check.outputs.failed == '1' &&
+          !contains(github.event.pull_request.labels.*.name, 'size/override')
         run: exit 1

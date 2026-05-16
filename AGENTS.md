@@ -29,7 +29,7 @@ Add unit tests in `test/unit/*.test.ts` for services, utilities, and validators.
 
 ## Commit & Pull Request Guidelines
 
-Use Conventional Commits, for example `feat(copy): add file contents command`, `fix(fileDiscovery): respect cache ttl`, or `test(unit): cover enum generation`. Hooks and CI enforce a maximum of 15 files and 600 changed lines per commit. Branch from `main` using prefixes such as `feature/`, `fix/`, `docs/`, or `refactor/`.
+Use Conventional Commits, for example `feat(copy): add file contents command`, `fix(fileDiscovery): respect cache ttl`, or `test(unit): cover enum generation`. Hooks and CI enforce a maximum of 10 files and 400 changed lines per commit. Sweeping refactors may add the `size/override` label to the PR to bypass the CI hard-fail. Branch from `main` using prefixes such as `feature/`, `fix/`, `docs/`, or `refactor/`.
 
 Pull requests should include a clear description, linked issues when applicable, and screenshots or recordings for visible VS Code UI changes. Before opening a PR, run `pnpm run lint`, `pnpm run build`, and relevant tests. Workflow or community automation changes should also update `README.md`, `CHANGELOG.md`, `CLAUDE.md`, `CONTRIBUTING.md`, and `.github/copilot-instructions.md` when commands or maintainer procedures change.
 

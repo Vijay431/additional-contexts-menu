@@ -14,7 +14,12 @@ jobs:
   add-contributor:
     name: Add Contributor
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.comment.body, '@all-contributors please add')
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (
+        startsWith(github.event.comment.body, '@all-contributors please add') &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+      )
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

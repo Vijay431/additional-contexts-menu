@@ -78,8 +78,8 @@ extension:
   publisher: 'VijayGangatharan'
   test_coverage: '53 e2e tests'
   success_rate: '100%'
-  bundle_size: 'optimized'
-  lazy_services: 'optimized'
+  bundle_size: '60KB'
+  lazy_services: '26KB'
   build_time: '~1 second'
 
 # SEO and social

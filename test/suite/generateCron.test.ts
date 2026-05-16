@@ -18,7 +18,7 @@ suite('Generate Cron Expression', () => {
     await new Promise((r) => setTimeout(r, 200));
     await vscode.commands.executeCommand('workbench.action.closeQuickOpen');
     // Command should resolve (possibly with undefined) after dismissal
-    await Promise.resolve(cmdPromise).catch(() => {});
+    await assert.doesNotReject(Promise.resolve(cmdPromise));
     assert.ok(true, 'Command invoked without crashing');
   });
 });

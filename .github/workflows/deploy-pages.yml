@@ -31,7 +31,7 @@ jobs:
 
       - name: Build Jekyll Site
         run: bundle exec jekyll build
-        working-directory: site
+        working-directory: docs
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3

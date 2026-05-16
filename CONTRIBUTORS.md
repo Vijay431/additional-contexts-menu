@@ -16,8 +16,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding standards, 
 
 Human contributors are tracked via [all-contributors](https://allcontributors.org/). To add yourself, comment on any issue or PR with:
 
-```
+```text
 @all-contributors please add @<username> for <contributions>
 ```
 
-Valid contribution types include: `code`, `doc`, `test`, `bug`, `ideas`, `maintenance`, `review`, and [more](https://allcontributors.org/docs/en/emoji-key).
+Valid contribution types include: `code`, `doc`, `test`, `bug`, `ideas`, `maintenance`, `review`, and [more contribution types](https://allcontributors.org/docs/en/emoji-key).

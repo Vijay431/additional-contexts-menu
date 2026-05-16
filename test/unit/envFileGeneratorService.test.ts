@@ -2,13 +2,15 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 import { EnvFileGeneratorService } from '../../src/services/envFileGeneratorService';
 
-beforeEach(() => {
-  (EnvFileGeneratorService as any).instance = undefined;
-});
-
 describe('EnvFileGeneratorService.parseEnvVariables', () => {
-  const svc = EnvFileGeneratorService.getInstance();
-  const parseEnvVariables = (svc as any).parseEnvVariables.bind(svc);
+  let svc: EnvFileGeneratorService;
+  let parseEnvVariables: (content: string) => { name: string }[];
+
+  beforeEach(() => {
+    (EnvFileGeneratorService as any).instance = undefined;
+    svc = EnvFileGeneratorService.getInstance();
+    parseEnvVariables = (svc as any).parseEnvVariables.bind(svc);
+  });
 
   it('should skip comments and empty lines when parsing', () => {
     const content = [
@@ -22,7 +24,7 @@ describe('EnvFileGeneratorService.parseEnvVariables', () => {
 
     const variables = parseEnvVariables(content);
     expect(variables).toHaveLength(3);
-    expect(variables.map((v: { name: string }) => v.name)).toEqual(['NODE_ENV', 'PORT', 'DB_HOST']);
+    expect(variables.map((v) => v.name)).toEqual(['NODE_ENV', 'PORT', 'DB_HOST']);
   });
 
   it('should ignore lines without equals sign', () => {

@@ -314,7 +314,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 - `fix(fileDiscovery): respect cache ttl`
 - `test(unit): cover enum generation`
 
-**Commit size limits** (enforced by hooks and CI): max **15 files** and **600 changed lines** per commit.
+**Commit size limits** (enforced by hooks and CI): max **10 files** and **400 changed lines** per commit. Sweeping refactors that exceed these limits may add the `size/override` label to the PR to bypass the CI hard-fail (warning comment is still posted).
 
 Branch naming: `feature/`, `fix/`, `docs/`, or `refactor/` prefix from `main`.
 

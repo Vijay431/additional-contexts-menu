@@ -88,7 +88,7 @@ _Extract functions in one click with intelligent import handling_
 
 ## 📚 Features Documentation
 
-Detailed documentation for all 12 features with usage guides and examples.
+Detailed documentation for all 13 features with usage guides and examples.
 
 | Feature                | Documentation                                                                                               | Purpose                                                                               |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
