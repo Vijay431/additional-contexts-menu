@@ -286,7 +286,7 @@ export class Cache<T> {
   public dispose(): void {
     if (this.cleanupTimer) {
       clearInterval(this.cleanupTimer);
-      delete (this as unknown as { cleanupTimer?: NodeJS.Timeout }).cleanupTimer;
+      this.cleanupTimer = undefined;
     }
     this.clear();
   }

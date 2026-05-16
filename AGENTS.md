@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This is a TypeScript VS Code extension. Source code lives in `src/`: command handlers in `src/commands/`, services in `src/services/`, dependency injection in `src/di/`, managers in `src/managers/`, shared types in `src/types/`, and helpers in `src/utils/`. Unit tests are in `test/unit/`, integration tests in `test/suite/`, mocks in `test/__mocks__/`, and fixtures in `test/fixtures/`. Documentation and site pages are under `docs/` and `site/`. Do not edit generated output in `dist/` or `out-test/`.
+This is a TypeScript VS Code extension. Source code lives in `src/`: command handlers in `src/commands/`, services in `src/services/`, dependency injection in `src/di/`, managers in `src/managers/`, shared types in `src/types/`, and helpers in `src/utils/`. Unit tests are in `test/unit/`, integration tests in `test/suite/`, mocks in `test/__mocks__/`, and fixtures in `test/fixtures/`. Documentation and site pages are under `docs/` (Jekyll GitHub Pages source) and `public/` (packaged extension assets). Do not edit generated output in `dist/` or `out-test/`.
 
 ## Build, Test, and Development Commands
 
@@ -17,7 +17,7 @@ This is a TypeScript VS Code extension. Source code lives in `src/`: command han
 - `pnpm run test:integration`: compile tests and run VS Code integration tests.
 - `pnpm run package`: create a `.vsix` package.
 
-Use Node.js 20+ and pnpm. For manual testing, open the repo in VS Code and press `F5`.
+Use Node.js 22+ and pnpm. Development uses Node 24 LTS (`.nvmrc` = `lts/jod`). For manual testing, open the repo in VS Code and press `F5`.
 
 ## Coding Style & Naming Conventions
 
@@ -29,10 +29,20 @@ Add unit tests in `test/unit/*.test.ts` for services, utilities, and validators.
 
 ## Commit & Pull Request Guidelines
 
-Use Conventional Commits, for example `feat(copy): add file contents command`, `fix(fileDiscovery): respect cache ttl`, or `test(unit): cover enum generation`. Hooks and CI enforce a maximum of 15 files and 600 changed lines per commit. Branch from `main` using prefixes such as `feature/`, `fix/`, `docs/`, or `refactor/`.
+Use Conventional Commits, for example `feat(copy): add file contents command`, `fix(fileDiscovery): respect cache ttl`, or `test(unit): cover enum generation`. Hooks and CI enforce a maximum of 10 files and 400 changed lines per commit. Sweeping refactors may add the `size/override` label to the PR to bypass the CI hard-fail. Branch from `main` using prefixes such as `feature/`, `fix/`, `docs/`, or `refactor/`.
 
 Pull requests should include a clear description, linked issues when applicable, and screenshots or recordings for visible VS Code UI changes. Before opening a PR, run `pnpm run lint`, `pnpm run build`, and relevant tests. Workflow or community automation changes should also update `README.md`, `CHANGELOG.md`, `CLAUDE.md`, `CONTRIBUTING.md`, and `.github/copilot-instructions.md` when commands or maintainer procedures change.
 
 ## Security & Configuration Tips
 
 Do not commit secrets, local VS Code state, generated packages, coverage output, or build artifacts. Review `SECURITY.md` for vulnerability reporting. Configuration changes should update `package.json`, related types in `src/types/`, and tests together. Third-party tooling changes should keep `THIRDPARTY.md` current.
+
+## Assistant Conventions
+
+### Communication
+
+Default to **caveman mode** (terse: drop articles/filler/pleasantries; fragments OK). Keep technical substance exact. Code/commits/PRs/security warnings stay in normal English. Disable on request ("normal mode").
+
+### Shell commands
+
+Prepend `rtk` to all shell invocations when available — 60-90% token savings on dev ops. Examples: `rtk git status`, `rtk pnpm test`, `rtk ls`. Fallback to direct command if `rtk` unavailable, or for compound predicates (`find -not`, `find -exec`) which rtk does not support.

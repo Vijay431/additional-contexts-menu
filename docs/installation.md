@@ -154,7 +154,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </div>
                 <h3 class="req-title">Visual Studio Code</h3>
                 <div class="req-details">
-                    <p class="req-version">Version 1.110.0 or higher</p>
+                    <p class="req-version">Version 1.111.0 or higher</p>
                     <p class="req-note">Latest stable version recommended</p>
                 </div>
             </div>
@@ -179,7 +179,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                 </div>
                 <h3 class="req-title">Node.js Runtime</h3>
                 <div class="req-details">
-                    <p class="req-version">Node.js 20+ required for development</p>
+                    <p class="req-version">Node.js 22+ required (Node 24 LTS recommended)</p>
                     <p class="req-note">For development and build tools</p>
                     <p class="req-note">Extension runs in VS Code host</p>
                 </div>
@@ -435,7 +435,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                         <ol>
                             <li>Disable extension temporarily: <code>Additional Context Menus: Disable</code></li>
                             <li>Check for large files that may slow AST parsing</li>
-                            <li>Verify Node.js version compatibility (20-24 supported)</li>
+                            <li>Verify Node.js version compatibility (22+ required, Node 24 LTS recommended)</li>
                             <li>Check output logs: <code>Additional Context Menus: Show Output Channel</code></li>
                         </ol>
                     </div>

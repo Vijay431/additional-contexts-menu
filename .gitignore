@@ -1,11 +1,45 @@
-.claude/
-.code-review-graph/
-.vscode-test/
-dist/
-coverage/
+# Dependencies
 node_modules/
+
+# Build output
+dist/
 out-test/
+coverage/
+*.vsix
+
+# Compiled test files
 test/**/*.js
 test/**/*.js.map
 
+# Tooling caches & local state
+.claude/
+.code-review-graph/
+.vscode-test/
+.worktrees/
+.auto-claude/
+.automaker/
+.sisyphus
+.auto-claude-security.json
+
+# Logs
+*.log
+debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jekyll site build artifacts
+docs/_site/
+docs/.bundle/
+docs/vendor/
+docs/Gemfile.lock
+docs/.jekyll-cache/
+
+# Legacy site/ directory (renamed to docs/)
+site/
+
+# Local-only docs
 TODO.md
+CHANGELOG_RELEASE.md
+IMPLEMENTATION_SUMMARY.md

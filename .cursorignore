@@ -1,8 +1,22 @@
+# Generated / build
+dist/
+out-test/
+coverage/
+*.vsix
+
+# Dependencies & lockfiles (noise for AI context)
+node_modules/
+pnpm-lock.yaml
+
+# Tooling caches
 .claude/
 .code-review-graph/
 .vscode-test/
-dist/
-node_modules/
-out-test/
 
+# Jekyll site build artifacts
+docs/_site/
+docs/.bundle/
+docs/vendor/
+
+# Local-only docs
 TODO.md

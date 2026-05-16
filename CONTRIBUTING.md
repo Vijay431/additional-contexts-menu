@@ -21,11 +21,11 @@ By participating in this project, you are expected to uphold our [Code of Conduc
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (version 20+ required, 20, 22, and 24 supported)
+- [Node.js](https://nodejs.org/) (version 22+ required, 22, 24, and 26 supported; Node 24 LTS recommended for development)
 - [PNPM](https://pnpm.io/) (install with `npm install -g pnpm`)
 - [Visual Studio Code](https://code.visualstudio.com/) (for development and testing)
 - [Git](https://git-scm.com/)
-- [Ruby](https://www.ruby-lang.org/en/downloads/) >= 3.1 — required for local GitHub Pages preview (`pnpm run site:serve`)
+- [Ruby](https://www.ruby-lang.org/en/downloads/) >= 3.1 — required for local GitHub Pages preview (`pnpm run docs:serve`)
 - [Bundler](https://bundler.io/) — Ruby gem manager, install with `gem install bundler`, then run `pnpm run system:verify` to set up Husky and site dependencies
 
 ### Types of Contributions
@@ -59,7 +59,7 @@ pnpm install
 ### 3. Build and Verify
 
 ```bash
-# Build the extension (requires Node.js 20+)
+# Build the extension (requires Node.js 22+; Node 24 LTS recommended)
 pnpm run build
 
 # Run ESLint — uses tsconfig.eslint.json for type-aware rules
@@ -85,7 +85,7 @@ pnpm run test:unit:coverage  # Run unit tests with LCOV coverage
 pnpm run test:integration  # Run integration tests (requires display/xvfb on Linux)
 ```
 
-The repository also includes a Dev Container and GitHub Codespaces configuration. Opening the project in that environment installs Node.js 20, pnpm dependencies, recommended VS Code extensions, and Linux packages required for headless integration tests.
+The repository also includes a Dev Container and GitHub Codespaces configuration. Opening the project in that environment installs Node.js 24 (latest LTS), pnpm dependencies, recommended VS Code extensions, and Linux packages required for headless integration tests.
 
 ## Testing
 
@@ -95,11 +95,11 @@ The project has two test layers:
 | ----------- | ----------------------------- | ------------------------------- | ------------------------------------------------------------------ |
 | Unit        | `pnpm run test:unit`          | Vitest                          | Infrastructure utilities and services with mocked VS Code API      |
 | Coverage    | `pnpm run test:unit:coverage` | Vitest + V8 coverage            | Unit tests plus `coverage/lcov.info` for Codecov                   |
-| Integration | `pnpm run test:integration`   | Mocha + `@vscode/test-electron` | All 11 user-facing features, end-to-end in a real VS Code instance |
+| Integration | `pnpm run test:integration`   | Mocha + `@vscode/test-electron` | All 13 user-facing features, end-to-end in a real VS Code instance |
 
 **Unit tests** cover: `Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`.
 
-**Integration tests** cover: Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File to Convention, Generate Enum, Generate Cron, Generate .env.
+**Integration tests** cover: Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File to Convention, Generate Enum, Generate Cron, Generate .env, Copy File Contents, Duplicate File.
 
 On Linux, integration tests require a display. Use `xvfb-run -a pnpm run test:integration` in headless environments.
 
@@ -177,10 +177,10 @@ Breaking changes: append `!` after the type — `feat!: remove deprecated API`
 
 | Limit                        | Value   | Rationale                            |
 | ---------------------------- | ------- | ------------------------------------ |
-| Max files per commit         | **15**  | Keeps commits focused and reviewable |
-| Max lines changed per commit | **600** | Prevents large, hard-to-review diffs |
+| Max files per commit         | **10**  | Keeps commits focused and reviewable |
+| Max lines changed per commit | **400** | Prevents large, hard-to-review diffs |
 
-If your change exceeds these limits, split it into multiple focused commits:
+If your change exceeds these limits, split it into multiple focused commits. For sweeping refactors that cannot reasonably be split, add the `size/override` label to the PR — the CI check will post a warning but will not hard-fail.
 
 ```bash
 # Stage and commit one logical group at a time

@@ -6,7 +6,7 @@
 
 <div align="center">
 
-![Copy Function Demo](docs/images/screenshots/copy-function.gif)
+![Copy Function Demo](public/images/screenshots/copy-function.gif)
 _Extract functions in one click with intelligent import handling_
 
 </div>
@@ -39,35 +39,35 @@ _Extract functions in one click with intelligent import handling_
 
 ### Copy Function
 
-![Copy Function Demo](docs/images/screenshots/copy-function.gif)
+![Copy Function Demo](public/images/screenshots/copy-function.gif)
 
 ### Copy Function to File
 
-![Copy Function to File Demo](docs/images/screenshots/copy-function-to-file.gif)
+![Copy Function to File Demo](public/images/screenshots/copy-function-to-file.gif)
 
 ### Move Function to File
 
-![Move Function to File Demo](docs/images/screenshots/move-function-to-file.gif)
+![Move Function to File Demo](public/images/screenshots/move-function-to-file.gif)
 
 ### Copy Selection to File
 
-![Copy Selection to File Demo](docs/images/screenshots/copy-selection-to-file.gif)
+![Copy Selection to File Demo](public/images/screenshots/copy-selection-to-file.gif)
 
 ### Move Selection to File
 
-![Move Selection to File Demo](docs/images/screenshots/move-selection-to-file.gif)
+![Move Selection to File Demo](public/images/screenshots/move-selection-to-file.gif)
 
 ### Save All
 
-![Save All Demo](docs/images/screenshots/save-all.gif)
+![Save All Demo](public/images/screenshots/save-all.gif)
 
 ### Open in Terminal
 
-![Open in Terminal Demo](docs/images/screenshots/open-in-terminal.gif)
+![Open in Terminal Demo](public/images/screenshots/open-in-terminal.gif)
 
 ### Rename File to Convention
 
-![Rename File to Convention Demo](docs/images/screenshots/rename-file-convention.gif)
+![Rename File to Convention Demo](public/images/screenshots/rename-file-convention.gif)
 
 ---
 
@@ -88,7 +88,7 @@ _Extract functions in one click with intelligent import handling_
 
 ## 📚 Features Documentation
 
-Detailed documentation for all 12 features with usage guides and examples.
+Detailed documentation for all 13 features with usage guides and examples.
 
 | Feature                | Documentation                                                                                               | Purpose                                                                               |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
@@ -408,8 +408,8 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 
 ## 📋 Requirements
 
-- **VS Code**: Version 1.110.0 or higher
-- **Node.js**: Version 20+ required for development
+- **VS Code**: Version 1.111.0 or higher (last 10 minor versions supported)
+- **Node.js**: Version 22+ runtime (Node 24 LTS recommended for development)
 - **PNPM**: Package manager for dependency management (install with `npm install -g pnpm`)
 - **Project Type**: Node.js project with `package.json` (for smart detection)
 - **File Types**: TypeScript/JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`)
@@ -800,7 +800,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ### 🛠️ Development Setup
 
-**Prerequisites**: Node.js 20+ required for development (20, 22, 24 supported)
+**Prerequisites**: Node.js 22+ runtime (22, 24, 26 supported); development uses Node 24 LTS. VS Code 1.111+ required (last 10 minor versions supported).
 
 ```bash
 # 1. Clone and setup
@@ -815,7 +815,7 @@ pnpm run build
 # Press F5 in VS Code to launch Extension Development Host
 ```
 
-You can also open the project in GitHub Codespaces or a VS Code Dev Container. The container installs Node.js 20, pnpm dependencies, recommended VS Code extensions, and Linux packages needed for headless integration tests.
+You can also open the project in GitHub Codespaces or a VS Code Dev Container. The container installs Node.js 24 (latest LTS), pnpm dependencies, recommended VS Code extensions, and Linux packages needed for headless integration tests.
 
 ### 📋 Available Development Commands
 
@@ -846,6 +846,8 @@ Thanks goes to these wonderful people:
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome.
+
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full contributors list including AI pair programmers.
 
 ## 📄 License
 

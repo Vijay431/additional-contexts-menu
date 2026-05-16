@@ -21,27 +21,27 @@
   "marketplace": {
     "screenshots": [
       {
-        "path": "docs/images/screenshots/copy-function.png",
+        "path": "public/images/screenshots/copy-function.png",
         "label": "Extract functions with intelligent import handling"
       },
       {
-        "path": "docs/images/screenshots/copy-to-file.png",
+        "path": "public/images/screenshots/copy-to-file.png",
         "label": "Smart file discovery with framework-aware filtering"
       },
       {
-        "path": "docs/images/screenshots/context-menu.png",
+        "path": "public/images/screenshots/context-menu.png",
         "label": "Complete context menu integration"
       },
       {
-        "path": "docs/images/screenshots/enum-generator.png",
+        "path": "public/images/screenshots/enum-generator.png",
         "label": "Generate enums from union types"
       },
       {
-        "path": "docs/images/screenshots/terminal-integration.png",
+        "path": "public/images/screenshots/terminal-integration.png",
         "label": "Cross-platform terminal integration"
       }
     ],
-    "banner": "docs/images/banner.png"
+    "banner": "public/images/banner.png"
   },
   "keywords": [
     "context",
@@ -82,8 +82,8 @@
     "Other"
   ],
   "engines": {
-    "node": ">=20",
-    "vscode": ">=1.110.0"
+    "node": ">=22",
+    "vscode": ">=1.111.0"
   },
   "activationEvents": [
     "onStartupFinished",
@@ -520,11 +520,6 @@
     "yarn": false
   },
   "main": "./dist/extension.js",
-  "pnpm": {
-    "overrides": {
-      "serialize-javascript": "7.0.5"
-    }
-  },
   "scripts": {
     "vscode:prepublish": "tsx esbuild.config.ts --production",
     "build": "tsx esbuild.config.ts",
@@ -542,9 +537,9 @@
     "lint:fix": "eslint src --fix",
     "lint-staged": "lint-staged",
     "format": "prettier --write .",
-    "site:serve": "cd site && bundle exec jekyll serve --baseurl ''",
-    "site:live": "cd site && bundle exec jekyll serve --baseurl '' --livereload",
-    "system:verify": "concurrently \"husky\" \"cd site && bundle config set --local path vendor/bundle && bundle install\""
+    "docs:serve": "cd docs && bundle exec jekyll serve --baseurl ''",
+    "docs:live": "cd docs && bundle exec jekyll serve --baseurl '' --livereload",
+    "system:verify": "concurrently \"husky\" \"cd docs && bundle config set --local path vendor/bundle && bundle install\""
   },
   "prettier": {
     "printWidth": 100,
@@ -587,9 +582,66 @@
       "prettier --write"
     ]
   },
+  "pnpm": {
+    "overrides": {
+      "fast-uri": ">=3.1.2",
+      "serialize-javascript": ">=7.0.5"
+    }
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
+    ]
+  },
+  "all-contributors": {
+    "projectName": "additional-context-menus",
+    "projectOwner": "Vijay431",
+    "repoType": "github",
+    "repoHost": "https://github.com",
+    "files": [
+      "README.md"
+    ],
+    "imageSize": 100,
+    "commit": false,
+    "commitType": "docs",
+    "contributorsPerLine": 7,
+    "contributors": [
+      {
+        "login": "Vijay431",
+        "name": "Vijay Gangatharan",
+        "avatar_url": "https://github.com/Vijay431.png",
+        "profile": "https://github.com/Vijay431",
+        "contributions": [
+          "code",
+          "doc",
+          "design",
+          "infra",
+          "maintenance"
+        ]
+      },
+      {
+        "login": "claude-anthropic",
+        "name": "Claude (Anthropic)",
+        "avatar_url": "https://avatars.githubusercontent.com/u/76263028",
+        "profile": "https://claude.ai",
+        "contributions": [
+          "code",
+          "doc",
+          "test",
+          "review"
+        ]
+      },
+      {
+        "login": "codex-openai",
+        "name": "Codex (OpenAI)",
+        "avatar_url": "https://avatars.githubusercontent.com/u/14957082",
+        "profile": "https://openai.com",
+        "contributions": [
+          "code",
+          "doc",
+          "review"
+        ]
+      }
     ]
   },
   "devDependencies": {
@@ -597,8 +649,8 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.39.4",
     "@types/mocha": "10.0.10",
-    "@types/node": "^20.0.0",
-    "@types/vscode": "^1.110.0",
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.111.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "@vitest/coverage-v8": "3.1.1",

@@ -65,7 +65,7 @@ body:
     id: vscode-version
     attributes:
       label: VS Code version
-      placeholder: 1.110.0
+      placeholder: 1.111.0
     validations:
       required: true
   - type: dropdown

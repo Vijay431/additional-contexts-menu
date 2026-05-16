@@ -11,8 +11,8 @@ This file is the single source of truth for the **Additional Context Menus** VS 
 - **Name:** Additional Context Menus
 - **Publisher:** VijayGangatharan
 - **Version:** 2.1.0
-- **VS Code engine:** >=1.110.0
-- **Node.js:** >=20
+- **VS Code engine:** >=1.111.0 (last 10 minor versions; 1.111–1.120)
+- **Node.js:** >=22 runtime (22, 24, 26 supported); dev uses Node 24 LTS (`lts/jod`)
 - **Package manager:** pnpm
 - **Language:** TypeScript (strict mode)
 - **Bundle tool:** esbuild (via `esbuild.config.ts`)
@@ -37,8 +37,8 @@ pnpm run test:unit:coverage # run unit tests with LCOV coverage
 pnpm run test:integration # run integration tests (Mocha + VS Code, requires display)
 pnpm run publish          # publish to VS Code Marketplace
 pnpm run publish:openvsx  # publish to Open VSX Registry
-pnpm run site:serve       # serve Jekyll GitHub Pages site locally
-pnpm run site:live        # serve with live reload
+pnpm run docs:serve       # serve Jekyll GitHub Pages site locally
+pnpm run docs:live        # serve with live reload
 ```
 
 Run a single unit test file: `pnpm run test:unit -- test/unit/cache.test.ts`
@@ -90,8 +90,8 @@ src/
     configValidator.ts
     metrics.ts
     pathValidator.ts
-docs/                           # screenshots (docs/images/screenshots/)
-site/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-context-menus)
+public/                         # packaged extension assets (images, screenshots)
+docs/                           # Jekyll GitHub Pages site (vijay431.github.io/additional-context-menus)
 test/
   __mocks__/vscode.ts           # minimal vscode mock for Vitest unit tests
   unit/                         # Vitest unit tests (infrastructure, no VS Code API)
@@ -102,12 +102,12 @@ vitest.config.ts                # Vitest config (aliases vscode to mock)
 tsconfig.test.json              # TypeScript config for compiling integration tests
 ```
 
-### GitHub Pages site (`site/`)
+### GitHub Pages site (`docs/`)
 
-- **Styles:** [`site/assets/css/main.css`](site/assets/css/main.css) (global layout, design tokens, `prefers-color-scheme: dark`, responsive nav), [`site/assets/css/pages.css`](site/assets/css/pages.css) (page-specific grids/cards, installation/download/docs grids, **`code-operations.md`** operation/example/workflow/best-practices blocks).
-- **Scripts:** [`site/assets/js/main.js`](site/assets/js/main.js) — mobile nav, scroll reveal, code-block copy buttons, tabs. Exposes `window.AdditionalContextMenusSite` (legacy alias `window.FileInsights`).
-- **Documentation page:** [`site/documentation.md`](site/documentation.md) Commands API uses `.commands-api` … `.command-item` markup; styles are scoped under `.commands-api` in [`site/assets/css/pages.css`](site/assets/css/pages.css) so generic class names do not affect e.g. installation’s `.command-list` UL wrapper.
-- **Layout:** [`site/_layouts/default.html`](site/_layouts/default.html). Markdown-only pages (e.g. `developer.md`) get a readable column via `.main-content > :not(section)`; section-based marketing pages stay full width with inner `.container`.
+- **Styles:** [`docs/assets/css/main.css`](docs/assets/css/main.css) (global layout, design tokens, `prefers-color-scheme: dark`, responsive nav), [`docs/assets/css/pages.css`](docs/assets/css/pages.css) (page-specific grids/cards, installation/download/docs grids, **`code-operations.md`** operation/example/workflow/best-practices blocks).
+- **Scripts:** [`docs/assets/js/main.js`](docs/assets/js/main.js) — mobile nav, scroll reveal, code-block copy buttons, tabs. Exposes `window.AdditionalContextMenusSite` (legacy alias `window.FileInsights`).
+- **Documentation page:** [`docs/documentation.md`](docs/documentation.md) Commands API uses `.commands-api` … `.command-item` markup; styles are scoped under `.commands-api` in [`docs/assets/css/pages.css`](docs/assets/css/pages.css) so generic class names do not affect e.g. installation’s `.command-list` UL wrapper.
+- **Layout:** [`docs/_layouts/default.html`](docs/_layouts/default.html). Markdown-only pages (e.g. `developer.md`) get a readable column via `.main-content > :not(section)`; section-based marketing pages stay full width with inner `.container`.
 
 ---
 
@@ -115,9 +115,9 @@ tsconfig.test.json              # TypeScript config for compiling integration te
 
 ### User-Facing Features (13)
 
-These are the commands users interact with. Each has a site service doc in `site/services/`.
+These are the commands users interact with. Each has a site service doc in `docs/services/`.
 
-| Feature                   | Command ID                                    | `site/services/` doc              |
+| Feature                   | Command ID                                    | `docs/services/` doc              |
 | ------------------------- | --------------------------------------------- | --------------------------------- |
 | Copy Function             | `additionalContextMenus.copyFunction`         | `copyFunction.md`                 |
 | Copy Function to File     | `additionalContextMenus.copyFunctionToFile`   | `copyFunctionToFile.md`           |
@@ -135,7 +135,7 @@ These are the commands users interact with. Each has a site service doc in `site
 
 ### Infrastructure Services (5)
 
-These power the features internally. They have **no standalone user-facing docs** — do not create `site/services/` pages for them.
+These power the features internally. They have **no standalone user-facing docs** — do not create `docs/services/` pages for them.
 
 | Service                 | Source File                               | Purpose                                                  |
 | ----------------------- | ----------------------------------------- | -------------------------------------------------------- |
@@ -300,7 +300,7 @@ fi
 ## Steps to follow:
 
 - All new changes should be added to the `CLAUDE.md` file
-- All new changes that user viewable should be added to the `docs`, `site` and `README.md` files
+- All new changes that user viewable should be added to the `docs/`, `public/`, and `README.md` files
 - All new changes should be logged in the `CHANGELOG.md` file under unreleased section
 - Community automation changes should update `AGENTS.md`, `CONTRIBUTING.md`, `.github/copilot-instructions.md`, and `THIRDPARTY.md` when commands, workflow ownership, or dependency notices change.
 - Configuration or command behavior changes must update `package.json`, related types in `src/types/`, tests, and docs together.
@@ -314,7 +314,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 - `fix(fileDiscovery): respect cache ttl`
 - `test(unit): cover enum generation`
 
-**Commit size limits** (enforced by hooks and CI): max **15 files** and **600 changed lines** per commit.
+**Commit size limits** (enforced by hooks and CI): max **10 files** and **400 changed lines** per commit. Sweeping refactors that exceed these limits may add the `size/override` label to the PR to bypass the CI hard-fail (warning comment is still posted).
 
 Branch naming: `feature/`, `fix/`, `docs/`, or `refactor/` prefix from `main`.
 
@@ -329,3 +329,15 @@ Branch naming: `feature/`, `fix/`, `docs/`, or `refactor/` prefix from `main`.
 - On Linux CI, integration tests run under `xvfb-run -a`.
 - All test descriptions must start with `"should "` (e.g. `it('should detect React', ...)`).
 - Run integration tests before any change to context menus, commands, file operations, or editor interactions.
+
+---
+
+## Assistant Conventions
+
+### Communication
+
+Default to **caveman mode** (terse: drop articles/filler/pleasantries; fragments OK). Keep technical substance exact. Code/commits/PRs/security warnings stay in normal English. Disable on request ("normal mode").
+
+### Shell commands
+
+Prepend `rtk` to all shell invocations when available — 60-90% token savings on dev ops. Examples: `rtk git status`, `rtk pnpm test`, `rtk ls`. Fallback to direct command if `rtk` unavailable, or for compound predicates (`find -not`, `find -exec`) which rtk does not support.

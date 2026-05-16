@@ -1,6 +1,6 @@
 #!/bin/bash
-MAX_FILES=15
-MAX_LINES=3000
+MAX_FILES=10
+MAX_LINES=400
 
 STATS=$(git diff --cached --numstat)
 

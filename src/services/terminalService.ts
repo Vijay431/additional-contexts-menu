@@ -344,13 +344,20 @@ export class TerminalService implements ITerminalService {
   }
 
   public async executeCommand(command: string, directoryPath?: string): Promise<void> {
-    const terminalOptions: vscode.TerminalOptions = { name: 'Command Execution' };
-    if (directoryPath !== undefined) {
-      terminalOptions.cwd = directoryPath;
+    try {
+      const terminalOptions: vscode.TerminalOptions = { name: 'Command Execution' };
+      if (directoryPath !== undefined) {
+        terminalOptions.cwd = directoryPath;
+      }
+      const terminal = vscode.window.createTerminal(terminalOptions);
+      terminal.sendText(command);
+      terminal.show();
+    } catch (error) {
+      this.logger.error('Failed to execute command in terminal', error);
+      vscode.window.showErrorMessage(
+        `Failed to open terminal: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
-    const terminal = vscode.window.createTerminal(terminalOptions);
-    terminal.sendText(command);
-    terminal.show();
   }
 
   private async getExternalTerminalCommand(): Promise<string | undefined> {

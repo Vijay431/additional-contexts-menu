@@ -786,6 +786,14 @@ export class ContextMenuManager {
         return;
       }
 
+      const stat = await vscode.workspace.fs.stat(targetUri);
+      const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+      if (stat.size > MAX_BYTES) {
+        vscode.window.showWarningMessage(
+          `File is too large to copy (${(stat.size / 1024 / 1024).toFixed(1)} MB). Maximum is 10 MB.`,
+        );
+        return;
+      }
       const bytes = await vscode.workspace.fs.readFile(targetUri);
       const contents = new TextDecoder().decode(bytes);
       await vscode.env.clipboard.writeText(contents);
@@ -823,11 +831,13 @@ export class ContextMenuManager {
       const ext = path.posix.extname(targetUri.path);
       const nameWithoutExt = path.posix.basename(targetUri.path, ext);
 
-      // Derive parent directory from the URI's POSIX path to preserve scheme/authority
-      const parentPosixPath = targetUri.path.substring(0, targetUri.path.lastIndexOf('/'));
+      const parentPosixPath = path.posix.dirname(targetUri.path);
 
       // Find a free name: <name>-duplicate<ext>, then <name>-duplicate-1<ext>, etc.
-      let candidatePosixPath = `${parentPosixPath}/${nameWithoutExt}-duplicate${ext}`;
+      let candidatePosixPath = path.posix.join(
+        parentPosixPath,
+        `${nameWithoutExt}-duplicate${ext}`,
+      );
       let counter = 1;
       let slotFound = false;
       const MAX_DUPLICATES = 100;
@@ -841,7 +851,10 @@ export class ContextMenuManager {
         try {
           await vscode.workspace.fs.stat(targetUri.with({ path: candidatePosixPath }));
           // File exists — try next increment
-          candidatePosixPath = `${parentPosixPath}/${nameWithoutExt}-duplicate-${counter}${ext}`;
+          candidatePosixPath = path.posix.join(
+            parentPosixPath,
+            `${nameWithoutExt}-duplicate-${counter}${ext}`,
+          );
           counter++;
         } catch (statError) {
           if (statError instanceof vscode.FileSystemError && statError.code === 'FileNotFound') {

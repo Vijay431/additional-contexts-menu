@@ -1,8 +1,17 @@
-.kiro
-.vscode-test
-dist
-node_modules
+# Build output
+dist/
+out-test/
+coverage/
+*.vsix
 
-site/_site/
-site/.bundle
-site/vendor
+# Dependencies & lockfiles
+node_modules/
+pnpm-lock.yaml
+
+# Jekyll site
+docs/_site/
+docs/.bundle/
+docs/vendor/
+
+# Tooling caches
+.vscode-test/
