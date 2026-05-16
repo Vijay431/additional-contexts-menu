@@ -329,3 +329,15 @@ Branch naming: `feature/`, `fix/`, `docs/`, or `refactor/` prefix from `main`.
 - On Linux CI, integration tests run under `xvfb-run -a`.
 - All test descriptions must start with `"should "` (e.g. `it('should detect React', ...)`).
 - Run integration tests before any change to context menus, commands, file operations, or editor interactions.
+
+---
+
+## Assistant Conventions
+
+### Communication
+
+Default to **caveman mode** (terse: drop articles/filler/pleasantries; fragments OK). Keep technical substance exact. Code/commits/PRs/security warnings stay in normal English. Disable on request ("normal mode").
+
+### Shell commands
+
+Prepend `rtk` to all shell invocations when available — 60-90% token savings on dev ops. Examples: `rtk git status`, `rtk pnpm test`, `rtk ls`. Fallback to direct command if `rtk` unavailable, or for compound predicates (`find -not`, `find -exec`) which rtk does not support.
