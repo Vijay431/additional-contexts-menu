@@ -108,7 +108,7 @@ export interface FunctionInfo {
   endLine: number;
   startColumn: number;
   endColumn: number;
-  type: 'function' | 'method' | 'arrow' | 'async' | 'component' | 'hook';
+  type: 'function' | 'method' | 'arrow' | 'component' | 'hook';
   isExported: boolean;
   hasDecorators: boolean;
   fullText: string;

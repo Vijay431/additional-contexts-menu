@@ -45,7 +45,7 @@ export interface CommandMetadata {
  *
  * @example
  * ```typescript
- * const registry = new CommandRegistry(context);
+ * const registry = new CommandRegistry();
  * registry.registerCommand({
  *   id: 'additionalContextMenus.copyFunction',
  *   title: 'Copy Function',
@@ -63,8 +63,6 @@ export class CommandRegistry {
     { metadata: CommandMetadata; disposable: vscode.Disposable }
   >();
   private readonly disposables: vscode.Disposable[] = [];
-
-  constructor(private readonly _context: vscode.ExtensionContext) {}
 
   /**
    * Register a command

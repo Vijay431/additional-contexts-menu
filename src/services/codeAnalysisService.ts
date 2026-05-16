@@ -187,14 +187,6 @@ export class CodeAnalysisService implements ICodeAnalysisService {
       return 'component';
     }
 
-    // Async function detection
-    if (
-      ts.canHaveModifiers(node) &&
-      node.modifiers?.some((m) => m.kind === ts.SyntaxKind.AsyncKeyword)
-    ) {
-      return 'async';
-    }
-
     // Arrow function
     if (ts.isArrowFunction(node)) {
       return 'arrow';

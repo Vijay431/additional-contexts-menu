@@ -196,7 +196,11 @@ export class CronJobTimerGeneratorService {
         }
         cronExpression = customExpression;
       } else {
-        cronExpression = selected.value ?? selected.label;
+        if (!selected.value) {
+          this.logger.error('Selected schedule missing value property');
+          return;
+        }
+        cronExpression = selected.value;
         await this.accessibilityService.announce(
           `Selected schedule: ${selected.label}. Expression: ${cronExpression}`,
           'normal',

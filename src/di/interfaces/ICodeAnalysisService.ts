@@ -26,8 +26,8 @@ import type { vscode } from '../../types/vscode';
 export interface FunctionInfo {
   /** Function/method name */
   name: string;
-  /** Function type (function, arrow, method, class) */
-  type: 'function' | 'arrow' | 'method' | 'class' | 'component' | 'hook' | 'async';
+  /** Function type (function, arrow, method, class, component, hook) */
+  type: 'function' | 'arrow' | 'method' | 'class' | 'component' | 'hook';
   /** Start line number (1-indexed) */
   startLine: number;
   /** End line number (1-indexed) */

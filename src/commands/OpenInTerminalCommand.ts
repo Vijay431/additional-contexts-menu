@@ -13,6 +13,8 @@
  * @subcategory Terminal Operations
  */
 
+import type { IAccessibilityService } from '../di/interfaces/IAccessibilityService';
+import type { ILogger } from '../di/interfaces/ILogger';
 import type { ITerminalService } from '../di/interfaces/ITerminalService';
 
 import { BaseCommandHandler } from './BaseCommandHandler';
@@ -27,13 +29,10 @@ import type { ICommandHandler } from './ICommandHandler';
 export class OpenInTerminalCommand extends BaseCommandHandler implements ICommandHandler {
   constructor(
     terminalService: ITerminalService,
-    logger: import('../di/interfaces/ILogger').ILogger,
+    logger: ILogger,
+    accessibilityService: IAccessibilityService,
   ) {
-    super(
-      'OpenInTerminal',
-      logger,
-      {} as import('../di/interfaces/IAccessibilityService').IAccessibilityService,
-    );
+    super('OpenInTerminal', logger, accessibilityService);
     this.terminalService = terminalService;
   }
 
