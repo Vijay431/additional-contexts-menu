@@ -787,6 +787,10 @@ export class ContextMenuManager {
       }
 
       const stat = await vscode.workspace.fs.stat(targetUri);
+      if (stat.type & vscode.FileType.Directory) {
+        vscode.window.showErrorMessage('Copy File Contents only works on files, not folders.');
+        return;
+      }
       const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
       if (stat.size > MAX_BYTES) {
         vscode.window.showWarningMessage(
@@ -795,7 +799,7 @@ export class ContextMenuManager {
         return;
       }
       const bytes = await vscode.workspace.fs.readFile(targetUri);
-      const contents = new TextDecoder().decode(bytes);
+      const contents = new TextDecoder('utf-8').decode(bytes);
       await vscode.env.clipboard.writeText(contents);
 
       const fileName = path.basename(targetUri.fsPath);
