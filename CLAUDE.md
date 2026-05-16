@@ -11,8 +11,8 @@ This file is the single source of truth for the **Additional Context Menus** VS 
 - **Name:** Additional Context Menus
 - **Publisher:** VijayGangatharan
 - **Version:** 2.1.0
-- **VS Code engine:** >=1.110.0
-- **Node.js:** >=20
+- **VS Code engine:** >=1.111.0 (last 10 minor versions; 1.111–1.120)
+- **Node.js:** >=22 runtime (22, 24, 26 supported); dev uses Node 24 LTS (`lts/jod`)
 - **Package manager:** pnpm
 - **Language:** TypeScript (strict mode)
 - **Bundle tool:** esbuild (via `esbuild.config.ts`)

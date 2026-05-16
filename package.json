@@ -82,8 +82,8 @@
     "Other"
   ],
   "engines": {
-    "node": ">=20",
-    "vscode": ">=1.110.0"
+    "node": ">=22",
+    "vscode": ">=1.111.0"
   },
   "activationEvents": [
     "onStartupFinished",
@@ -520,11 +520,6 @@
     "yarn": false
   },
   "main": "./dist/extension.js",
-  "pnpm": {
-    "overrides": {
-      "serialize-javascript": "7.0.5"
-    }
-  },
   "scripts": {
     "vscode:prepublish": "tsx esbuild.config.ts --production",
     "build": "tsx esbuild.config.ts",
@@ -654,8 +649,8 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.39.4",
     "@types/mocha": "10.0.10",
-    "@types/node": "^20.0.0",
-    "@types/vscode": "^1.110.0",
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.111.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "@vitest/coverage-v8": "3.1.1",

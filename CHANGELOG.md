@@ -7,32 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- **📁 Duplicate File**: New `additionalContextMenus.duplicateFile` command — right-click any single file in the Explorer to create a duplicate alongside the original. The duplicate is named `<basename>-duplicate<ext>`; if that name already exists, it auto-increments (`<basename>-duplicate-1<ext>`, `-2`, …). Appears in the Explorer `7_modification` group; restricted to single non-folder files via `!explorerResourceIsFolder && !listMultiSelection`.
-- **Community standards**: Added structured YAML bug and feature issue forms, pull request template, funding metadata, release-note categories, canonical labels, stale automation, label sync, all-contributors metadata/workflow, and third-party notices.
-- **Cloud development**: Added a Dev Container/Codespaces setup with Node.js 20, pnpm, recommended VS Code extensions, and Linux packages for headless VS Code integration tests.
-- **Coverage reporting**: Added `pnpm run test:unit:coverage` and Codecov upload support through CI.
-- **Copilot guidance**: Added `.github/copilot-instructions.md` with architecture, command, test, and generated-file guidance.
-
-### Changed
-
-- **CI/release split**: Moved tag-driven publishing from `.github/workflows/ci.yml` into `.github/workflows/release.yml`; CI now focuses on PR/main quality gates.
-- **Contributor docs**: Updated `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, and `SECURITY.md` for coverage, workflow ownership, Codespaces, third-party notices, and supported versions.
-- **Site restructure**: Renamed Jekyll source from `site/` to `docs/`; moved packaged images from `docs/images/` to `public/images/` for cleaner extension packaging. Updated `release.yml` and `deploy-pages.yml` build paths accordingly.
+_Nothing yet._
 
 ## [2.1.0] - 2026-05-06
-
-> First published as pre-release `v2.1.0-beta.1`. Stable `v2.1.0` follows after beta soak.
 
 ### Added
 
 - **📋 Copy File Contents**: New `additionalContextMenus.copyFileContents` command — right-click any single file in the Explorer to copy its entire contents to the clipboard without opening it. Appears in `explorer/context` under the "Copy Path" group; restricted to single non-folder files via `!explorerResourceIsFolder && !listMultiSelection` when-clause.
-- **🧪 Test suite**: Two-layer test infrastructure — Vitest unit tests for infrastructure utilities/services (`Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`) and Mocha + `@vscode/test-electron` integration tests for all 12 user-facing features end-to-end.
+- **📁 Duplicate File**: New `additionalContextMenus.duplicateFile` command — right-click any single file in the Explorer to create a duplicate alongside the original. The duplicate is named `<basename>-duplicate<ext>`; if that name already exists, it auto-increments (`<basename>-duplicate-1<ext>`, `-2`, …). Appears in the Explorer `7_modification` group; restricted to single non-folder files via `!explorerResourceIsFolder && !listMultiSelection`.
+- **🧪 Test suite**: Two-layer test infrastructure — Vitest unit tests for infrastructure utilities/services (`Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`) and Mocha + `@vscode/test-electron` integration tests for all 13 user-facing features end-to-end.
 - **CI test jobs**: `test-unit` and `test-integration` jobs run in parallel after `lint` and must pass before `build` in the CI pipeline.
+- **Coverage reporting**: Added `pnpm run test:unit:coverage` and Codecov upload support through CI.
+- **Community standards**: Added structured YAML bug and feature issue forms, pull request template, funding metadata, release-note categories, canonical labels, stale automation, label sync, all-contributors metadata/workflow, and third-party notices.
+- **Cloud development**: Added a Dev Container/Codespaces setup with Node.js 24 (latest LTS), pnpm, recommended VS Code extensions, and Linux packages for headless VS Code integration tests.
+- **Copilot guidance**: Added `.github/copilot-instructions.md` with architecture, command, test, and generated-file guidance.
 
 ### Changed
 
+- **Node runtime floor raised to 22**: `engines.node` bumped from `>=20` to `>=22`. Supported runtimes: Node 22, 24 (LTS), and 26. esbuild `target` raised to `node22`. `@types/node` bumped to `^22`.
+- **Developer toolchain pinned to Node 24 LTS**: `.nvmrc` → `lts/jod`; devcontainer base image → `typescript-node:24`. CI build matrix exercises Node 22/24/26 to validate the supported range.
+- **VS Code engine floor bumped to `>=1.111.0`**: `engines.vscode` and `@types/vscode` aligned to the last 10 minor versions of VS Code (1.111–1.120). VS Code 1.110 and below are no longer supported.
+- **CI/release split**: Moved tag-driven publishing from `.github/workflows/ci.yml` into `.github/workflows/release.yml`; CI now focuses on PR/main quality gates.
+- **Site restructure**: Renamed Jekyll source from `site/` to `docs/`; moved packaged images from `docs/images/` to `public/images/` for cleaner extension packaging. Updated `release.yml` and `deploy-pages.yml` build paths accordingly.
+- **Contributor docs**: Updated `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, and `SECURITY.md` for coverage, workflow ownership, Codespaces, third-party notices, and supported versions.
 - **Repo name corrected**: All URLs and references updated from `additional-contexts-menu` to `additional-context-menus`.
 - **Bundle size references**: Replaced specific KB figures with "optimized" across all user-facing documentation and source comments.
 - **Cache TTL injectable**: `ProjectDetectionService.create()` and `FileDiscoveryService.create()` now accept an optional `cacheTTL` parameter (defaults: 10 min and 5 min respectively), enabling precise cache expiry testing without mocking.
