@@ -95,11 +95,11 @@ The project has two test layers:
 | ----------- | ----------------------------- | ------------------------------- | ------------------------------------------------------------------ |
 | Unit        | `pnpm run test:unit`          | Vitest                          | Infrastructure utilities and services with mocked VS Code API      |
 | Coverage    | `pnpm run test:unit:coverage` | Vitest + V8 coverage            | Unit tests plus `coverage/lcov.info` for Codecov                   |
-| Integration | `pnpm run test:integration`   | Mocha + `@vscode/test-electron` | All 11 user-facing features, end-to-end in a real VS Code instance |
+| Integration | `pnpm run test:integration`   | Mocha + `@vscode/test-electron` | All 13 user-facing features, end-to-end in a real VS Code instance |
 
 **Unit tests** cover: `Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`.
 
-**Integration tests** cover: Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File to Convention, Generate Enum, Generate Cron, Generate .env.
+**Integration tests** cover: Copy Function, Copy/Move Function to File, Copy/Move Selection to File, Save All, Open in Terminal, Rename File to Convention, Generate Enum, Generate Cron, Generate .env, Copy File Contents, Duplicate File.
 
 On Linux, integration tests require a display. Use `xvfb-run -a pnpm run test:integration` in headless environments.
 

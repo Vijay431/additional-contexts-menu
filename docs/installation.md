@@ -435,7 +435,7 @@ description: 'Complete step-by-step installation guide for Additional Context Me
                         <ol>
                             <li>Disable extension temporarily: <code>Additional Context Menus: Disable</code></li>
                             <li>Check for large files that may slow AST parsing</li>
-                            <li>Verify Node.js version compatibility (20-24 supported)</li>
+                            <li>Verify Node.js version compatibility (22+ required, Node 24 LTS recommended)</li>
                             <li>Check output logs: <code>Additional Context Menus: Show Output Channel</code></li>
                         </ol>
                     </div>
