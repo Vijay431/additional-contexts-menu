@@ -2,8 +2,6 @@
 
 import * as esbuild from 'esbuild';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
-
 // Ensure dist directory exists
 if (!existsSync('./dist')) {
   mkdirSync('./dist', { recursive: true });

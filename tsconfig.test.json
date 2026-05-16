@@ -16,6 +16,12 @@
     "noFallthroughCasesInSwitch": false,
     "noEmitOnError": false
   },
-  "include": ["test/runTests.ts", "test/suite/**/*", "src/**/*"],
+  "include": [
+    "test/runTests.ts",
+    "test/suite/**/*",
+    "test/unit/**/*",
+    "test/__mocks__/**/*",
+    "src/**/*"
+  ],
   "exclude": ["node_modules"]
 }
