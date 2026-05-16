@@ -592,6 +592,20 @@
       "@commitlint/config-conventional"
     ]
   },
+  "all-contributors": {
+    "projectName": "additional-context-menus",
+    "projectOwner": "Vijay431",
+    "repoType": "github",
+    "repoHost": "https://github.com",
+    "files": [
+      "README.md"
+    ],
+    "imageSize": 100,
+    "commit": false,
+    "commitType": "docs",
+    "contributorsPerLine": 7,
+    "contributors": []
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
