@@ -2,10 +2,7 @@
 .code-review-graph/
 .vscode-test/
 dist/
-coverage/
 node_modules/
 out-test/
-test/**/*.js
-test/**/*.js.map
 
 TODO.md

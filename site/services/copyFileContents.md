@@ -29,7 +29,7 @@ description: 'Documentation for Copy File Contents - copy entire file contents t
 <ul>
 <li>Quickly share file contents without opening an editor tab</li>
 <li>Copy configuration files, templates, or snippets to paste elsewhere</li>
-<li>Copy file contents before destructive edits as a manual backup</li>
+<li>Keep a temporary copy of file contents while experimenting with changes</li>
 <li>Paste entire file contents into chat tools, documentation, or issue trackers</li>
 </ul>
 

@@ -454,7 +454,7 @@ Edit `package.json`:
 
 ```json
 {
-  "version": "2.0.1"
+  "version": "2.1.0"
 }
 ```
 
@@ -463,7 +463,7 @@ Edit `package.json`:
 Edit `CHANGELOG.md` with release notes:
 
 ```markdown
-## [2.0.1] - 2024-01-31
+## [2.1.0] - 2026-05-06
 
 ### Added
 
@@ -485,14 +485,14 @@ The CI pipeline handles publishing automatically when a tag is pushed. You do no
 ```bash
 # Commit version bump and changelog
 git add package.json CHANGELOG.md
-git commit -m "chore(release): bump version to 2.0.1"
+git commit -m "chore(release): bump version to 2.1.0-beta.1"
 
 # Push the commit to main first
 git push origin main
 
 # Create and push the tag — this triggers the full release pipeline
-git tag v2.0.1
-git push origin v2.0.1
+git tag v2.1.0-beta.1
+git push origin v2.1.0-beta.1
 ```
 
 **What happens after pushing a tag:**
@@ -510,18 +510,20 @@ Tags containing `-rc`, `-next`, `-beta`, or `-alpha` are treated as pre-releases
 
 ```bash
 # Pre-release tag — publishes with --pre-release flag, skips pages deployment
-git tag v2.1.0-rc.1
-git push origin v2.1.0-rc.1
+git tag v2.1.0-beta.1
+git push origin v2.1.0-beta.1
 
-# Stable release tag — full publish + pages deployment
+# Stable release tag — full publish + pages deployment (same package.json version)
 git tag v2.1.0
 git push origin v2.1.0
 ```
 
-| Tag      | Marketplace | GitHub Pages | GitHub Release |
-| -------- | ----------- | ------------ | -------------- |
-| `v2.0.0` | stable      | ✅ deployed  | stable         |
-| `v2.0.1` | stable      | ✅ deployed  | stable         |
+| Tag             | Marketplace | GitHub Pages | GitHub Release |
+| --------------- | ----------- | ------------ | -------------- |
+| `v2.0.0`        | stable      | ✅ deployed  | stable         |
+| `v2.0.1`        | stable      | ✅ deployed  | stable         |
+| `v2.1.0-beta.1` | pre-release | ⏭️ skipped   | pre-release    |
+| `v2.1.0`        | stable      | ✅ deployed  | stable         |
 
 ---
 

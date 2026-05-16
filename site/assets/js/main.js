@@ -333,11 +333,9 @@ function debounce(func, wait) {
 
 function throttle(func, limit) {
   let inThrottle;
-  return function () {
-    const args = arguments;
-    const context = this;
+  return function (...args) {
     if (!inThrottle) {
-      func.apply(context, args);
+      func.apply(this, args);
       inThrottle = true;
       setTimeout(() => (inThrottle = false), limit);
     }

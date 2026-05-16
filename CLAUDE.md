@@ -303,6 +303,20 @@ fi
 - All new changes that user viewable should be added to the `docs`, `site` and `README.md` files
 - All new changes should be logged in the `CHANGELOG.md` file under unreleased section
 - Community automation changes should update `AGENTS.md`, `CONTRIBUTING.md`, `.github/copilot-instructions.md`, and `THIRDPARTY.md` when commands, workflow ownership, or dependency notices change.
+- Configuration or command behavior changes must update `package.json`, related types in `src/types/`, tests, and docs together.
+- Third-party tooling changes must keep `THIRDPARTY.md` current.
+
+## Commit & Branch Conventions
+
+Use [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat(copy): add file contents command`
+- `fix(fileDiscovery): respect cache ttl`
+- `test(unit): cover enum generation`
+
+**Commit size limits** (enforced by hooks and CI): max **15 files** and **600 changed lines** per commit.
+
+Branch naming: `feature/`, `fix/`, `docs/`, or `refactor/` prefix from `main`.
 
 ## Test Conventions:
 
@@ -314,3 +328,4 @@ fi
 - Never add VS Code API-dependent logic to unit tests; never add pure-logic tests to the integration suite.
 - On Linux CI, integration tests run under `xvfb-run -a`.
 - All test descriptions must start with `"should "` (e.g. `it('should detect React', ...)`).
+- Run integration tests before any change to context menus, commands, file operations, or editor interactions.
