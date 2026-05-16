@@ -6,7 +6,7 @@
 
 <div align="center">
 
-![Copy Function Demo](docs/images/screenshots/copy-function.gif)
+![Copy Function Demo](public/images/screenshots/copy-function.gif)
 _Extract functions in one click with intelligent import handling_
 
 </div>
@@ -39,35 +39,35 @@ _Extract functions in one click with intelligent import handling_
 
 ### Copy Function
 
-![Copy Function Demo](docs/images/screenshots/copy-function.gif)
+![Copy Function Demo](public/images/screenshots/copy-function.gif)
 
 ### Copy Function to File
 
-![Copy Function to File Demo](docs/images/screenshots/copy-function-to-file.gif)
+![Copy Function to File Demo](public/images/screenshots/copy-function-to-file.gif)
 
 ### Move Function to File
 
-![Move Function to File Demo](docs/images/screenshots/move-function-to-file.gif)
+![Move Function to File Demo](public/images/screenshots/move-function-to-file.gif)
 
 ### Copy Selection to File
 
-![Copy Selection to File Demo](docs/images/screenshots/copy-selection-to-file.gif)
+![Copy Selection to File Demo](public/images/screenshots/copy-selection-to-file.gif)
 
 ### Move Selection to File
 
-![Move Selection to File Demo](docs/images/screenshots/move-selection-to-file.gif)
+![Move Selection to File Demo](public/images/screenshots/move-selection-to-file.gif)
 
 ### Save All
 
-![Save All Demo](docs/images/screenshots/save-all.gif)
+![Save All Demo](public/images/screenshots/save-all.gif)
 
 ### Open in Terminal
 
-![Open in Terminal Demo](docs/images/screenshots/open-in-terminal.gif)
+![Open in Terminal Demo](public/images/screenshots/open-in-terminal.gif)
 
 ### Rename File to Convention
 
-![Rename File to Convention Demo](docs/images/screenshots/rename-file-convention.gif)
+![Rename File to Convention Demo](public/images/screenshots/rename-file-convention.gif)
 
 ---
 

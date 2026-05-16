@@ -21,27 +21,27 @@
   "marketplace": {
     "screenshots": [
       {
-        "path": "docs/images/screenshots/copy-function.png",
+        "path": "public/images/screenshots/copy-function.png",
         "label": "Extract functions with intelligent import handling"
       },
       {
-        "path": "docs/images/screenshots/copy-to-file.png",
+        "path": "public/images/screenshots/copy-to-file.png",
         "label": "Smart file discovery with framework-aware filtering"
       },
       {
-        "path": "docs/images/screenshots/context-menu.png",
+        "path": "public/images/screenshots/context-menu.png",
         "label": "Complete context menu integration"
       },
       {
-        "path": "docs/images/screenshots/enum-generator.png",
+        "path": "public/images/screenshots/enum-generator.png",
         "label": "Generate enums from union types"
       },
       {
-        "path": "docs/images/screenshots/terminal-integration.png",
+        "path": "public/images/screenshots/terminal-integration.png",
         "label": "Cross-platform terminal integration"
       }
     ],
-    "banner": "docs/images/banner.png"
+    "banner": "public/images/banner.png"
   },
   "keywords": [
     "context",
