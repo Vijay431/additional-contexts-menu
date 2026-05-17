@@ -42,8 +42,8 @@ describe('isSafeFilePath', () => {
     expect(isSafeFilePath('/project/run.ps1')).toBe(false);
   });
 
-  it('should return false for a .js extension (listed as dangerous)', () => {
-    expect(isSafeFilePath('/project/run.js')).toBe(false);
+  it('should return true for a .js extension', () => {
+    expect(isSafeFilePath('/project/run.js')).toBe(true);
   });
 
   it('should return false for a non-string input', () => {

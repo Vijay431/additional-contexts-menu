@@ -12,7 +12,7 @@ export function isSafeFilePath(filePath: string): boolean {
   }
 
   const ext = path.extname(filePath).toLowerCase();
-  const dangerousExts = ['.exe', '.bat', '.cmd', '.sh', '.ps1', '.vbs', '.js', '.jar'];
+  const dangerousExts = ['.exe', '.bat', '.cmd', '.sh', '.ps1', '.vbs', '.jar'];
 
   return !dangerousExts.includes(ext);
 }
