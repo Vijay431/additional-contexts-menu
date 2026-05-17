@@ -8,8 +8,13 @@ EXCLUDES_FILE="scripts/commit-size-excludes.txt"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --excludes)
-      EXCLUDES_FILE="$2"
-      shift 2
+      if [[ -n "$2" && "$2" != -* ]]; then
+        EXCLUDES_FILE="$2"
+        shift 2
+      else
+        echo "Error: --excludes requires a file path"
+        exit 1
+      fi
       ;;
     *)
       shift
@@ -28,7 +33,7 @@ fi
 if [ -f "$EXCLUDES_FILE" ]; then
   PATTERN=$(grep -v -E '^\s*(#|$)' "$EXCLUDES_FILE" | paste -sd '|' -)
   if [ -n "$PATTERN" ]; then
-    FILTERED=$(echo "$STATS" | grep -v -E "$PATTERN")
+    FILTERED=$(printf '%s\n' "$STATS" | grep -v -E "$PATTERN")
   else
     FILTERED="$STATS"
   fi
@@ -36,8 +41,8 @@ else
   FILTERED="$STATS"
 fi
 
-FILE_COUNT=$(echo "$FILTERED" | grep -c . 2>/dev/null || true)
-LINE_COUNT=$(echo "$FILTERED" | awk '{sum += $1 + $2} END {print sum+0}')
+FILE_COUNT=$(printf '%s\n' "$FILTERED" | grep -c . 2>/dev/null || true)
+LINE_COUNT=$(printf '%s\n' "$FILTERED" | awk '{sum += $1 + $2} END {print sum+0}')
 
 FAILED=0
 if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
