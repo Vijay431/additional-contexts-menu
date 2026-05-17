@@ -5,32 +5,7 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Changed
-
-- **Dev dependency upgrades** (patch/minor + selected majors; TypeScript and Node `@types` held back):
-  - prettier 3.8.1 → 3.8.3
-  - @typescript-eslint/{eslint-plugin,parser,typescript-eslint} 8.58.0 → 8.59.3
-  - @vscode/vsce 3.7.1 → 3.9.1
-  - eslint-plugin-promise 7.2.1 → 7.3.0
-  - mocha 11.1.0 → 11.7.5
-  - tsx 4.21.0 → 4.22.1
-  - ovsx 0.10.10 → 0.10.12
-  - eslint 9.39.4 → 10.4.0 · @eslint/js 9.39.4 → 10.0.1 · eslint-config-prettier 9.1.2 → 10.1.8 · eslint-plugin-n 17.24.0 → 18.0.1 · eslint-plugin-security 3.0.1 → 4.0.0
-  - @commitlint/{cli,config-conventional} 19.8.1 → 21.0.1
-  - vitest 3.1.1 → 4.1.6 · @vitest/coverage-v8 3.1.1 → 4.1.6
-- **Build tooling**: Excluded auto-generated lockfiles from commit/PR size checks (`scripts/check-commit-size.sh`, `.github/workflows/pr-commit-size.yml`).
-- **Error propagation**: Re-thrown errors in `ContextMenuManager` and `terminalService` now carry `{ cause: originalError }` to satisfy the ESLint 10 `preserve-caught-error` rule and improve stack trace fidelity.
-
-- **Bundle size reduced from 7.52MB to 3.82MB**: VSIX now well below the 5MB target.
-  - `codeAnalysisService` moved to `dist/lazy/` (same pattern as generator services). The TypeScript compiler (~3.4MB minified) is no longer bundled in the core `extension.js`; it loads on the first Copy/Move Function command invocation. Core bundle drops from 3.46MB to 64KB, restoring the documented ≤100KB target.
-  - GIF screenshots re-encoded with ffmpeg (fps 8, 70% scale, 64-colour palette): 6.0MB → 2.9MB (~51% reduction).
-  - Dev-only files excluded from VSIX: `.devcontainer/`, `AGENTS.md`, `.cursorignore`, `.code-review-graph`.
-  - Removed broken `marketplace` block from `package.json` (referenced 5 non-existent PNG screenshots and a missing `banner.png`).
-  - Codespaces SVG badge removed from `README.md` (VS Code Marketplace restricts SVG image URLs).
-
-## [2.1.0] - 2026-05-06
+## [2.1.0] - 2026-05-17
 
 ### Added
 
@@ -55,6 +30,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Bundle size references**: Replaced specific KB figures with "optimized" across all user-facing documentation and source comments.
 - **Cache TTL injectable**: `ProjectDetectionService.create()` and `FileDiscoveryService.create()` now accept an optional `cacheTTL` parameter (defaults: 10 min and 5 min respectively), enabling precise cache expiry testing without mocking.
 - **Test description convention**: All test descriptions now start with `"should "`.
+- **Dev dependency upgrades** (patch/minor + selected majors; TypeScript and Node `@types` held back):
+  - prettier 3.8.1 → 3.8.3
+  - @typescript-eslint/{eslint-plugin,parser,typescript-eslint} 8.58.0 → 8.59.3
+  - @vscode/vsce 3.7.1 → 3.9.1
+  - eslint-plugin-promise 7.2.1 → 7.3.0
+  - mocha 11.1.0 → 11.7.5
+  - tsx 4.21.0 → 4.22.1
+  - ovsx 0.10.10 → 0.10.12
+  - eslint 9.39.4 → 10.4.0 · @eslint/js 9.39.4 → 10.0.1 · eslint-config-prettier 9.1.2 → 10.1.8 · eslint-plugin-n 17.24.0 → 18.0.1 · eslint-plugin-security 3.0.1 → 4.0.0
+  - @commitlint/{cli,config-conventional} 19.8.1 → 21.0.1
+  - vitest 3.1.1 → 4.1.6 · @vitest/coverage-v8 3.1.1 → 4.1.6
+- **Build tooling**: Made commit/PR size-check exclusions configurable via `scripts/commit-size-excludes.txt`, shared between the husky hook and CI workflow.
+- **Error propagation**: Re-thrown errors in `ContextMenuManager` and `terminalService` now carry `{ cause: originalError }` to satisfy the ESLint 10 `preserve-caught-error` rule and improve stack trace fidelity.
+- **Bundle size reduced from 7.52MB to 3.82MB**: VSIX now well below the 5MB target.
+  - `codeAnalysisService` moved to `dist/lazy/` (same pattern as generator services). The TypeScript compiler (~3.4MB minified) is no longer bundled in the core `extension.js`; it loads on the first Copy/Move Function command invocation. Core bundle drops from 3.46MB to 64KB, restoring the documented ≤100KB target.
+  - GIF screenshots re-encoded with ffmpeg (fps 8, 70% scale, 64-colour palette): 6.0MB → 2.9MB (~51% reduction).
+  - Dev-only files excluded from VSIX: `.devcontainer/`, `AGENTS.md`, `.cursorignore`, `.code-review-graph`.
+  - Removed broken `marketplace` block from `package.json` (referenced 5 non-existent PNG screenshots and a missing `banner.png`).
+  - Codespaces SVG badge removed from `README.md` (VS Code Marketplace restricts SVG image URLs).
 
 ### Removed
 
@@ -65,13 +59,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`CodeAnalysisService.extractImports`**: Fixed crash when `importClause.namedBindings` is `undefined` for default imports (e.g. `import React from 'react'`). `ts.isNamespaceImport()` was called without a null guard, causing a `TypeError`.
 
-## [2.0.1] - 2026-04-07
+---
+
+<details>
+<summary><h2>[2.0.1] - 2026-04-07</h2></summary>
 
 ### Changed
 
-- **GitHub Pages site (`site/`)**: Improved responsive UI/UX—fluid typography, safer grids on small screens, touch-friendly controls, sticky-header scroll padding, safe-area insets, optional `prefers-color-scheme: dark` theming, hero/media frame styling, and clearer keyboard focus. Layout fixes: invalid markup on the Features page header, accessible mobile nav (`button` + `aria-expanded`), and `rel="noopener noreferrer"` on external links. Homepage **Features Documentation** section (`.services-docs` / `.service-card`) now has full card styling aligned with the rest of the site. **Features** page (`site/features.md`): fixed mismatched closing tags on the last “Cross-Platform Terminal” feature item that broke the DOM (stray `</div>` after the CTA). **Code operations** page (`site/code-operations.md`): added full styling for previously unstyled blocks (`.operation-section`, example cards, workflow steps, import/move/save panels, best-practices grid) so the long documentation page has clear hierarchy and filled bands instead of a bare container. Escaped `React.FC&lt;UserProfileProps&gt;` in the TSX sample so Jekyll/Kramdown does not treat the generics as real HTML tags (which broke the example grid and looked like empty layout); example cards are no longer scroll-animated so code blocks stay visible on load. **Documentation** Commands API section: copy tightened, per-row “Access:” boilerplate removed in favor of category hints; card grid and `<kbd>` styling (scoped under `.commands-api` so other pages’ `.command-list` wrappers are unchanged).
+- **GitHub Pages site (`site/`)**: Improved responsive UI/UX—fluid typography, safer grids on small screens, touch-friendly controls, sticky-header scroll padding, safe-area insets, optional `prefers-color-scheme: dark` theming, hero/media frame styling, and clearer keyboard focus. Layout fixes: invalid markup on the Features page header, accessible mobile nav (`button` + `aria-expanded`), and `rel="noopener noreferrer"` on external links. Homepage **Features Documentation** section (`.services-docs` / `.service-card`) now has full card styling aligned with the rest of the site. **Features** page (`site/features.md`): fixed mismatched closing tags on the last "Cross-Platform Terminal" feature item that broke the DOM (stray `</div>` after the CTA). **Code operations** page (`site/code-operations.md`): added full styling for previously unstyled blocks (`.operation-section`, example cards, workflow steps, import/move/save panels, best-practices grid) so the long documentation page has clear hierarchy and filled bands instead of a bare container. Escaped `React.FC&lt;UserProfileProps&gt;` in the TSX sample so Jekyll/Kramdown does not treat the generics as real HTML tags (which broke the example grid and looked like empty layout); example cards are no longer scroll-animated so code blocks stay visible on load. **Documentation** Commands API section: copy tightened, per-row "Access:" boilerplate removed in favor of category hints; card grid and `<kbd>` styling (scoped under `.commands-api` so other pages' `.command-list` wrappers are unchanged).
 
-## [2.0.0] - 2026-04-07
+</details>
+
+---
+
+<details>
+<summary><h2>[2.0.0] - 2026-04-07</h2></summary>
 
 ### Added
 
@@ -246,7 +248,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **🏗️ Configuration Architecture**: Modular esbuild configuration with environment-specific optimizations
 - **🔄 CI/CD Pipeline Updates**: GitHub Actions workflows updated for improved build consistency
 
-## [1.1.0] - 2025-07-24
+</details>
+
+---
+
+<details>
+<summary><h2>[1.1.0] - 2025-07-24</h2></summary>
 
 ### Added
 
@@ -288,7 +295,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **🔄 Real-time Updates**: Status bar updates automatically on configuration and workspace changes
 - **🛡️ Safety Features**: Keybindings disabled by default to prevent conflicts with existing shortcuts
 
-## [1.0.0] - 2025-07-23
+</details>
+
+---
+
+<details>
+<summary><h2>[1.0.0] - 2025-07-23</h2></summary>
 
 ### Fixed
 
@@ -336,9 +348,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **🔍 Better Debugging**: Enhanced logging and error reporting for complex scenarios
 - **⚡ Reliable Performance**: Proven stability under stress testing conditions
 
-## [1.0.0] - 2025-07-23
-
-### Added
+### Initial Release
 
 - Enhanced right-click context menus for Node.js development
 - Support for React, Angular, Express, Next.js projects
@@ -405,7 +415,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maintained full VS Code extension compatibility
 - Preserved all existing functionality with comprehensive test coverage
 
-## [0.0.0] - Initial Development
+</details>
+
+---
+
+<details>
+<summary><h2>[0.0.0] - Initial Development</h2></summary>
 
 ### Added
 
@@ -418,3 +433,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ESLint and Prettier setup
 - esbuild bundling (migrated from webpack)
 - VS Code extension manifest
+
+</details>
