@@ -30,6 +30,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Bundle size references**: Replaced specific KB figures with "optimized" across all user-facing documentation and source comments.
 - **Cache TTL injectable**: `ProjectDetectionService.create()` and `FileDiscoveryService.create()` now accept an optional `cacheTTL` parameter (defaults: 10 min and 5 min respectively), enabling precise cache expiry testing without mocking.
 - **Test description convention**: All test descriptions now start with `"should "`.
+- **Dev dependency upgrades** (patch/minor + selected majors; TypeScript and Node `@types` held back):
+  - prettier 3.8.1 → 3.8.3
+  - @typescript-eslint/{eslint-plugin,parser,typescript-eslint} 8.58.0 → 8.59.3
+  - @vscode/vsce 3.7.1 → 3.9.1
+  - eslint-plugin-promise 7.2.1 → 7.3.0
+  - mocha 11.1.0 → 11.7.5
+  - tsx 4.21.0 → 4.22.1
+  - ovsx 0.10.10 → 0.10.12
+  - eslint 9.39.4 → 10.4.0 · @eslint/js 9.39.4 → 10.0.1 · eslint-config-prettier 9.1.2 → 10.1.8 · eslint-plugin-n 17.24.0 → 18.0.1 · eslint-plugin-security 3.0.1 → 4.0.0
+  - @commitlint/{cli,config-conventional} 19.8.1 → 21.0.1
+  - vitest 3.1.1 → 4.1.6 · @vitest/coverage-v8 3.1.1 → 4.1.6
+- **Build tooling**: Made commit/PR size-check exclusions configurable via `scripts/commit-size-excludes.txt`, shared between the husky hook and CI workflow.
+- **Error propagation**: Re-thrown errors in `ContextMenuManager` and `terminalService` now carry `{ cause: originalError }` to satisfy the ESLint 10 `preserve-caught-error` rule and improve stack trace fidelity.
 - **Bundle size reduced from 7.52MB to 3.82MB**: VSIX now well below the 5MB target.
   - `codeAnalysisService` moved to `dist/lazy/` (same pattern as generator services). The TypeScript compiler (~3.4MB minified) is no longer bundled in the core `extension.js`; it loads on the first Copy/Move Function command invocation. Core bundle drops from 3.46MB to 64KB, restoring the documented ≤100KB target.
   - GIF screenshots re-encoded with ffmpeg (fps 8, 70% scale, 64-colour palette): 6.0MB → 2.9MB (~51% reduction).
