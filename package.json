@@ -628,7 +628,7 @@
     "@types/vscode": "^1.111.0",
     "@typescript-eslint/eslint-plugin": "^8.59.3",
     "@typescript-eslint/parser": "^8.59.3",
-    "@vitest/coverage-v8": "3.1.1",
+    "@vitest/coverage-v8": "4.1.6",
     "@vscode/test-electron": "2.5.2",
     "@vscode/vsce": "^3.9.1",
     "all-contributors-cli": "^6.26.1",
@@ -651,6 +651,6 @@
     "tsx": "^4.22.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.59.3",
-    "vitest": "3.1.1"
+    "vitest": "4.1.6"
   }
 }
