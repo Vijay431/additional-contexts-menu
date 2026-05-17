@@ -158,7 +158,7 @@ export class TerminalService implements ITerminalService {
       this.logger.debug('Integrated terminal created', { name: terminalName, cwd: directoryPath });
     } catch (error) {
       this.logger.error('Failed to create integrated terminal', error);
-      throw new Error('Failed to open integrated terminal');
+      throw new Error('Failed to open integrated terminal', { cause: error });
     }
   }
 
@@ -182,7 +182,7 @@ export class TerminalService implements ITerminalService {
       this.logger.debug('External terminal command executed', { command });
     } catch (error) {
       this.logger.error('Failed to open external terminal', error);
-      throw new Error('Failed to open external terminal');
+      throw new Error('Failed to open external terminal', { cause: error });
     }
   }
 
@@ -236,7 +236,7 @@ export class TerminalService implements ITerminalService {
       });
     } catch (error) {
       this.logger.error('Failed to open system default terminal', error);
-      throw new Error('Failed to open system default terminal');
+      throw new Error('Failed to open system default terminal', { cause: error });
     }
   }
 
@@ -300,7 +300,7 @@ export class TerminalService implements ITerminalService {
       return path.dirname(filePath);
     } catch (error) {
       this.logger.error('Failed to get parent directory', error);
-      throw new Error('Failed to resolve parent directory');
+      throw new Error('Failed to resolve parent directory', { cause: error });
     }
   }
 

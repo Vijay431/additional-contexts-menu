@@ -413,6 +413,7 @@ export class ContextMenuManager {
       if (isPermissionError) {
         throw new Error(
           `Permission denied writing to '${targetFilePath}'. Check that the file is not read-only and you have write access.`,
+          { cause: error },
         );
       }
       throw error;
