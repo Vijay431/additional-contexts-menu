@@ -19,7 +19,7 @@
  * @module di/container
  */
 
-import * as path from 'path';
+import * as path from 'node:path';
 
 import type {
   ILogger,
@@ -262,9 +262,14 @@ export async function initializeContainer(context: {
   container.registerSingleton<ICodeAnalysisService>(TYPES.CodeAnalysisService, () => {
     const logger = container.get<ILogger>(TYPES.Logger);
     const lazyPath = path.join(context.extensionPath, 'dist', 'lazy', 'codeAnalysisService.js');
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, import/no-dynamic-require, security/detect-non-literal-require
-    const { CodeAnalysisService } = require(lazyPath);
-    return CodeAnalysisService.create(logger);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, import/no-dynamic-require, security/detect-non-literal-require
+      const { CodeAnalysisService } = require(lazyPath);
+      return CodeAnalysisService.create(logger);
+    } catch (err) {
+      logger.error(`Failed to load CodeAnalysisService from ${lazyPath}`, err);
+      throw err;
+    }
   });
 
   container.registerSingleton<IFileSaveService>(TYPES.FileSaveService, () => {
