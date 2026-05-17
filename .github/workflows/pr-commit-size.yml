@@ -26,8 +26,20 @@ jobs:
           MAX_FILES=10
           MAX_LINES=400
           STATS=$(git diff --numstat origin/${{ github.base_ref }}...HEAD)
-          FILE_COUNT=$(echo "$STATS" | grep -c .)
-          LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
+          # Build exclusion pattern from scripts/commit-size-excludes.txt (skip blank lines and # comments)
+          EXCLUDES_FILE="scripts/commit-size-excludes.txt"
+          if [ -f "$EXCLUDES_FILE" ]; then
+            PATTERN=$(grep -v -E '^\s*(#|$)' "$EXCLUDES_FILE" | paste -sd '|' -)
+            if [ -n "$PATTERN" ]; then
+              FILTERED=$(echo "$STATS" | grep -v -E "$PATTERN")
+            else
+              FILTERED="$STATS"
+            fi
+          else
+            FILTERED="$STATS"
+          fi
+          FILE_COUNT=$(echo "$FILTERED" | grep -c . 2>/dev/null || echo 0)
+          LINE_COUNT=$(echo "$FILTERED" | awk '{sum += $1 + $2} END {print sum+0}')
           FAILED=0
           [ "$FILE_COUNT" -gt "$MAX_FILES" ] && FAILED=1
           [ "$LINE_COUNT" -gt "$MAX_LINES" ] && FAILED=1
