@@ -19,6 +19,8 @@
  * @module di/container
  */
 
+import * as path from 'node:path';
+
 import type {
   ILogger,
   IConfigurationService,
@@ -195,6 +197,7 @@ export const container = new DIContainer();
  */
 export async function initializeContainer(context: {
   subscriptions: { dispose(): void }[];
+  extensionPath: string;
 }): Promise<void> {
   // Dynamic imports to avoid circular dependencies
   // Core services (always loaded)
@@ -202,7 +205,6 @@ export async function initializeContainer(context: {
   const { ConfigurationService } = await import('../services/configurationService');
   const { ProjectDetectionService } = await import('../services/projectDetectionService');
   const { FileDiscoveryService } = await import('../services/fileDiscoveryService');
-  const { CodeAnalysisService } = await import('../services/codeAnalysisService');
   const { FileSaveService } = await import('../services/fileSaveService');
   const { TerminalService } = await import('../services/terminalService');
   const { FileNamingConventionService } = await import('../services/fileNamingConventionService');
@@ -256,10 +258,18 @@ export async function initializeContainer(context: {
     );
   });
 
-  // Services with other dependencies
+  // CodeAnalysisService is lazy-loaded to avoid bundling the TypeScript compiler in the core bundle
   container.registerSingleton<ICodeAnalysisService>(TYPES.CodeAnalysisService, () => {
     const logger = container.get<ILogger>(TYPES.Logger);
-    return CodeAnalysisService.create(logger);
+    const lazyPath = path.join(context.extensionPath, 'dist', 'lazy', 'codeAnalysisService.js');
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, import/no-dynamic-require, security/detect-non-literal-require
+      const { CodeAnalysisService } = require(lazyPath);
+      return CodeAnalysisService.create(logger);
+    } catch (err) {
+      logger.error(`Failed to load CodeAnalysisService from ${lazyPath}`, err);
+      throw err;
+    }
   });
 
   container.registerSingleton<IFileSaveService>(TYPES.FileSaveService, () => {
