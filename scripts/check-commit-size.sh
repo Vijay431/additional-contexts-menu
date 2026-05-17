@@ -9,8 +9,11 @@ if [ -z "$STATS" ]; then
   exit 0
 fi
 
-FILE_COUNT=$(echo "$STATS" | grep -c .)
-LINE_COUNT=$(echo "$STATS" | awk '{sum += $1 + $2} END {print sum+0}')
+# Exclude auto-generated lockfiles from size checks
+FILTERED=$(echo "$STATS" | grep -v -E '(pnpm-lock\.yaml|package-lock\.json|yarn\.lock)$')
+
+FILE_COUNT=$(echo "$FILTERED" | grep -c . 2>/dev/null || echo 0)
+LINE_COUNT=$(echo "$FILTERED" | awk '{sum += $1 + $2} END {print sum+0}')
 
 FAILED=0
 if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
