@@ -64,6 +64,20 @@ describe('CodeAnalysisService.findFunctionAtPosition', () => {
     expect(result?.name).toBe('inner');
   });
 
+  it('should detect a named export function (transform)', async () => {
+    const code = `export function transform(s: string): string {\n  return s.trim();\n}`;
+    const result = await service.findFunctionAtPosition(makeDoc(code) as any, pos(1) as any);
+    expect(result).toBeTruthy();
+    expect(result?.name).toBe('transform');
+  });
+
+  it('should detect an arrow function used in move operations (multiply)', async () => {
+    const code = `const multiply = (a: number, b: number): number => {\n  return a * b;\n};`;
+    const result = await service.findFunctionAtPosition(makeDoc(code) as any, pos(1) as any);
+    expect(result).toBeTruthy();
+    expect(result?.name).toBe('multiply');
+  });
+
   it('should return undefined when cursor is outside any function', async () => {
     const code = `const x = 1;\nconst y = 2;`;
     const result = await service.findFunctionAtPosition(makeDoc(code) as any, pos(0) as any);

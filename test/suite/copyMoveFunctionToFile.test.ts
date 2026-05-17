@@ -50,21 +50,6 @@ suite('Copy Function to File', () => {
     );
   });
 
-  test('should detect function at cursor and expose it to the command handler', async () => {
-    // Verify that the underlying CodeAnalysisService detects the function
-    // (used by the command before showing QuickPick)
-    const content = `export function transform(s: string): string {\n  return s.trim();\n}`;
-    await openTsFile(content);
-    const editor = vscode.window.activeTextEditor!;
-    editor.selection = new vscode.Selection(1, 2, 1, 2);
-
-    const { CodeAnalysisService } = require('../../src/services/codeAnalysisService');
-    const svc = CodeAnalysisService.getInstance();
-    const fnInfo = await svc.findFunctionAtPosition(editor.document, editor.selection.active);
-
-    assert.ok(fnInfo, 'Should find function at cursor position');
-    assert.ok(fnInfo.name === 'transform', `Expected "transform", got "${fnInfo?.name}"`);
-  });
 });
 
 suite('Move Function to File', () => {
@@ -96,17 +81,4 @@ suite('Move Function to File', () => {
     );
   });
 
-  test('should detect arrow function at cursor for move operation', async () => {
-    const content = `const multiply = (a: number, b: number): number => {\n  return a * b;\n};`;
-    await openTsFile(content);
-    const editor = vscode.window.activeTextEditor!;
-    editor.selection = new vscode.Selection(1, 2, 1, 2);
-
-    const { CodeAnalysisService } = require('../../src/services/codeAnalysisService');
-    const svc = CodeAnalysisService.getInstance();
-    const fnInfo = await svc.findFunctionAtPosition(editor.document, editor.selection.active);
-
-    assert.ok(fnInfo, 'Should find arrow function at cursor position');
-    assert.strictEqual(fnInfo!.name, 'multiply');
-  });
 });
