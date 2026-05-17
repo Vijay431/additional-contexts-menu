@@ -2,11 +2,11 @@
 
 🚀 **Enhanced right-click context menus for Node.js development** with intelligent code operations for React, Angular, Express, Next.js, TypeScript, and JavaScript projects.
 
-[![CI](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml/badge.svg)](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml) [![Codecov](https://codecov.io/gh/Vijay431/additional-context-menus/branch/main/graph/badge.svg)](https://codecov.io/gh/Vijay431/additional-context-menus) [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/VijayGangatharan.additional-context-menus)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Open VSX Registry](https://img.shields.io/open-vsx/v/VijayGangatharan/additional-context-menus)](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Installs](https://img.shields.io/visual-studio-marketplace/i/VijayGangatharan.additional-context-menus)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Downloads](https://img.shields.io/visual-studio-marketplace/d/VijayGangatharan.additional-context-menus)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Rating](https://img.shields.io/visual-studio-marketplace/r/VijayGangatharan.additional-context-menus)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus&ssr=false#review-details) [![Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/VijayGangatharan.additional-context-menus)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus)
+[![CI](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml/badge.svg)](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml) [![Codecov](https://codecov.io/gh/Vijay431/additional-context-menus/branch/main/graph/badge.svg)](https://codecov.io/gh/Vijay431/additional-context-menus) [![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Open VSX Registry](https://img.shields.io/open-vsx/v/VijayGangatharan/additional-context-menus)](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Installs](https://vsmarketplacebadges.dev/installs-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Downloads](https://vsmarketplacebadges.dev/downloads-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Rating](https://vsmarketplacebadges.dev/rating-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus&ssr=false#review-details)
 
 <div align="center">
 
-![Copy Function Demo](public/images/screenshots/copy-function.gif)
+![Copy Function Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-function.gif)
 _Extract functions in one click with intelligent import handling_
 
 </div>
@@ -39,35 +39,35 @@ _Extract functions in one click with intelligent import handling_
 
 ### Copy Function
 
-![Copy Function Demo](public/images/screenshots/copy-function.gif)
+![Copy Function Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-function.gif)
 
 ### Copy Function to File
 
-![Copy Function to File Demo](public/images/screenshots/copy-function-to-file.gif)
+![Copy Function to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-function-to-file.gif)
 
 ### Move Function to File
 
-![Move Function to File Demo](public/images/screenshots/move-function-to-file.gif)
+![Move Function to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/move-function-to-file.gif)
 
 ### Copy Selection to File
 
-![Copy Selection to File Demo](public/images/screenshots/copy-selection-to-file.gif)
+![Copy Selection to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-selection-to-file.gif)
 
 ### Move Selection to File
 
-![Move Selection to File Demo](public/images/screenshots/move-selection-to-file.gif)
+![Move Selection to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/move-selection-to-file.gif)
 
 ### Save All
 
-![Save All Demo](public/images/screenshots/save-all.gif)
+![Save All Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/save-all.gif)
 
 ### Open in Terminal
 
-![Open in Terminal Demo](public/images/screenshots/open-in-terminal.gif)
+![Open in Terminal Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/open-in-terminal.gif)
 
 ### Rename File to Convention
 
-![Rename File to Convention Demo](public/images/screenshots/rename-file-convention.gif)
+![Rename File to Convention Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/rename-file-convention.gif)
 
 ---
 
@@ -662,8 +662,6 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 
 ## Release Notes
 
-See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
-
 ### [2.1.0] - Latest (pre-release `v2.1.0-beta.1`)
 
 > First publication is the pre-release `v2.1.0-beta.1`; stable `v2.1.0` follows after beta soak.
@@ -674,47 +672,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 - **🔧 Cache TTL fix**: `fileDiscovery.cacheTTL` setting now correctly wired into `FileDiscoveryService`
 - **🗑️ Removed** `copyCode.handleImports` setting (was never implemented) and the walkthrough
 
-### [2.0.1] - Previous Release
-
-- **🎨 GitHub Pages UI/UX**: Improved responsive layout, fluid typography, touch-friendly controls, dark mode support, and accessible mobile nav
-- **🔧 Site fixes**: Fixed broken DOM on Features page, unstyled blocks on Code Operations page, and Commands API copy improvements
-
-### [2.0.0] - Previous Release
-
-- **📝 Copy Function to File**: Copy function at cursor position to target file
-- **📝 Move Function to File**: Move function at cursor position to target file (removes from source)
-- **⌨️ Keyboard Shortcuts**: Complete keybinding system with 7 shortcuts for core commands
-- **🔧 Enhanced Context Menu Visibility**: All commands properly available in command palette and context menus
-- **📦 Complete Command Palette Coverage**: All 20 commands registered in package.json
-- **🎯 Function Detection Context**: Smart context variable for function-aware menu visibility
-- **🔄 Command Renaming**: More accurate naming (Copy/Move Selection to File)
-- **🏗️ Service Cleanup**: Removed unused services (BulkFileRenamer, Gitignore)
-- **📚 Documentation Corrections**: Accurate service count (11)
-
-### [1.2.0] - Previous Release
-
-- **🖥️ Cross-Platform Terminal Integration**: Right-click "Open in Terminal" with intelligent platform detection
-- **🔧 Three Terminal Types**: Integrated, External, and System Default with automatic fallbacks
-- **⚙️ Configurable Directory Behaviors**: Parent directory, workspace root, or current directory options
-- **🌐 Robust Cross-Platform Support**: Windows (cmd/PowerShell), macOS (Terminal.app), Linux (auto-detection)
-- **🛠️ Enhanced GitHub Infrastructure**: Updated templates, issue tracking, and comprehensive wiki
-- **📚 Custom External Terminal Support**: User-configurable commands with directory placeholders
-
-### [1.1.0] - Previous Release
-
-- **📊 Status Bar Integration**: Visual project status indicators with framework-specific icons
-- **🔧 Enhanced Command System**: New debug and management commands for better control
-- **⚙️ Expanded Configuration**: Enhanced settings for project detection and status management
-
-### [1.0.0] - Initial Release
-
-- Enhanced right-click context menus for Node.js development
-- Support for React, Angular, Express, Next.js projects
-- TypeScript and JavaScript intelligent code operations
-- Copy Function feature with AST-based function detection
-- Copy Selection to File with smart import handling
-- Move Selection to File with conflict resolution
-- Save All functionality with progress feedback
+For older versions, see [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
