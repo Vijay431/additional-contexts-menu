@@ -831,19 +831,6 @@ Special thanks to:
 
 ---
 
-## 💬 What Developers Say
-
-> "Cut my refactoring time by 80%. Can't imagine working without it now."
-> — _React Developer at Tech Startup_
-
-> "The enum generation alone saves me hours every week."
-> — _Full-Stack TypeScript Developer_
-
-> "Finally, a context menu that understands my Angular projects!"
-> — _Angular Enterprise Developer_
-
----
-
 ## 📈 Extension Stats
 
 - 🔄 **Lazy-Loaded Services** - Generators load on demand
