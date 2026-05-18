@@ -49,20 +49,15 @@ jobs:
 
       - name: Post or Update PR Comment
         if: steps.check.outputs.failed == '1'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          BODY="## ⚠️ PR Too Large
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-size
+          message: |
+            ## ⚠️ PR Too Large
 
-          This PR exceeds the recommended size limits. Consider splitting it into smaller PRs.
-          "
-          [ "${{ steps.check.outputs.file_count }}" -gt 10 ] && BODY="${BODY}
-          - Too many files changed: **${{ steps.check.outputs.file_count }}** (max 10)"
-          [ "${{ steps.check.outputs.line_count }}" -gt 400 ] && BODY="${BODY}
-          - Too many lines changed: **${{ steps.check.outputs.line_count }}** (max 400)"
-
-          gh pr comment ${{ github.event.pull_request.number }} --edit-last --body "$BODY" 2>/dev/null || \
-          gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
+            This PR exceeds the recommended size limits. Consider splitting it into smaller PRs.
+            ${{ steps.check.outputs.file_count > 10 && format('- Too many files changed: **{0}** (max 10)', steps.check.outputs.file_count) || '' }}
+            ${{ steps.check.outputs.line_count > 400 && format('- Too many lines changed: **{0}** (max 400)', steps.check.outputs.line_count) || '' }}
 
       - name: Fail if PR Too Large
         if: >-
