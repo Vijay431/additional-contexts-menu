@@ -5,7 +5,7 @@ All notable changes to the "Additional Context Menus" extension will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.0] - 2026-05-17
+## [2.1.0]
 
 ### Added
 
@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <details>
-<summary><h2>[2.0.1] - 2026-04-07</h2></summary>
+<summary><h2>[2.0.1]</h2></summary>
 
 ### Changed
 
@@ -73,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <details>
-<summary><h2>[2.0.0] - 2026-04-07</h2></summary>
+<summary><h2>[2.0.0]</h2></summary>
 
 ### Added
 
@@ -253,7 +253,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <details>
-<summary><h2>[1.1.0] - 2025-07-24</h2></summary>
+<summary><h2>[1.1.0]</h2></summary>
 
 ### Added
 
@@ -300,7 +300,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <details>
-<summary><h2>[1.0.0] - 2025-07-23</h2></summary>
+<summary><h2>[1.0.0]</h2></summary>
 
 ### Fixed
 
@@ -420,7 +420,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 <details>
-<summary><h2>[0.0.0] - Initial Development</h2></summary>
+<summary><h2>[0.0.0]</h2></summary>
 
 ### Added
 

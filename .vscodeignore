@@ -7,6 +7,7 @@ scripts/
 out-test/
 dist/src/
 dist/test/
+coverage/
 
 # ============================================
 # Dependencies & Package Management
@@ -59,6 +60,7 @@ debug.log
 # ============================================
 blogs/
 docs/
+public/
 
 # ============================================
 # Project & Documentation Files
