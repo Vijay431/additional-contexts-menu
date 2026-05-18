@@ -24,7 +24,6 @@ export interface ExtensionConfig {
   supportedExtensions: string[];
   copyCode: {
     insertionPoint: 'smart' | 'end' | 'beginning';
-    handleImports: 'merge' | 'duplicate' | 'skip';
     preserveComments: boolean;
   };
   saveAll: {
@@ -109,7 +108,7 @@ export interface FunctionInfo {
   endLine: number;
   startColumn: number;
   endColumn: number;
-  type: 'function' | 'method' | 'arrow' | 'async' | 'component' | 'hook';
+  type: 'function' | 'method' | 'arrow' | 'component' | 'hook';
   isExported: boolean;
   hasDecorators: boolean;
   fullText: string;

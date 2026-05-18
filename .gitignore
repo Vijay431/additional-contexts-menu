@@ -1,67 +1,45 @@
-# ============================================
-# Build & Distribution Artifacts
-# ============================================
-*.vsix
-dist/
-out/
-
-# ============================================
 # Dependencies
-# ============================================
 node_modules/
-.pnpm-debug.log*
 
-# ============================================
-# Testing & Coverage
-# ============================================
-.vscode-test/
-.vscode-test-web/
+# Build output
+dist/
+out-test/
 coverage/
+*.vsix
 
-# ============================================
-# Compiled Files
-# ============================================
-src/**/*.js
-src/**/*.js.map
+# Compiled test files
 test/**/*.js
 test/**/*.js.map
-*.map
 
-# ============================================
-# Debug & Logs
-# ============================================
+# Tooling caches & local state
+.claude/
+.code-review-graph/
+.vscode-test/
+.worktrees/
+.auto-claude/
+.automaker/
+.sisyphus
+.auto-claude-security.json
+
+# Logs
+*.log
 debug.log
-meta.json
 
-# ============================================
-# OS Generated Files
-# ============================================
+# OS
 .DS_Store
 Thumbs.db
 
-# ============================================
-# AI & Tool Configuration
-# ============================================
-.claude/
-.auto-claude/
-.sisyphus/
-.opencode/
-.auto-claude-security.json
-.claude_settings.json
-.specify/
-specs/
-.mcp.json
+# Jekyll site build artifacts
+docs/_site/
+docs/.bundle/
+docs/vendor/
+docs/Gemfile.lock
+docs/.jekyll-cache/
 
-# ============================================
-# Documentation & Content
-# ============================================
-blogs/
+# Legacy site/ directory (renamed to docs/)
+site/
+
+# Local-only docs
 TODO.md
-
-# ============================================
-# Development Tools
-# ============================================
-opencode.json
-.automaker/
-.worktrees/
-logs/security/
+CHANGELOG_RELEASE.md
+IMPLEMENTATION_SUMMARY.md

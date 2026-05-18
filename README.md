@@ -2,11 +2,11 @@
 
 🚀 **Enhanced right-click context menus for Node.js development** with intelligent code operations for React, Angular, Express, Next.js, TypeScript, and JavaScript projects.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/VijayGangatharan.additional-context-menus)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Open VSX Registry](https://img.shields.io/open-vsx/v/VijayGangatharan/additional-context-menus)](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Downloads](https://img.shields.io/visual-studio-marketplace/d/VijayGangatharan.additional-context-menus)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus)
+[![CI](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml/badge.svg)](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml) [![Codecov](https://codecov.io/gh/Vijay431/additional-context-menus/branch/main/graph/badge.svg)](https://codecov.io/gh/Vijay431/additional-context-menus) [![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Open VSX Registry](https://img.shields.io/open-vsx/v/VijayGangatharan/additional-context-menus)](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Installs](https://vsmarketplacebadges.dev/installs-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Downloads](https://vsmarketplacebadges.dev/downloads-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Rating](https://vsmarketplacebadges.dev/rating-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus&ssr=false#review-details)
 
 <div align="center">
 
-![Copy Function Demo](docs/images/screenshots/copy-function.gif)
+![Copy Function Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-function.gif)
 _Extract functions in one click with intelligent import handling_
 
 </div>
@@ -39,35 +39,35 @@ _Extract functions in one click with intelligent import handling_
 
 ### Copy Function
 
-![Copy Function Demo](docs/images/screenshots/copy-function.gif)
+![Copy Function Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-function.gif)
 
 ### Copy Function to File
 
-![Copy Function to File Demo](docs/images/screenshots/copy-function-to-file.gif)
+![Copy Function to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-function-to-file.gif)
 
 ### Move Function to File
 
-![Move Function to File Demo](docs/images/screenshots/move-function-to-file.gif)
+![Move Function to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/move-function-to-file.gif)
 
 ### Copy Selection to File
 
-![Copy Selection to File Demo](docs/images/screenshots/copy-selection-to-file.gif)
+![Copy Selection to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-selection-to-file.gif)
 
 ### Move Selection to File
 
-![Move Selection to File Demo](docs/images/screenshots/move-selection-to-file.gif)
+![Move Selection to File Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/move-selection-to-file.gif)
 
 ### Save All
 
-![Save All Demo](docs/images/screenshots/save-all.gif)
+![Save All Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/save-all.gif)
 
 ### Open in Terminal
 
-![Open in Terminal Demo](docs/images/screenshots/open-in-terminal.gif)
+![Open in Terminal Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/open-in-terminal.gif)
 
 ### Rename File to Convention
 
-![Rename File to Convention Demo](docs/images/screenshots/rename-file-convention.gif)
+![Rename File to Convention Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/rename-file-convention.gif)
 
 ---
 
@@ -88,23 +88,25 @@ _Extract functions in one click with intelligent import handling_
 
 ## 📚 Features Documentation
 
-Detailed documentation for all 11 features with usage guides and examples.
+Detailed documentation for all 13 features with usage guides and examples.
 
 | Feature                | Documentation                                                                                               | Purpose                                                                               |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Copy Function          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunction.html)                 | Copy function at cursor                                                               |
-| Copy Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copyFunctionToFile.html)           | Copy function to target file                                                          |
-| Move Function to File  | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveFunctionToFile.html)           | Move function to target file                                                          |
-| Copy Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/copySelectionToFile.html)          | Copy selected code to file                                                            |
-| Move Selection to File | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/moveSelectionToFile.html)          | Move selected code to file                                                            |
-| Save All               | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileSaveService.html)              | Enhanced save operations                                                              |
-| Open in Terminal       | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/terminalService.html)              | Terminal integration                                                                  |
-| Rename File Convention | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/fileNamingConventionService.html)  | Rename files/folders to kebab-case, camelCase, or PascalCase via Explorer right-click |
-| Generate Enum          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/enumGeneratorService.html)         | Union type to enum                                                                    |
-| Generate Cron          | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/cronJobTimerGeneratorService.html) | Cron expression generation                                                            |
-| Generate .env File     | [View Docs](https://vijay431.github.io/additional-contexts-menu/services/envFileGeneratorService.html)      | .env file creation                                                                    |
+| Copy Function          | [View Docs](https://vijay431.github.io/additional-context-menus/services/copyFunction.html)                 | Copy function at cursor                                                               |
+| Copy Function to File  | [View Docs](https://vijay431.github.io/additional-context-menus/services/copyFunctionToFile.html)           | Copy function to target file                                                          |
+| Move Function to File  | [View Docs](https://vijay431.github.io/additional-context-menus/services/moveFunctionToFile.html)           | Move function to target file                                                          |
+| Copy Selection to File | [View Docs](https://vijay431.github.io/additional-context-menus/services/copySelectionToFile.html)          | Copy selected code to file                                                            |
+| Move Selection to File | [View Docs](https://vijay431.github.io/additional-context-menus/services/moveSelectionToFile.html)          | Move selected code to file                                                            |
+| Save All               | [View Docs](https://vijay431.github.io/additional-context-menus/services/fileSaveService.html)              | Enhanced save operations                                                              |
+| Open in Terminal       | [View Docs](https://vijay431.github.io/additional-context-menus/services/terminalService.html)              | Terminal integration                                                                  |
+| Rename File Convention | [View Docs](https://vijay431.github.io/additional-context-menus/services/fileNamingConventionService.html)  | Rename files/folders to kebab-case, camelCase, or PascalCase via Explorer right-click |
+| Generate Enum          | [View Docs](https://vijay431.github.io/additional-context-menus/services/enumGeneratorService.html)         | Union type to enum                                                                    |
+| Generate Cron          | [View Docs](https://vijay431.github.io/additional-context-menus/services/cronJobTimerGeneratorService.html) | Cron expression generation                                                            |
+| Generate .env File     | [View Docs](https://vijay431.github.io/additional-context-menus/services/envFileGeneratorService.html)      | .env file creation                                                                    |
+| Copy File Contents     | [View Docs](https://vijay431.github.io/additional-context-menus/services/copyFileContents.html)             | Copy entire file to clipboard                                                         |
+| Duplicate File         | [View Docs](https://vijay431.github.io/additional-context-menus/services/duplicateFile.html)                | Duplicate file with auto-incremented naming                                           |
 
-[**View All Features** →](https://vijay431.github.io/additional-contexts-menu/services/)
+[**View All Features** →](https://vijay431.github.io/additional-context-menus/services/)
 
 ---
 
@@ -133,11 +135,12 @@ Detailed documentation for all 11 features with usage guides and examples.
 - ⌨️ **Check Keybinding Conflicts** - View keybinding configuration
 - 🔛 **Enable/Disable Keybindings** - Toggle custom keybindings
 - 🌿 **Generate .env File** - Generate environment file from usage patterns
-- 🚶 **Open Walkthrough** - Open the getting started walkthrough
 
 #### Explorer Right-Click Menu
 
 - 🗂️ **Rename File to Convention** - Right-click any file or folder in the Explorer to rename to kebab-case, camelCase, or PascalCase. Processes a single file or recursively renames all files in a folder. Reports renamed, skipped (already compliant), and failed counts.
+- 📋 **Copy File Contents** - Copy the entire contents of any file to the clipboard directly from the Explorer, no editor tab needed
+- 📁 **Duplicate File** - Duplicate any file from the Explorer with a single right-click — auto-increments the name if the duplicate already exists
 
 ### Project Intelligence
 
@@ -200,7 +203,7 @@ The extension supports NVDA (Windows), VoiceOver (macOS), and Orca (Linux):
 - **Progress Announcements**: Long-running operations announce progress percentage
 - **Operation Feedback**: Success/failure announcements for all operations
 
-For detailed accessibility documentation, see [Accessibility Guide](https://vijay431.github.io/additional-contexts-menu/accessibility.html).
+For detailed accessibility documentation, see [Accessibility Guide](https://vijay431.github.io/additional-context-menus/accessibility.html).
 
 ---
 
@@ -232,7 +235,7 @@ Pre-release builds are published to both VS Code Marketplace and Open VSX Regist
 **Open VSX Registry:**
 Pre-release versions are listed alongside stable versions on the extension page.
 
-Pre-release tags follow the format `vX.ODD_MINOR.PATCH-suffix` (e.g. `v2.1.0-beta.1`, `v2.1.0-rc.1`). Stable releases use even minor versions (e.g. `v2.0.0`, `v2.2.0`).
+Pre-release tags carry a suffix (e.g. `v2.1.0-beta.1`, `v2.1.0-rc.1`). Stable releases omit the suffix (e.g. `v2.1.0`). Per SemVer, the beta and its stable graduation share the same version number.
 
 ---
 
@@ -386,7 +389,6 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 - `Additional Context Menus: Enable Keybindings` - Enable custom keybindings
 - `Additional Context Menus: Disable Keybindings` - Disable custom keybindings
 - `Additional Context Menus: Generate .env File` - Generate env file
-- `Additional Context Menus: Open Walkthrough` - Open getting started guide
 
 **Explorer Right-Click**:
 
@@ -406,8 +408,8 @@ Access management and utility features via Command Palette (`Ctrl+Shift+P` / `Cm
 
 ## 📋 Requirements
 
-- **VS Code**: Version 1.110.0 or higher
-- **Node.js**: Version 20+ required for development
+- **VS Code**: Version 1.111.0 or higher (last 10 minor versions supported)
+- **Node.js**: Version 22+ runtime (Node 24 LTS recommended for development)
 - **PNPM**: Package manager for dependency management (install with `npm install -g pnpm`)
 - **Project Type**: Node.js project with `package.json` (for smart detection)
 - **File Types**: TypeScript/JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`)
@@ -438,10 +440,6 @@ Additional Context Menus provides extensive configuration options:
   - `"smart"` - Intelligently choose the best location
   - `"end"` - Insert at the end of the file
   - `"beginning"` - Insert at the beginning of the file
-- `additionalContextMenus.copyCode.handleImports` (string, default: `"merge"`) - How to handle import statements
-  - `"merge"` - Merge with existing imports
-  - `"duplicate"` - Allow duplicate imports
-  - `"skip"` - Skip import statements
 - `additionalContextMenus.copyCode.preserveComments` (boolean, default: `true`) - Preserve comments when copying code
 
 ### Save All Settings
@@ -504,7 +502,6 @@ Additional Context Menus provides extensive configuration options:
   "additionalContextMenus.enabled": true,
   "additionalContextMenus.autoDetectProjects": true,
   "additionalContextMenus.copyCode.insertionPoint": "smart",
-  "additionalContextMenus.copyCode.handleImports": "merge",
   "additionalContextMenus.copyCode.preserveComments": true,
   "additionalContextMenus.saveAll.showNotification": true,
   "additionalContextMenus.terminal.type": "integrated"
@@ -616,15 +613,14 @@ The extension automatically detects and provides enhanced functionality:
 3. **External Terminal**: If using external terminal, verify command syntax
 4. **Fallback**: Extension automatically falls back to integrated terminal
 
-#### Import Handling Problems
+#### Import Handling
 
-**Problem**: Imports not merged correctly when copying code
+**Problem**: Imports not copied when moving code between files
 
 **Solutions:**
 
-1. **Configuration**: Check `additionalContextMenus.copyCode.handleImports` setting
-2. **File Structure**: Ensure proper ES module or CommonJS structure
-3. **Import Style**: Use consistent import style throughout project
+1. **File Structure**: Ensure proper ES module or CommonJS structure
+2. **Import Style**: Use consistent import style throughout project
 
 ### 📚 Frequently Asked Questions
 
@@ -646,7 +642,7 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 2. **Check Extension State**: `Additional Context Menus: Debug Context Variables`
 3. **Refresh Detection**: `Additional Context Menus: Refresh Context Variables`
 4. **Review Configuration**: Check all settings in VS Code preferences
-5. **Report Issues**: Use [GitHub Issues](https://github.com/Vijay431/additional-contexts-menu/issues) with debug output
+5. **Report Issues**: Use [GitHub Issues](https://github.com/Vijay431/additional-context-menus/issues) with debug output
 
 ---
 
@@ -657,7 +653,7 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 - **Import Merging**: Complex import scenarios may require manual adjustment
 - **Large Files**: Very large files (>10MB) may experience slower function detection
 
-**Reporting Issues**: Please report problems on our [GitHub repository](https://github.com/Vijay431/additional-contexts-menu/issues) with:
+**Reporting Issues**: Please report problems on our [GitHub repository](https://github.com/Vijay431/additional-context-menus/issues) with:
 
 - VS Code version
 - Extension version
@@ -666,49 +662,15 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 
 ## Release Notes
 
-See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
+### [2.1.0] - Latest
 
-### [2.0.1] - Latest
+- **📋 Copy File Contents**: Right-click any file in the Explorer to copy its entire contents to the clipboard without opening it
+- **📁 Duplicate File**: Right-click any file in the Explorer to create a `<name>-duplicate<ext>` copy alongside the original. Auto-increments if needed.
+- **🧪 Full test suite**: Vitest unit tests + Mocha integration tests covering all 12 user-facing commands via `@vscode/test-electron`
+- **🔧 Cache TTL fix**: `fileDiscovery.cacheTTL` setting now correctly wired into `FileDiscoveryService`
+- **🗑️ Removed** `copyCode.handleImports` setting (was never implemented) and the walkthrough
 
-- **🎨 GitHub Pages UI/UX**: Improved responsive layout, fluid typography, touch-friendly controls, dark mode support, and accessible mobile nav
-- **🔧 Site fixes**: Fixed broken DOM on Features page, unstyled blocks on Code Operations page, and Commands API copy improvements
-
-### [2.0.0] - Previous Release
-
-- **📝 Copy Function to File**: Copy function at cursor position to target file
-- **📝 Move Function to File**: Move function at cursor position to target file (removes from source)
-- **⌨️ Keyboard Shortcuts**: Complete keybinding system with 7 shortcuts for core commands
-- **🔧 Enhanced Context Menu Visibility**: All commands properly available in command palette and context menus
-- **📦 Complete Command Palette Coverage**: All 20 commands registered in package.json
-- **🎯 Function Detection Context**: Smart context variable for function-aware menu visibility
-- **🔄 Command Renaming**: More accurate naming (Copy/Move Selection to File)
-- **🏗️ Service Cleanup**: Removed unused services (BulkFileRenamer, Gitignore)
-- **📚 Documentation Corrections**: Accurate service count (11)
-
-### [1.2.0] - Previous Release
-
-- **🖥️ Cross-Platform Terminal Integration**: Right-click "Open in Terminal" with intelligent platform detection
-- **🔧 Three Terminal Types**: Integrated, External, and System Default with automatic fallbacks
-- **⚙️ Configurable Directory Behaviors**: Parent directory, workspace root, or current directory options
-- **🌐 Robust Cross-Platform Support**: Windows (cmd/PowerShell), macOS (Terminal.app), Linux (auto-detection)
-- **🛠️ Enhanced GitHub Infrastructure**: Updated templates, issue tracking, and comprehensive wiki
-- **📚 Custom External Terminal Support**: User-configurable commands with directory placeholders
-
-### [1.1.0] - Previous Release
-
-- **📊 Status Bar Integration**: Visual project status indicators with framework-specific icons
-- **🔧 Enhanced Command System**: New debug and management commands for better control
-- **⚙️ Expanded Configuration**: Enhanced settings for project detection and status management
-
-### [1.0.0] - Initial Release
-
-- Enhanced right-click context menus for Node.js development
-- Support for React, Angular, Express, Next.js projects
-- TypeScript and JavaScript intelligent code operations
-- Copy Function feature with AST-based function detection
-- Copy Selection to File with smart import handling
-- Move Selection to File with conflict resolution
-- Save All functionality with progress feedback
+For older versions, see [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
@@ -794,12 +756,12 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ### 🛠️ Development Setup
 
-**Prerequisites**: Node.js 20+ required for development (20, 22, 24 supported)
+**Prerequisites**: Node.js 22+ runtime (22, 24, 26 supported); development uses Node 24 LTS. VS Code 1.111+ required (last 10 minor versions supported).
 
 ```bash
 # 1. Clone and setup
-git clone https://github.com/Vijay431/additional-contexts-menu.git
-cd additional-contexts-menu
+git clone https://github.com/Vijay431/additional-context-menus.git
+cd additional-context-menus
 pnpm install
 
 # 2. Build
@@ -809,18 +771,39 @@ pnpm run build
 # Press F5 in VS Code to launch Extension Development Host
 ```
 
+You can also open the project in GitHub Codespaces or a VS Code Dev Container. The container installs Node.js 24 (latest LTS), pnpm dependencies, recommended VS Code extensions, and Linux packages needed for headless integration tests.
+
 ### 📋 Available Development Commands
 
-| Command             | Description                                     | Performance         |
-| ------------------- | ----------------------------------------------- | ------------------- |
-| `pnpm run build`    | Build extension using TypeScript esbuild config | ⚡ ~1 second        |
-| `pnpm run watch`    | Watch mode for development                      | 🔄 Instant rebuilds |
-| `pnpm run package`  | Production build with optimizations             | 📦 Optimized        |
-| `pnpm run lint`     | Run ESLint on src directory                     | 🎨 Code quality     |
-| `pnpm run lint:fix` | Auto-fix ESLint issues                          | 🔧 Auto-fix         |
-| `pnpm run format`   | Format code using Prettier                      | ✨ Consistent style |
+| Command                       | Description                                     | Performance              |
+| ----------------------------- | ----------------------------------------------- | ------------------------ |
+| `pnpm run build`              | Build extension using TypeScript esbuild config | ⚡ ~1 second             |
+| `pnpm run watch`              | Watch mode for development                      | 🔄 Instant rebuilds      |
+| `pnpm run package`            | Production build with optimizations             | 📦 Optimized             |
+| `pnpm run lint`               | Run ESLint on src directory                     | 🎨 Code quality          |
+| `pnpm run lint:fix`           | Auto-fix ESLint issues                          | 🔧 Auto-fix              |
+| `pnpm run format`             | Format code using Prettier                      | ✨ Consistent style      |
+| `pnpm run test:unit`          | Run unit tests (Vitest)                         | ⚡ Fast, no display      |
+| `pnpm run test:unit:coverage` | Run unit tests with coverage output             | 📈 Codecov-ready LCOV    |
+| `pnpm run test:integration`   | Run integration tests (VS Code, Ubuntu/Linux)   | 🧪 Full feature coverage |
 
 ---
+
+## Contributors
+
+Thanks goes to these wonderful people:
+
+<!-- ALL-CONTRIBUTORS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome.
+
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full contributors list including AI pair programmers.
 
 ## 📄 License
 
@@ -833,7 +816,7 @@ This extension is licensed under the [MIT License](LICENSE).
 **Vijay Gangatharan**
 
 - 📧 Email: <vijayanand431@gmail.com>
-- 🐙 [GitHub Repository](https://github.com/Vijay431/additional-contexts-menu)
+- 🐙 [GitHub Repository](https://github.com/Vijay431/additional-context-menus)
 - 🌐 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus)
 
 ---

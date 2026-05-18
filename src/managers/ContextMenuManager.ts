@@ -21,7 +21,7 @@ import { getAccessibleQuickPickItem } from '../utils/accessibilityHelper';
  * Context Menu Manager
  *
  * Manages context menu commands and their visibility based on project type
- * and cursor position. Uses lazy loading via DI container for optimal bundle size.
+ * and cursor position. Uses lazy loading via DI container for an optimized bundle.
  *
  * @category Managers
  */
@@ -169,6 +169,14 @@ export class ContextMenuManager {
       ),
       vscode.commands.registerCommand('additionalContextMenus.generateCronTimer', () =>
         this.handleGenerateCronTimer(),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.copyFileContents',
+        async (uri?: vscode.Uri) => await this.handleCopyFileContents(uri),
+      ),
+      vscode.commands.registerCommand(
+        'additionalContextMenus.duplicateFile',
+        async (uri?: vscode.Uri) => await this.handleDuplicateFile(uri),
       ),
     );
 
@@ -375,7 +383,7 @@ export class ContextMenuManager {
   private async copyCodeToTargetFile(
     code: string,
     targetFilePath: string,
-    sourceDocument: vscode.TextDocument,
+    _sourceDocument: vscode.TextDocument,
   ): Promise<void> {
     try {
       // Open target file
@@ -395,11 +403,6 @@ export class ContextMenuManager {
       await targetEditor.edit((editBuilder) => {
         editBuilder.insert(insertionPoint, `\n${code}\n`);
       });
-
-      // Handle imports if configured
-      if (this.configService.getCopyCodeConfig().handleImports === 'merge') {
-        await this.handleImportMerging(sourceDocument, targetDocument, code);
-      }
     } catch (error) {
       this.logger.error('Error copying code to target file', error);
       const isPermissionError =
@@ -410,6 +413,7 @@ export class ContextMenuManager {
       if (isPermissionError) {
         throw new Error(
           `Permission denied writing to '${targetFilePath}'. Check that the file is not read-only and you have write access.`,
+          { cause: error },
         );
       }
       throw error;
@@ -455,40 +459,6 @@ export class ContextMenuManager {
       return new vscode.Position(firstExportLine, 0);
     } else {
       return new vscode.Position(document.lineCount, 0);
-    }
-  }
-
-  private async handleImportMerging(
-    sourceDocument: vscode.TextDocument,
-    targetDocument: vscode.TextDocument,
-    copiedCode: string,
-  ): Promise<void> {
-    try {
-      // Extract imports from copied code
-      const sourceImports = this.codeAnalysisService.extractImports(
-        copiedCode,
-        sourceDocument.languageId,
-      );
-
-      if (sourceImports.length === 0) {
-        return;
-      }
-
-      // Get existing imports from target file
-      const targetText = targetDocument.getText();
-      const targetImports = this.codeAnalysisService.extractImports(
-        targetText,
-        targetDocument.languageId,
-      );
-
-      // TODO: Implement smart import merging logic
-      // This would involve parsing import statements and merging them intelligently
-      this.logger.debug('Import merging not yet fully implemented', {
-        sourceImports: sourceImports.length,
-        targetImports: targetImports.length,
-      });
-    } catch (error) {
-      this.logger.warn('Error handling import merging', error);
     }
   }
 
@@ -801,6 +771,128 @@ export class ContextMenuManager {
       this.logger.error('Error in rename file convention', error);
       vscode.window.showErrorMessage(`Failed to rename files: ${(error as Error).message}`);
       await this.announceError('Rename File Convention', (error as Error).message);
+    }
+  }
+
+  private async handleCopyFileContents(uri?: vscode.Uri): Promise<void> {
+    this.logger.info('Copy File Contents command triggered');
+
+    try {
+      const targetUri = uri ?? vscode.window.activeTextEditor?.document.uri;
+
+      if (!targetUri) {
+        vscode.window.showErrorMessage(
+          'No file selected. Right-click a file in the Explorer and choose Copy File Contents.',
+        );
+        return;
+      }
+
+      const stat = await vscode.workspace.fs.stat(targetUri);
+      if (stat.type & vscode.FileType.Directory) {
+        vscode.window.showErrorMessage('Copy File Contents only works on files, not folders.');
+        return;
+      }
+      const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+      if (stat.size > MAX_BYTES) {
+        vscode.window.showWarningMessage(
+          `File is too large to copy (${(stat.size / 1024 / 1024).toFixed(1)} MB). Maximum is 10 MB.`,
+        );
+        return;
+      }
+      const bytes = await vscode.workspace.fs.readFile(targetUri);
+      const contents = new TextDecoder('utf-8').decode(bytes);
+      await vscode.env.clipboard.writeText(contents);
+
+      const fileName = path.basename(targetUri.fsPath);
+      vscode.window.showInformationMessage(`Copied contents of ${fileName} to clipboard`);
+      this.logger.info(`File contents copied: ${targetUri.fsPath}`);
+    } catch (error) {
+      this.logger.error('Error in Copy File Contents command', error);
+      vscode.window.showErrorMessage(
+        `Failed to copy file contents: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
+
+  private async handleDuplicateFile(uri?: vscode.Uri): Promise<void> {
+    this.logger.info('Duplicate File command triggered');
+
+    try {
+      const targetUri = uri ?? vscode.window.activeTextEditor?.document.uri;
+
+      if (!targetUri) {
+        vscode.window.showErrorMessage(
+          'No file selected. Right-click a file in the Explorer and choose Duplicate File.',
+        );
+        return;
+      }
+
+      const stat = await vscode.workspace.fs.stat(targetUri);
+      if (stat.type & vscode.FileType.Directory) {
+        vscode.window.showErrorMessage('Duplicate File only works on files, not folders.');
+        return;
+      }
+
+      const ext = path.posix.extname(targetUri.path);
+      const nameWithoutExt = path.posix.basename(targetUri.path, ext);
+
+      const parentPosixPath = path.posix.dirname(targetUri.path);
+
+      // Find a free name: <name>-duplicate<ext>, then <name>-duplicate-1<ext>, etc.
+      let candidatePosixPath = path.posix.join(
+        parentPosixPath,
+        `${nameWithoutExt}-duplicate${ext}`,
+      );
+      let counter = 1;
+      let slotFound = false;
+      const MAX_DUPLICATES = 100;
+      while (!slotFound) {
+        if (counter > MAX_DUPLICATES) {
+          vscode.window.showErrorMessage(
+            `Could not find a free name after ${MAX_DUPLICATES} attempts. Please rename or remove existing duplicates.`,
+          );
+          return;
+        }
+        try {
+          await vscode.workspace.fs.stat(targetUri.with({ path: candidatePosixPath }));
+          // File exists — try next increment
+          candidatePosixPath = path.posix.join(
+            parentPosixPath,
+            `${nameWithoutExt}-duplicate-${counter}${ext}`,
+          );
+          counter++;
+        } catch (statError) {
+          if (statError instanceof vscode.FileSystemError && statError.code === 'FileNotFound') {
+            slotFound = true;
+          } else {
+            throw statError; // propagate permission / network errors to outer catch
+          }
+        }
+      }
+
+      const newUri = targetUri.with({ path: candidatePosixPath });
+      try {
+        await vscode.workspace.fs.copy(targetUri, newUri, { overwrite: false });
+      } catch (copyError) {
+        // FileSystemError on a naming collision = TOCTOU race condition
+        if (copyError instanceof vscode.FileSystemError && copyError.code === 'FileExists') {
+          vscode.window.showWarningMessage(
+            'Could not create duplicate — a naming collision occurred. Please try again.',
+          );
+          return;
+        }
+        throw copyError; // re-throw non-collision errors to outer catch
+      }
+
+      const originalName = path.posix.basename(targetUri.path);
+      const newName = path.posix.basename(candidatePosixPath);
+      vscode.window.showInformationMessage(`Duplicated ${originalName} → ${newName}`);
+      this.logger.info(`File duplicated: ${targetUri.toString()} → ${newUri.toString()}`);
+    } catch (error) {
+      this.logger.error('Error in Duplicate File command', error);
+      vscode.window.showErrorMessage(
+        `Failed to duplicate file: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
 

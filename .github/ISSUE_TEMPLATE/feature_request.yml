@@ -1,0 +1,46 @@
+name: Feature request
+description: Suggest a new capability or improvement for Additional Context Menus.
+title: '[Feature]: '
+labels: ['enhancement', 'needs triage']
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for sharing an idea. Please describe the workflow this would improve.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or workflow
+      description: What is hard, slow, or missing today?
+      placeholder: I often need to...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How should the extension behave?
+    validations:
+      required: true
+  - type: dropdown
+    id: location
+    attributes:
+      label: Where should this appear?
+      options:
+        - Right-click context menu
+        - Explorer context menu
+        - Command Palette
+        - Configuration setting
+        - Documentation only
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional workarounds or alternate designs.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, examples, links, or related issues.

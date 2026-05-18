@@ -158,7 +158,7 @@ export class TerminalService implements ITerminalService {
       this.logger.debug('Integrated terminal created', { name: terminalName, cwd: directoryPath });
     } catch (error) {
       this.logger.error('Failed to create integrated terminal', error);
-      throw new Error('Failed to open integrated terminal');
+      throw new Error('Failed to open integrated terminal', { cause: error });
     }
   }
 
@@ -182,7 +182,7 @@ export class TerminalService implements ITerminalService {
       this.logger.debug('External terminal command executed', { command });
     } catch (error) {
       this.logger.error('Failed to open external terminal', error);
-      throw new Error('Failed to open external terminal');
+      throw new Error('Failed to open external terminal', { cause: error });
     }
   }
 
@@ -236,7 +236,7 @@ export class TerminalService implements ITerminalService {
       });
     } catch (error) {
       this.logger.error('Failed to open system default terminal', error);
-      throw new Error('Failed to open system default terminal');
+      throw new Error('Failed to open system default terminal', { cause: error });
     }
   }
 
@@ -300,7 +300,7 @@ export class TerminalService implements ITerminalService {
       return path.dirname(filePath);
     } catch (error) {
       this.logger.error('Failed to get parent directory', error);
-      throw new Error('Failed to resolve parent directory');
+      throw new Error('Failed to resolve parent directory', { cause: error });
     }
   }
 
@@ -344,12 +344,20 @@ export class TerminalService implements ITerminalService {
   }
 
   public async executeCommand(command: string, directoryPath?: string): Promise<void> {
-    const terminal = vscode.window.createTerminal({
-      name: 'Command Execution',
-      cwd: directoryPath,
-    });
-    terminal.sendText(command);
-    terminal.show();
+    try {
+      const terminalOptions: vscode.TerminalOptions = { name: 'Command Execution' };
+      if (directoryPath !== undefined) {
+        terminalOptions.cwd = directoryPath;
+      }
+      const terminal = vscode.window.createTerminal(terminalOptions);
+      terminal.sendText(command);
+      terminal.show();
+    } catch (error) {
+      this.logger.error('Failed to execute command in terminal', error);
+      vscode.window.showErrorMessage(
+        `Failed to open terminal: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
   }
 
   private async getExternalTerminalCommand(): Promise<string | undefined> {

@@ -329,7 +329,11 @@ export function memoize(
     descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
-    const cache = new Cache<unknown>({ defaultTTL: ttl });
+    const cacheConfig: Partial<CacheConfig> = {};
+    if (ttl !== undefined) {
+      cacheConfig.defaultTTL = ttl;
+    }
+    const cache = new Cache<unknown>(cacheConfig);
 
     descriptor.value = function (...args: unknown[]) {
       // Generate cache key

@@ -9,7 +9,6 @@ import type {
   IProjectDetectionService,
   ProjectType,
 } from '../di/interfaces/IProjectDetectionService';
-import { ProjectType as OldProjectType } from '../types/extension';
 import { Cache } from '../utils/cache';
 import { Logger } from '../utils/logger';
 import { isSafeFilePath } from '../utils/pathValidator';
@@ -90,17 +89,17 @@ import { isSafeFilePath } from '../utils/pathValidator';
 export class ProjectDetectionService implements IProjectDetectionService {
   private static instance: ProjectDetectionService | undefined;
   private logger: ILogger;
-  private projectTypeCache: Cache<OldProjectType>;
+  private projectTypeCache: Cache<ProjectType>;
 
   private constructor(
     logger: ILogger,
-    private configService?: IConfigurationService,
+    _configService?: IConfigurationService,
+    cacheTTL: number = 10 * 60 * 1000,
   ) {
     this.logger = logger;
-    // Cache project type for 10 minutes
-    this.projectTypeCache = new Cache<OldProjectType>({
+    this.projectTypeCache = new Cache<ProjectType>({
       maxSize: 50,
-      defaultTTL: 10 * 60 * 1000, // 10 minutes
+      defaultTTL: cacheTTL,
       trackStats: false,
     });
     this.logger = logger;
@@ -128,8 +127,9 @@ export class ProjectDetectionService implements IProjectDetectionService {
   public static create(
     logger: ILogger,
     configService?: IConfigurationService,
+    cacheTTL?: number,
   ): ProjectDetectionService {
-    return new ProjectDetectionService(logger, configService);
+    return new ProjectDetectionService(logger, configService, cacheTTL);
   }
 
   public async detectProjectType(workspaceFolder?: vscode.WorkspaceFolder): Promise<ProjectType> {
@@ -307,24 +307,6 @@ export class ProjectDetectionService implements IProjectDetectionService {
     };
   }
 
-  /**
-   * Legacy method for backward compatibility
-   * @deprecated Use detectProjectType() instead
-   */
-  private createOldProjectType(
-    isNodeProject: boolean,
-    frameworks: string[],
-    hasTypeScript: boolean,
-    supportLevel: 'full' | 'partial' | 'none',
-  ): OldProjectType {
-    return {
-      isNodeProject,
-      frameworks,
-      hasTypeScript,
-      supportLevel,
-    };
-  }
-
   public async updateContextVariables(): Promise<void> {
     const projectType = await this.detectProjectType();
 
@@ -352,7 +334,7 @@ export class ProjectDetectionService implements IProjectDetectionService {
     await vscode.commands.executeCommand(
       'setContext',
       'additionalContextMenus.hasNextjs',
-      projectType.frameworks.includes('nextjs'),
+      projectType.frameworks.includes('next'),
     );
     await vscode.commands.executeCommand(
       'setContext',

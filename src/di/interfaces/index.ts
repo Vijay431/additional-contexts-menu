@@ -24,7 +24,6 @@ export {
 export {
   IFileNamingConventionService,
   type NamingConvention,
-  type NamingSuggestion,
 } from './IFileNamingConventionService';
 export {
   IAccessibilityService,

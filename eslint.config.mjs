@@ -51,6 +51,7 @@ export default tseslint.config(
       '.vscode-test/**', // VS Code test environment
       '.vscode-test-web/**', // VS Code web test environment
       'out/**', // TypeScript compiled output
+      'out-test/**', // TypeScript compiled test output
       'dist/**', // Distribution build output
 
       // Dependencies and generated content
@@ -64,9 +65,16 @@ export default tseslint.config(
       'blogs/**', // Blog content
       'docs/**', // Documentation
 
+      // Jekyll site generated/vendor content
+      'site/_site/**', // Jekyll build output
+      'site/vendor/**', // Ruby/Bundler dependencies
+
       // AI and specification tools
       '.specify/**', // Specify tool files
       'specs/**', // Specification files
+
+      // Test fixtures (sample files for AST parsing, not real code)
+      'test/fixtures/**',
 
       // Generated files
       'meta.json', // Build metadata
@@ -827,13 +835,63 @@ export default tseslint.config(
   },
 
   // ============================================
+  // SITE JAVASCRIPT - Browser Environment
+  // ============================================
+  // Target: site/assets/js/*.js
+  // Purpose: Allow browser globals in Jekyll site scripts
+  // Rationale: These are browser-only scripts, not Node.js
+  {
+    files: ['site/assets/js/**/*.js'],
+    languageOptions: {
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly',
+        location: 'readonly',
+        history: 'readonly',
+        localStorage: 'readonly',
+        sessionStorage: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        requestAnimationFrame: 'readonly',
+        cancelAnimationFrame: 'readonly',
+        IntersectionObserver: 'readonly',
+        MutationObserver: 'readonly',
+        ResizeObserver: 'readonly',
+        CustomEvent: 'readonly',
+        Event: 'readonly',
+        HTMLElement: 'readonly',
+        Element: 'readonly',
+        Node: 'readonly',
+        NodeList: 'readonly',
+        fetch: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+        console: 'readonly',
+        jQuery: 'readonly',
+        $: 'readonly',
+      },
+    },
+    rules: {
+      'no-undef': 'error',
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      'no-var': 'off',
+      'prefer-const': 'off',
+      'security/detect-object-injection': 'off',
+    },
+  },
+
+  // ============================================
   // CONFIGURATION FILES OVERRIDE - JavaScript Configs
   // ============================================
   // Target: *.config.js, *.config.mjs, esbuild.config.js
   // Purpose: Allow CommonJS patterns in config files
   // Rationale: Config files use require and module.exports
   {
-    files: ['*.config.js', '*.config.mjs', 'esbuild.config.js'],
+    files: ['*.config.js', '*.config.mjs', '*.config.ts', 'esbuild.config.js'],
 
     // ============================================
     // LANGUAGE OPTIONS - Config File Globals
@@ -872,6 +930,12 @@ export default tseslint.config(
 
       'import/no-dynamic-require': 'off',
       // Reason: Config files use dynamic requires
+
+      'security/detect-non-literal-fs-filename': 'off',
+      // Reason: Build config uses computed paths from known templates, not user input
+
+      'security/detect-object-injection': 'off',
+      // Reason: Build config accesses known object keys safely
     },
   },
 );

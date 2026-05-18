@@ -4,8 +4,10 @@
 src/
 test/
 scripts/
+out-test/
 dist/src/
 dist/test/
+coverage/
 
 # ============================================
 # Dependencies & Package Management
@@ -27,8 +29,13 @@ pnpm-lock.yaml
 eslint*
 tsconfig*.json
 esbuild*
+vitest.config.ts
+tsconfig.test.json
 .vscode-test.mjs
 .lintstagedrc
+.devcontainer/
+.cursorignore
+.code-review-graph
 
 # ============================================
 # VS Code Configuration & Workspaces
@@ -53,7 +60,7 @@ debug.log
 # ============================================
 blogs/
 docs/
-site/
+public/
 
 # ============================================
 # Project & Documentation Files
@@ -65,3 +72,4 @@ IMPLEMENTATION_SUMMARY.md
 opencode.json
 .auto-claude-security.json
 DEVELOPER.md
+AGENTS.md
