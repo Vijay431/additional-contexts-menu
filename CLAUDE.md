@@ -259,8 +259,8 @@ This project follows [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html). Pre-re
 ### Automation Layout
 
 - `.github/workflows/ci.yml` runs PR/main quality gates: lint, unit coverage, integration tests, build matrix, audit, and dependency review.
-- `.github/workflows/release.yml` runs only on `v*` tag pushes: package, verify, publish to VS Code Marketplace and Open VSX, deploy Pages for stable releases, and create a GitHub Release.
-- `.github/workflows/deploy-pages.yml` is a manual docs redeploy escape hatch.
+- `.github/workflows/release.yml` runs only on `v*` tag pushes: package, verify, publish to VS Code Marketplace and Open VSX, and create a GitHub Release.
+- GitHub Pages auto-deploys from `main` via the built-in `pages build and deployment` workflow on every push.
 - Community automation lives in `.github/workflows/stale.yml`, `.github/workflows/labels-sync.yml`, and `.github/workflows/all-contributors.yml`.
 - Release publishing requires `VSCE_PAT` and `OVSX_PAT`.
 
@@ -274,8 +274,8 @@ if echo "$VERSION" | grep -qE '\-(rc|next|beta|alpha)'; then
 fi
 ```
 
-- Pre-release tags → both marketplaces publish with `--pre-release`; `deploy-pages` is skipped
-- Stable tags → both marketplaces publish as stable; `deploy-pages` runs and GitHub Pages is updated
+- Pre-release tags → both marketplaces publish with `--pre-release`
+- Stable tags → both marketplaces publish as stable; GitHub Pages auto-updates from main
 
 ### Release Checklist
 
