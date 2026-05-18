@@ -31,7 +31,7 @@ jobs:
           if [ -f "$EXCLUDES_FILE" ]; then
             PATTERN=$(grep -v -E '^\s*(#|$)' "$EXCLUDES_FILE" | paste -sd '|' -)
             if [ -n "$PATTERN" ]; then
-              FILTERED=$(echo "$STATS" | grep -v -E "$PATTERN")
+              FILTERED=$(echo "$STATS" | grep -v -E "$PATTERN" || true)
             else
               FILTERED="$STATS"
             fi
