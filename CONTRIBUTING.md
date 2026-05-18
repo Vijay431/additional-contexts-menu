@@ -94,7 +94,7 @@ The project has two test layers:
 | Layer       | Command                       | Framework                       | What's covered                                                     |
 | ----------- | ----------------------------- | ------------------------------- | ------------------------------------------------------------------ |
 | Unit        | `pnpm run test:unit`          | Vitest                          | Infrastructure utilities and services with mocked VS Code API      |
-| Coverage    | `pnpm run test:unit:coverage` | Vitest + V8 coverage            | Unit tests plus `coverage/lcov.info` for Codecov                   |
+| Coverage    | `pnpm run test:unit:coverage` | Vitest + V8 coverage            | Unit tests plus `coverage/lcov.info`                               |
 | Integration | `pnpm run test:integration`   | Mocha + `@vscode/test-electron` | All 13 user-facing features, end-to-end in a real VS Code instance |
 
 **Unit tests** cover: `Cache`, `pathValidator`, `ConfigValidator`, `accessibilityHelper`, `CodeAnalysisService`, `ProjectDetectionService`, `FileDiscoveryService`.
@@ -214,7 +214,7 @@ The repository separates quality gates, release publishing, and community automa
 **CI (`.github/workflows/ci.yml`, on PRs and pushes to `main`):**
 
 - `lint` — runs `pnpm run lint`
-- `test-unit` — runs `pnpm run test:unit:coverage` and uploads `coverage/lcov.info` to Codecov
+- `test-unit` — runs `pnpm run test:unit:coverage`
 - `test-integration` — runs `pnpm run test:integration` (Mocha + VS Code, Ubuntu, after `lint`, parallel with `test-unit`)
 - `build` — builds on Ubuntu, Windows, macOS × Node 20/22/24 × VS Code stable/insiders (after both test jobs pass)
 - `audit` — runs `pnpm audit --audit-level=high`

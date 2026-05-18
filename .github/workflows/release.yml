@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   setup:
@@ -206,41 +204,6 @@ jobs:
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
 
-  deploy-pages:
-    name: Deploy GitHub Pages
-    runs-on: ubuntu-latest
-    needs: [setup, publish-vscode, publish-openvsx]
-    if: needs.setup.outputs.is_prerelease == 'false'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
-          bundler-cache: true
-          working-directory: docs
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Build Jekyll Site
-        run: bundle exec jekyll build
-        working-directory: docs
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/_site
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
@@ -252,16 +215,10 @@ jobs:
           name: vsix-package
 
       - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PRERELEASE_FLAG=""
-          if [ "${{ needs.setup.outputs.is_prerelease }}" = "true" ]; then
-            PRERELEASE_FLAG="--prerelease"
-          fi
-
-          gh release create "${{ needs.setup.outputs.tag }}" \
-            *.vsix \
-            --title "Additional Context Menus ${{ needs.setup.outputs.version }}" \
-            --generate-notes \
-            ${PRERELEASE_FLAG}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.setup.outputs.tag }}
+          name: Additional Context Menus ${{ needs.setup.outputs.version }}
+          files: '*.vsix'
+          generate_release_notes: true
+          prerelease: ${{ needs.setup.outputs.is_prerelease == 'true' }}
