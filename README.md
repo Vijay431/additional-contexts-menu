@@ -662,9 +662,7 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 
 ## Release Notes
 
-### [2.1.0] - Latest (pre-release `v2.1.0-beta.1`)
-
-> First publication is the pre-release `v2.1.0-beta.1`; stable `v2.1.0` follows after beta soak.
+### [2.1.0] - Latest
 
 - **📋 Copy File Contents**: Right-click any file in the Explorer to copy its entire contents to the clipboard without opening it
 - **📁 Duplicate File**: Right-click any file in the Explorer to create a `<name>-duplicate<ext>` copy alongside the original. Auto-increments if needed.

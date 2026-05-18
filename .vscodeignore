@@ -7,6 +7,7 @@ scripts/
 out-test/
 dist/src/
 dist/test/
+coverage/
 
 # ============================================
 # Dependencies & Package Management
