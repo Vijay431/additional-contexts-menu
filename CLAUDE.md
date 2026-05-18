@@ -258,11 +258,11 @@ This project follows [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html). Pre-re
 
 ### Automation Layout
 
-- `.github/workflows/ci.yml` runs PR/main quality gates: lint, unit coverage, integration tests, build matrix, audit, dependency review, and Codecov upload.
+- `.github/workflows/ci.yml` runs PR/main quality gates: lint, unit coverage, integration tests, build matrix, audit, and dependency review.
 - `.github/workflows/release.yml` runs only on `v*` tag pushes: package, verify, publish to VS Code Marketplace and Open VSX, deploy Pages for stable releases, and create a GitHub Release.
 - `.github/workflows/deploy-pages.yml` is a manual docs redeploy escape hatch.
 - Community automation lives in `.github/workflows/stale.yml`, `.github/workflows/labels-sync.yml`, and `.github/workflows/all-contributors.yml`.
-- Coverage uploads use `codecov/codecov-action` and require `CODECOV_TOKEN`. Release publishing requires `VSCE_PAT` and `OVSX_PAT`.
+- Release publishing requires `VSCE_PAT` and `OVSX_PAT`.
 
 ### How Release Detects Pre-release
 
@@ -323,7 +323,7 @@ Branch naming: `feature/`, `fix/`, `docs/`, or `refactor/` prefix from `main`.
 ## Test Conventions:
 
 - **Unit tests** (`test/unit/`, run with `pnpm run test:unit`): infrastructure utilities and services where VS Code API is mocked. No live VS Code instance required.
-- **Coverage** (`pnpm run test:unit:coverage`): Vitest coverage output is written to `coverage/lcov.info` for Codecov.
+- **Coverage** (`pnpm run test:unit:coverage`): Vitest coverage output is written to `coverage/lcov.info`.
 - **Integration tests** (`test/suite/`, run with `pnpm run test:integration`): feature-level tests that exercise the 13 user-facing commands end-to-end in a real VS Code Extension Development Host.
 - **No separate E2E layer**: The integration suite already drives a real VS Code Extension Development Host, which is the canonical end-to-end layer for a VS Code extension. A separate `@vscode/test-web` layer is not warranted unless vscode.dev certification is required (out of scope for v2.0.x). Do not add a separate e2e folder.
 - Integration test build output goes to `out-test/` (not `dist/`). The script is `pnpm run test:integration`. Compile errors fail the build — `|| true` is not used in CI.
