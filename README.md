@@ -2,7 +2,7 @@
 
 🚀 **Enhanced right-click context menus for Node.js development** with intelligent code operations for React, Angular, Express, Next.js, TypeScript, and JavaScript projects.
 
-[![CI](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml/badge.svg)](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml) [![Codecov](https://codecov.io/gh/Vijay431/additional-context-menus/branch/main/graph/badge.svg)](https://codecov.io/gh/Vijay431/additional-context-menus) [![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Open VSX Registry](https://img.shields.io/open-vsx/v/VijayGangatharan/additional-context-menus)](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Installs](https://vsmarketplacebadges.dev/installs-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Downloads](https://vsmarketplacebadges.dev/downloads-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Rating](https://vsmarketplacebadges.dev/rating-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus&ssr=false#review-details)
+[![CI](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml/badge.svg)](https://github.com/Vijay431/additional-context-menus/actions/workflows/ci.yml) [![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Open VSX Registry](https://img.shields.io/open-vsx/v/VijayGangatharan/additional-context-menus)](https://open-vsx.org/extension/VijayGangatharan/additional-context-menus) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Installs](https://vsmarketplacebadges.dev/installs-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Downloads](https://vsmarketplacebadges.dev/downloads-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus) [![Rating](https://vsmarketplacebadges.dev/rating-short/VijayGangatharan.additional-context-menus.svg)](https://marketplace.visualstudio.com/items?itemName=VijayGangatharan.additional-context-menus&ssr=false#review-details)
 
 <div align="center">
 
@@ -784,7 +784,7 @@ You can also open the project in GitHub Codespaces or a VS Code Dev Container. T
 | `pnpm run lint:fix`           | Auto-fix ESLint issues                          | 🔧 Auto-fix              |
 | `pnpm run format`             | Format code using Prettier                      | ✨ Consistent style      |
 | `pnpm run test:unit`          | Run unit tests (Vitest)                         | ⚡ Fast, no display      |
-| `pnpm run test:unit:coverage` | Run unit tests with coverage output             | 📈 Codecov-ready LCOV    |
+| `pnpm run test:unit:coverage` | Run unit tests with coverage output             | 📈 LCOV report           |
 | `pnpm run test:integration`   | Run integration tests (VS Code, Ubuntu/Linux)   | 🧪 Full feature coverage |
 
 ---
@@ -828,19 +828,6 @@ Special thanks to:
 - The VS Code Extension API team for excellent documentation
 - The TypeScript and JavaScript developer communities
 - All contributors and users who provide feedback and suggestions
-
----
-
-## 💬 What Developers Say
-
-> "Cut my refactoring time by 80%. Can't imagine working without it now."
-> — _React Developer at Tech Startup_
-
-> "The enum generation alone saves me hours every week."
-> — _Full-Stack TypeScript Developer_
-
-> "Finally, a context menu that understands my Angular projects!"
-> — _Angular Enterprise Developer_
 
 ---
 
