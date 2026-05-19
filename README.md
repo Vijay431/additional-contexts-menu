@@ -37,6 +37,9 @@ _Extract functions in one click with intelligent import handling_
 
 ## 🎬 Feature Showcase
 
+<details>
+<summary>See all feature demos (8 GIFs)</summary>
+
 ### Copy Function
 
 ![Copy Function Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/copy-function.gif)
@@ -69,18 +72,22 @@ _Extract functions in one click with intelligent import handling_
 
 ![Rename File to Convention Demo](https://raw.githubusercontent.com/Vijay431/additional-context-menus/main/public/images/screenshots/rename-file-convention.gif)
 
+</details>
+
 ---
 
 ## 🌟 Why Additional Context Menus?
 
 **Stop wasting time on manual refactoring:**
 
-| ❌ Manual Refactoring                                           | ✅ With Additional Context Menus   |
-| --------------------------------------------------------------- | ---------------------------------- |
-| Copy function → Find target file → Paste → Manually add imports | Right-click → Select target → Done |
-| 30+ seconds per operation                                       | 3 seconds per operation            |
-| Error-prone import management                                   | Automatic import resolution        |
-| Lost flow state                                                 | Stay in the zone                   |
+| ❌ Manual Refactoring                                            | ✅ With Additional Context Menus        |
+| ---------------------------------------------------------------- | --------------------------------------- |
+| Select code → find target file → paste → fix up imports by hand  | Right-click → Select target → Done      |
+| Context-switch kills momentum                                    | Stay in the editor, stay in the zone    |
+| Duplicate or missed imports when moving selections between files | Existing imports merged automatically\* |
+| Manually hunt for function boundaries in large files             | AST-based detection finds it in 1 click |
+
+_\* Import merging applies to **Copy/Move Selection to File**. Copy/Move Function commands transfer the function body only._
 
 **Join developers saving hours weekly on routine code operations.**
 
@@ -125,6 +132,7 @@ Detailed documentation for all 13 features with usage guides and examples.
 - 🖥️ **Open in Terminal** - Cross-platform terminal integration
 - 🔢 **Generate Enum from Union Type** - Convert TypeScript union types to enums
 - ⏱️ **Generate Cron Expression** - Interactive cron expression builder
+- 🌿 **Generate .env File** - Generate environment file from usage patterns
 
 #### Extension Management (Command Palette Only)
 
@@ -134,7 +142,6 @@ Detailed documentation for all 13 features with usage guides and examples.
 - 🔄 **Refresh Context Variables** - Force re-detection of project context
 - ⌨️ **Check Keybinding Conflicts** - View keybinding configuration
 - 🔛 **Enable/Disable Keybindings** - Toggle custom keybindings
-- 🌿 **Generate .env File** - Generate environment file from usage patterns
 
 #### Explorer Right-Click Menu
 
@@ -160,28 +167,13 @@ Detailed documentation for all 13 features with usage guides and examples.
 
 - 🔍 **Dual Access Patterns** - Main features accessible via both command palette and right-click menu
 - ⚙️ **Management Commands** - Enable/disable functionality available via command palette only
-- 🎯 **Context-Aware Display** - Menus shown based on file type, project detection, and extension state
+- 🎯 **Context-Aware Display** - Menus shown based on file type and extension state; function-specific items appear only when cursor is inside a function
 - 🌐 **Cross-Platform Terminal** - Intelligent terminal integration across Windows, macOS, and Linux
 - ♿ **Screen Reader Support** - ARIA labels and announcements for assistive technology users
 - 🎹 **Keyboard Navigation** - All features fully keyboard accessible with enhanced hints
 - ⚙️ **Configurable Verbosity** - Adjust screen reader announcement levels (minimal, normal, verbose)
 
-#### Accessibility Settings
-
-The extension provides comprehensive accessibility configuration options:
-
-- `additionalContextMenus.accessibility.verbosity` - Control announcement verbosity
-  - `minimal` - Only errors and critical operations
-  - `normal` - All operations (default, recommended)
-  - `verbose` - Detailed progress and contextual information
-
-- `additionalContextMenus.accessibility.screenReaderMode` - Enable enhanced screen reader support with additional ARIA labels (default: `false` — announcements are opt-in)
-
-- `additionalContextMenus.accessibility.keyboardNavigation` - Show keyboard navigation hints in Quick Pick dialogs
-
 #### Keyboard Shortcuts
-
-All commands are keyboard accessible:
 
 | Command                | Windows/Linux      | macOS             |
 | ---------------------- | ------------------ | ----------------- |
@@ -193,17 +185,18 @@ All commands are keyboard accessible:
 | Save All               | `Ctrl+Alt+Shift+A` | `Cmd+Alt+Shift+A` |
 | Open in Terminal       | `Ctrl+Alt+Shift+T` | `Cmd+Alt+Shift+T` |
 
-#### Screen Reader Support
+<details>
+<summary>♿ Accessibility Settings & Screen Reader Support</summary>
 
-The extension supports NVDA (Windows), VoiceOver (macOS), and Orca (Linux):
+- `additionalContextMenus.accessibility.verbosity` — `minimal` / `normal` (default) / `verbose`
+- `additionalContextMenus.accessibility.screenReaderMode` — enhanced ARIA labels (default: `false`)
+- `additionalContextMenus.accessibility.keyboardNavigation` — keyboard hints in Quick Pick (default: `true`)
 
-- **Quick Pick Dialogs**: All items include ARIA labels with position and description
-- **File Lists**: Accessible file names, directory locations, and modification times
-- **Input Validation**: Clear error messages with "Error:" prefix for easy identification
-- **Progress Announcements**: Long-running operations announce progress percentage
-- **Operation Feedback**: Success/failure announcements for all operations
+Supports NVDA (Windows), VoiceOver (macOS), Orca (Linux). All Quick Pick items include ARIA labels; long-running operations announce progress percentage.
 
-For detailed accessibility documentation, see [Accessibility Guide](https://vijay431.github.io/additional-context-menus/accessibility.html).
+For full details see [Accessibility Guide](https://vijay431.github.io/additional-context-menus/accessibility.html).
+
+</details>
 
 ---
 
@@ -235,7 +228,7 @@ Pre-release builds are published to both VS Code Marketplace and Open VSX Regist
 **Open VSX Registry:**
 Pre-release versions are listed alongside stable versions on the extension page.
 
-Pre-release tags carry a suffix (e.g. `v2.1.0-beta.1`, `v2.1.0-rc.1`). Stable releases omit the suffix (e.g. `v2.1.0`). Per SemVer, the beta and its stable graduation share the same version number.
+Pre-release tags carry a suffix (e.g. `v2.1.0-beta.1`, `v2.1.0-rc.1`). Stable releases omit the suffix (e.g. `v2.1.0`). The beta and its stable graduation share the same MAJOR.MINOR.PATCH core — `package.json` version stays unchanged when graduating from pre-release to stable.
 
 ---
 
@@ -243,11 +236,12 @@ Pre-release tags carry a suffix (e.g. `v2.1.0-beta.1`, `v2.1.0-rc.1`). Stable re
 
 The extension automatically detects Node.js projects and enhances right-click context menus for supported file types.
 
-### 🎬 Feature Demonstrations
+<details>
+<summary>🎬 Feature Demonstrations (before & after examples)</summary>
 
 #### Copy Function - Before & After
 
-**Before:** Manual copy-paste with import management headaches
+**Before:** Manual copy-paste — scroll to function, select boundaries, switch file, paste, fix indentation
 
 ```typescript
 // In ComponentA.tsx - you want to copy this function
@@ -256,15 +250,16 @@ const validateEmail = (email: string): boolean => {
 };
 ```
 
-**After:** One right-click, perfect function extraction
+**After:** Cursor inside the function → right-click → Copy Function — function text copied to clipboard
 
 ```typescript
-// Automatically copied to ComponentB.tsx with imports resolved
-import { validateEmail } from './utils/validation';
-
-// Function is now properly imported and ready to use
-const isValid = validateEmail(userEmail);
+// Pasted into ComponentB.tsx - function body transferred exactly
+const validateEmail = (email: string): boolean => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
 ```
+
+> **Note:** Copy Function / Copy Function to File transfers the function body only. Add the import in the target file manually (or use Copy Selection to File for automatic import merging).
 
 #### Code Migration - React Component Example
 
@@ -284,15 +279,15 @@ const UserProfile = () => {
 };
 ```
 
-**After:** Clean separation with smart copy/move
+**After:** Clean separation with Move Function to File
 
 ```typescript
-// hooks/useUserData.ts - Moved via context menu
+// hooks/useUserData.ts - Moved via context menu (function body only)
 export const useUserData = (userId: string) => {
   // Hook logic properly extracted
 };
 
-// UserProfile.tsx - Import automatically managed
+// UserProfile.tsx - import added manually after move
 import { useUserData } from '../hooks/useUserData';
 
 const UserProfile = () => {
@@ -300,6 +295,8 @@ const UserProfile = () => {
   return <div>Profile Content</div>;
 };
 ```
+
+</details>
 
 ### 🔧 Detailed Feature Usage
 
@@ -329,7 +326,7 @@ const UserProfile = () => {
 
 **Smart Features:**
 
-- 🧠 **Import Management**: Automatically merges, skips, or handles duplicate imports
+- 🧠 **Import Merging**: Existing import statements from the source are merged into the target file (deduplicates where possible)
 - 📍 **Intelligent Placement**: Finds optimal insertion point after imports, before exports
 - 💬 **Comment Preservation**: Maintains code comments during transfer
 - 🔍 **File Discovery**: Shows only compatible files (.ts↔.tsx, .js↔.jsx)
@@ -461,11 +458,10 @@ Additional Context Menus provides extensive configuration options:
   - `"workspace-root"` - Root of the workspace
   - `"current-directory"` - The file's directory
 
-#### 🖥️ Terminal Configuration Examples
+<details>
+<summary>🖥️ Terminal Configuration Examples</summary>
 
-#### Power User Setups
-
-**Windows Terminal (Recommended):**
+**Windows Terminal:**
 
 ```json
 {
@@ -475,7 +471,7 @@ Additional Context Menus provides extensive configuration options:
 }
 ```
 
-**iTerm2 with Custom Profile (macOS):**
+**iTerm2 (macOS):**
 
 ```json
 {
@@ -485,7 +481,7 @@ Additional Context Menus provides extensive configuration options:
 }
 ```
 
-**Linux Development Setup:**
+**GNOME Terminal (Linux):**
 
 ```json
 {
@@ -508,90 +504,86 @@ Additional Context Menus provides extensive configuration options:
 }
 ```
 
+</details>
+
 ---
 
 ## 🚀 Supported Frameworks
 
-### 🎯 Framework-Specific Intelligence
+The extension auto-detects React, Angular, Express, and Next.js projects for informational purposes; all core operations work in any TypeScript/JavaScript workspace.
 
-The extension automatically detects and provides enhanced functionality:
-
-#### ⚛️ **React Projects**
+<details>
+<summary>⚛️ React Projects</summary>
 
 - **Smart Component Detection**: Recognizes functional and class components
 - **JSX Support**: Handles JSX syntax in function extraction and copying
-- **Hook Extraction**: Specialized support for React hooks (functions starting with 'use')
-- **Import Optimization**: Smart handling of React imports and dependencies
+- **Hook Extraction**: Specialized support for React hooks (functions starting with `use`)
 
-**Example Use Cases:**
+**Example Use Cases:** extract custom hooks from components, move JSX components between files
 
-- Extract custom hooks from components
-- Move JSX components between files
-- Copy utility functions with proper React imports
+</details>
 
-#### 🅰️ **Angular Projects**
+<details>
+<summary>🅰️ Angular Projects</summary>
 
 - **Service Detection**: Identifies Angular services and components
 - **Decorator Support**: Preserves Angular decorators during code operations
 - **TypeScript Integration**: Full TypeScript support for Angular development
-- **Module Awareness**: Understands Angular module structure
 
-**Example Use Cases:**
+**Example Use Cases:** extract services from components, move utility functions, copy component methods
 
-- Extract services from components
-- Move utility functions between Angular modules
-- Copy component methods with proper typing
+</details>
 
-#### 🚂 **Express Projects**
+<details>
+<summary>🚂 Express Projects</summary>
 
 - **Route Handler Detection**: Identifies Express route handlers and middleware
 - **Server-side Logic**: Optimized for Node.js server development patterns
-- **API Structure**: Understands REST API and middleware patterns
 
-**Example Use Cases:**
+**Example Use Cases:** extract middleware functions, move route handlers between files
 
-- Extract middleware functions
-- Move route handlers between files
-- Copy utility functions for server logic
+</details>
 
-#### ▲ **Next.js Projects**
+<details>
+<summary>▲ Next.js Projects</summary>
 
 - **Full-Stack Support**: Handles both client and server-side code
 - **API Routes**: Special handling for Next.js API route patterns
 - **SSR/SSG Functions**: Supports `getServerSideProps`, `getStaticProps`
-- **React Integration**: Combines React and Next.js specific features
 
-**Example Use Cases:**
+**Example Use Cases:** extract API route handlers, move page components and data-fetching logic
 
-- Extract API route handlers
-- Move page components and their data fetching logic
-- Copy utility functions between client and server code
+</details>
 
-#### 📝 **TypeScript & JavaScript**
+<details>
+<summary>📝 TypeScript & JavaScript</summary>
 
 - **ES6+ Syntax**: Full support for modern JavaScript features
 - **Type Safety**: Maintains TypeScript types during code operations
 - **Import/Export**: Smart handling of ES modules and CommonJS
 - **JSDoc Support**: Preserves documentation comments
 
+</details>
+
 ---
 
 ## ❓ Troubleshooting & FAQ
 
-### 🚨 Common Issues & Solutions
-
-#### Context Menus Not Appearing
+<details>
+<summary>Context Menus Not Appearing</summary>
 
 **Problem**: Right-click context menus don't show Additional Context Menus options
 
 **Solutions:**
 
-1. **Check Project Type**: Ensure you're in a Node.js project with `package.json`
-2. **Verify File Type**: Context menus appear only in `.ts`, `.tsx`, `.js`, `.jsx` files
-3. **Extension Status**: Run `Additional Context Menus: Debug Context Variables` to check status
-4. **Refresh Detection**: Use `Additional Context Menus: Refresh Context Variables`
+1. **Verify File Type**: Editor context menus appear only in `.ts`, `.tsx`, `.js`, `.jsx` files (Explorer menus appear for any file)
+2. **Extension Status**: Run `Additional Context Menus: Debug Context Variables` to check status
+3. **Refresh Detection**: Use `Additional Context Menus: Refresh Context Variables`
 
-#### Function Detection Issues
+</details>
+
+<details>
+<summary>Function Detection Issues</summary>
 
 **Problem**: "Copy Function" doesn't detect function at cursor
 
@@ -602,7 +594,10 @@ The extension automatically detects and provides enhanced functionality:
 3. **Supported Types**: Check if your function type is supported (see usage guide)
 4. **File Extension**: Ensure file has correct extension (`.ts`, `.tsx`, `.js`, `.jsx`)
 
-#### Terminal Not Opening
+</details>
+
+<details>
+<summary>Terminal Not Opening</summary>
 
 **Problem**: "Open in Terminal" command fails
 
@@ -613,19 +608,26 @@ The extension automatically detects and provides enhanced functionality:
 3. **External Terminal**: If using external terminal, verify command syntax
 4. **Fallback**: Extension automatically falls back to integrated terminal
 
-#### Import Handling
+</details>
 
-**Problem**: Imports not copied when moving code between files
+<details>
+<summary>Import Handling</summary>
+
+**Problem**: Imports not merged when using Copy/Move Selection to File
 
 **Solutions:**
 
-1. **File Structure**: Ensure proper ES module or CommonJS structure
-2. **Import Style**: Use consistent import style throughout project
+1. **Use the correct command**: Only **Copy/Move Selection to File** merges imports. **Copy/Move Function to File** transfers the function body only — add the import in the target file manually.
+2. **File Structure**: Ensure proper ES module or CommonJS structure
+3. **Import Style**: Use consistent import style throughout the project
 
-### 📚 Frequently Asked Questions
+</details>
+
+<details>
+<summary>📚 Frequently Asked Questions</summary>
 
 **Q: Can I use this extension in non-Node.js projects?**
-A: The extension requires a Node.js project with `package.json` for smart detection. Basic file operations might work without it.
+A: Yes. Context menus appear in any workspace — no `package.json` required. The `autoDetectProjects` setting identifies frameworks for informational purposes, but does not gate the menus.
 
 **Q: Does this work with other frameworks like Vue or Svelte?**
 A: The extension currently detects React, Angular, Express, and Next.js projects. Basic file operations work in any Node.js project, but framework-specific features are limited to supported frameworks.
@@ -636,7 +638,10 @@ A: The extension is optimized for performance and can handle large files. Progre
 **Q: Can I customize where code gets inserted?**
 A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" in settings.
 
-### 🔍 Debugging Steps
+</details>
+
+<details>
+<summary>🔍 Debugging Steps</summary>
 
 1. **Enable Debug Output**: `Additional Context Menus: Show Output Channel`
 2. **Check Extension State**: `Additional Context Menus: Debug Context Variables`
@@ -644,13 +649,14 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 4. **Review Configuration**: Check all settings in VS Code preferences
 5. **Report Issues**: Use [GitHub Issues](https://github.com/Vijay431/additional-context-menus/issues) with debug output
 
+</details>
+
 ---
 
 ## 🐛 Known Issues & Limitations
 
-- **Project Detection**: Context menus only appear in Node.js projects with `package.json`
 - **Syntax Requirements**: Function detection requires valid JavaScript/TypeScript syntax
-- **Import Merging**: Complex import scenarios may require manual adjustment
+- **Import Merging (Selection only)**: Complex import scenarios may require manual adjustment; Copy/Move Function commands do not merge imports
 - **Large Files**: Very large files (>10MB) may experience slower function detection
 
 **Reporting Issues**: Please report problems on our [GitHub repository](https://github.com/Vijay431/additional-context-menus/issues) with:
@@ -666,7 +672,7 @@ A: Yes! Configure `insertionPoint` to "smart" (default), "beginning", or "end" i
 
 - **📋 Copy File Contents**: Right-click any file in the Explorer to copy its entire contents to the clipboard without opening it
 - **📁 Duplicate File**: Right-click any file in the Explorer to create a `<name>-duplicate<ext>` copy alongside the original. Auto-increments if needed.
-- **🧪 Full test suite**: Vitest unit tests + Mocha integration tests covering all 12 user-facing commands via `@vscode/test-electron`
+- **🧪 Full test suite**: Vitest unit tests + Mocha integration tests covering all 13 user-facing commands via `@vscode/test-electron`
 - **🔧 Cache TTL fix**: `fileDiscovery.cacheTTL` setting now correctly wired into `FileDiscoveryService`
 - **🗑️ Removed** `copyCode.handleImports` setting (was never implemented) and the walkthrough
 
@@ -674,79 +680,44 @@ For older versions, see [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
-## ⚡ Performance & Reliability
+<details>
+<summary>⚡ Performance & Reliability</summary>
 
-### 🚀 Optimized for Professional Development
-
-**Build Performance:**
-
-- ⚡ **Lightning Fast Builds**: esbuild compilation in ~1 second (20x faster than webpack)
-- 🔄 **Instant Rebuilds**: Near-instant watch mode for development
-- 🎯 **Smart Bundling**: Tree-shaking eliminates unused dependencies
-
-### 🚀 Performance Optimizations
-
-- **Lazy-Loaded Services**: Generator services (Enum, Env, Cron) load only when needed
-- **On-Demand Features**: Rarely-used generators load in small chunks when invoked
+**Build Performance:** esbuild compilation ~1 second · near-instant watch mode · tree-shaking removes unused code
 
 **Runtime Performance:**
 
-- 🧠 **Intelligent Caching**: Project detection and file discovery results cached
-- 📊 **Memory Efficient**: Optimized for large codebases and complex project structures
-- ⚡ **Fast Function Detection**: AST-based parsing via TypeScript Compiler API for accurate results
-- 🔄 **Background Processing**: Non-blocking operations don't interrupt coding
+- **Lazy-Loaded Services**: `codeAnalysisService`, Enum/Env/Cron generators load on first use only
+- **Intelligent Caching**: file discovery results cached (configurable TTL)
+- **Background Processing**: non-blocking operations
+- **Error Boundary Protection**: continues working with malformed code
 
-### 🛡️ Enterprise-Grade Quality Assurance
+**Code Quality:** TypeScript strict mode · ESLint · Prettier · integration tests via `@vscode/test-electron`
 
-**Reliability Engineering:**
+</details>
 
-- 🛡️ **Error Boundary Protection**: Continues working with malformed code
-- 🔄 **Graceful Degradation**: Handles unsupported files without crashes
-- ⚡ **Concurrent Safety**: Multiple commands execute simultaneously without conflicts
-- 🎛️ **Robust Configuration**: Validates and sanitizes all user settings
+<details>
+<summary>🏗️ Technical Architecture</summary>
 
-**Code Quality Standards:**
+Service-oriented design with singleton pattern and DI container (`src/di/container.ts`):
 
-- 📝 **TypeScript Strict Mode**: Type safety and compile-time error detection
-- 🎨 **ESLint Compliance**: Strict linting rules for code consistency
-- ✨ **Prettier Formatting**: Consistent code style across entire codebase
-- 🔬 **Production Tested**: Extensively validated in real-world environments
+**Core Managers**
 
----
+- `ExtensionManager` — lifecycle coordinator
+- `ContextMenuManager` — command registration and handler dispatch
 
-## 🏗️ Technical Architecture
+**Specialized Services**
 
-### 🎯 Service-Oriented Design
+- `ProjectDetectionService` — framework detection (informational)
+- `ConfigurationService` — settings and change events
+- `FileDiscoveryService` — workspace file scanning, compatible-file filtering
+- `FileSaveService` — bulk save with progress feedback
+- `CodeAnalysisService` — AST-based function detection (TypeScript Compiler API, lazy-loaded)
+- `TerminalService` — cross-platform terminal (integrated / external / system-default)
 
-Built with clear separation of concerns and enterprise-grade patterns:
+**Lazy-loaded** (loaded from `dist/lazy/` on first use): `codeAnalysisService`, `enumGeneratorService`, `envFileGeneratorService`, `cronJobTimerGeneratorService`
 
-#### 🎮 **Core Managers**
-
-- **ExtensionManager**: Coordinates lifecycle and component initialization
-- **ContextMenuManager**: Handles command registration and menu interactions
-
-#### 🔧 **Specialized Services** (Singleton Pattern)
-
-- **ProjectDetectionService**: Detects Node.js projects and frameworks (React, Angular, etc.)
-- **ConfigurationService**: Manages settings and real-time configuration changes
-- **FileDiscoveryService**: Discovers compatible files with smart filtering
-- **FileSaveService**: Handles bulk save operations with progress feedback
-- **CodeAnalysisService**: AST-based function detection using TypeScript Compiler API for accurate results
-- **TerminalService**: Cross-platform terminal integration with three modes (integrated/external/system-default)
-
-#### ⚡ **Performance Optimizations**
-
-- **Intelligent Caching**: Project detection and file discovery results
-- **Lazy Loading**: Services initialize only when needed
-- **Background Processing**: Non-blocking operations
-- **Memory Management**: Automatic cache cleanup on workspace changes
-
-#### 🔒 **Reliability Patterns**
-
-- **Error Boundaries**: Graceful handling of malformed code
-- **Fallback Mechanisms**: Automatic degradation for unsupported scenarios
-- **Event-Driven**: Reactive updates to workspace and configuration changes
-- **Resource Cleanup**: Proper disposal of all resources and listeners
+</details>
 
 ---
 
@@ -773,7 +744,8 @@ pnpm run build
 
 You can also open the project in GitHub Codespaces or a VS Code Dev Container. The container installs Node.js 24 (latest LTS), pnpm dependencies, recommended VS Code extensions, and Linux packages needed for headless integration tests.
 
-### 📋 Available Development Commands
+<details>
+<summary>📋 Available Development Commands</summary>
 
 | Command                       | Description                                     | Performance              |
 | ----------------------------- | ----------------------------------------------- | ------------------------ |
@@ -786,6 +758,8 @@ You can also open the project in GitHub Codespaces or a VS Code Dev Container. T
 | `pnpm run test:unit`          | Run unit tests (Vitest)                         | ⚡ Fast, no display      |
 | `pnpm run test:unit:coverage` | Run unit tests with coverage output             | 📈 LCOV report           |
 | `pnpm run test:integration`   | Run integration tests (VS Code, Ubuntu/Linux)   | 🧪 Full feature coverage |
+
+</details>
 
 ---
 
