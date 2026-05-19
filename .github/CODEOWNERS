@@ -1,0 +1,57 @@
+# CODEOWNERS — auto-request review on files whose silent modification
+
+# could destroy review intent, break publishing, weaken security, or
+
+# invalidate CI gates. No wildcard: routine PRs are not auto-assigned.
+
+# Syntax: https://docs.github.com/repositories/managing-your-repositories-settings-and-customizations/customizing-your-repository/about-code-owners
+
+# --- Review & quality gates (silently disabling these defeats the whole review process) ---
+
+/.coderabbit.yaml @Vijay431 # CodeRabbit rules — bad change disables AI review gate
+/.github/CODEOWNERS @Vijay431 # circular — anyone editing this can unprotect everything else
+/.github/workflows/ci.yml @Vijay431 # main PR gate (lint, unit, integration, audit) — can be neutered
+/.github/workflows/pr-commit-size.yml @Vijay431 # 10-file / 400-line cap enforcement
+/.husky/ @Vijay431 # local pre-commit / commit-msg hooks
+/scripts/check-commit-size.sh @Vijay431 # commit-size script CI calls
+/scripts/commit-size-excludes.txt @Vijay431 # bypass list for commit-size check — abuse vector
+
+# --- Release / publishing (bad change publishes broken build or leaks tokens) ---
+
+/.github/workflows/release.yml @Vijay431 # publishes to VS Code Marketplace + Open VSX with VSCE_PAT/OVSX_PAT
+/package.json @Vijay431 # extension manifest: publisher, version, engines, contributes
+/.vscodeignore @Vijay431 # controls what ships in .vsix — can leak source/secrets
+
+# --- Supply chain (bad change = arbitrary code on dev/CI machines) ---
+
+/pnpm-lock.yaml @Vijay431 # dependency integrity
+/pnpm-workspace.yaml @Vijay431 # owns pnpm overrides + allowBuilds (install-time scripts)
+/.npmrc @Vijay431 # registry + auth behavior
+/.github/dependabot.yml @Vijay431 # auto-PR config — bad change stops security updates silently
+
+# --- Build correctness (broken bundle = broken extension on every user's machine) ---
+
+/esbuild.config.ts @Vijay431 # bundle externals (lazy services) + 100KB core budget
+/tsconfig.json @Vijay431 # strict mode + target — relaxing silently weakens type safety
+
+# --- Runtime core (breaks extension activation or service resolution) ---
+
+/src/extension.ts @Vijay431 # activation entrypoint
+/src/di/ @Vijay431 # DI container wiring; bad token = runtime crash
+
+# --- Source-of-truth governance (all AI assistants & contributors drift if these drift) ---
+
+/CLAUDE.md @Vijay431 # single source of truth — CLAUDE.md itself says so
+/AGENTS.md @Vijay431 # companion ruleset for other agents
+/.github/copilot-instructions.md @Vijay431 # companion ruleset for Copilot
+
+# --- Security & legal (disclosure policy + license obligations) ---
+
+/SECURITY.md @Vijay431 # vuln disclosure policy
+/LICENSE @Vijay431 # license terms
+/NOTICE.md @Vijay431 # attribution
+/THIRDPARTY.md @Vijay431 # third-party notices — legal compliance
+
+# --- Release notes (users read this; stripped breaking-change note = silent breakage) ---
+
+/CHANGELOG.md @Vijay431
