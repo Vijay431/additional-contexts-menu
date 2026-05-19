@@ -47,7 +47,10 @@ suite('Save All', () => {
         }
       });
       // 5-second fallback in case the event doesn't fire
-      setTimeout(() => { disposable.dispose(); resolve(); }, 5000);
+      setTimeout(() => {
+        disposable.dispose();
+        resolve();
+      }, 5000);
     });
 
     await vscode.commands.executeCommand('additionalContextMenus.saveAll');

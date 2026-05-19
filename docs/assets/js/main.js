@@ -158,7 +158,8 @@ function initializeCodeCopyButtons() {
       copyButton.type = 'button';
       copyButton.className = 'copy-button';
       copyButton.setAttribute('aria-label', 'Copy code to clipboard');
-      copyButton.innerHTML = '<i class="fas fa-copy" aria-hidden="true"></i><span class="copy-label">Copy</span>';
+      copyButton.innerHTML =
+        '<i class="fas fa-copy" aria-hidden="true"></i><span class="copy-label">Copy</span>';
 
       wrapper.style.position = 'relative';
       wrapper.appendChild(copyButton);
@@ -166,12 +167,14 @@ function initializeCodeCopyButtons() {
       copyButton.addEventListener('click', function () {
         const code = codeBlock.textContent;
         copyToClipboard(code).then(() => {
-          copyButton.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i><span class="copy-label">Copied!</span>';
+          copyButton.innerHTML =
+            '<i class="fas fa-check" aria-hidden="true"></i><span class="copy-label">Copied!</span>';
           copyButton.setAttribute('aria-label', 'Copied!');
           copyButton.classList.add('success');
 
           setTimeout(() => {
-            copyButton.innerHTML = '<i class="fas fa-copy" aria-hidden="true"></i><span class="copy-label">Copy</span>';
+            copyButton.innerHTML =
+              '<i class="fas fa-copy" aria-hidden="true"></i><span class="copy-label">Copy</span>';
             copyButton.setAttribute('aria-label', 'Copy code to clipboard');
             copyButton.classList.remove('success');
           }, 2000);
